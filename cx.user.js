@@ -170,12 +170,12 @@
             new_date = new Date(year, month - 1, day)
         };
         new_date.setDate(new_date.getDate() + days)
-        return new_date.getFullYear() + '' + (new_date.getMonth() + 1).toString().padStart(2, '0') + '' + new_date.getDate().toString().padStart(2, '0')
+        return `${new_date.getFullYear()}${(new_date.getMonth() + 1).toString().padStart(2, '0')}${new_date.getDate().toString().padStart(2, '0')}`
     };
 
     // Convert CX Date String to Dashed Date String
     function toDashedDate(date) {
-        return date.substring(0, 4).toString() + '-' + date.substring(4, 6).toString().padStart(2, '0') + '-' + date.substring(6, 8).toString().padStart(2, '0')
+        return `${date.substring(0, 4).toString()}-${date.substring(4, 6).toString().padStart(2, '0')}-${date.substring(6, 8).toString().padStart(2, '0')}`
     }
 
     // Get Weekday from CX Date String
