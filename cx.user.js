@@ -283,29 +283,31 @@
                 initSearchBox()
                 checkLogin()
             })
-        } else if (current_url.includes('air/booking/availability') && cont_query) {
-            log('initRoot air/booking/availability with cont_query')
-            waitForElm('body > header').then((elm) => {
-                const boxes = document.querySelectorAll('body > div')
-                boxes.forEach(box => {
-                    box.remove()
-                })
-                document.body.append(shadowWrapper)
-                shadowContainer.classList.add('results_container')
-                initSearchBox()
-                checkLogin()
-            })
         } else if (current_url.includes('air/booking/availability')) {
-            reset_cont_vars()
+            if (cont_query) {
+                log('initRoot air/booking/availability with cont_query')
+                waitForElm('body > header').then((elm) => {
+                    const boxes = document.querySelectorAll('body > div')
+                    boxes.forEach(box => {
+                        box.remove()
+                    })
+                    document.body.append(shadowWrapper)
+                    shadowContainer.classList.add('results_container')
+                    initSearchBox()
+                    checkLogin()
+                })
+            } else {
+                reset_cont_vars()
 
-            log('initRoot air/booking/availability without cont_query')
-            waitForElm('#section-flights .bound-route, #section-flights-departure .bound-route').then((elm) => {
-                shadowWrapper.style.margin = '30px 20px 0px 20px'
-                shadowWrapper.style.padding = 0
-                document.querySelector('#section-flights, #section-flights-departure').before(shadowWrapper)
-                initSearchBox()
-                checkLogin()
-            })
+                log('initRoot air/booking/availability without cont_query')
+                waitForElm('#section-flights .bound-route, #section-flights-departure .bound-route').then((elm) => {
+                    shadowWrapper.style.margin = '30px 20px 0px 20px'
+                    shadowWrapper.style.padding = 0
+                    document.querySelector('#section-flights, #section-flights-departure').before(shadowWrapper)
+                    initSearchBox()
+                    checkLogin()
+                })
+            }
         } else if (current_url.includes('air/booking/complexAvailability')) {
             reset_cont_vars()
 
