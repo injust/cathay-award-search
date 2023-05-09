@@ -5,7 +5,6 @@
 // @version             3.3.0
 // @description         Un-Elevate Your Cathay Award Search 2022.
 // @author              jayliutw
-// @connect             greasyfork.org
 // @connect             cathaypacific.com
 // @connect             userscripts.jayliu.net
 // @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/redeem-flight-awards.html*
