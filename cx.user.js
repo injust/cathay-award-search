@@ -1292,7 +1292,7 @@
         input_from.addEventListener('change', function(e) {
             if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
             route_changed = true
-            batchLabel(lang.bulk_batch + ' ' + input_from.value + ' - ' + input_to.value + ' ' + lang.bulk_flights)
+            batchLabel(`${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`)
             const dest = this.value.match(/[A-Z]{3}$/)
             if (dest) getDestinations(dest[0])
         })
@@ -1300,7 +1300,7 @@
         input_to.addEventListener('change', function(e) {
             if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
             route_changed = true
-            batchLabel(lang.bulk_batch + ' ' + input_from.value + ' - ' + input_to.value + ' ' + lang.bulk_flights)
+            batchLabel(`${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`)
         })
 
         let inFocus = false;
@@ -1482,7 +1482,7 @@
                 let pos = 1
                 Array.from(segments_array).sort(function(a, b) {
                     if (+a.dataset.date > +b.dataset.date) return 1
-                    console.log(a.dataset.date + ' ' + b.dataset.date)
+                    log(`${a.dataset.date} ${b.dataset.date}`)
                     if (a.dataset.date == b.dataset.date) return (a.dataset.new ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1))
                     return false
                 }).forEach(function(elm) {
