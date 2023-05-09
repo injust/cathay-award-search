@@ -1723,7 +1723,7 @@
         }
 
         function checkLocale(code) {
-            return code.replace(atob('VGFpd2FuIENoaW5h'), atob('VGFpd2Fu')).replace(decodeURI(atob('JUU0JUI4JUFEJUU1JTlDJThCJUU1JThGJUIwJUU3JTgxJUEz')), decodeURI('%E5%8F%B0%E7%81%A3'))
+            return code.replace('Taiwan China', 'Taiwan').replace('中國台灣', '台灣')
         }
 
         function newAC(elm, e) {
