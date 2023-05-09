@@ -111,8 +111,8 @@
 	}
 
 	const browser_locale = navigator.language;
-	const browser_lang = (browser_locale.trim().split(/-|_/)[0] == "zh") ? "zh" : "en";
-	const browser_country = (browser_locale.trim().split(/-|_/)[1]?.toUpperCase() == "TW") ? "TW" : "HK";
+	const browser_lang = "en";
+	const browser_country = "CA";
 
 	let login_url = "https://www.cathaypacific.com/content/cx/" + browser_lang + "_" + browser_country + "/sign-in.html?loginreferrer=" + encodeURI("https://www.cathaypacific.com/cx/" + browser_lang + "_" + browser_country + "/book-a-trip/redeem-flights/redeem-flight-awards.html");
 
@@ -336,7 +336,7 @@
 	// Localisation
 	//============================================================
 
-	var lang = (browser_lang != "zh") ? {
+	var lang = {
 		"ec": "HK",
 		"el": "en",
 		"search": "Search",
@@ -396,66 +396,6 @@
 		"prem_donate": "To enable these extended features, please click below to view the Extras package on buymeacoffee.com.<a href='https://www.buymeacoffee.com/jayliutw/e/106024' target='_blank' class='unlock_btn'>Unlock Advanced Features</a>If you've previously donated to me through Buy Me a Coffee before the release of these features, you should have received an email inviting you to a BMaC membership, and you will be receiving these features for free. Seriously guys, thanks for your donations. I hope these exclusive features are a nice surprise for you. It takes quite some time and effort to build, maintain, and support this tweak, and the positive feedback and heartwarming support I've been receiving from the community has made it all the more worth it. Thank you guys, for your generous donations, especially seeing as you were all getting nothing extra in return.<br><br>If you haven't donated yet, and you've found this tool helpful, please consider buying me a coffee at: <a href='https://buymeacoffee.com/jayliutw' target='_blank'>https://buymeacoffee.com/jayliutw</a>",
 		"human": "Cathay's website needs you to prove you're a human:",
 		"bot_check": "Please Complete Cathay Bot Check",
-	} : {
-		"ec": "TW",
-		"el": "zh",
-		"search": "搜尋",
-		"coffee": "這工具有幫到你嗎？歡迎請我喝杯咖啡呀！",
-		"searching": "<img src='https://book.cathaypacific.com" + static_path + "common/skin/img/icons/cx/icon-loading.gif'> 請稍後...",
-		"searching_w_cancel": "<img src='https://book.cathaypacific.com" + static_path + "common/skin/img/icons/cx/icon-loading.gif'> 請稍後... (點我暫停)",
-		"next_batch": "載人更多...",
-		"search_20": "批次搜尋 20 天可兌換航班",
-		"search_all_cabins": "批次搜尋全艙等航班",
-		"flights": "可兌換航班",
-		"nonstop": "直飛",
-		"first": "頭等",
-		"business": "商務",
-		"premium": "豪經",
-		"economy": "經濟",
-		"first_full": "頭等艙",
-		"business_full": "商務艙",
-		"premium_full": "特選經濟艙",
-		"economy_full": "經濟艙",
-		"date": "日期",
-		"no_flights": "查無獎勵機位",
-		"expired": "再搜尋 20 天 (畫面需重整)",
-		"searching_cont": "<img src='https://book.cathaypacific.com" + static_path + "common/skin/img/icons/cx/icon-loading.gif'> 請稍後... (視窗將會刷新)",
-		"super": "SUPERCharged Award Search",
-		"error": "不明錯誤... 再試一次",
-		"bulk_batch": "批次查詢",
-		"bulk_flights": "航班",
-		"new_version": "有新版本可更新:",
-		"login": "提醒: 請先登入後再搜尋。",
-		"tab_retrieve_fail": "無法取得金鑰，請試著登出再重新登入。",
-		"key_exhausted": "金鑰查詢額度用盡，正嘗試取得新金鑰...",
-		"getting_key": "正在嘗試取得 API 金鑰...",
-		"invalid_code": "目的地代碼錯誤",
-		"invalid_date": "日期錯誤",
-		"saved_queries": "收藏的航程日期",
-		"maxsegments": "至多可選擇 6 航段",
-		"multi_book": "兌換多城市行程",
-		"query": "查詢",
-		"delete": "刪除",
-		"search_selected": "批次查詢收藏行程",
-		"book_multi": "多目的地行程預定",
-		"nosaves": "您沒有收藏任何行程。您可以在批次結果頁點擊愛心 ♥ 收藏行程。",
-		"advanced": "進階功能<br>啟用說明",
-		"loading": "查詢中...",
-		"hu_prompt": "你好像查詢量很大...或許你該看看這裡!",
-		"prem_title": "啟用神器進階功能",
-		"prem_intro": "嗨，哩程同好們！希望這個插件有幫助到各位！有沒有想再更進一步提升查票體驗呢？那別錯過以下幾個相信一定會讓各位愛不釋手的進階功能：",
-		"prem_feat1": "一次查詢多個路線",
-		"prem_text1": "你也是行程彈性、有票就飛一族嗎？進階版支援同時輸入多個出發地和目的地（至多各 6 個），就可以輕鬆批次查找多個城市之間跨日期的獎勵機位！這對想要組合複雜的環球票行程的哩民們也是超級方便！比如，只要出發地選 TPE,KHH、目的地選 NRT,KIX，就可以同時輕鬆查找台北到東京、大阪和高雄到東京、大阪的機票！",
-		"prem_feat2": "把行程存到最愛",
-		"prem_text2": "找到了某個航線有位子的日期，想要收藏起來之後回來查？還是已經鎖定某個日期和航線，定期回來關注有沒有放票？現在只要在批次搜尋結果頁簡單按個愛心，就可以把選定的航程日期收藏到自己的最愛起來，之後回來就可以輕鬆從清單裡隨選即查！",
-		"prem_feat3": "一批次查詢收藏的路線",
-		"prem_text3": "只要一鍵就能批次查詢所有收藏清單裡的行程和日期，所有結果一次呈現，一目了然！再也不必來來回回改搜尋條件和日期！",
-		"prem_feat4": "多城市行程(環球票)查詢",
-		"prem_text4": "在你收藏的行程清單裡，簡單勾選你的行程（最多6個）就能組出國泰網站「多個城市」查詢的參數，並直接搜尋和選航班！",
-		"prem_feat5": "還有更多待產中，請拭目以待！",
-		"prem_donate": "若有興起解鎖上述進階功能，請點擊下方按鈕至 buymeacoffee.com 查看進階功能 Extras 包：<a href='https://www.buymeacoffee.com/jayliutw/e/106024' target='_blank' class='unlock_btn'>解鎖進階功能</a>如果過去曾經已透過 buymeacoffee.com 贊助過咖啡，應該會收到一封 Email 邀請加入一個 Buy Me a Coffee 的免費會籍，而會員都會免費獲得解鎖進階功能 Extras 包喔！真心感謝各位的熱心贊助，也希望這些獨家的新功能有給你們帶來一點小驚喜！開發、維護這個插件其實花我不少的私人時間，但是獲得各位的熱情反饋和實質鼓勵讓這一切都感到非常值得。每次看到有人開環球票然後 Tag 我，就覺得倍感溫馨。尤其是之前請過咖啡的各位，贊助並沒有獲得任何額外的好處卻還是選擇斗內，真的是由衷感謝！<br><br>還沒贊助過的朋友們，如果也覺得這個工具幫到你，也歡迎請我喝咖啡喔：<a href='https://buymeacoffee.com/jayliutw' target='_blank'>https://buymeacoffee.com/jayliutw</a><br><br>如果曾經用別的方式贊助過我，請跟我聯繫，好讓我邀請加入會籍：<a href='mailto:epicurean.tw@gmail.com' target='_blank'>epicurean.tw@gmail.com</a>",
-		"human": "國泰網站需要你證明你是真人：",
-		"bot_check": "請解除國泰網站機器人檢查",
 	};
 
 	//============================================================
