@@ -114,7 +114,7 @@
 	const browser_lang = "en";
 	const browser_country = "CA";
 
-	let login_url = "https://www.cathaypacific.com/content/cx/" + browser_lang + "_" + browser_country + "/sign-in.html?loginreferrer=" + encodeURI("https://www.cathaypacific.com/cx/" + browser_lang + "_" + browser_country + "/book-a-trip/redeem-flights/redeem-flight-awards.html");
+	let login_url = `https://www.cathaypacific.com/content/cx/${browser_lang}_${browser_country}/sign-in.html?loginreferrer=${encodeURI(`https://www.cathaypacific.com/cx/${browser_lang}_${browser_country}/book-a-trip/redeem-flights/redeem-flight-awards.html`)}`;
 
 	let r = Math.random();
 	let t = tab_id || "";
