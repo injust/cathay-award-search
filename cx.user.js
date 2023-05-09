@@ -204,7 +204,7 @@
             const hours = (date.getUTCDate() - 1) * 24 + date.getUTCHours()
             return (hours > 0 ? hours.toString() + 'hr ' : '') + date.getUTCMinutes().toString() + 'mins'
         } else {
-            return date.getUTCFullYear() + '-' + (date.getUTCMonth() + 1).toString().padStart(2, '0') + '-' + date.getUTCDate().toString().padStart(2, '0') + ' ' + date.getUTCHours().toString().padStart(2, '0') + ':' + date.getUTCMinutes().toString().padStart(2, '0')
+            return `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1).toString().padStart(2, '0')}-${date.getUTCDate().toString().padStart(2, '0')} ${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')}`
         };
     };
 
@@ -412,7 +412,7 @@
                 <label class="labels_right"><span>Children</span>
                     <input tabindex="5" type='number' inputmode='decimal' onClick='this.select();' id='uef_child' name='uef_child' placeholder='Children' value='${uef_child}'></label>
                 <label class="labels_left"><span>Date</span>
-                    <input tabindex="3" class='uef_date' onClick='this.setSelectionRange(6, 8);' id='uef_date' inputmode='decimal' name='uef_date' placeholder='${dateAdd(30)}` + '\' value=\'' + uef_date + `'></label>
+                    <input tabindex="3" class='uef_date' onClick='this.setSelectionRange(6, 8);' id='uef_date' inputmode='decimal' name='uef_date' placeholder='${dateAdd(30)}' value='${uef_date}'></label>
                 <button class='uef_search'>` + lang.search + `</button>
             </div>
         </div>
