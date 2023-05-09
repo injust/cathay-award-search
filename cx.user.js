@@ -7,12 +7,12 @@
 // @author              jayliutw
 // @connect             cathaypacific.com
 // @connect             userscripts.jayliu.net
-// @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/redeem-flight-awards.html*
 // @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/facade.html*
+// @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/redeem-flight-awards.html*
 // @match               https://book.cathaypacific.com/*
-// @grant               GM_setValue
 // @grant               GM_getValue
 // @grant               GM_log
+// @grant               GM_setValue
 // @grant               GM_xmlhttpRequest
 // @grant               unsafeWindow
 // @license             GPL
