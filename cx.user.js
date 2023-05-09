@@ -413,7 +413,7 @@
                     <input tabindex="5" type='number' inputmode='decimal' onClick='this.select();' id='uef_child' name='uef_child' placeholder='Children' value='${uef_child}' min='0'></label>
                 <label class="labels_left"><span>Date</span>
                     <input tabindex="3" class='uef_date' onClick='this.setSelectionRange(6, 8);' id='uef_date' inputmode='decimal' name='uef_date' placeholder='${dateAdd(30)}' value='${uef_date}'></label>
-                <button class='uef_search'>` + lang.search + `</button>
+                <button class='uef_search'>${lang.search}</button>
             </div>
         </div>
 
@@ -428,7 +428,7 @@
                     <input type='number' inputmode='decimal' onClick='this.select();' id='multi_adult' name='multi_adult' placeholder='Adults' value='1' min='0'></label>
                 <label class="labels_right"><span>Children</span>
                     <input type='number' inputmode='decimal' onClick='this.select();' id='multi_child' name='multi_child' placeholder='Children' value='0' min='0'></label>
-                                    <a href="javascript:void(0)" class='multi_search'>` + lang.multi_book + `</a>
+                                    <a href="javascript:void(0)" class='multi_search'>${lang.multi_book}</a>
         </div>
 
         <div class='bulk_box'>
@@ -440,11 +440,11 @@
 <label><input type="checkbox" id="filter_premium" checked>${lang.premium}</label>
 <label><input type="checkbox" id="filter_economy" checked>${lang.economy}</label>
 </div>
-                <table class='bulk_table show_first show_business show_premium show_economy'><thead><th class='bulk_date'>` + lang.date + '</th><th class=\'bulk_flights\'>' + lang.flights + ' <span class=\'info-x info-f\'>' + lang.first + '</span><span class=\'info-x info-j\'>' + lang.business + '</span><span class=\'info-x info-p\'>' + lang.premium + '</span><span class=\'info-x info-y\'>' + lang.economy + `</span></th></thead><tbody></tbody></table>
+                <table class='bulk_table show_first show_business show_premium show_economy'><thead><th class='bulk_date'>${lang.date}</th><th class='bulk_flights'>${lang.flights} <span class='info-x info-f'>${lang.first}</span><span class='info-x info-j'>${lang.business}</span><span class='info-x info-p'>${lang.premium}</span><span class='info-x info-y'>${lang.economy}</span></th></thead><tbody></tbody></table>
             </div>
             <div class="bulk_footer">
                 <div class="bulk_footer_container">
-                    <button class='bulk_submit'>` + lang.search_20 + `</button>
+                    <button class='bulk_submit'>${lang.search_20}</button>
                     <div class="bulk_error bulk_error_hidden"><span></span></div>
                 </div>
             </div>
@@ -569,7 +569,7 @@
         }
         .saved_queries:empty:after {
             display:flex;
-            content:"` + lang.nosaves + `";
+            content:"${lang.nosaves}";
             text-align: center;
             font-size: 14px;
             align-items: center;
@@ -620,7 +620,7 @@
         }
         .saved_flights:empty:after {
             display:flex;
-            content:"` + lang.nosaves + `";
+            content:"${lang.nosaves}";
             text-align: center;
             font-size: 14px;
             align-items: center;
@@ -821,7 +821,7 @@
         .bulk_table td.bulk_flights .flight_list:empty:after {
             display: block;
             height: 24px;
-            content: "` + lang.no_flights + `";
+            content: "${lang.no_flights}";
             margin-bottom: 5px;
             margin-top: -3px;
             margin-left: 10px;
