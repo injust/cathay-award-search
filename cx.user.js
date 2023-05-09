@@ -358,6 +358,8 @@
         tab_retrieve_fail: 'Failed to retrieve key. Try logging out and in again.',
         key_exhausted: 'Key request quota exhausted, attempting to get new key...',
         getting_key: 'Attempting to retrieve API key...',
+        invalid_airport: 'Invalid Airport',
+        invalid_airports: 'Invalid Airports',
         invalid_code: 'Invalid Destination Code',
         invalid_date: 'Invalid Date',
         saved_queries: 'Saved Flight Queries',
@@ -2011,20 +2013,20 @@
         log('checkCities()')
         setTimeout(function() {
             let cities = elem.value.split(',')
-            const errorcities = []
+            const errorCities = []
             cities = cities.filter(city => {
                 if (city.match(/^[A-Z]{3}$/)) {
                     return true
                 } else {
-                    errorcities.push(city)
+                    if (city) errorCities.push(city)
                     return false
                 }
             })
 
-            if (errorcities.filter(Boolean).length > 0) {
+            if (errorCities.length > 0) {
                 elem.value = cities.join(',')
                 elem.dispatchEvent(new Event('change'))
-                alert('Invalid Airport' + (errorcities.filter(Boolean).length > 1 ? 's' : '') + ' Removed: ' + errorcities.filter(Boolean).join(','))
+                alert((errorCities.length > 1 ? lang.invalid_airports : lang.invalid_airport) + ' Removed: ' + errorCities.join(','))
             }
         }, 500)
     }
