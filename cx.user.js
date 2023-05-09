@@ -28,8 +28,8 @@
 
     const debug = false
 
-    function log(data) {
-        if (debug) console.debug(data)
+    function log(...data) {
+        if (debug) console.debug(...data)
     }
 
     // ============================================================
@@ -260,7 +260,7 @@
     }
 
     function initRoot() {
-        log('initRoot();')
+        log('initRoot()')
 
         addCss(styleCss)
 
@@ -404,13 +404,13 @@
                 <label class="labels_left"><span>From</span>
                     <input tabindex="1" type='text' id='uef_from' name='uef_from' placeholder='TPE,HKG' value='${uef_from}'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clear_from" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></a></label>
                 <label class="labels_right"><span>Adults</span>
-                    <input tabindex="4" type='number' inputmode='decimal' onClick='this.select();' id='uef_adult' name='uef_adult' placeholder='Adults' value='${uef_adult}' min='0'></label>
+                    <input tabindex="4" type='number' inputmode='decimal' onClick='this.select()' id='uef_adult' name='uef_adult' placeholder='Adults' value='${uef_adult}' min='0'></label>
                 <label class="labels_left"><span>To</span>
                     <input tabindex="2" type='text' id='uef_to' name='uef_to' placeholder='TYO,LHR,SFO' value='${uef_to}'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clear_to" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></label>
                 <label class="labels_right"><span>Children</span>
-                    <input tabindex="5" type='number' inputmode='decimal' onClick='this.select();' id='uef_child' name='uef_child' placeholder='Children' value='${uef_child}' min='0'></label>
+                    <input tabindex="5" type='number' inputmode='decimal' onClick='this.select()' id='uef_child' name='uef_child' placeholder='Children' value='${uef_child}' min='0'></label>
                 <label class="labels_left"><span>Date</span>
-                    <input tabindex="3" class='uef_date' onClick='this.setSelectionRange(6, 8);' id='uef_date' inputmode='decimal' name='uef_date' placeholder='${dateAdd(30)}' value='${uef_date}'></label>
+                    <input tabindex="3" class='uef_date' onClick='this.setSelectionRange(6, 8)' id='uef_date' inputmode='decimal' name='uef_date' placeholder='${dateAdd(30)}' value='${uef_date}'></label>
                 <button class='uef_search'>${lang.search}</button>
             </div>
         </div>
@@ -423,9 +423,9 @@
     <option value="F">${lang.first_full}</option>
 </select>
                 <label class="labels_right"><span>Adults</span>
-                    <input type='number' inputmode='decimal' onClick='this.select();' id='multi_adult' name='multi_adult' placeholder='Adults' value='1' min='0'></label>
+                    <input type='number' inputmode='decimal' onClick='this.select()' id='multi_adult' name='multi_adult' placeholder='Adults' value='1' min='0'></label>
                 <label class="labels_right"><span>Children</span>
-                    <input type='number' inputmode='decimal' onClick='this.select();' id='multi_child' name='multi_child' placeholder='Children' value='0' min='0'></label>
+                    <input type='number' inputmode='decimal' onClick='this.select()' id='multi_child' name='multi_child' placeholder='Children' value='0' min='0'></label>
                                     <a href="javascript:void(0)" class='multi_search'>${lang.multi_book}</a>
         </div>
 
@@ -1474,7 +1474,7 @@
                 let pos = 1
                 Array.from(segments_array).sort(function(a, b) {
                     if (+a.dataset.date > +b.dataset.date) return 1
-                    log(`${a.dataset.date} ${b.dataset.date}`)
+                    log(a.dataset.date, b.dataset.date)
                     if (a.dataset.date == b.dataset.date) return (a.dataset.new ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1))
                     return false
                 }).forEach(function(elm) {
@@ -1525,7 +1525,7 @@
 
         link_search_saved.addEventListener('click', function(e) {
             if (Object.keys(saved).length == 0) {
-                alert('No Saved Queries.')
+                alert('No Saved Queries')
             } else {
                 this.innerText = lang.loading
                 saved_search()
@@ -1534,7 +1534,7 @@
 
         link_search_multi.addEventListener('click', function(e) {
             if (shadowRoot.querySelectorAll('.saved_query.selected').length == 0) {
-                alert('No Selected Segments.')
+                alert('No Selected Segments')
             } else {
                 this.innerText = lang.loading
                 const to_search = []
@@ -1818,7 +1818,7 @@
     let remaining_days = 20
 
     function stop_batch() {
-        log('Batch Clicked. Stopping Search.')
+        log('Batch Clicked. Stopping Search')
         stop_search = true
         searching = false
         shadowRoot.querySelector('.bulk_submit').innerText = lang.next_batch
@@ -1830,7 +1830,7 @@
     function bulk_click(single_date = false) {
         shadowRoot.querySelector('.bulk_results').classList.remove('bulk_results_hidden')
         if (!searching) {
-            log('Batch Clicked. Starting Search.')
+            log('Batch Clicked. Starting Search')
             uef_from = value_set('uef_from', input_from.value)
             uef_to = value_set('uef_to', input_to.value)
             uef_date = value_set('uef_date', input_date.value)
@@ -2033,7 +2033,7 @@
             },
             withCredentials: 'true',
             onload: function(response) {
-                log('getprofile')
+                log('getProfile')
                 const data = JSON.parse(response.responseText)
                 if (data.membershipNumber) return
                 div_login_prompt.classList.remove('hidden')
@@ -2129,7 +2129,7 @@
             withCredentials: 'true',
             data: JSON.stringify(newQueryPayload()),
             onload: function(response) {
-                log('Initial Request Parameters Received.')
+                log('Initial Request Parameters Received')
                 const data = JSON.parse(response.responseText)
                 const parameters = (data.parameters)
                 const urlToPost = data.urlToPost || 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability'
@@ -2154,19 +2154,19 @@
                             log('Tab ID Response Received. Parsing...')
                             const data = response.responseText
                             requestVars = response_parser(data, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
-                            log(response_parser(data, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/))
+                            log('requestVars:', requestVars)
                             if (!requestVars) {
                                 errorBOM = response_parser(data, /errorBom = ([^;]+)/)
                                 if (errorBOM?.modelObject?.step == 'Error') {
                                     errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
                                 }
-                                log('Tab ID Could not be parsed.')
+                                log('Tab ID Could not be parsed')
                                 batchError(`<strong>Error:</strong> ${errorMessage} (<a href='${login_url}'>Login</a>) `)
                                 resetSearch()
                                 return false
                             }
                             tab_id = requestVars.TAB_ID ? requestVars.TAB_ID : ''
-                            log('New Tab ID: ' + tab_id)
+                            log('New Tab ID:', tab_id)
                             batchError(false)
                             form_submit_url = availability_url + tab_id
                             if (callback) callback()
@@ -2175,7 +2175,7 @@
                             if (errorBOM?.modelObject?.step == 'Error') {
                                 errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
                             }
-                            log('Failed to receive Tab ID.')
+                            log('Failed to receive Tab ID')
                             resetSearch()
                             batchError(`<strong>Error:</strong> ${errorMessage} ( <a href='${login_url}'>Login</a> ) `)
                         }
@@ -2207,8 +2207,7 @@
         }
 
         // var cx_string = JSON.stringify(newQueryPayload(uef_from, uef_to, uef_date, uef_adult, uef_child));
-        log('cx_string:')
-        log(cx_string)
+        log('cx_string:', cx_string)
         btn_search.innerHTML = lang.searching
         btn_search.classList.add('searching')
         httpRequest({
@@ -2223,8 +2222,7 @@
                 const data = JSON.parse(response.responseText)
                 const parameters = data.parameters
                 const urlToPost = data.urlToPost || 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability'
-                log('regularSearch parameters:')
-                log(parameters)
+                log('regularSearch parameters:', parameters)
                 const action_url = new URL(urlToPost)
                 if (is_cont_query) value_set('cont_query', '1')
                 if (is_cont_batch) value_set('cont_batch', '1')
@@ -2258,14 +2256,14 @@
     let bulk_date = ''
 
     function bulk_search(single_date = false) {
-        log('bulk_search start, remaining_days:' + remaining_days)
+        log('bulk_search start, remaining_days:', remaining_days)
         let no_continue = false
         if (remaining_days-- == 0) {
             stop_batch()
             no_continue = true
         }
 
-        log('remaining_days: ' + remaining_days)
+        log('remaining_days:', remaining_days)
 
         uef_from = input_from.value
         uef_to = input_to.value
@@ -2366,8 +2364,7 @@
 
         const requests = requestVars
 
-        log('searchAvailability() requests')
-        log(requests)
+        log('searchAvailability() requests:', requests)
 
         requests.B_DATE_1 = date + '0000'
         // requests.B_DATE_2 = dateAdd(1,date) + "0000";
@@ -2408,7 +2405,7 @@
 						if (incapsula_script) {
 						    batchError("Cathay bot block triggered.");
 						} */
-                        batchError('Response not valid JSON.')
+                        batchError('Response not valid JSON')
                         return
                     }
                     const pageBom = JSON.parse(data.pageBom)
@@ -2432,7 +2429,7 @@
         if (!shadowRoot.querySelector(`.bulk_table tr[data-date="${date}"]`)) {
             let results_row = ''
             results_row += `<tr data-date='${date}'><td class='bulk_date'>
-        <a href='javascript:void(0);' data-book='true' data-date='${date}'>${toDashedDate(date)}</a>
+        <a href='javascript:void(0)' data-book='true' data-date='${date}'>${toDashedDate(date)}</a>
         ${dateWeekday(date)}
         </td><td class='bulk_flights'></td></tr>`
             shadowRoot.querySelector('.bulk_table tbody').insertAdjacentHTML('beforeend', results_row)
