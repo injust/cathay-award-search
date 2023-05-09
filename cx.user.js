@@ -378,7 +378,6 @@
 		"search_selected": "Search All Saved",
 		"book_multi": "Book Multicity Award",
 		"nosaves": "You do not have any saved queries. Click on ♥ in batch results to save.",
-		"advanced": "Advanced<br>Features",
 		"loading": "Searching...",
 		"hu_prompt": "Looks like you're searching a lot. You might want to read this.",
 		"prem_title": "Enable Advanced Features",
@@ -437,7 +436,6 @@
             </div>
 
             <div class="unelevated_saved"><a href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="heart_save" viewBox="0 0 16 16"> <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"></path></svg><span>0</span></a></div>
-            <div class="unelevated_premium"><a href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="premium_crown"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M576 136c0 22.09-17.91 40-40 40c-.248 0-.4551-.1266-.7031-.1305l-50.52 277.9C482 468.9 468.8 480 453.3 480H122.7c-15.46 0-28.72-11.06-31.48-26.27L40.71 175.9C40.46 175.9 40.25 176 39.1 176c-22.09 0-40-17.91-40-40S17.91 96 39.1 96s40 17.91 40 40c0 8.998-3.521 16.89-8.537 23.57l89.63 71.7c15.91 12.73 39.5 7.544 48.61-10.68l57.6-115.2C255.1 98.34 247.1 86.34 247.1 72C247.1 49.91 265.9 32 288 32s39.1 17.91 39.1 40c0 14.34-7.963 26.34-19.3 33.4l57.6 115.2c9.111 18.22 32.71 23.4 48.61 10.68l89.63-71.7C499.5 152.9 496 144.1 496 136C496 113.9 513.9 96 536 96S576 113.9 576 136z"/></svg><span>` + lang.advanced + `</span></a></div>
 
             <div class='labels'>
                 <a href="javascript:void(0);" class="switch"><svg height="16px" width="16px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 365.352 365.352" xml:space="preserve" stroke-width="0" transform="rotate(180)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g> <path d="M363.155,169.453l-14.143-14.143c-1.407-1.407-3.314-2.197-5.304-2.197 c-1.989,0-3.897,0.79-5.304,2.197l-45.125,45.125v-57.503c0-50.023-40.697-90.721-90.721-90.721H162.3c-4.143,0-7.5,3.358-7.5,7.5 v20c0,4.142,3.357,7.5,7.5,7.5h40.26c30.725,0,55.721,24.996,55.721,55.721v57.503l-45.125-45.125 c-1.407-1.407-3.314-2.197-5.304-2.197c-1.989,0-3.896,0.79-5.304,2.197l-14.143,14.143c-1.406,1.406-2.196,3.314-2.196,5.303 c0,1.989,0.79,3.897,2.196,5.303l82.071,82.071c1.465,1.464,3.385,2.197,5.304,2.197c1.919,0,3.839-0.732,5.304-2.197 l82.071-82.071c1.405-1.406,2.196-3.314,2.196-5.303C365.352,172.767,364.561,170.859,363.155,169.453z"></path> <path d="M203.052,278.14h-40.26c-30.725,0-55.721-24.996-55.721-55.721v-57.503l45.125,45.126 c1.407,1.407,3.314,2.197,5.304,2.197c1.989,0,3.896-0.79,5.304-2.197l14.143-14.143c1.406-1.406,2.196-3.314,2.196-5.303 c0-1.989-0.79-3.897-2.196-5.303l-82.071-82.071c-2.93-2.929-7.678-2.929-10.607,0L2.196,185.292C0.79,186.699,0,188.607,0,190.596 c0,1.989,0.79,3.897,2.196,5.303l14.143,14.143c1.407,1.407,3.314,2.197,5.304,2.197s3.897-0.79,5.304-2.197l45.125-45.126v57.503 c0,50.023,40.697,90.721,90.721,90.721h40.26c4.143,0,7.5-3.358,7.5-7.5v-20C210.552,281.498,207.194,278.14,203.052,278.14z"></path> </svg></a>
@@ -507,39 +505,13 @@
         .unelevated_form.uef_collapsed { margin-left:-90%;}
         .unelevated_title {font-weight: 400; font-size: 17px; font-family: "GT Walsheim","Cathay Sans EN", CathaySans_Rg, sans-serif; color: #2d2d2d; margin: 5px; height:26px;}
         .unelevated_title a {text-decoration:none; color: #2d2d2d;}
-        .unelevated_form .unelevated_premium {    position: absolute;
-            right: 10px;
-            top: 6px;
-            background: linear-gradient(339deg, #fdf98b, #e4c63f,#fef985,#eec946);
-            box-shadow: -1px 1px 3px rgb(155 95 70 / 40%);
-            display: inline-block;
-            border-radius: 5px;
-            padding: 1px;
-        }
-        .unelevated_form .unelevated_premium a, .unelevated_form .unelevated_premium a:hover, .unelevated_form .unelevated_premium a:active, .unelevated_form .unelevated_premium a:focus {
-            font-size: 15px; line-height: 28px; text-decoration: none !important; color: #4d3b0e; display: block; height: 28px;
-            background: linear-gradient(180deg, #fcd54a, #e8b524,#ffd561,#f7eb6d);
-            border-radius: 5px;
-            padding: 1px 8px;
-        }
-        .unelevated_form .unelevated_premium svg.premium_crown { width: 16px;margin-right: 6px;height: 26px;display: inline-block;}
-        .unelevated_form .unelevated_premium svg.premium_crown path { fill: #bf8028;}
-        .unelevated_form .unelevated_premium a span {
-            display:inline-block;
-            padding: 3px 0;
-            vertical-align: top;
-            line-height: 10px;
-            font-size: 9px;
-            text-transform:uppercase;
-        }
         .unelevated_form .unelevated_saved { position:absolute; right:10px;top:6px;background: #ae4b4b; display: inline-block; border-radius: 5px; padding: 3px 10px;}
         .unelevated_form .unelevated_saved a, .unelevated_form .unelevated_saved a:hover, .unelevated_form .unelevated_saved a:active, .unelevated_form .unelevated_saved a:focus {font-size: 15px; line-height: 24px; text-decoration: none !important; color: white; display: block; height: 24px;}
         .unelevated_form .unelevated_saved svg.heart_save { width: 16px;margin-right: 6px;height: 24px;display: inline-block;}
         .unelevated_form .unelevated_saved svg.heart_save path { fill: #ff8b8b;}
         .unelevated_form .unelevated_saved a span {vertical-align: top; line-height: 24px;}
 
-        .elevated_on .unelevated_prem_desc,
-        .elevated_on .unelevated_premium {
+        .elevated_on .unelevated_prem_desc {
             display:none;
         }
 
@@ -1705,10 +1677,6 @@
 		shadowRoot.querySelector(".unelevated_saved a").addEventListener("click", function(e) {
 			//alert(JSON.stringify(saved));
 			shadowRoot.querySelector(".unelevated_faves").classList.toggle("unelevated_faves_hidden");
-		});
-
-		shadowRoot.querySelector(".unelevated_premium a").addEventListener("click", function(e) {
-			shadowRoot.querySelector(".unelevated_prem_desc").classList.toggle("unelevated_prem_hidden");
 		});
 
 		let pt_count = 0
