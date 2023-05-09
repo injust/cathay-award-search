@@ -2843,13 +2843,9 @@
 	// Enable Advanced Features
 	//============================================================
 
-	advanced_features();
-
-	function advanced_features() {
-		let code = "c2hhZG93Q29udGFpbmVyLmNsYXNzTGlzdC5hZGQoImVsZXZhdGVkX29uIik7c2hhZG93Q29";
-		code += "udGFpbmVyLmNsYXNzTGlzdC5yZW1vdmUoInVuZWxldmF0ZWRfY29udGFpbmVyIik7dCA9IHI7";
-		eval(atob(code));
-	}
+	shadowContainer.classList.add("elevated_on");
+	shadowContainer.classList.remove("unelevated_container");
+	t = r;
 
 	//============================================================
 	// Check Version (Max once per day)
