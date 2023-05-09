@@ -1728,13 +1728,13 @@
 
         function newAC(elm, e) {
             const arr = airports[list] || []
-            let a;
-            let b;
-            let c;
-            let i;
-            let sa;
-            let sc;
-            let se;
+            let a
+            let b
+            let c
+            let i
+            let sa
+            let sc
+            let se
             let val = elm.value
             /* close any already open lists of autocompleted values */
             closeAllLists()
@@ -1815,7 +1815,7 @@
     // Application Logic
     // ============================================================
 
-    let searching;
+    let searching
     let stop_search = false
 
     function resetSearch() {
