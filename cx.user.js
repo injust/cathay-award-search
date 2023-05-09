@@ -267,9 +267,9 @@
 
         addCss(styleCss)
 
-        const current_page = window.location.href
+        const current_url = window.location.href
 
-        if (current_page.indexOf('redeem-flight-awards.html') > -1) {
+        if (current_url.includes('redeem-flight-awards.html')) {
             reset_cont_vars()
 
             log('initRoot redeem-flight-awards.html')
@@ -278,7 +278,7 @@
                 initSearchBox()
                 checkLogin()
             })
-        } else if (current_page.indexOf('facade.html') > -1) {
+        } else if (current_url.includes('facade.html')) {
             reset_cont_vars()
 
             log('initRoot facade.html')
@@ -287,7 +287,7 @@
                 initSearchBox()
                 checkLogin()
             })
-        } else if (current_page.indexOf('air/booking/availability') > -1 && cont_query) {
+        } else if (current_url.includes('air/booking/availability') && cont_query) {
             log('initRoot air/booking/availability with cont_query')
             waitForElm('body > header').then((elm) => {
                 const boxes = document.querySelectorAll('body > div')
@@ -299,7 +299,7 @@
                 initSearchBox()
                 checkLogin()
             })
-        } else if (window.location.href.indexOf('air/booking/availability') > -1) {
+        } else if (current_url.includes('air/booking/availability')) {
             reset_cont_vars()
 
             log('initRoot air/booking/availability without cont_query')
@@ -310,7 +310,7 @@
                 initSearchBox()
                 checkLogin()
             })
-        } else if (window.location.href.indexOf('air/booking/complexAvailability') > -1) {
+        } else if (current_url.includes('air/booking/complexAvailability')) {
             reset_cont_vars()
 
             log('initRoot air/booking/complexAvailability')
