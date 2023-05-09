@@ -253,7 +253,7 @@
 		mode: "closed"
 	});
 	const shadowContainer = document.createElement("div");
-	shadowContainer.classList.add("unelevated_container");
+	shadowContainer.classList.add("elevated_on");
 	shadowRoot.appendChild(shadowContainer);
 
 	if (debug && unsafeWindow.shadowRoot == undefined) {
@@ -537,7 +537,6 @@
         .unelevated_form .unelevated_saved svg.heart_save { width: 16px;margin-right: 6px;height: 24px;display: inline-block;}
         .unelevated_form .unelevated_saved svg.heart_save path { fill: #ff8b8b;}
         .unelevated_form .unelevated_saved a span {vertical-align: top; line-height: 24px;}
-        .unelevated_container .unelevated_saved{ display:none; }
 
         .elevated_on .unelevated_prem_desc,
         .elevated_on .unelevated_premium {
@@ -944,9 +943,6 @@
         .bulk_table th, .bulk_table td { border: 1px solid #c6c2c1; padding: 5px; }
         .bulk_table .bulk_date { width:80px; text-align:center; }
         .bulk_table .bulk_date a { text-decoration:underline !important; font-family: "Cathay Sans EN", CathaySans_Md, sans-serif; font-weight: 400; display:block;margin-bottom:5px;}
-        .unelevated_container .bulk_table td.bulk_flights > div { display:none; }
-        .unelevated_container .bulk_table td.bulk_flights > div:first-of-type { display:block; }
-        .unelevated_container .bulk_table td.bulk_flights .flight_title { display:none; }
         .bulk_table td.bulk_flights { padding:5px 5px 0 5px; font-family: "Cathay Sans EN", CathaySans_Rg, sans-serif; font-weight: 400; line-height:0px; }
         .bulk_table td.bulk_flights .flight_list:empty:after {
             display: block;
@@ -2782,8 +2778,6 @@
 	// Enable Advanced Features
 	//============================================================
 
-	shadowContainer.classList.add("elevated_on");
-	shadowContainer.classList.remove("unelevated_container");
 	t = r;
 
 	//============================================================
