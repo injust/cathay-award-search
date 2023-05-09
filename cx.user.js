@@ -329,8 +329,8 @@
     //= ===========================================================
 
     const lang = {
-        ec: 'HK',
-        el: 'en',
+        ec: browser_country,
+        el: browser_lang,
         search: 'Search',
         coffee: 'Did this tool help you? Buy me a coffee! ',
         searching: "<img src='https://book.cathaypacific.com" + static_path + "common/skin/img/icons/cx/icon-loading.gif'> Searching...",
@@ -1593,7 +1593,7 @@
         log('getOrigins()')
         httpRequest({
             method: 'GET',
-            url: 'https://api.cathaypacific.com/redibe/airport/origin/' + (browser_lang == 'zh' ? (browser_country == 'CN' ? 'sc' : 'zh') : 'en') + '/',
+            url: `https://api.cathaypacific.com/redibe/airport/origin/${lang.el}/`,
             onload: function(response) {
                 const data = JSON.parse(response.responseText)
                 if (data.airports) {
@@ -1616,7 +1616,7 @@
         log('getDestinations()')
         httpRequest({
             method: 'GET',
-            url: 'https://api.cathaypacific.com/redibe/airport/destination/' + from + '/' + (browser_lang == 'zh' ? (browser_country == 'CN' ? 'sc' : 'zh') : 'en') + '/',
+            url: `https://api.cathaypacific.com/redibe/airport/destination/${from}/${lang.el}/`,
             onload: function(response) {
                 const data = JSON.parse(response.responseText)
                 if (data.airports) {
