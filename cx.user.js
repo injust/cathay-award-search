@@ -470,7 +470,7 @@
             <div class='login_prompt hidden'><span class='unelevated_error'><a href="` + login_url + `">` + lang.login + `</a></span></div>
 
             <div class='unelevated_update hidden'><a href='https://pse.is/cxupdate' target='_blank'>` + lang.new_version + ` <span id='upd_version'>3.2.1</span> &raquo;</a></div>
-            
+
             <div class='unelevated_prem_desc unelevated_prem_hidden'>
                 <span class="prem_title">` + lang.prem_title + `</span>
                 <div class="prem_content">
@@ -704,7 +704,7 @@
         .unelevated_faves .saved_flights{
             display:none;
         }
-        
+
         .unelevated_faves.flights .saved_queries {
             display:none;
         }
@@ -2212,7 +2212,7 @@
                             ${avail.y > 0 ? '<span class="av_y">Y ' + avail.y + '</span>' : ''}
                         </span>
                     </span>
-                    
+
                 </span>
             </label>
             <!--<a href="javascript:void(0);" class="saved_book" data-book="true" "data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>-->
