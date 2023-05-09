@@ -2289,7 +2289,7 @@
             return
         }
 
-        bulk_date = bulk_date || input_date.value
+        bulk_date ||= input_date.value
 
         if (route_changed) {
             div_table_body.innerHTML = ''
@@ -2668,7 +2668,7 @@
     function versionCheck(update, updateurl, metaData) {
         let date = new Date()
         date = Math.floor(date.setHours(0, 0, 0) / 1000)
-        if (date > lastCheck || !lastCheck) {
+        if (!lastCheck || date > lastCheck) {
             getLatest(date)
             lastCheck = value_set('lastCheck', date)
         } else {
