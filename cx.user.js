@@ -110,7 +110,7 @@
             tab_id = requestParams.TAB_ID || ''
         }
 
-        form_submit_url = (typeof formSubmitUrl !== 'undefined') ? formSubmitUrl : availability_url + tab_id
+        form_submit_url = typeof formSubmitUrl !== 'undefined' ? formSubmitUrl : availability_url + tab_id
     }
 
     const browser_locale = navigator.language
@@ -1690,7 +1690,7 @@
             /* start by removing the "active" class on all items: */
             removeActive(x)
             if (currentFocus >= x.length) currentFocus = 0
-            if (currentFocus < 0) currentFocus = (x.length - 1)
+            if (currentFocus < 0) currentFocus = x.length - 1
             /* add class "autocomplete-active": */
             x[currentFocus].classList.add('autocomplete-active')
         }
@@ -1761,9 +1761,9 @@
                 const shortName = arr[key].shortName
                 if (airportCode.length > 3) return
                 if (val.toUpperCase() == airportCode.substr(0, val.length).toUpperCase() || val.toUpperCase() == countryName.substr(0, val.length).toUpperCase() || val.toUpperCase() == shortName.substr(0, val.length).toUpperCase()) {
-                    sa = (airportCode.substr(0, val.length).toUpperCase() == val.toUpperCase()) ? val.length : 0
-                    se = (shortName.substr(0, val.length).toUpperCase() == val.toUpperCase()) ? val.length : 0
-                    sc = (countryName.substr(0, val.length).toUpperCase() == val.toUpperCase()) ? val.length : 0
+                    sa = airportCode.substr(0, val.length).toUpperCase() == val.toUpperCase() ? val.length : 0
+                    se = shortName.substr(0, val.length).toUpperCase() == val.toUpperCase() ? val.length : 0
+                    sc = countryName.substr(0, val.length).toUpperCase() == val.toUpperCase() ? val.length : 0
                     /* create a DIV element for each matching element: */
                     b = document.createElement('DIV')
                     /* make the matching letters bold: */
@@ -2131,7 +2131,7 @@
             onload: function(response) {
                 log('Initial Request Parameters Received')
                 const data = JSON.parse(response.responseText)
-                const parameters = (data.parameters)
+                const parameters = data.parameters
                 const urlToPost = data.urlToPost || 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability'
                 let form_data = ''
                 for (const key in parameters) {
@@ -2297,10 +2297,10 @@
         const routes = []
         const rt_from = uef_from.split(',')
         const rt_to = uef_to.split(',')
-        const query_count = (rt_from.length * rt_to.length)
+        const query_count = rt_from.length * rt_to.length
 
         if (!no_continue & remaining_days > Math.ceil(25 / query_count)) {
-            remaining_days = (Math.ceil(25 / query_count) - 1)
+            remaining_days = Math.ceil(25 / query_count) - 1
         }
 
         if (r == t) {
