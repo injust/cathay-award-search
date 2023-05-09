@@ -1781,7 +1781,7 @@
                     c += ' - <strong>' + countryName.substr(0, sc) + '</strong>' + countryName.substr(sc) + '</span>'
                     c += '</span>'
                     /* insert a input field that will hold the current array item's value: */
-                    c += "<input type='hidden' value='" + airportCode + "'>"
+                    c += `<input type='hidden' value='${airportCode}'>`
                     b.dataset.city = airportCode
                     b.innerHTML = c
                     /* execute a function when someone clicks on the item value (DIV element): */
@@ -2170,7 +2170,7 @@
                                     errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
                                 }
                                 log('Tab ID Could not be parsed.')
-                                batchError('<strong>Error:</strong> ' + errorMessage + " (<a href='" + login_url + "'>Login</a>) ")
+                                batchError(`<strong>Error:</strong> ${errorMessage} (<a href='${login_url}'>Login</a>) `)
                                 resetSearch()
                                 return false
                             }
@@ -2186,7 +2186,7 @@
                             }
                             log('Failed to receive Tab ID.')
                             resetSearch()
-                            batchError('<strong>Error:</strong> ' + errorMessage + " ( <a href='" + login_url + "'>Login</a> ) ")
+                            batchError(`<strong>Error:</strong> ${errorMessage} ( <a href='${login_url}'>Login</a> ) `)
                         }
                     }
                 }, true)
@@ -2438,7 +2438,7 @@
     // ============================================================
 
     function insertResults(from, to, date, pageBom) {
-        if (!shadowRoot.querySelector('.bulk_table tr[data-date="' + date + '"]')) {
+        if (!shadowRoot.querySelector(`.bulk_table tr[data-date="${date}"]`)) {
             let results_row = ''
             results_row += `<tr data-date='${date}'><td class='bulk_date'>
         <a href='javascript:void(0);' data-book='true' data-date='${date}'>${toDashedDate(date)}</a>
@@ -2599,7 +2599,7 @@
         }
         flightHTML += '</div></div>'
 
-        shadowRoot.querySelector('.bulk_table tr[data-date="' + date + '"] .bulk_flights').insertAdjacentHTML('beforeend', flightHTML)
+        shadowRoot.querySelector(`.bulk_table tr[data-date="${date}"] .bulk_flights`).insertAdjacentHTML('beforeend', flightHTML)
         stickyFooter()
     }
 
