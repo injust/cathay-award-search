@@ -379,7 +379,6 @@
 		"book_multi": "Book Multicity Award",
 		"nosaves": "You do not have any saved queries. Click on ♥ in batch results to save.",
 		"loading": "Searching...",
-		"hu_prompt": "Looks like you're searching a lot. You might want to read this.",
 		"human": "Cathay's website needs you to prove you're a human:",
 		"bot_check": "Please Complete Cathay Bot Check",
 	};
