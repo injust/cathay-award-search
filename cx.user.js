@@ -10,10 +10,9 @@
 // @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/facade.html*
 // @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/redeem-flight-awards.html*
 // @match               https://book.cathaypacific.com/*
+// @grant               GM.xmlHttpRequest
 // @grant               GM_getValue
-// @grant               GM_log
 // @grant               GM_setValue
-// @grant               GM_xmlhttpRequest
 // @grant               unsafeWindow
 // @license             GPL
 // ==/UserScript==
@@ -24,16 +23,19 @@
 (function() {
     'use strict'
 
+    // ============================================================
+    // Debugging
+    // ============================================================
+
     const debug = false
+
+    function log(data) {
+        if (debug) console.debug(data)
+    }
 
     // ============================================================
     // Greasymonkey Function Wrappers
     // ============================================================
-
-    // GM_Log
-    function log(data) {
-        if (debug) GM_log(data)
-    }
 
     // Get and Set Stored Values
     function value_get(valueName, defaultValue) {
@@ -45,10 +47,10 @@
         return setValue
     }
 
-    // XMLHttpRequest and GM_xmlhttpRequest
+    // XMLHttpRequest and GM.xmlHttpRequest
     function httpRequest(request, native = false) {
         if (!native && !debug) {
-            GM_xmlhttpRequest(request)
+            GM.xmlHttpRequest(request)
         } else {
             if (!request.method || !request.url) return
             const http = new XMLHttpRequest()
@@ -2626,7 +2628,7 @@
     // Check Version (Max once per day)
     // ============================================================
 
-    const currentVersion = GM_info.script.version
+    const currentVersion = GM.info.script.version
     let lastCheck = value_get('lastCheck', 0)
     const latestVersion = value_get('latestVersion', currentVersion)
 
@@ -2656,7 +2658,7 @@
     }
 
     function getLatest(date) {
-        GM_xmlhttpRequest({
+        GM.xmlHttpRequest({
             method: 'GET',
             url: 'https://userscripts.jayliu.net/latest.json?v=' + date,
             onload: function(e) {
