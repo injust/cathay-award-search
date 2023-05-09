@@ -503,11 +503,11 @@
             <div class='labels'>
                 <a href="javascript:void(0);" class="switch"><svg height="16px" width="16px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 365.352 365.352" xml:space="preserve" stroke-width="0" transform="rotate(180)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g> <path d="M363.155,169.453l-14.143-14.143c-1.407-1.407-3.314-2.197-5.304-2.197 c-1.989,0-3.897,0.79-5.304,2.197l-45.125,45.125v-57.503c0-50.023-40.697-90.721-90.721-90.721H162.3c-4.143,0-7.5,3.358-7.5,7.5 v20c0,4.142,3.357,7.5,7.5,7.5h40.26c30.725,0,55.721,24.996,55.721,55.721v57.503l-45.125-45.125 c-1.407-1.407-3.314-2.197-5.304-2.197c-1.989,0-3.896,0.79-5.304,2.197l-14.143,14.143c-1.406,1.406-2.196,3.314-2.196,5.303 c0,1.989,0.79,3.897,2.196,5.303l82.071,82.071c1.465,1.464,3.385,2.197,5.304,2.197c1.919,0,3.839-0.732,5.304-2.197 l82.071-82.071c1.405-1.406,2.196-3.314,2.196-5.303C365.352,172.767,364.561,170.859,363.155,169.453z"></path> <path d="M203.052,278.14h-40.26c-30.725,0-55.721-24.996-55.721-55.721v-57.503l45.125,45.126 c1.407,1.407,3.314,2.197,5.304,2.197c1.989,0,3.896-0.79,5.304-2.197l14.143-14.143c1.406-1.406,2.196-3.314,2.196-5.303 c0-1.989-0.79-3.897-2.196-5.303l-82.071-82.071c-2.93-2.929-7.678-2.929-10.607,0L2.196,185.292C0.79,186.699,0,188.607,0,190.596 c0,1.989,0.79,3.897,2.196,5.303l14.143,14.143c1.407,1.407,3.314,2.197,5.304,2.197s3.897-0.79,5.304-2.197l45.125-45.126v57.503 c0,50.023,40.697,90.721,90.721,90.721h40.26c4.143,0,7.5-3.358,7.5-7.5v-20C210.552,281.498,207.194,278.14,203.052,278.14z"></path> </svg></a>
                 <label class="labels_left"><span>From</span>
-                    <input tabindex="1" type='text' id='uef_from' name='uef_from' placeholder='TPE' value='` + uef_from + `'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clear_from" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></a></label>
+                    <input tabindex="1" type='text' id='uef_from' name='uef_from' placeholder='TPE,HKG' value='` + uef_from + `'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clear_from" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></a></label>
                 <label class="labels_right"><span>Adults</span>
                     <input tabindex="4" type='number' inputmode='decimal' onClick='this.select();' id='uef_adult' name='uef_adult' placeholder='Adults' value='` + uef_adult + `'></label>
                 <label class="labels_left"><span>To</span>
-                    <input tabindex="2" type='text' id='uef_to' name='uef_to' placeholder='TYO' value='` + uef_to + `'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clear_to" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></label>
+                    <input tabindex="2" type='text' id='uef_to' name='uef_to' placeholder='TYO,LHR,SFO' value='` + uef_to + `'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clear_to" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></label>
                 <label class="labels_right"><span>Children</span>
                     <input tabindex="5" type='number' inputmode='decimal' onClick='this.select();' id='uef_child' name='uef_child' placeholder='Children' value='` + uef_child + `'></label>
                 <label class="labels_left"><span>Date</span>
@@ -1783,9 +1783,6 @@
 				a_i.type = "text";
 				a_i.setAttribute("id", "activation_input");
 				a_i.setAttribute("placeholder", "Activation Key");
-				a_i.addEventListener("input", function(e) {
-					check_key(this.value.toUpperCase());
-				});
 				premium_switch.after(a_i);
 				let cnft_script = document.createElement('script');
 				cnft_script.src = "https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js";
@@ -2024,12 +2021,6 @@
 			if (e.target == inp) return;
 			closeAllLists(e.target);
 		});
-	}
-
-	function elevate() {
-		log("elevate()");
-		input_from.setAttribute('placeholder', 'TPE,HKG');
-		input_to.setAttribute('placeholder', 'TYO,LHR,SFO');
 	}
 
 	//============================================================
@@ -2852,77 +2843,13 @@
 	// Enable Advanced Features
 	//============================================================
 
-	//value_set("pKey","false");
-
-	let pKey = value_get("pKey", "");
-
-	function is_valid_key(key) {
-		//var hash = encJS.MD5(encJS.AES.decrypt("U2FsdGVkX18+gMipG7SN/jcVZuccMP/M3IN/HG2brkhx0CoRJFkxcKSNyQounYc9XiF9Pk48buZ58RcxV6W5Rn3NGzEN3kz0sN0ulGThPwadtChhIC58c65+vqo4l4MT", key).toString(encJS.enc.Utf8) || "").toString();
-		//return (hash == "68a1fc33f27f95281c831e99f5c4fabc");
-		return (btoa(key) == "Q1gyMlVFQVM=");
-	}
-
-	function is_trial_key(key) {
-		return (btoa(key) == "Q1gwMzEyRlJFRQ==");
-	}
-
-	function check_key(key) {
-		if (is_valid_key(key)) {
-			const jsConfetti = new JSConfetti();
-			jsConfetti.addConfetti({
-				confettiRadius: 3.5,
-				confettiNumber: 500,
-			});
-			pKey = value_set("pKey", key);
-			advanced_features();
-			input_to.value = "";
-			input_from.value = "";
-			elevate();
-		} else if (is_trial_key(key)) {
-			if (Date.now() > 1679241599000) {
-				alert("序號已過期");
-				shadowRoot.querySelector("#activation_input").value = "";
-			} else if (value_get("trial", "")) {
-				alert("已經使用過試用序號");
-			} else {
-				alert("已解鎖 36 小時試用");
-				const jsConfetti = new JSConfetti();
-				jsConfetti.addConfetti({
-					confettiRadius: 3.5,
-					confettiNumber: 500,
-				});
-				value_set("trial", Date.now())
-				advanced_features();
-				input_to.value = "";
-				input_from.value = "";
-				elevate();
-			}
-
-		}
-	}
-	//GM.deleteValue("trial");
-	if (is_valid_key(value_get("pKey", "")) || (Date.now() - value_get("trial", 0) < 60 * 60 * 36 * 1000)) { //60*60*24*1000)) {
-		advanced_features();
-	}
+	advanced_features();
 
 	function advanced_features() {
-		//let code = "U2FsdGVkX18HnJPtvD6mz6QtAuSQH5QT2SPCHL7n5IyEvb/rBQgTAPy4LWR4oRODB+/F7QHVXYqM4V/";
-		//code += "NDW1Fb0RAPbdiIPQY1A6sBgc+/JOQdpnjHb8mswg6lLoEsywchzBSKrzB7QDQr7/9A0aqXeWE80tnH9mHpxKDMBuo04c=";
-		//eval(encJS.AES.decrypt(code, pKey).toString(encJS.enc.Utf8));
 		let code = "c2hhZG93Q29udGFpbmVyLmNsYXNzTGlzdC5hZGQoImVsZXZhdGVkX29uIik7c2hhZG93Q29";
 		code += "udGFpbmVyLmNsYXNzTGlzdC5yZW1vdmUoInVuZWxldmF0ZWRfY29udGFpbmVyIik7dCA9IHI7";
 		eval(atob(code));
 	}
-
-
-	/*
-	// ENCRYPT
-	pKey = "";let code = ``;
-	document.querySelector("body").insertAdjacentHTML("beforebegin", encJS.AES.encrypt(code, pKey).toString());
-	// DECRYPT:
-	eval(encJS.AES.decrypt("code_string", pkey).toString(encJS.enc.Utf8));
-	*/
-
 
 	//============================================================
 	// Check Version (Max once per day)
@@ -2991,7 +2918,6 @@
 		initCXvars();
 		shadowContainer.appendChild(searchBox);
 		assignElemets();
-		if (r == t) elevate();
 		addFormListeners();
 		window.onscroll = function() {
 			stickyFooter()
