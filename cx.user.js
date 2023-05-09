@@ -161,7 +161,7 @@
     };
 
     // Add to Date and Return CX Date String
-    function dateAdd(days = 0, date = false) {
+    function dateAdd(days = 0, date = null) {
         let new_date = new Date()
         if (date) {
             const year = +date.substring(0, 4)
