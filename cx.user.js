@@ -409,21 +409,6 @@
 
             <div class='unelevated_update hidden'><a href='https://pse.is/cxupdate' target='_blank'>` + lang.new_version + ` <span id='upd_version'>3.2.1</span> &raquo;</a></div>
 
-            <div class='unelevated_prem_desc unelevated_prem_hidden'>
-                <span class="prem_title">` + lang.prem_title + `</span>
-                <div class="prem_content">
-                    <span class="prem_intro">` + lang.prem_intro + `</span>
-                    <ul>
-                        <li><span class="feat_title">` + lang.prem_feat1 + `</span><span class="feat_text">` + lang.prem_text1 + `</span></li>
-                        <li><span class="feat_title">` + lang.prem_feat2 + `</span><span class="feat_text">` + lang.prem_text2 + `</span></li>
-                        <li><span class="feat_title">` + lang.prem_feat3 + `</span><span class="feat_text">` + lang.prem_text3 + `</span></li>
-                        <li><span class="feat_title">` + lang.prem_feat4 + `</span><span class="feat_text">` + lang.prem_text4 + `</span></li>
-                        <li><span class="feat_title">` + lang.prem_feat5 + `</span></li>
-                    </ul>
-                    <span class="prem_intro">` + lang.prem_donate + `</span>
-                </div>
-            </div>
-
             <div class='unelevated_faves unelevated_faves_hidden'>
                 <div class="faves_tabs">
                     <a href="javascript:void(0);" class="tabs tab_queries">Routes</a>
@@ -511,29 +496,6 @@
         .unelevated_form .unelevated_saved svg.heart_save path { fill: #ff8b8b;}
         .unelevated_form .unelevated_saved a span {vertical-align: top; line-height: 24px;}
 
-        .elevated_on .unelevated_prem_desc {
-            display:none;
-        }
-
-        .unelevated_prem_desc {
-            line-height: 24px;
-            overflow:scroll;
-            transition: all 0.5s ease-out;
-            background:#fdfefe;
-            border: 1px solid #bebebe;
-            margin-right: 8px;
-            box-shadow: inset 0px 0px 4px 0px rgb(0 0 0 / 10%);
-            position: absolute;
-            top: 0px;
-            right: 0;
-            left: 8px;
-            z-index: 100;
-            height: calc(100% + 14px);
-            margin-top: 42px;
-            opacity:1;
-            padding:10px;
-        }
-        .unelevated_prem_hidden {height:0;opacity:0; z-index: -1;}
         .unelevated_form .autocomplete-items div:hover{
             background-color: #e9e9e9;
         }
@@ -564,17 +526,6 @@
             width: calc(100% - 20px);
             padding: 10px;
             text-transform:uppercase;
-        }
-
-        .unelevated_prem_desc ul {
-            list-style-type: disclosure-closed;
-            padding-left:23px;
-        }
-
-        .unelevated_prem_desc li{
-            list-style-type: disclosure-closed;
-            margin-bottom:5px;
-            padding-left:0;
         }
 
         .feat_title {
