@@ -2483,19 +2483,19 @@
                 let flightkey
                 if (flight.segments.length == 1) {
                     if (f1 >= 1) {
-                        available = available + ` <span class='bulk_cabin bulk_f'>F <b>${f1}</b></span>`
+                        available += ` <span class='bulk_cabin bulk_f'>F <b>${f1}</b></span>`
                         d_f = true
                     }
                     if (j1 >= 1) {
-                        available = available + ` <span class='bulk_cabin bulk_j'>J <b>${j1}</b></span>`
+                        available += ` <span class='bulk_cabin bulk_j'>J <b>${j1}</b></span>`
                         d_j = true
                     }
                     if (p1 >= 1) {
-                        available = available + ` <span class='bulk_cabin bulk_p'>PY <b>${p1}</b></span>`
+                        available += ` <span class='bulk_cabin bulk_p'>PY <b>${p1}</b></span>`
                         d_p = true
                     }
                     if (y1 >= 1) {
-                        available = available + ` <span class='bulk_cabin bulk_y'>Y <b>${y1}</b></span>`
+                        available += ` <span class='bulk_cabin bulk_y'>Y <b>${y1}</b></span>`
                         d_y = true
                     }
                     flightkey = `${date}${from}${to}_${leg1_airline}${leg1_flight_no}`
@@ -2536,22 +2536,22 @@
                     if (f1 >= 1 && f2 >= 1) {
                         d_f = true
                         n_f = Math.min(f1, f2)
-                        available = available + ` <span class='bulk_cabin bulk_f'>F <b>${n_f}</b></span>`
+                        available += ` <span class='bulk_cabin bulk_f'>F <b>${n_f}</b></span>`
                     }
                     if (j1 >= 1 && j2 >= 1) {
                         d_j = true
                         n_j = Math.min(j1, j2)
-                        available = available + ` <span class='bulk_cabin bulk_j'>J <b>${n_j}</b></span>`
+                        available += ` <span class='bulk_cabin bulk_j'>J <b>${n_j}</b></span>`
                     }
                     if (p1 >= 1 && p2 >= 1) {
                         d_p = true
                         n_p = Math.min(p1, p2)
-                        available = available + ` <span class='bulk_cabin bulk_p'>PY <b>${n_p}</b></span>`
+                        available += ` <span class='bulk_cabin bulk_p'>PY <b>${n_p}</b></span>`
                     }
                     if (y1 >= 1 && y2 >= 1) {
                         d_y = true
                         n_y = Math.min(y1, y2)
-                        available = available + ` <span class='bulk_cabin bulk_y'>Y <b>${n_y}</b></span>`
+                        available += ` <span class='bulk_cabin bulk_y'>Y <b>${n_y}</b></span>`
                     }
                     const leg2_airline = flight.segments[1].flightIdentifier.marketingAirline
                     const leg2_flight_no = flight.segments[1].flightIdentifier.flightNumber
