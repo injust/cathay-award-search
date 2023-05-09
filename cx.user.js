@@ -2077,9 +2077,9 @@
             cabinClass: cabinclass,
             entryCountry: lang.ec,
             entryLanguage: lang.el,
-            entryPoint: 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html',
-            errorUrl: 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow',
-            returnUrl: 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow',
+            entryPoint: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html`,
+            errorUrl: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow`,
+            returnUrl: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow`,
             isFlexibleDate: false,
             numAdult: passengers.adult,
             numChild: passengers.child,
@@ -2108,9 +2108,9 @@
             cabinClass: cabinclass,
             entryCountry: lang.ec,
             entryLanguage: lang.el,
-            entryPoint: 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html',
-            errorUrl: 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc',
-            returnUrl: 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc',
+            entryPoint: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html`,
+            errorUrl: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc`,
+            returnUrl: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc`,
             isFlexibleDate: false,
             numAdult: passengers.adult,
             numChild: passengers.child,
@@ -2504,7 +2504,7 @@
                         available = available + ` <span class='bulk_cabin bulk_y'>Y <b>${y1}</b></span>`
                         d_y = true
                     }
-                    flightkey = date + from + to + '_' + leg1_airline + leg1_flight_no
+                    flightkey = `${date}${from}${to}_${leg1_airline}${leg1_flight_no}`
                     if (available != '') {
                         flightHTML += '<div class="flight_wrapper">'
                         flightHTML += `<div class='flight_item direct ${(saved_flights[flightkey] ? ' saved' : '')}' data-flightinfo='${flightkey}' data-flightavail='${f1 + '_' + j1 + '_' + p1 + '_' + y1}' data-direct='1' data-f='${(d_f ? 1 : 0)}' data-j='${(d_j ? 1 : 0)}' data-p='${(d_p ? 1 : 0)}' data-y='${(d_y ? 1 : 0)}'>
@@ -2565,7 +2565,7 @@
                     const leg2_arr_time = getFlightTime(flight.segments[1].destinationDate)
                     const transit_time = getFlightTime(flight.segments[1].flightIdentifier.originDate - flight.segments[0].destinationDate, true)
                     const stopcity = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g.exec(flight.flightIdString)[1].replace(':', ' / ')
-                    flightkey = date + from + to + '_' + leg1_airline + leg1_flight_no + '_' + stopcity + '_' + leg2_airline + leg2_flight_no
+                    flightkey = `${date}${from}${to}_${leg1_airline}${leg1_flight_no}_${stopcity}_${leg2_airline}${leg2_flight_no}`
                     if (available != '') {
                         flightHTML += '<div class="flight_wrapper">'
                         flightHTML += `<div class='flight_item ${(saved_flights[flightkey] ? ' saved' : '')}' data-direct='0' data-flightinfo='${flightkey}'  data-flightavail='${n_f + '_' + n_j + '_' + n_p + '_' + n_y}' data-f='${d_f ? 1 : 0}' data-j='${d_j ? 1 : 0}' data-p='${d_p ? 1 : 0}' data-y='${d_y ? 1 : 0}'>
