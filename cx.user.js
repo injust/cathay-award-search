@@ -332,7 +332,6 @@
         ec: browser_country,
         el: browser_lang,
         search: 'Search',
-        coffee: 'Did this tool help you? Buy me a coffee! ',
         searching: "<img src='https://book.cathaypacific.com" + static_path + "common/skin/img/icons/cx/icon-loading.gif'> Searching...",
         searching_w_cancel: "<img src='https://book.cathaypacific.com" + static_path + "common/skin/img/icons/cx/icon-loading.gif'> Searching... (Click to Stop)",
         next_batch: 'Load More...',
@@ -416,8 +415,6 @@
                     <input tabindex="3" class='uef_date' onClick='this.setSelectionRange(6, 8);' id='uef_date' inputmode='decimal' name='uef_date' placeholder='` + dateAdd(30) + '\' value=\'' + uef_date + `'></label>
                 <button class='uef_search'>` + lang.search + `</button>
             </div>
-
-            <div class='unelevated_sub'><a href='https://jayliu.net/buymeacoffee' target='_blank'>` + lang.coffee + `</a><span class='coffee_emoji'>☕</span></div>
         </div>
 
         <div class='multi_box hidden'>
@@ -775,9 +772,6 @@
         }
 
         .unelevated_form button.uef_search { background-color: #367778; white-space:nowrap; overflow:hidden;text-overflow:ellipsis;border: none; color: white; display: inline-block;vertical-align: top; margin: 0px; height: 45px; width: calc(35% - 8px); font-size:15px}
-        .unelevated_sub { line-height:25px; vertical-align:top;} .coffee_emoji {display:inline-block; line-height:25px; font-size: 25px; margin-left: 6px; vertical-align: top;}
-        .unelevated_sub a { line-height:25px; vertical-align:top; font-family: Cathay Sans EN, CathaySans_Bd, sans-serif; font-size: 14px !important; text-decoration:underline dotted !important; margin: 0px; color: #ae4b4b !important; font-weight: bold;}
-        .unelevated_sub a:after { content:none !important; }
 
 
         .heavy_user_prompt {
