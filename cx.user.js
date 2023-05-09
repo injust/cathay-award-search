@@ -178,10 +178,6 @@
         return date.substring(0, 4).toString() + '-' + date.substring(4, 6).toString().padStart(2, '0') + '-' + date.substring(6, 8).toString().padStart(2, '0')
     }
 
-    function toDashedDateShort(date) {
-        return date.substring(2, 4).toString() + '-' + date.substring(4, 6).toString().padStart(2, '0') + '-' + date.substring(6, 8).toString().padStart(2, '0')
-    }
-
     // Get Weekday from CX Date String
     function dateWeekday(date) {
         const newdate = new Date(+date.substring(0, 4), (+date.substring(4, 6) - 1), +date.substring(6, 8))
