@@ -18,22 +18,21 @@
 // @license             GPL
 // ==/UserScript==
 
-
-//============================================================
+//= ===========================================================
 // Main Userscript
-//============================================================
+//= ===========================================================
 (function() {
-    'use strict';
+    'use strict'
 
-    const debug = false;
+    const debug = false
 
-    //============================================================
+    //= ===========================================================
     // Greasymonkey Function Wrappers
-    //============================================================
+    //= ===========================================================
 
     // GM_Log
     function log(data) {
-        if (debug) GM_log(data);
+        if (debug) GM_log(data)
     }
 
     // Get and Set Stored Values
@@ -42,29 +41,33 @@
     }
 
     function value_set(valueName, setValue) {
-        GM_setValue(valueName, setValue);
-        return setValue;
+        GM_setValue(valueName, setValue)
+        return setValue
     }
 
     // XMLHttpRequest and GM_xmlhttpRequest
     function httpRequest(request, native = false) {
         if (!native && !debug) {
-            GM_xmlhttpRequest(request);
+            GM_xmlhttpRequest(request)
         } else {
-            if (!request.method || !request.url) return;
-            var http = new XMLHttpRequest();
-            http.withCredentials = true;
-            http.open(request.method, request.url, true);
+            if (!request.method || !request.url) return
+            const http = new XMLHttpRequest()
+            http.withCredentials = true
+            http.open(request.method, request.url, true)
             if (request.headers) {
-                for (var key in request.headers) {
+                for (const key in request.headers) {
                     http.setRequestHeader(key, request.headers[key])
                 }
             }
-            if (request.onreadystatechange) http.onreadystatechange = function() {
-                request.onreadystatechange(this)
+            if (request.onreadystatechange) {
+                http.onreadystatechange = function() {
+                    request.onreadystatechange(this)
+                }
             }
-            if (request.onload) http.onload = function() {
-                request.onload(this)
+            if (request.onload) {
+                http.onload = function() {
+                    request.onload(this)
+                }
             }
             if (request.data) {
                 http.send(request.data)
@@ -74,325 +77,315 @@
         }
     }
 
-    //============================================================
+    //= ===========================================================
     // Initialize Variables
-    //============================================================
+    //= ===========================================================
 
-    let route_changed = false;
+    let route_changed = false
 
     // Retrieve CX Parameters
 
-    let static_path = value_get("static_path", "/CathayPacificAwardV3/AML_IT3.1.14/");
-    let requestVars = {};
-    let tab_id = "";
-    let availability_url = "https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability?TAB_ID=";
-    let form_submit_url = availability_url + tab_id;
+    let static_path = value_get('static_path', '/CathayPacificAwardV3/AML_IT3.1.14/')
+    let requestVars = {}
+    let tab_id = ''
+    const availability_url = 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability?TAB_ID='
+    let form_submit_url = availability_url + tab_id
 
     function initCXvars() {
-        if (typeof staticFilesPath !== "undefined" && static_path != staticFilesPath) {
-            log(typeof staticFilesPath);
-            static_path = staticFilesPath;
-            value_set("static_path", static_path);
+        if (typeof staticFilesPath !== 'undefined' && static_path != staticFilesPath) {
+            log(typeof staticFilesPath)
+            static_path = staticFilesPath
+            value_set('static_path', static_path)
         }
 
         if (typeof tabId === 'string') {
-            tab_id = tabId;
+            tab_id = tabId
         }
         if (typeof requestParams === 'string') {
-            requestVars = JSON.parse(requestParams);
-            tab_id = requestVars.TAB_ID;
+            requestVars = JSON.parse(requestParams)
+            tab_id = requestVars.TAB_ID
         } else if (typeof requestParams === 'object') {
-            requestVars = requestParams;
-            tab_id = requestParams.TAB_ID || "";
+            requestVars = requestParams
+            tab_id = requestParams.TAB_ID || ''
         }
 
-        form_submit_url = (typeof formSubmitUrl !== 'undefined') ? formSubmitUrl : availability_url + tab_id;
+        form_submit_url = (typeof formSubmitUrl !== 'undefined') ? formSubmitUrl : availability_url + tab_id
     }
 
-    const browser_locale = navigator.language;
-    const browser_lang = "en";
-    const browser_country = "CA";
+    const browser_locale = navigator.language
+    const browser_lang = 'en'
+    const browser_country = 'CA'
 
-    let login_url = `https://www.cathaypacific.com/content/cx/${browser_lang}_${browser_country}/sign-in.html?loginreferrer=${encodeURI(`https://www.cathaypacific.com/cx/${browser_lang}_${browser_country}/book-a-trip/redeem-flights/redeem-flight-awards.html`)}`;
+    const login_url = `https://www.cathaypacific.com/content/cx/${browser_lang}_${browser_country}/sign-in.html?loginreferrer=${encodeURI(`https://www.cathaypacific.com/cx/${browser_lang}_${browser_country}/book-a-trip/redeem-flights/redeem-flight-awards.html`)}`
 
-    let r = Math.random();
-    let t = tab_id || "";
+    const r = Math.random()
+    let t = tab_id || ''
 
-    //============================================================
+    //= ===========================================================
     // Helper Functions
-    //============================================================
+    //= ===========================================================
 
     // Wait for Element to Load
     function waitForElm(selector) {
         return new Promise(resolve => {
             if (document.querySelector(selector)) {
-                return resolve(document.querySelector(selector));
+                return resolve(document.querySelector(selector))
             }
             const observer = new MutationObserver(mutations => {
                 if (document.querySelector(selector)) {
-                    resolve(document.querySelector(selector));
-                    observer.disconnect();
+                    resolve(document.querySelector(selector))
+                    observer.disconnect()
                 }
-            });
+            })
             observer.observe(document.body, {
                 childList: true,
                 subtree: true
-            });
-        });
+            })
+        })
     }
 
     // Check CX Date String Validity (dateString YYYYMMDD)
     function isValidDate(dateString) {
-        if (!/^\d{8}$/.test(dateString)) return false;
-        let year = dateString.substring(0, 4);
-        let month = dateString.substring(4, 6);
-        let day = dateString.substring(6, 8);
-        if (year < 1000 || year > 3000 || month == 0 || month > 12) return false;
-        let monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-        if (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)) monthLength[1] = 29;
-        if (day <= 0 || day > monthLength[month - 1]) return false;
-        let today = new Date();
-        let date = new Date(year, month - 1, day);
-        if ((date - today) / 24 / 60 / 60 / 1000 >= 366 || (date - today) / 24 / 60 / 60 / 1000 < -1) return false;
-        return true;
+        if (!/^\d{8}$/.test(dateString)) return false
+        const year = dateString.substring(0, 4)
+        const month = dateString.substring(4, 6)
+        const day = dateString.substring(6, 8)
+        if (year < 1000 || year > 3000 || month == 0 || month > 12) return false
+        const monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+        if (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)) monthLength[1] = 29
+        if (day <= 0 || day > monthLength[month - 1]) return false
+        const today = new Date()
+        const date = new Date(year, month - 1, day)
+        if ((date - today) / 24 / 60 / 60 / 1000 >= 366 || (date - today) / 24 / 60 / 60 / 1000 < -1) return false
+        return true
     };
 
     // Add to Date and Return CX Date String
     function dateAdd(days = 0, date = false) {
-        let new_date = new Date();
+        let new_date = new Date()
         if (date) {
-            let year = +date.substring(0, 4);
-            let month = +date.substring(4, 6);
-            let day = +date.substring(6, 8);
-            new_date = new Date(year, month - 1, day);
+            const year = +date.substring(0, 4)
+            const month = +date.substring(4, 6)
+            const day = +date.substring(6, 8)
+            new_date = new Date(year, month - 1, day)
         };
-        new_date.setDate(new_date.getDate() + days);
-        return new_date.getFullYear() + "" + (new_date.getMonth() + 1).toString().padStart(2, '0') + "" + new_date.getDate().toString().padStart(2, '0');
+        new_date.setDate(new_date.getDate() + days)
+        return new_date.getFullYear() + '' + (new_date.getMonth() + 1).toString().padStart(2, '0') + '' + new_date.getDate().toString().padStart(2, '0')
     };
 
     // Convert CX Date String to Dashed Date String
     function toDashedDate(date) {
-        return date.substring(0, 4).toString() + "-" + date.substring(4, 6).toString().padStart(2, '0') + "-" + date.substring(6, 8).toString().padStart(2, '0');
+        return date.substring(0, 4).toString() + '-' + date.substring(4, 6).toString().padStart(2, '0') + '-' + date.substring(6, 8).toString().padStart(2, '0')
     }
 
     function toDashedDateShort(date) {
-        return date.substring(2, 4).toString() + "-" + date.substring(4, 6).toString().padStart(2, '0') + "-" + date.substring(6, 8).toString().padStart(2, '0');
+        return date.substring(2, 4).toString() + '-' + date.substring(4, 6).toString().padStart(2, '0') + '-' + date.substring(6, 8).toString().padStart(2, '0')
     }
 
     // Get Weekday from CX Date String
     function dateWeekday(date) {
-        let newdate = new Date(+date.substring(0, 4), (+date.substring(4, 6) - 1), +date.substring(6, 8));
+        const newdate = new Date(+date.substring(0, 4), (+date.substring(4, 6) - 1), +date.substring(6, 8))
         const weekday = {
-            1: "Mon",
-            2: "Tue",
-            3: "Wed",
-            4: "Thu",
-            5: "Fri",
-            6: "Sat",
-            0: "Sun"
-        };
-        return weekday[newdate.getDay()];
+            1: 'Mon',
+            2: 'Tue',
+            3: 'Wed',
+            4: 'Thu',
+            5: 'Fri',
+            6: 'Sat',
+            0: 'Sun'
+        }
+        return weekday[newdate.getDay()]
     };
 
     // Get Time
     function getFlightTime(timestamp, timeonly = false) {
-        let date = new Date(timestamp);
+        const date = new Date(timestamp)
         if (timeonly) {
-            let hours = (date.getUTCDate() - 1) * 24 + date.getUTCHours();
-            return (hours > 0 ? hours.toString() + "hr " : "") + date.getUTCMinutes().toString() + "mins";
+            const hours = (date.getUTCDate() - 1) * 24 + date.getUTCHours()
+            return (hours > 0 ? hours.toString() + 'hr ' : '') + date.getUTCMinutes().toString() + 'mins'
         } else {
-            return date.getUTCFullYear() + "-" + (date.getUTCMonth() + 1).toString().padStart(2, '0') + "-" + date.getUTCDate().toString().padStart(2, '0') + " " + date.getUTCHours().toString().padStart(2, '0') + ":" + date.getUTCMinutes().toString().padStart(2, '0');
+            return date.getUTCFullYear() + '-' + (date.getUTCMonth() + 1).toString().padStart(2, '0') + '-' + date.getUTCDate().toString().padStart(2, '0') + ' ' + date.getUTCHours().toString().padStart(2, '0') + ':' + date.getUTCMinutes().toString().padStart(2, '0')
         };
     };
 
     // Append CSS to DOM Element (Default to Shadow Root)
     function addCss(cssString, target = shadowRoot) {
-        var styleSheet = document.createElement("style");
-        styleSheet.innerHTML = cssString;
-        target.appendChild(styleSheet);
+        const styleSheet = document.createElement('style')
+        styleSheet.innerHTML = cssString
+        target.appendChild(styleSheet)
     }
 
-
-    //============================================================
+    //= ===========================================================
     // Get Stored Values
-    //============================================================
+    //= ===========================================================
 
     // Set Search Parameters
 
-    let uef_from = value_get("uef_from", "HKG");
-    let uef_to = value_get("uef_to", "TYO");
-    let uef_date = value_get("uef_date", dateAdd(14));
-    let uef_adult = value_get("uef_adult", "1");
-    let uef_child = value_get("uef_child", "0");
+    let uef_from = value_get('uef_from', 'HKG')
+    let uef_to = value_get('uef_to', 'TYO')
+    let uef_date = value_get('uef_date', dateAdd(14))
+    let uef_adult = value_get('uef_adult', '1')
+    let uef_child = value_get('uef_child', '0')
 
     // Saved Queries
 
-    let saved = value_get("saved", {});
-    let saved_flights = value_get("saved_flights", {});
+    const saved = value_get('saved', {})
+    const saved_flights = value_get('saved_flights', {})
 
-    let cont_query = value_get("cont_query", "0") == "0" ? 0 : 1; ///cont_query/.test(window.location.hash); //urlParams.get('cont_query');
-    let cont_batch = value_get("cont_batch", "0") == "0" ? 0 : 1;; ///cont_batch/.test(window.location.hash); //urlParams.get('cont_batch');
-    let cont_saved = value_get("cont_saved", "0") == "0" ? 0 : 1;; ///cont_saved/.test(window.location.hash); //urlParams.get('cont_saved');
-    let cont_ts = value_get("cont_ts", "0"); //window.location.hash.match(/cont_ts=([0-9]+)&/) ? window.location.hash.match(/cont_ts=([0-9]+)&/)[1] : 0;
+    const cont_query = value_get('cont_query', '0') == '0' ? 0 : 1 /// cont_query/.test(window.location.hash); //urlParams.get('cont_query');
+    const cont_batch = value_get('cont_batch', '0') == '0' ? 0 : 1 /// cont_batch/.test(window.location.hash); //urlParams.get('cont_batch');
+    const cont_saved = value_get('cont_saved', '0') == '0' ? 0 : 1 /// cont_saved/.test(window.location.hash); //urlParams.get('cont_saved');
+    const cont_ts = value_get('cont_ts', '0') // window.location.hash.match(/cont_ts=([0-9]+)&/) ? window.location.hash.match(/cont_ts=([0-9]+)&/)[1] : 0;
 
     function reset_cont_vars() {
-        value_set("cont_query", "0");
-        value_set("cont_batch", "0");
-        value_set("cont_saved", "0");
-        value_set("cont_ts", "0");
+        value_set('cont_query', '0')
+        value_set('cont_batch', '0')
+        value_set('cont_saved', '0')
+        value_set('cont_ts', '0')
     }
 
-    //============================================================
+    //= ===========================================================
     // Initialize Shadow Root
-    //============================================================
+    //= ===========================================================
 
-    const shadowWrapper = document.createElement("div");
-    shadowWrapper.style.margin = 0;
-    shadowWrapper.style.padding = 0;
+    const shadowWrapper = document.createElement('div')
+    shadowWrapper.style.margin = 0
+    shadowWrapper.style.padding = 0
     const shadowRoot = shadowWrapper.attachShadow({
-        mode: "closed"
-    });
-    const shadowContainer = document.createElement("div");
-    shadowContainer.classList.add("elevated_on");
-    shadowRoot.appendChild(shadowContainer);
+        mode: 'closed'
+    })
+    const shadowContainer = document.createElement('div')
+    shadowContainer.classList.add('elevated_on')
+    shadowRoot.appendChild(shadowContainer)
 
     if (debug && unsafeWindow.shadowRoot == undefined) {
-        unsafeWindow.shadowRoot = shadowRoot;
+        unsafeWindow.shadowRoot = shadowRoot
     }
 
     function initRoot() {
+        log('initRoot();')
 
-        log("initRoot();")
+        addCss(styleCss)
 
-        addCss(styleCss);
+        const current_page = window.location.href
 
-        const current_page = window.location.href;
+        if (current_page.indexOf('redeem-flight-awards.html') > -1) {
+            reset_cont_vars()
 
-        if (current_page.indexOf("redeem-flight-awards.html") > -1) {
-            reset_cont_vars();
-
-            log("initRoot redeem-flight-awards.html")
+            log('initRoot redeem-flight-awards.html')
             waitForElm('.redibe-v3-flightsearch form').then((elm) => {
-                elm.before(shadowWrapper);
-                initSearchBox();
-                checkLogin();
-            });
+                elm.before(shadowWrapper)
+                initSearchBox()
+                checkLogin()
+            })
+        } else if (current_page.indexOf('facade.html') > -1) {
+            reset_cont_vars()
 
-        } else if (current_page.indexOf("facade.html") > -1) {
-            reset_cont_vars();
-
-            log("initRoot facade.html")
+            log('initRoot facade.html')
             waitForElm('.ibered__search-panel').then((elm) => {
-                elm.before(shadowWrapper);
-                initSearchBox();
-                checkLogin();
-            });
-
-        } else if (current_page.indexOf("air/booking/availability") > -1 && cont_query) {
-
-            log("initRoot air/booking/availability with cont_query")
+                elm.before(shadowWrapper)
+                initSearchBox()
+                checkLogin()
+            })
+        } else if (current_page.indexOf('air/booking/availability') > -1 && cont_query) {
+            log('initRoot air/booking/availability with cont_query')
             waitForElm('body > header').then((elm) => {
-                const boxes = document.querySelectorAll("body > div");
+                const boxes = document.querySelectorAll('body > div')
                 boxes.forEach(box => {
                     box.remove()
-                });
-                document.body.append(shadowWrapper);
-                shadowContainer.classList.add("results_container");
-                initSearchBox();
-                checkLogin();
-            });
+                })
+                document.body.append(shadowWrapper)
+                shadowContainer.classList.add('results_container')
+                initSearchBox()
+                checkLogin()
+            })
+        } else if (window.location.href.indexOf('air/booking/availability') > -1) {
+            reset_cont_vars()
 
-
-        } else if (window.location.href.indexOf("air/booking/availability") > -1) {
-            reset_cont_vars();
-
-            log("initRoot air/booking/availability without cont_query")
+            log('initRoot air/booking/availability without cont_query')
             waitForElm('#section-flights .bound-route, #section-flights-departure .bound-route').then((elm) => {
-                shadowWrapper.style.margin = "30px 20px 0px 20px";
-                shadowWrapper.style.padding = 0;
-                document.querySelector("#section-flights, #section-flights-departure").before(shadowWrapper);
-                initSearchBox();
-                checkLogin();
-            });
+                shadowWrapper.style.margin = '30px 20px 0px 20px'
+                shadowWrapper.style.padding = 0
+                document.querySelector('#section-flights, #section-flights-departure').before(shadowWrapper)
+                initSearchBox()
+                checkLogin()
+            })
+        } else if (window.location.href.indexOf('air/booking/complexAvailability') > -1) {
+            reset_cont_vars()
 
-        } else if (window.location.href.indexOf("air/booking/complexAvailability") > -1) {
-            reset_cont_vars();
-
-            log("initRoot air/booking/complexAvailability")
+            log('initRoot air/booking/complexAvailability')
             waitForElm('.mc-trips .bound-route').then((elm) => {
-                shadowWrapper.style.margin = "30px 20px 0px 20px";
-                shadowWrapper.style.padding = 0;
-                document.querySelector(".mc-trips").before(shadowWrapper);
-                initSearchBox();
-                checkLogin();
-            });
-
+                shadowWrapper.style.margin = '30px 20px 0px 20px'
+                shadowWrapper.style.padding = 0
+                document.querySelector('.mc-trips').before(shadowWrapper)
+                initSearchBox()
+                checkLogin()
+            })
         }
-
     }
 
-    //============================================================
+    //= ===========================================================
     // Localization
-    //============================================================
+    //= ===========================================================
 
-    var lang = {
-        "ec": "HK",
-        "el": "en",
-        "search": "Search",
-        "coffee": "Did this tool help you? Buy me a coffee! ",
-        "searching": "<img src='https://book.cathaypacific.com" + static_path + "common/skin/img/icons/cx/icon-loading.gif'> Searching...",
-        "searching_w_cancel": "<img src='https://book.cathaypacific.com" + static_path + "common/skin/img/icons/cx/icon-loading.gif'> Searching... (Click to Stop)",
-        "next_batch": "Load More...",
-        "search_20": "Batch Availability for 20 Days",
-        "search_all_cabins": "Search Availability in All Cabins",
-        "flights": "Available Flights",
-        "nonstop": "Non-Stop",
-        "first": "First",
-        "business": "Bus",
-        "premium": "Prem",
-        "economy": "Econ",
-        "first_full": "First Class",
-        "business_full": "Business Class",
-        "premium_full": "Premium Economy",
-        "economy_full": "Economy Class",
-        "date": "Date",
-        "no_flights": "No Redemption Availability",
-        "expired": "Search Next 20 (Requires Refresh)",
-        "searching_cont": "<img src='https://book.cathaypacific.com" + static_path + "common/skin/img/icons/cx/icon-loading.gif'> Please wait... (Page will refresh)",
-        "super": "SuperCharged Award Search",
-        "error": "Unknown Error... Try Again",
-        "bulk_batch": "Batch Search",
-        "bulk_flights": "Flights",
-        "new_version": "New Version Available:",
-        "login": "Reminder: Login before searching.",
-        "tab_retrieve_fail": "Failed to retrieve key. Try logging out and in again.",
-        "key_exhausted": "Key request quota exhausted, attempting to get new key...",
-        "getting_key": "Attempting to retrieve API key...",
-        "invalid_code": "Invalid Destination Code",
-        "invalid_date": "Invalid Date",
-        "saved_queries": "Saved Flight Queries",
-        "maxsegments": "Max 6 Sectors Accepted",
-        "multi_book": "Book Multi-City Award",
-        "query": "Search",
-        "delete": "Remove",
-        "search_selected": "Search All Saved",
-        "book_multi": "Book Multicity Award",
-        "nosaves": "You do not have any saved queries. Click on ♥ in batch results to save.",
-        "loading": "Searching...",
-        "human": "Cathay's website needs you to prove you're a human:",
-        "bot_check": "Please Complete Cathay Bot Check",
-    };
+    const lang = {
+        ec: 'HK',
+        el: 'en',
+        search: 'Search',
+        coffee: 'Did this tool help you? Buy me a coffee! ',
+        searching: "<img src='https://book.cathaypacific.com" + static_path + "common/skin/img/icons/cx/icon-loading.gif'> Searching...",
+        searching_w_cancel: "<img src='https://book.cathaypacific.com" + static_path + "common/skin/img/icons/cx/icon-loading.gif'> Searching... (Click to Stop)",
+        next_batch: 'Load More...',
+        search_20: 'Batch Availability for 20 Days',
+        search_all_cabins: 'Search Availability in All Cabins',
+        flights: 'Available Flights',
+        nonstop: 'Non-Stop',
+        first: 'First',
+        business: 'Bus',
+        premium: 'Prem',
+        economy: 'Econ',
+        first_full: 'First Class',
+        business_full: 'Business Class',
+        premium_full: 'Premium Economy',
+        economy_full: 'Economy Class',
+        date: 'Date',
+        no_flights: 'No Redemption Availability',
+        expired: 'Search Next 20 (Requires Refresh)',
+        searching_cont: "<img src='https://book.cathaypacific.com" + static_path + "common/skin/img/icons/cx/icon-loading.gif'> Please wait... (Page will refresh)",
+        super: 'SuperCharged Award Search',
+        error: 'Unknown Error... Try Again',
+        bulk_batch: 'Batch Search',
+        bulk_flights: 'Flights',
+        new_version: 'New Version Available:',
+        login: 'Reminder: Login before searching.',
+        tab_retrieve_fail: 'Failed to retrieve key. Try logging out and in again.',
+        key_exhausted: 'Key request quota exhausted, attempting to get new key...',
+        getting_key: 'Attempting to retrieve API key...',
+        invalid_code: 'Invalid Destination Code',
+        invalid_date: 'Invalid Date',
+        saved_queries: 'Saved Flight Queries',
+        maxsegments: 'Max 6 Sectors Accepted',
+        multi_book: 'Book Multi-City Award',
+        query: 'Search',
+        delete: 'Remove',
+        search_selected: 'Search All Saved',
+        book_multi: 'Book Multicity Award',
+        nosaves: 'You do not have any saved queries. Click on ♥ in batch results to save.',
+        loading: 'Searching...',
+        human: "Cathay's website needs you to prove you're a human:",
+        bot_check: 'Please Complete Cathay Bot Check'
+    }
 
-    //============================================================
+    //= ===========================================================
     // Search Box
-    //============================================================
+    //= ===========================================================
 
-    const searchBox = document.createElement("div");
+    const searchBox = document.createElement('div')
     searchBox.innerHTML = `
         <div class='unelevated_form'>
             <div class='unelevated_title'><a href="https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html">Unelevated Award Search</a></div>
 
-            <div class='login_prompt hidden'><span class='unelevated_error'><a href="` + login_url + `">` + lang.login + `</a></span></div>
+            <div class='login_prompt hidden'><span class='unelevated_error'><a href="` + login_url + '">' + lang.login + `</a></span></div>
 
             <div class='unelevated_update hidden'><a href='https://pse.is/cxupdate' target='_blank'>` + lang.new_version + ` <span id='upd_version'>3.2.1</span> &raquo;</a></div>
 
@@ -420,7 +413,7 @@
                 <label class="labels_right"><span>Children</span>
                     <input tabindex="5" type='number' inputmode='decimal' onClick='this.select();' id='uef_child' name='uef_child' placeholder='Children' value='` + uef_child + `'></label>
                 <label class="labels_left"><span>Date</span>
-                    <input tabindex="3" class='uef_date' onClick='this.setSelectionRange(6, 8);' id='uef_date' inputmode='decimal' name='uef_date' placeholder='` + dateAdd(30) + `' value='` + uef_date + `'></label>
+                    <input tabindex="3" class='uef_date' onClick='this.setSelectionRange(6, 8);' id='uef_date' inputmode='decimal' name='uef_date' placeholder='` + dateAdd(30) + '\' value=\'' + uef_date + `'></label>
                 <button class='uef_search'>` + lang.search + `</button>
             </div>
 
@@ -450,7 +443,7 @@
 <label><input type="checkbox" id="filter_premium" checked>${lang.premium}</label>
 <label><input type="checkbox" id="filter_economy" checked>${lang.economy}</label>
 </div>
-                <table class='bulk_table show_first show_business show_premium show_economy'><thead><th class='bulk_date'>` + lang.date + `</th><th class='bulk_flights'>` + lang.flights + ` <span class='info-x info-f'>` + lang.first + `</span><span class='info-x info-j'>` + lang.business + `</span><span class='info-x info-p'>` + lang.premium + `</span><span class='info-x info-y'>` + lang.economy + `</span></th></thead><tbody></tbody></table>
+                <table class='bulk_table show_first show_business show_premium show_economy'><thead><th class='bulk_date'>` + lang.date + '</th><th class=\'bulk_flights\'>' + lang.flights + ' <span class=\'info-x info-f\'>' + lang.first + '</span><span class=\'info-x info-j\'>' + lang.business + '</span><span class=\'info-x info-p\'>' + lang.premium + '</span><span class=\'info-x info-y\'>' + lang.economy + `</span></th></thead><tbody></tbody></table>
             </div>
             <div class="bulk_footer">
                 <div class="bulk_footer_container">
@@ -460,11 +453,11 @@
             </div>
         </div>
         <div id="encbox"></div>
-       `;
+       `
 
-    //============================================================
+    //= ===========================================================
     // Styles
-    //============================================================
+    //= ===========================================================
 
     const styleCss = `
         .unelevated_form * { box-sizing:border-box; -webkit-text-size-adjust: none;}
@@ -1202,7 +1195,7 @@
             background-color: DodgerBlue !important;
             color: #ffffff;
         }
-    `;
+    `
 
     addCss(`.captcha_wrapper {
             position: fixed;
@@ -1223,56 +1216,54 @@
         }
         `, document.body)
 
-    //============================================================
+    //= ===========================================================
     // Form Listeners
-    //============================================================
+    //= ===========================================================
 
-    let btn_search, btn_batch;
-    let input_from, input_to, input_date, input_adult, input_child;
-    let clear_from, clear_to;
-    let link_search_saved, link_search_multi, div_filters;
-    let div_update, div_login_prompt, div_footer, div_ue_container, div_saved, div_faves_tabs, div_saved_queries;
-    let div_saved_flights, div_multi_box, div_table, div_table_body;
+    let btn_search, btn_batch
+    let input_from, input_to, input_date, input_adult, input_child
+    let clear_from, clear_to
+    let link_search_saved, link_search_multi, div_filters
+    let div_update, div_login_prompt, div_footer, div_ue_container, div_saved, div_faves_tabs, div_saved_queries
+    let div_saved_flights, div_multi_box, div_table, div_table_body
 
     function assignElements() {
+        log('assignElements()')
+        btn_search = shadowRoot.querySelector('.uef_search') // Search Button
+        btn_batch = shadowRoot.querySelector('.bulk_submit') // Batch Search Button
+        input_from = shadowRoot.querySelector('#uef_from')
+        input_to = shadowRoot.querySelector('#uef_to')
+        input_date = shadowRoot.querySelector('#uef_date')
+        input_adult = shadowRoot.querySelector('#uef_adult')
+        input_child = shadowRoot.querySelector('#uef_child')
+        clear_from = shadowRoot.querySelector('.clear_from')
+        clear_to = shadowRoot.querySelector('.clear_to')
 
-        log("assignElements()");
-        btn_search = shadowRoot.querySelector(".uef_search"); // Search Button
-        btn_batch = shadowRoot.querySelector(".bulk_submit"); // Batch Search Button
-        input_from = shadowRoot.querySelector("#uef_from");
-        input_to = shadowRoot.querySelector("#uef_to");
-        input_date = shadowRoot.querySelector("#uef_date");
-        input_adult = shadowRoot.querySelector("#uef_adult");
-        input_child = shadowRoot.querySelector("#uef_child");
-        clear_from = shadowRoot.querySelector(".clear_from");
-        clear_to = shadowRoot.querySelector(".clear_to");
+        link_search_saved = shadowRoot.querySelector('.search_selected')
+        link_search_multi = shadowRoot.querySelector('.multi_search')
 
-        link_search_saved = shadowRoot.querySelector(".search_selected");
-        link_search_multi = shadowRoot.querySelector(".multi_search");
-
-        div_filters = shadowRoot.querySelector(".filters");
-        div_update = shadowRoot.querySelector(".unelevated_update");
-        div_login_prompt = shadowRoot.querySelector(".login_prompt");
-        div_footer = shadowRoot.querySelector(".bulk_footer");
-        div_ue_container = shadowRoot.querySelector(".unelevated_form");
-        div_saved = shadowRoot.querySelector(".unelevated_faves");
-        div_faves_tabs = shadowRoot.querySelector(".unelevated_faves .faves_tabs");
-        div_saved_queries = shadowRoot.querySelector(".unelevated_faves .saved_queries");
-        div_saved_flights = shadowRoot.querySelector(".unelevated_faves .saved_flights");
-        div_multi_box = shadowRoot.querySelector(".multi_box");
-        div_table = shadowRoot.querySelector(".bulk_table");
-        div_table_body = shadowRoot.querySelector(".bulk_table tbody");
+        div_filters = shadowRoot.querySelector('.filters')
+        div_update = shadowRoot.querySelector('.unelevated_update')
+        div_login_prompt = shadowRoot.querySelector('.login_prompt')
+        div_footer = shadowRoot.querySelector('.bulk_footer')
+        div_ue_container = shadowRoot.querySelector('.unelevated_form')
+        div_saved = shadowRoot.querySelector('.unelevated_faves')
+        div_faves_tabs = shadowRoot.querySelector('.unelevated_faves .faves_tabs')
+        div_saved_queries = shadowRoot.querySelector('.unelevated_faves .saved_queries')
+        div_saved_flights = shadowRoot.querySelector('.unelevated_faves .saved_flights')
+        div_multi_box = shadowRoot.querySelector('.multi_box')
+        div_table = shadowRoot.querySelector('.bulk_table')
+        div_table_body = shadowRoot.querySelector('.bulk_table tbody')
     }
 
     function addFormListeners() {
-
-        log("addFormListeners()");
-        btn_search.addEventListener("click", function(e) {
-            uef_from = value_set("uef_from", input_from.value);
-            uef_to = value_set("uef_to", input_to.value);
-            uef_date = value_set("uef_date", input_date.value);
-            uef_adult = value_set("uef_adult", input_adult.value);
-            uef_child = value_set("uef_child", input_child.value);
+        log('addFormListeners()')
+        btn_search.addEventListener('click', function(e) {
+            uef_from = value_set('uef_from', input_from.value)
+            uef_to = value_set('uef_to', input_to.value)
+            uef_date = value_set('uef_date', input_date.value)
+            uef_adult = value_set('uef_adult', input_adult.value)
+            uef_child = value_set('uef_child', input_child.value)
             regularSearch([{
                 from: uef_from.substring(0, 3),
                 to: uef_to.substring(0, 3),
@@ -1280,58 +1271,58 @@
             }], {
                 adult: uef_adult,
                 child: uef_child
-            }, "Y", (uef_to.length > 3 ? true : false), false);
-        });
+            }, 'Y', (uef_to.length > 3), false)
+        })
 
-        btn_batch.addEventListener("click", function(e) {
-            bulk_click();
-        });
+        btn_batch.addEventListener('click', function(e) {
+            bulk_click()
+        })
 
-        shadowRoot.querySelector(".switch").addEventListener('click', function(e) {
-            let from = input_from.value;
-            let to = input_to.value;
-            input_from.value = to;
-            input_to.value = from;
-            route_changed = true;
+        shadowRoot.querySelector('.switch').addEventListener('click', function(e) {
+            const from = input_from.value
+            const to = input_to.value
+            input_from.value = to
+            input_to.value = from
+            route_changed = true
         });
 
         [input_from, input_to].forEach(item => {
             item.addEventListener('keyup', function(e) {
-                if (r != t) return;
+                if (r != t) return
                 if (e.keyCode == 32 || e.keyCode == 188 || e.keyCode == 13) {
-                    if (e.keyCode == 13) this.value += ",";
-                    this.value = this.value.toUpperCase().split(/[ ,]+/).join(',');
+                    if (e.keyCode == 13) this.value += ','
+                    this.value = this.value.toUpperCase().split(/[ ,]+/).join(',')
                 }
             })
-        });
+        })
 
-        input_from.addEventListener("change", function(e) {
-            if (r != t) this.value = this.value.toUpperCase().substring(0, 3);
-            route_changed = true;
-            batchLabel(lang.bulk_batch + " " + input_from.value + " - " + input_to.value + " " + lang.bulk_flights);
-            let dest = this.value.match(/[A-Z]{3}$/);
-            if (dest) getDestinations(dest[0]);
-        });
+        input_from.addEventListener('change', function(e) {
+            if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
+            route_changed = true
+            batchLabel(lang.bulk_batch + ' ' + input_from.value + ' - ' + input_to.value + ' ' + lang.bulk_flights)
+            const dest = this.value.match(/[A-Z]{3}$/)
+            if (dest) getDestinations(dest[0])
+        })
 
-        input_to.addEventListener("change", function(e) {
-            if (r != t) this.value = this.value.toUpperCase().substring(0, 3);
-            route_changed = true;
-            batchLabel(lang.bulk_batch + " " + input_from.value + " - " + input_to.value + " " + lang.bulk_flights);
-        });
+        input_to.addEventListener('change', function(e) {
+            if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
+            route_changed = true
+            batchLabel(lang.bulk_batch + ' ' + input_from.value + ' - ' + input_to.value + ' ' + lang.bulk_flights)
+        })
 
         let inFocus = false;
 
         [input_from, input_to].forEach(item => {
             item.addEventListener('focus', function(e) {
-                if (this.value.length > 0 && r == t) this.value = this.value + ",";
+                if (this.value.length > 0 && r == t) this.value = this.value + ','
             })
         });
 
         [input_from, input_to].forEach(item => {
             item.addEventListener('click', function(e) {
                 if (r == t) {
-                    if (!inFocus) this.setSelectionRange(this.value.length, this.value.length);
-                    inFocus = true;
+                    if (!inFocus) this.setSelectionRange(this.value.length, this.value.length)
+                    inFocus = true
                 } else {
                     this.select()
                 }
@@ -1340,37 +1331,37 @@
 
         [input_from, input_to].forEach(item => {
             item.addEventListener('blur', function(e) {
-                inFocus = false;
-                this.value = this.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, "")
-                this.dispatchEvent(new Event('change'));
-                checkCities(this);
+                inFocus = false
+                this.value = this.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
+                this.dispatchEvent(new Event('change'))
+                checkCities(this)
             })
-        });
+        })
 
-        input_date.addEventListener("change", function(e) {
+        input_date.addEventListener('change', function(e) {
             if (!isValidDate(this.value)) {
-                alert(lang.invalid_date);
-                this.value = uef_date;
+                alert(lang.invalid_date)
+                this.value = uef_date
             } else {
-                route_changed = true;
+                route_changed = true
             }
-        });
+        })
 
-        clear_from.addEventListener("click", function(e) {
-            input_from.value = "";
-        });
+        clear_from.addEventListener('click', function(e) {
+            input_from.value = ''
+        })
 
-        clear_to.addEventListener("click", function(e) {
-            input_to.value = "";
-        });
+        clear_to.addEventListener('click', function(e) {
+            input_to.value = ''
+        })
 
-        div_table.addEventListener("click", function(e) {
-            var key;
+        div_table.addEventListener('click', function(e) {
+            let key
             if (e.target.dataset.book) {
-                stop_batch();
-                //stop_search = true;
-                //searching = false;
-                e.target.innerText = lang.loading;
+                stop_batch()
+                // stop_search = true;
+                // searching = false;
+                e.target.innerText = lang.loading
                 regularSearch([{
                     from: (e.target.dataset.from ? e.target.dataset.from : uef_from.substring(0, 3)),
                     to: (e.target.dataset.dest ? e.target.dataset.dest : uef_to.substring(0, 3)),
@@ -1380,83 +1371,81 @@
                     child: uef_child
                 })
             } else if (e.target.dataset.save) {
-                key = e.target.dataset.date + e.target.dataset.from + e.target.dataset.dest;
-                if (e.target.classList.contains("bulk_saved")) {
-                    e.target.classList.remove("bulk_saved");
-                    delete saved[key];
-                    update_saved_count();
+                key = e.target.dataset.date + e.target.dataset.from + e.target.dataset.dest
+                if (e.target.classList.contains('bulk_saved')) {
+                    e.target.classList.remove('bulk_saved')
+                    delete saved[key]
+                    update_saved_count()
                 } else {
-                    e.target.classList.add("bulk_saved");
-                    saved[key] = 1;
-                    update_saved_count();
+                    e.target.classList.add('bulk_saved')
+                    saved[key] = 1
+                    update_saved_count()
                 }
-                value_set("saved", saved)
-            } else if (e.target.classList.contains("flight_save")) {
-                key = e.target.parentNode.dataset.flightinfo;
-                var flightavail = e.target.parentNode.dataset.flightavail.split("_");
-                if (e.target.parentNode.classList.contains("saved")) {
-                    e.target.parentNode.classList.remove("saved");
-                    delete saved_flights[key];
-                    update_saved_flights();
+                value_set('saved', saved)
+            } else if (e.target.classList.contains('flight_save')) {
+                key = e.target.parentNode.dataset.flightinfo
+                const flightavail = e.target.parentNode.dataset.flightavail.split('_')
+                if (e.target.parentNode.classList.contains('saved')) {
+                    e.target.parentNode.classList.remove('saved')
+                    delete saved_flights[key]
+                    update_saved_flights()
                 } else {
-                    e.target.parentNode.classList.add("saved");
+                    e.target.parentNode.classList.add('saved')
                     saved_flights[key] = {
                         f: flightavail[0],
                         j: flightavail[1],
                         p: flightavail[2],
                         y: flightavail[3]
-                    };
-                    update_saved_flights();
+                    }
+                    update_saved_flights()
                 }
-                value_set("saved_flights", saved_flights)
-            } else if (e.target.classList.contains("flight_item")) {
-                if (e.target.classList.contains("active")) {
-                    e.target.classList.remove("active");
+                value_set('saved_flights', saved_flights)
+            } else if (e.target.classList.contains('flight_item')) {
+                if (e.target.classList.contains('active')) {
+                    e.target.classList.remove('active')
                 } else {
-                    shadowRoot.querySelectorAll(".flight_item").forEach(function(elm) {
-                        elm.classList.remove('active');
-                    });
-                    e.target.classList.add("active");
+                    shadowRoot.querySelectorAll('.flight_item').forEach(function(elm) {
+                        elm.classList.remove('active')
+                    })
+                    e.target.classList.add('active')
                 }
-
-
             }
-        });
+        })
 
-        document.addEventListener("scroll", function() {
-            shadowRoot.querySelectorAll(".flight_item").forEach(function(elm) {
-                elm.classList.remove('active');
-            });
-        });
+        document.addEventListener('scroll', function() {
+            shadowRoot.querySelectorAll('.flight_item').forEach(function(elm) {
+                elm.classList.remove('active')
+            })
+        })
         /*
-                value_set("saved",{
-               "20230809TPETYO":1,
-               "20230816TYOCDG":1,
-               "20230816TYOLHR":1,
-               "20230823CDGAMS":1,
-               "20230823CDGMAD":1,
-               "20230826AMSHKG":1,
-               "20230826MADLHR":1,
-               "20230906LHRHKG":1,
-               "20230906LHRDOH":1,
-               "20230913HKGTPE":1
-                });*/
+		        value_set("saved",{
+		       "20230809TPETYO":1,
+		       "20230816TYOCDG":1,
+		       "20230816TYOLHR":1,
+		       "20230823CDGAMS":1,
+		       "20230823CDGMAD":1,
+		       "20230826AMSHKG":1,
+		       "20230826MADLHR":1,
+		       "20230906LHRHKG":1,
+		       "20230906LHRDOH":1,
+		       "20230913HKGTPE":1
+		        }); */
 
-        div_saved.addEventListener("click", function(e) {
+        div_saved.addEventListener('click', function(e) {
             if (e.target.dataset.remove) {
-                delete saved[e.target.dataset.remove];
-                delete saved_flights[e.target.dataset.remove];
-                update_saved_count();
-                update_saved_flights();
-                value_set("saved", saved)
-                value_set("saved_flights", saved_flights)
+                delete saved[e.target.dataset.remove]
+                delete saved_flights[e.target.dataset.remove]
+                update_saved_count()
+                update_saved_flights()
+                value_set('saved', saved)
+                value_set('saved_flights', saved_flights)
             }
-        });
+        })
 
-        div_saved_queries.addEventListener("click", function(e) {
+        div_saved_queries.addEventListener('click', function(e) {
             if (e.target.dataset.book) {
-                stop_batch();
-                e.target.innerText = lang.loading;
+                stop_batch()
+                e.target.innerText = lang.loading
                 regularSearch([{
                     from: (e.target.dataset.from ? e.target.dataset.from : uef_from),
                     to: (e.target.dataset.dest ? e.target.dataset.dest : uef_to),
@@ -1465,149 +1454,148 @@
                     adult: 1,
                     child: 0
                 })
-            } else if (e.target.type == "checkbox") {
-                div_saved_queries.querySelectorAll(".selected").forEach(function(elm) {
-                    delete elm.dataset.new;
-                });
+            } else if (e.target.type == 'checkbox') {
+                div_saved_queries.querySelectorAll('.selected').forEach(function(elm) {
+                    delete elm.dataset.new
+                })
 
                 if (e.target.checked) {
-                    e.target.parentNode.parentNode.dataset.new = true;
-                    e.target.parentNode.parentNode.classList.add("selected");
-                    div_saved_queries.parentNode.classList.add("multi_on");
-                    div_multi_box.classList.remove("hidden");
+                    e.target.parentNode.parentNode.dataset.new = true
+                    e.target.parentNode.parentNode.classList.add('selected')
+                    div_saved_queries.parentNode.classList.add('multi_on')
+                    div_multi_box.classList.remove('hidden')
                 } else {
-                    e.target.parentNode.parentNode.classList.remove("selected");
-                    e.target.parentNode.parentNode.querySelector(".leg").innerText = "";
-                    delete e.target.parentNode.parentNode.dataset.segment;
-                    if (div_saved_queries.querySelectorAll(".selected").length == 0) {
-                        div_saved_queries.parentNode.classList.remove("multi_on");
-                        div_multi_box.classList.add("hidden");
+                    e.target.parentNode.parentNode.classList.remove('selected')
+                    e.target.parentNode.parentNode.querySelector('.leg').innerText = ''
+                    delete e.target.parentNode.parentNode.dataset.segment
+                    if (div_saved_queries.querySelectorAll('.selected').length == 0) {
+                        div_saved_queries.parentNode.classList.remove('multi_on')
+                        div_multi_box.classList.add('hidden')
                     }
                 }
 
-                let segments_array = div_saved_queries.querySelectorAll(".selected");
+                const segments_array = div_saved_queries.querySelectorAll('.selected')
 
                 if (segments_array.length == 6) {
-                    div_saved_queries.querySelectorAll("input:not(:checked)").forEach(item => {
+                    div_saved_queries.querySelectorAll('input:not(:checked)').forEach(item => {
                         item.disabled = true
-                    });
+                    })
                 } else {
-                    div_saved_queries.querySelectorAll("input").forEach(item => {
+                    div_saved_queries.querySelectorAll('input').forEach(item => {
                         item.disabled = false
-                    });
+                    })
                 }
 
-                let pos = 1;
+                let pos = 1
                 Array.from(segments_array).sort(function(a, b) {
-                    if (+a.dataset.date > +b.dataset.date) return 1;
-                    console.log(a.dataset.date + " " + b.dataset.date);
-                    if (a.dataset.date == b.dataset.date) return (a.dataset.new ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1));
-                    return false;
+                    if (+a.dataset.date > +b.dataset.date) return 1
+                    console.log(a.dataset.date + ' ' + b.dataset.date)
+                    if (a.dataset.date == b.dataset.date) return (a.dataset.new ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1))
+                    return false
                 }).forEach(function(elm) {
-                    elm.dataset.segment = pos;
-                    elm.querySelector(".leg").innerText = "Segment " + pos;
-                    pos++;
-                });
+                    elm.dataset.segment = pos
+                    elm.querySelector('.leg').innerText = 'Segment ' + pos
+                    pos++
+                })
             }
-        });
+        })
 
-        div_saved_flights.addEventListener("click", function(e) {});
+        div_saved_flights.addEventListener('click', function(e) {})
 
-
-        div_filters.querySelectorAll("input").forEach(item => {
-            item.addEventListener("click", function(e) {
-                if (e.target.id == "filter_nonstop") {
+        div_filters.querySelectorAll('input').forEach(item => {
+            item.addEventListener('click', function(e) {
+                if (e.target.id == 'filter_nonstop') {
                     if (e.target.checked) {
-                        div_table.classList.add("nonstop_only")
+                        div_table.classList.add('nonstop_only')
                     } else {
-                        div_table.classList.remove("nonstop_only")
+                        div_table.classList.remove('nonstop_only')
                     }
-                } else if (e.target.id == "filter_first") {
+                } else if (e.target.id == 'filter_first') {
                     if (e.target.checked) {
-                        div_table.classList.add("show_first")
+                        div_table.classList.add('show_first')
                     } else {
-                        div_table.classList.remove("show_first")
+                        div_table.classList.remove('show_first')
                     }
-                } else if (e.target.id == "filter_business") {
+                } else if (e.target.id == 'filter_business') {
                     if (e.target.checked) {
-                        div_table.classList.add("show_business")
+                        div_table.classList.add('show_business')
                     } else {
-                        div_table.classList.remove("show_business")
+                        div_table.classList.remove('show_business')
                     }
-                } else if (e.target.id == "filter_premium") {
+                } else if (e.target.id == 'filter_premium') {
                     if (e.target.checked) {
-                        div_table.classList.add("show_premium")
+                        div_table.classList.add('show_premium')
                     } else {
-                        div_table.classList.remove("show_premium")
+                        div_table.classList.remove('show_premium')
                     }
-                } else if (e.target.id == "filter_economy") {
+                } else if (e.target.id == 'filter_economy') {
                     if (e.target.checked) {
-                        div_table.classList.add("show_economy")
+                        div_table.classList.add('show_economy')
                     } else {
-                        div_table.classList.remove("show_economy")
+                        div_table.classList.remove('show_economy')
                     }
                 }
             })
-        });
+        })
 
-        link_search_saved.addEventListener("click", function(e) {
+        link_search_saved.addEventListener('click', function(e) {
             if (Object.keys(saved).length == 0) {
-                alert("No Saved Queries.");
+                alert('No Saved Queries.')
             } else {
-                this.innerText = lang.loading;
-                saved_search();
+                this.innerText = lang.loading
+                saved_search()
             }
-        });
+        })
 
-        link_search_multi.addEventListener("click", function(e) {
-            if (shadowRoot.querySelectorAll(".saved_query.selected").length == 0) {
-                alert("No Selected Segments.");
+        link_search_multi.addEventListener('click', function(e) {
+            if (shadowRoot.querySelectorAll('.saved_query.selected').length == 0) {
+                alert('No Selected Segments.')
             } else {
-                this.innerText = lang.loading;
-                var to_search = [];
-                Array.from(shadowRoot.querySelectorAll(".saved_query.selected")).sort(function(a, b) {
-                    return a.dataset.segment - b.dataset.segment;
+                this.innerText = lang.loading
+                const to_search = []
+                Array.from(shadowRoot.querySelectorAll('.saved_query.selected')).sort(function(a, b) {
+                    return a.dataset.segment - b.dataset.segment
                 }).forEach(segment => {
                     to_search.push({
                         date: segment.dataset.date,
                         from: segment.dataset.route.substring(0, 3),
                         to: segment.dataset.route.substring(3, 6)
-                    });
+                    })
                 })
                 regularSearch(to_search, {
-                    adult: shadowRoot.querySelector("#multi_adult").value,
-                    child: shadowRoot.querySelector("#multi_child").value
-                }, shadowRoot.querySelector("#multi_cabin").value);
+                    adult: shadowRoot.querySelector('#multi_adult').value,
+                    child: shadowRoot.querySelector('#multi_child').value
+                }, shadowRoot.querySelector('#multi_cabin').value)
             }
-        });
+        })
 
-        div_faves_tabs.addEventListener("click", function(e) {
-            if (e.target.classList.contains("tab_flights")) this.parentNode.classList.add("flights");
-            if (e.target.classList.contains("tab_queries")) this.parentNode.classList.remove("flights");
-        });
+        div_faves_tabs.addEventListener('click', function(e) {
+            if (e.target.classList.contains('tab_flights')) this.parentNode.classList.add('flights')
+            if (e.target.classList.contains('tab_queries')) this.parentNode.classList.remove('flights')
+        })
 
-        shadowRoot.querySelector(".unelevated_saved a").addEventListener("click", function(e) {
-            //alert(JSON.stringify(saved));
-            shadowRoot.querySelector(".unelevated_faves").classList.toggle("unelevated_faves_hidden");
-        });
+        shadowRoot.querySelector('.unelevated_saved a').addEventListener('click', function(e) {
+            // alert(JSON.stringify(saved));
+            shadowRoot.querySelector('.unelevated_faves').classList.toggle('unelevated_faves_hidden')
+        })
     };
 
-    //============================================================
+    //= ===========================================================
     // Data Retrievers
-    //============================================================
+    //= ===========================================================
 
     const airports = {
         origins: [],
         dest: []
-    };
+    }
 
     function getOrigins() {
-        log("getOrigins()");
+        log('getOrigins()')
         httpRequest({
-            method: "GET",
-            url: "https://api.cathaypacific.com/redibe/airport/origin/" + (browser_lang == "zh" ? (browser_country == "CN" ? "sc" : "zh") : "en") + "/",
+            method: 'GET',
+            url: 'https://api.cathaypacific.com/redibe/airport/origin/' + (browser_lang == 'zh' ? (browser_country == 'CN' ? 'sc' : 'zh') : 'en') + '/',
             onload: function(response) {
-                var data = JSON.parse(response.responseText);
+                const data = JSON.parse(response.responseText)
                 if (data.airports) {
                     data.airports.forEach(airport => {
                         airports.origins[airport.airportCode] = {
@@ -1615,22 +1603,22 @@
                             shortName: airport.shortName,
                             countryName: airport.countryName
                         }
-                    });
+                    })
                 } else {
-                    airports.origins = [];
+                    airports.origins = []
                 }
             }
-        });
+        })
     }
 
     function getDestinations(from) {
-        if (!airports.origins[from]) return;
-        log("getDestinations()");
+        if (!airports.origins[from]) return
+        log('getDestinations()')
         httpRequest({
-            method: "GET",
-            url: "https://api.cathaypacific.com/redibe/airport/destination/" + from + "/" + (browser_lang == "zh" ? (browser_country == "CN" ? "sc" : "zh") : "en") + "/",
+            method: 'GET',
+            url: 'https://api.cathaypacific.com/redibe/airport/destination/' + from + '/' + (browser_lang == 'zh' ? (browser_country == 'CN' ? 'sc' : 'zh') : 'en') + '/',
             onload: function(response) {
-                var data = JSON.parse(response.responseText);
+                const data = JSON.parse(response.responseText)
                 if (data.airports) {
                     data.airports.forEach(airport => {
                         airports.dest[airport.airportCode] = {
@@ -1638,251 +1626,258 @@
                             shortName: airport.shortName,
                             countryName: airport.countryName
                         }
-                    });
+                    })
                 } else {
-                    airports.dest = [];
+                    airports.dest = []
                 }
             }
-        });
+        })
     }
 
-    //============================================================
+    //= ===========================================================
     // UI Logic
-    //============================================================
+    //= ===========================================================
 
-    //Batch Button Text
+    // Batch Button Text
     function batchLabel(label) {
-        if (shadowRoot.querySelector(".bulk_submit")) {
-            shadowRoot.querySelector(".bulk_submit").innerHTML = label;
+        if (shadowRoot.querySelector('.bulk_submit')) {
+            shadowRoot.querySelector('.bulk_submit').innerHTML = label
         }
     }
 
     function batchError(label) {
         if (label) {
-            shadowRoot.querySelector(".bulk_error span").innerHTML = label;
-            shadowRoot.querySelector(".bulk_error").classList.remove("bulk_error_hidden");
+            shadowRoot.querySelector('.bulk_error span').innerHTML = label
+            shadowRoot.querySelector('.bulk_error').classList.remove('bulk_error_hidden')
         } else {
-            shadowRoot.querySelector(".bulk_error").classList.add("bulk_error_hidden");
+            shadowRoot.querySelector('.bulk_error').classList.add('bulk_error_hidden')
         }
     }
 
     function autocomplete(inp, list) {
-        /*the autocomplete function takes two arguments,
-        the text field element and an array of possible autocompleted values:*/
-        var currentFocus;
-        /*execute a function when someone writes in the text field:*/
-        inp.addEventListener("input", function(e) {
-            newAC(this, e);
-        });
-        inp.addEventListener("click", function(e) {
-            //newAC(this,e);
-        });
-        /*execute a function presses a key on the keyboard:*/
-        inp.addEventListener("keydown", function(e) {
-            var x = shadowRoot.getElementById(this.id + "autocomplete-list");
-            if (x) x = x.getElementsByTagName("div");
+        /* the autocomplete function takes two arguments,
+		the text field element and an array of possible autocompleted values: */
+        let currentFocus
+        /* execute a function when someone writes in the text field: */
+        inp.addEventListener('input', function(e) {
+            newAC(this, e)
+        })
+        inp.addEventListener('click', function(e) {
+            // newAC(this,e);
+        })
+        /* execute a function presses a key on the keyboard: */
+        inp.addEventListener('keydown', function(e) {
+            let x = shadowRoot.getElementById(this.id + 'autocomplete-list')
+            if (x) x = x.getElementsByTagName('div')
             if (e.keyCode == 40) {
-                /*If the arrow DOWN key is pressed,
-                increase the currentFocus variable:*/
-                currentFocus++;
-                /*and and make the current item more visible:*/
-                addActive(x);
-            } else if (e.keyCode == 38) { //up
-                /*If the arrow UP key is pressed,
-                decrease the currentFocus variable:*/
-                currentFocus--;
-                /*and and make the current item more visible:*/
-                addActive(x);
+                /* If the arrow DOWN key is pressed,
+				increase the currentFocus variable: */
+                currentFocus++
+                /* and and make the current item more visible: */
+                addActive(x)
+            } else if (e.keyCode == 38) { // up
+                /* If the arrow UP key is pressed,
+				decrease the currentFocus variable: */
+                currentFocus--
+                /* and and make the current item more visible: */
+                addActive(x)
             } else if (e.keyCode == 13) {
-                /*If the ENTER key is pressed, prevent the form from being submitted,*/
-                e.preventDefault();
-                closeAllLists();
+                /* If the ENTER key is pressed, prevent the form from being submitted, */
+                e.preventDefault()
+                closeAllLists()
                 if (currentFocus > -1) {
-                    /*and simulate a click on the "active" item:*/
-                    if (x) x[currentFocus].click();
+                    /* and simulate a click on the "active" item: */
+                    if (x) x[currentFocus].click()
                 } else {
-                    if (x) x.querySelector(":not").click();
+                    if (x) x.querySelector(':not').click()
                 }
             } else if (e.keyCode == 32 || e.keyCode == 9) {
-                /*If the SPACE or TAB key is pressed, select first option*/
-                closeAllLists();
-                /*and simulate a click on the "active" item:*/
-                if (x) x[0].click();
+                /* If the SPACE or TAB key is pressed, select first option */
+                closeAllLists()
+                /* and simulate a click on the "active" item: */
+                if (x) x[0].click()
             }
-        });
+        })
 
         function addActive(x) {
-            /*a function to classify an item as "active":*/
-            if (!x) return false;
-            /*start by removing the "active" class on all items:*/
-            removeActive(x);
-            if (currentFocus >= x.length) currentFocus = 0;
-            if (currentFocus < 0) currentFocus = (x.length - 1);
-            /*add class "autocomplete-active":*/
-            x[currentFocus].classList.add("autocomplete-active");
+            /* a function to classify an item as "active": */
+            if (!x) return false
+            /* start by removing the "active" class on all items: */
+            removeActive(x)
+            if (currentFocus >= x.length) currentFocus = 0
+            if (currentFocus < 0) currentFocus = (x.length - 1)
+            /* add class "autocomplete-active": */
+            x[currentFocus].classList.add('autocomplete-active')
         }
 
         function removeActive(x) {
-            /*a function to remove the "active" class from all autocomplete items:*/
-            for (var i = 0; i < x.length; i++) {
-                x[i].classList.remove("autocomplete-active");
+            /* a function to remove the "active" class from all autocomplete items: */
+            for (let i = 0; i < x.length; i++) {
+                x[i].classList.remove('autocomplete-active')
             }
         }
 
         function closeAllLists(elmnt) {
-            /*close all autocomplete lists in the document,
-            except the one passed as an argument:*/
-            var x = shadowRoot.querySelectorAll(".autocomplete-items");
-            for (var i = 0; i < x.length; i++) {
+            /* close all autocomplete lists in the document,
+			except the one passed as an argument: */
+            const x = shadowRoot.querySelectorAll('.autocomplete-items')
+            for (let i = 0; i < x.length; i++) {
                 if (elmnt != x[i] && elmnt != inp) {
-                    x[i].parentNode.removeChild(x[i]);
+                    x[i].parentNode.removeChild(x[i])
                 }
             }
         }
 
         function checkLocale(code) {
-            return code.replace(atob("VGFpd2FuIENoaW5h"), atob("VGFpd2Fu")).replace(decodeURI(atob("JUU0JUI4JUFEJUU1JTlDJThCJUU1JThGJUIwJUU3JTgxJUEz")), decodeURI("%E5%8F%B0%E7%81%A3"));
+            return code.replace(atob('VGFpd2FuIENoaW5h'), atob('VGFpd2Fu')).replace(decodeURI(atob('JUU0JUI4JUFEJUU1JTlDJThCJUU1JThGJUIwJUU3JTgxJUEz')), decodeURI('%E5%8F%B0%E7%81%A3'))
         }
 
         function newAC(elm, e) {
-            var arr = airports[list] || [];
-            var a, b, c, i, sa, sc, se, val = elm.value;
-            /*close any already open lists of autocompleted values*/
-            closeAllLists();
-            val = elm.value.match(/[^,]+$/) ? elm.value.match(/[^,]+$/)[0] : false;
+            const arr = airports[list] || []
+            let a;
+            let b;
+            let c;
+            let i;
+            let sa;
+            let sc;
+            let se;
+            let val = elm.value
+            /* close any already open lists of autocompleted values */
+            closeAllLists()
+            val = elm.value.match(/[^,]+$/) ? elm.value.match(/[^,]+$/)[0] : false
             if (!val) {
-                return false;
+                return false
             }
-            currentFocus = -1;
-            /*create a DIV element that will contain the items (values):*/
-            a = document.createElement("DIV");
-            a.setAttribute("id", elm.id + "autocomplete-list");
-            a.setAttribute("class", "autocomplete-items");
-            /*append the DIV element as a child of the autocomplete container:*/
-            elm.parentNode.appendChild(a);
-            var sep = document.createElement("span");
-            sep.style.display = "none";
-            sep.classList.add("ac_separator");
-            a.appendChild(sep);
-            /*for each item in the array...*/
-            var favs = ["TPE", "TSA", "KHH", "RMQ", "TYO", "HND", "NRT", "KIX", "ITM", "CTS", "FUK", "NGO", "OKA", "ICN", "PUS",
-                "GMP", "CJU", "HKG", "MFM", "BKK", "CNX", "HKT", "CGK", "DPS", "SUB", "KUL", "BKI", "PEN", "DAD", "HAN", "SGN",
-                "CEB", "MNL", "SIN", "PNH", "DEL", "BOM", "DXB", "DOH", "TLV", "BCN", "MAD", "MXP", "CDG", "ZRH", "MUC",
-                "FCO", "FRA", "CDG", "AMS", "LHR", "LGW", "LON", "MAN", "FCO", "BOS", "JFK", "YYZ", "ORD", "IAD", "YVR",
-                "SFO", "LAX", "SAN", "SEA", "JNB", "PER", "SYD", "BNE", "MEL", "AKL", "HEL", "BLR", "SHA", "PVG", "PEK",
-                "CAN", "KTM", "ADL", "CPT", "ATH", "IST", "SOF", "VCE", "BUD", "PRG", "VIE", "BER", "WAW", "KBP", "CPH",
-                "DUS", "BRU", "OSL", "ARN", "DUB", "MIA", "ATL", "IAH", "DFW", "PHL", "CMN", "LAS", "SJC", "DEN", "AUS",
-                "MSY", "MCO", "EWR", "NYC", "LIS", "OPO", "SPU", "DBV", "ZAG", "MLE", "LIM", "BOG", "CNS", "GRU", "SCL", "GIG", "EZE", "MEX", "CUN"
-            ];
+            currentFocus = -1
+            /* create a DIV element that will contain the items (values): */
+            a = document.createElement('DIV')
+            a.setAttribute('id', elm.id + 'autocomplete-list')
+            a.setAttribute('class', 'autocomplete-items')
+            /* append the DIV element as a child of the autocomplete container: */
+            elm.parentNode.appendChild(a)
+            const sep = document.createElement('span')
+            sep.style.display = 'none'
+            sep.classList.add('ac_separator')
+            a.appendChild(sep)
+            /* for each item in the array... */
+            const favs = ['TPE', 'TSA', 'KHH', 'RMQ', 'TYO', 'HND', 'NRT', 'KIX', 'ITM', 'CTS', 'FUK', 'NGO', 'OKA', 'ICN', 'PUS',
+                'GMP', 'CJU', 'HKG', 'MFM', 'BKK', 'CNX', 'HKT', 'CGK', 'DPS', 'SUB', 'KUL', 'BKI', 'PEN', 'DAD', 'HAN', 'SGN',
+                'CEB', 'MNL', 'SIN', 'PNH', 'DEL', 'BOM', 'DXB', 'DOH', 'TLV', 'BCN', 'MAD', 'MXP', 'CDG', 'ZRH', 'MUC',
+                'FCO', 'FRA', 'CDG', 'AMS', 'LHR', 'LGW', 'LON', 'MAN', 'FCO', 'BOS', 'JFK', 'YYZ', 'ORD', 'IAD', 'YVR',
+                'SFO', 'LAX', 'SAN', 'SEA', 'JNB', 'PER', 'SYD', 'BNE', 'MEL', 'AKL', 'HEL', 'BLR', 'SHA', 'PVG', 'PEK',
+                'CAN', 'KTM', 'ADL', 'CPT', 'ATH', 'IST', 'SOF', 'VCE', 'BUD', 'PRG', 'VIE', 'BER', 'WAW', 'KBP', 'CPH',
+                'DUS', 'BRU', 'OSL', 'ARN', 'DUB', 'MIA', 'ATL', 'IAH', 'DFW', 'PHL', 'CMN', 'LAS', 'SJC', 'DEN', 'AUS',
+                'MSY', 'MCO', 'EWR', 'NYC', 'LIS', 'OPO', 'SPU', 'DBV', 'ZAG', 'MLE', 'LIM', 'BOG', 'CNS', 'GRU', 'SCL', 'GIG', 'EZE', 'MEX', 'CUN'
+            ]
             Object.keys(arr).forEach(key => {
-                /*check if the item starts with the same letters as the text field value:*/
-                var airportCode = arr[key].airportCode;
-                var countryName = checkLocale(arr[key].countryName);
-                var shortName = arr[key].shortName;
-                if (airportCode.length > 3) return;
+                /* check if the item starts with the same letters as the text field value: */
+                const airportCode = arr[key].airportCode
+                const countryName = checkLocale(arr[key].countryName)
+                const shortName = arr[key].shortName
+                if (airportCode.length > 3) return
                 if (val.toUpperCase() == airportCode.substr(0, val.length).toUpperCase() || val.toUpperCase() == countryName.substr(0, val.length).toUpperCase() || val.toUpperCase() == shortName.substr(0, val.length).toUpperCase()) {
-                    sa = (airportCode.substr(0, val.length).toUpperCase() == val.toUpperCase()) ? val.length : 0;
-                    se = (shortName.substr(0, val.length).toUpperCase() == val.toUpperCase()) ? val.length : 0;
-                    sc = (countryName.substr(0, val.length).toUpperCase() == val.toUpperCase()) ? val.length : 0;
-                    /*create a DIV element for each matching element:*/
-                    b = document.createElement("DIV");
-                    /*make the matching letters bold:*/
-                    c = "<span class='sa_code'><strong>" + airportCode.substr(0, sa) + "</strong>" + airportCode.substr(sa) + "</span>";
-                    c += "<span class='sc_code'><strong>" + shortName.substr(0, se) + "</strong>" + shortName.substr(se) + "";
-                    c += " - <strong>" + countryName.substr(0, sc) + "</strong>" + countryName.substr(sc) + "</span>";
-                    c += "</span>";
-                    /*insert a input field that will hold the current array item's value:*/
-                    c += "<input type='hidden' value='" + airportCode + "'>";
-                    b.dataset.city = airportCode;
-                    b.innerHTML = c;
-                    /*execute a function when someone clicks on the item value (DIV element):*/
-                    b.addEventListener("click", function(e) {
-                        /*insert the value for the autocomplete text field:*/
-                        inp.value = [inp.value.replace(/([,]?[^,]*)$/, ""), this.dataset.city].filter(Boolean).join(",");
-                        inp.dispatchEvent(new Event('change'));
-                        /*close the list of autocompleted values,
-                        (or any other open lists of autocompleted values:*/
-                        closeAllLists();
-                    });
+                    sa = (airportCode.substr(0, val.length).toUpperCase() == val.toUpperCase()) ? val.length : 0
+                    se = (shortName.substr(0, val.length).toUpperCase() == val.toUpperCase()) ? val.length : 0
+                    sc = (countryName.substr(0, val.length).toUpperCase() == val.toUpperCase()) ? val.length : 0
+                    /* create a DIV element for each matching element: */
+                    b = document.createElement('DIV')
+                    /* make the matching letters bold: */
+                    c = "<span class='sa_code'><strong>" + airportCode.substr(0, sa) + '</strong>' + airportCode.substr(sa) + '</span>'
+                    c += "<span class='sc_code'><strong>" + shortName.substr(0, se) + '</strong>' + shortName.substr(se) + ''
+                    c += ' - <strong>' + countryName.substr(0, sc) + '</strong>' + countryName.substr(sc) + '</span>'
+                    c += '</span>'
+                    /* insert a input field that will hold the current array item's value: */
+                    c += "<input type='hidden' value='" + airportCode + "'>"
+                    b.dataset.city = airportCode
+                    b.innerHTML = c
+                    /* execute a function when someone clicks on the item value (DIV element): */
+                    b.addEventListener('click', function(e) {
+                        /* insert the value for the autocomplete text field: */
+                        inp.value = [inp.value.replace(/([,]?[^,]*)$/, ''), this.dataset.city].filter(Boolean).join(',')
+                        inp.dispatchEvent(new Event('change'))
+                        /* close the list of autocompleted values,
+						(or any other open lists of autocompleted values: */
+                        closeAllLists()
+                    })
 
-                    if (["TPE", "KHH", "HKG"].includes(airportCode)) {
-                        a.prepend(b);
+                    if (['TPE', 'KHH', 'HKG'].includes(airportCode)) {
+                        a.prepend(b)
                     } else if (favs.includes(airportCode)) {
-                        a.insertBefore(b, sep);
+                        a.insertBefore(b, sep)
                     } else {
-                        a.appendChild(b);
+                        a.appendChild(b)
                     }
-
                 }
-            });
+            })
         }
-        /*execute a function when someone clicks in the document:*/
-        document.addEventListener("click", function(e) {
-            if (e.target == inp) return;
-            closeAllLists(e.target);
-        });
+        /* execute a function when someone clicks in the document: */
+        document.addEventListener('click', function(e) {
+            if (e.target == inp) return
+            closeAllLists(e.target)
+        })
     }
 
-    //============================================================
+    //= ===========================================================
     // Application Logic
-    //============================================================
+    //= ===========================================================
 
-    let searching, stop_search = false;
+    let searching;
+    let stop_search = false
 
     function resetSearch() {
-        searching = false;
-        batchLabel(lang.search_20);
-        shadowRoot.querySelector(".bulk_submit").classList.remove("bulk_searching");
+        searching = false
+        batchLabel(lang.search_20)
+        shadowRoot.querySelector('.bulk_submit').classList.remove('bulk_searching')
     }
 
-    let remaining_days = 20;
+    let remaining_days = 20
 
     function stop_batch() {
-        log("Batch Clicked. Stopping Search.");
-        stop_search = true;
-        searching = false;
-        shadowRoot.querySelector(".bulk_submit").innerText = lang.next_batch;
-        shadowRoot.querySelector(".bulk_submit").classList.remove("bulk_searching");
-        batchError(false);
-        remaining_days = 20;
+        log('Batch Clicked. Stopping Search.')
+        stop_search = true
+        searching = false
+        shadowRoot.querySelector('.bulk_submit').innerText = lang.next_batch
+        shadowRoot.querySelector('.bulk_submit').classList.remove('bulk_searching')
+        batchError(false)
+        remaining_days = 20
     }
 
     function bulk_click(single_date = false) {
-        shadowRoot.querySelector(".bulk_results").classList.remove("bulk_results_hidden");
+        shadowRoot.querySelector('.bulk_results').classList.remove('bulk_results_hidden')
         if (!searching) {
-            log("Batch Clicked. Starting Search.");
-            uef_from = value_set("uef_from", input_from.value);
-            uef_to = value_set("uef_to", input_to.value);
-            uef_date = value_set("uef_date", input_date.value);
-            uef_adult = value_set("uef_adult", input_adult.value);
-            uef_child = value_set("uef_child", input_child.value);
-            btn_batch.innerHTML = lang.searching_w_cancel;
-            btn_batch.classList.add("bulk_searching");
-            bulk_search(single_date);
+            log('Batch Clicked. Starting Search.')
+            uef_from = value_set('uef_from', input_from.value)
+            uef_to = value_set('uef_to', input_to.value)
+            uef_date = value_set('uef_date', input_date.value)
+            uef_adult = value_set('uef_adult', input_adult.value)
+            uef_child = value_set('uef_child', input_child.value)
+            btn_batch.innerHTML = lang.searching_w_cancel
+            btn_batch.classList.add('bulk_searching')
+            bulk_search(single_date)
         } else {
-            stop_batch();
+            stop_batch()
         }
     }
 
     function saved_search() {
-        var to_search = [];
+        const to_search = []
         Object.keys(saved).forEach(query => {
             to_search.push({
                 date: query.substring(0, 8),
                 from: query.substring(8, 11),
                 to: query.substring(11, 14)
             })
-        });
+        })
         to_search.sort(function(a, b) {
             return a.date - b.date
         })
 
-        var ss_query = to_search.shift();
+        let ss_query = to_search.shift()
 
-        shadowRoot.querySelector(".bulk_results").classList.remove("bulk_results_hidden");
-        btn_batch.innerHTML = lang.searching_w_cancel;
-        btn_batch.classList.add("bulk_searching");
-        shadowRoot.querySelector(".bulk_table tbody").innerHTML = "";
+        shadowRoot.querySelector('.bulk_results').classList.remove('bulk_results_hidden')
+        btn_batch.innerHTML = lang.searching_w_cancel
+        btn_batch.classList.add('bulk_searching')
+        shadowRoot.querySelector('.bulk_table tbody').innerHTML = ''
 
         if (!cont_query) {
             regularSearch([{
@@ -1892,119 +1887,115 @@
             }], {
                 adult: 1,
                 child: 0
-            }, "Y", true, false, true);
-            return;
+            }, 'Y', true, false, true)
+            return
         }
 
         var populate_next_query = function(flights) {
             if (to_search.length == 0) {
-                link_search_saved.innerText = lang.search_selected;
-                insertResults(ss_query.from, ss_query.to, ss_query.date, flights);
-                stop_batch();
-                stop_search = false;
-                searching = false;
-                route_changed = true;
-                return;
+                link_search_saved.innerText = lang.search_selected
+                insertResults(ss_query.from, ss_query.to, ss_query.date, flights)
+                stop_batch()
+                stop_search = false
+                searching = false
+                route_changed = true
             } else {
-                insertResults(ss_query.from, ss_query.to, ss_query.date, flights);
-                ss_query = to_search.shift();
-                searchAvailability(ss_query.from, ss_query.to, ss_query.date, 1, 0, populate_next_query);
+                insertResults(ss_query.from, ss_query.to, ss_query.date, flights)
+                ss_query = to_search.shift()
+                searchAvailability(ss_query.from, ss_query.to, ss_query.date, 1, 0, populate_next_query)
             }
         }
 
-        searchAvailability(ss_query.from, ss_query.to, ss_query.date, 1, 0, populate_next_query);
-
+        searchAvailability(ss_query.from, ss_query.to, ss_query.date, 1, 0, populate_next_query)
     }
 
     function update_saved_count() {
-        log("update_saved_count()");
-        let saved_list = "";
-        let saved_arr = [];
+        log('update_saved_count()')
+        let saved_list = ''
+        const saved_arr = []
         Object.keys(saved).forEach(query => {
-            var sdate = new Date(query.substring(0, 4), query.substring(4, 6) - 1, query.substring(6, 8));
-            var ndate = new Date();
+            const sdate = new Date(query.substring(0, 4), query.substring(4, 6) - 1, query.substring(6, 8))
+            const ndate = new Date()
             if (sdate <= ndate) {
-                delete saved[query];
-                return;
+                delete saved[query]
+                return
             }
             saved_arr.push({
                 date: query.substring(0, 8),
                 from: query.substring(8, 11).toUpperCase(),
                 to: query.substring(11, 14).toUpperCase()
             })
-        });
+        })
         saved_arr.sort(function(a, b) {
             return a.date - b.date
-        });
+        })
 
         saved_arr.forEach(query => {
-            var date = query.date;
-            var from = query.from;
-            var to = query.to
+            const date = query.date
+            const from = query.from
+            const to = query.to
             saved_list += `<div class="saved_query" data-date="${date}" data-route="${from + to}"><label><input type="checkbox" data-route="${date + from + to}" data-date="${date}"> ${toDashedDate(date)} ${from}-${to}</label>
             <a href="javascript:void(0);" class="saved_book" data-book="true" data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
             <span class="leg"></span>
             <a href="javascript:void(0);" class="saved_remove" data-remove="${date + from + to}">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg>
             </a></div>`
-
-        });
-        shadowRoot.querySelector(".unelevated_faves .saved_queries").innerHTML = saved_list;
-        shadowRoot.querySelector(".unelevated_saved a span").innerText = saved_arr.length;
-
+        })
+        shadowRoot.querySelector('.unelevated_faves .saved_queries').innerHTML = saved_list
+        shadowRoot.querySelector('.unelevated_saved a span').innerText = saved_arr.length
     }
 
     function update_saved_flights() {
-        log("update_saved_flights()");
-        let saved_list = "";
-        let saved_arr = [];
+        log('update_saved_flights()')
+        let saved_list = ''
+        const saved_arr = []
         Object.keys(saved_flights).forEach(query => {
-            var sdate = new Date(query.substring(0, 4), query.substring(4, 6) - 1, query.substring(6, 8));
-            var ndate = new Date();
+            const sdate = new Date(query.substring(0, 4), query.substring(4, 6) - 1, query.substring(6, 8))
+            const ndate = new Date()
             if (sdate <= ndate) {
-                delete saved_flights[query];
-                return;
+                delete saved_flights[query]
+                return
             }
             saved_arr.push({
                 fullquery: query,
                 date: query.substring(0, 8),
                 from: query.substring(8, 11).toUpperCase(),
                 to: query.substring(11, 14).toUpperCase(),
-                leg1: query.split("_")[1] || "",
-                stop: query.split("_")[2] || "",
-                leg2: query.split("_")[3] || "",
+                leg1: query.split('_')[1] || '',
+                stop: query.split('_')[2] || '',
+                leg2: query.split('_')[3] || '',
                 f: saved_flights[query].f,
                 j: saved_flights[query].j,
                 p: saved_flights[query].p,
                 y: saved_flights[query].y
             })
-        });
+        })
         saved_arr.sort(function(a, b) {
             return a.date - b.date
-        });
+        })
 
         saved_arr.forEach(query => {
-            var fullquery = query.fullquery;
-            var date = query.date;
-            var from = query.from;
-            var to = query.to;
-            var leg1 = query.leg1;
-            var stop = query.stop;
-            var leg2 = query.leg2;
-            var avail = {
+            const fullquery = query.fullquery
+            const date = query.date
+            const from = query.from
+            const to = query.to
+            const leg1 = query.leg1
+            const stop = query.stop
+            const leg2 = query.leg2
+            const avail = {
                 f: query.f,
                 j: query.j,
                 p: query.p,
                 y: query.y
-            };
+            }
             saved_list += `<div class="saved_flight" data-date="${date}" data-route="${from + to}">
             <label>
                 <!--<input type="checkbox" data-route="${date + from + to}" data-date="${date}">-->
                 <span>
                     <span class="sf_date">${toDashedDate(date)}</span>
-                    <span class="sf_route">${from}-${stop ? stop + "-" : ""}${to}
+                    <span class="sf_route">${from}-${stop ? stop + '-' : ''}${to}
                     </span><span class="sf_flights">
-                        ${leg1}${leg2 ? " + " + leg2 : ""}
+                        ${leg1}${leg2 ? ' + ' + leg2 : ''}
                         <span class="sf_avail">
                             ${avail.f > 0 ? '<span class="av_f">F ' + avail.f + '</span>' : ''}
                             ${avail.j > 0 ? '<span class="av_j">J ' + avail.j + '</span>' : ''}
@@ -2020,287 +2011,282 @@
             <a href="javascript:void(0);" class="saved_remove" data-remove="${fullquery}">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg>
             </a></div>`
-
-        });
-        shadowRoot.querySelector(".unelevated_faves .saved_flights").innerHTML = saved_list;
-        shadowRoot.querySelector(".unelevated_saved a span").innerText = saved_arr.length;
-
+        })
+        shadowRoot.querySelector('.unelevated_faves .saved_flights').innerHTML = saved_list
+        shadowRoot.querySelector('.unelevated_saved a span').innerText = saved_arr.length
     }
 
     function checkCities(elem) {
-        log("checkCities()");
+        log('checkCities()')
         setTimeout(function() {
-
-            var cities = elem.value.split(",");
-            var errorcities = [];
+            let cities = elem.value.split(',')
+            const errorcities = []
             cities = cities.filter(city => {
                 if (city.match(/^[A-Z]{3}$/)) {
-                    return true;
+                    return true
                 } else {
-                    errorcities.push(city);
-                    return false;
+                    errorcities.push(city)
+                    return false
                 }
             })
 
             if (errorcities.filter(Boolean).length > 0) {
-                elem.value = cities.join(",");
-                elem.dispatchEvent(new Event('change'));
-                alert("Invalid Airport" + (errorcities.filter(Boolean).length > 1 ? "s" : "") + " Removed: " + errorcities.filter(Boolean).join(","));
+                elem.value = cities.join(',')
+                elem.dispatchEvent(new Event('change'))
+                alert('Invalid Airport' + (errorcities.filter(Boolean).length > 1 ? 's' : '') + ' Removed: ' + errorcities.filter(Boolean).join(','))
             }
-        }, 500);
+        }, 500)
     }
 
     function checkLogin() {
-        log("checkLogin()");
+        log('checkLogin()')
         httpRequest({
-            method: "GET",
-            url: "https://api.cathaypacific.com/redibe/login/getProfile",
+            method: 'GET',
+            url: 'https://api.cathaypacific.com/redibe/login/getProfile',
             headers: {
-                "Content-Type": "application/json"
+                'Content-Type': 'application/json'
             },
-            withCredentials: "true",
+            withCredentials: 'true',
             onload: function(response) {
-                log("getprofile");
-                let data = JSON.parse(response.responseText);
-                if (data.membershipNumber) return;
-                div_login_prompt.classList.remove("hidden");
+                log('getprofile')
+                const data = JSON.parse(response.responseText)
+                if (data.membershipNumber) return
+                div_login_prompt.classList.remove('hidden')
             }
-        });
+        })
     }
 
-
-    //============================================================
+    //= ===========================================================
     // Request Variables
-    //============================================================
+    //= ===========================================================
 
     // Default Search JSON
 
     function newQueryPayload(route = {
-        from: "HND",
-        to: "ITM",
+        from: 'HND',
+        to: 'ITM',
         date: dateAdd(14)
     }, passengers = {
         adult: 1,
         child: 0
-    }, cabinclass = "Y", oneway = false) {
-        log("newQueryPayload()");
+    }, cabinclass = 'Y', oneway = false) {
+        log('newQueryPayload()')
         return {
-            "awardType": "Standard",
-            "brand": "CX",
-            "cabinClass": cabinclass,
-            "entryCountry": lang.ec,
-            "entryLanguage": lang.el,
-            "entryPoint": "https://www.cathaypacific.com/cx/" + lang.el + "_" + lang.ec + "/book-a-trip/redeem-flights/redeem-flight-awards.html",
-            "errorUrl": "https://www.cathaypacific.com/cx/" + lang.el + "_" + lang.ec + "/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow",
-            "returnUrl": "https://www.cathaypacific.com/cx/" + lang.el + "_" + lang.ec + "/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow",
-            "isFlexibleDate": false,
-            "numAdult": passengers.adult,
-            "numChild": passengers.child,
-            "promotionCode": "",
-            "segments": [{
-                "departureDate": route.date,
-                "origin": route.from,
-                "destination": route.to
+            awardType: 'Standard',
+            brand: 'CX',
+            cabinClass: cabinclass,
+            entryCountry: lang.ec,
+            entryLanguage: lang.el,
+            entryPoint: 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html',
+            errorUrl: 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow',
+            returnUrl: 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow',
+            isFlexibleDate: false,
+            numAdult: passengers.adult,
+            numChild: passengers.child,
+            promotionCode: '',
+            segments: [{
+                departureDate: route.date,
+                origin: route.from,
+                destination: route.to
             }]
-        };
+        }
     }
 
-    function newMultiPayload(routes, passengers, cabinclass = "Y") {
-        log("newMultiPayload()");
-        let legs = [];
+    function newMultiPayload(routes, passengers, cabinclass = 'Y') {
+        log('newMultiPayload()')
+        const legs = []
         routes.forEach(segment => {
             legs.push({
-                "departureDate": segment.date,
-                "origin": segment.from,
-                "destination": segment.to
+                departureDate: segment.date,
+                origin: segment.from,
+                destination: segment.to
             })
         })
         return {
-            "awardType": "Standard",
-            "brand": "CX",
-            "cabinClass": cabinclass,
-            "entryCountry": lang.ec,
-            "entryLanguage": lang.el,
-            "entryPoint": "https://www.cathaypacific.com/cx/" + lang.el + "_" + lang.ec + "/book-a-trip/redeem-flights/redeem-flight-awards.html",
-            "errorUrl": "https://www.cathaypacific.com/cx/" + lang.el + "_" + lang.ec + "/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc",
-            "returnUrl": "https://www.cathaypacific.com/cx/" + lang.el + "_" + lang.ec + "/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc",
-            "isFlexibleDate": false,
-            "numAdult": passengers.adult,
-            "numChild": passengers.child,
-            "promotionCode": "",
-            "segments": legs
-        };
+            awardType: 'Standard',
+            brand: 'CX',
+            cabinClass: cabinclass,
+            entryCountry: lang.ec,
+            entryLanguage: lang.el,
+            entryPoint: 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html',
+            errorUrl: 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc',
+            returnUrl: 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc',
+            isFlexibleDate: false,
+            numAdult: passengers.adult,
+            numChild: passengers.child,
+            promotionCode: '',
+            segments: legs
+        }
     }
 
-    //============================================================
+    //= ===========================================================
     // Get New TAB_ID
-    //============================================================
+    //= ===========================================================
 
     function response_parser(response, regex) {
-        var result = response.match(regex);
+        let result = response.match(regex)
         try {
-            result = JSON.parse(result[1]);
+            result = JSON.parse(result[1])
         } catch (e) {
-            result = false;
+            result = false
         }
-        return result;
+        return result
     }
 
     function newTabID(callback) {
-        log("Creating New Request Parameters...");
+        log('Creating New Request Parameters...')
         httpRequest({
-            method: "POST",
-            url: "https://api.cathaypacific.com/redibe/standardAward/create",
+            method: 'POST',
+            url: 'https://api.cathaypacific.com/redibe/standardAward/create',
             headers: {
-                "Content-Type": "application/json"
+                'Content-Type': 'application/json'
             },
-            withCredentials: "true",
+            withCredentials: 'true',
             data: JSON.stringify(newQueryPayload()),
             onload: function(response) {
-                log("Initial Request Parameters Received.");
-                var data = JSON.parse(response.responseText);
-                var parameters = (data.parameters);
-                var urlToPost = data.urlToPost || "https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability";
-                var form_data = "";
-                for (var key in parameters) {
-                    form_data = form_data + key + "=" + parameters[key] + "&";
+                log('Initial Request Parameters Received.')
+                const data = JSON.parse(response.responseText)
+                const parameters = (data.parameters)
+                const urlToPost = data.urlToPost || 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability'
+                let form_data = ''
+                for (const key in parameters) {
+                    form_data = form_data + key + '=' + parameters[key] + '&'
                 }
 
-                log("Requesting New Tab ID...");
+                log('Requesting New Tab ID...')
                 httpRequest({
-                    method: "POST",
+                    method: 'POST',
                     url: urlToPost,
                     headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
+                        'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     data: form_data,
-                    withCredentials: "true",
+                    withCredentials: 'true',
                     onreadystatechange: function(response) {
-                        var errorBOM = ""
-                        var errorMessage = lang.tab_retrieve_fail;
+                        let errorBOM = ''
+                        let errorMessage = lang.tab_retrieve_fail
                         if (response.readyState == 4 && response.status == 200) {
-                            log("Tab ID Response Received. Parsing...");
-                            var data = response.responseText;
-                            requestVars = response_parser(data, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/);
-                            log(response_parser(data, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/));
+                            log('Tab ID Response Received. Parsing...')
+                            const data = response.responseText
+                            requestVars = response_parser(data, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
+                            log(response_parser(data, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/))
                             if (!requestVars) {
-                                errorBOM = response_parser(data, /errorBom = ([^;]+)/);
-                                if (errorBOM?.modelObject?.step == "Error") {
-                                    errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage;
+                                errorBOM = response_parser(data, /errorBom = ([^;]+)/)
+                                if (errorBOM?.modelObject?.step == 'Error') {
+                                    errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
                                 }
-                                log("Tab ID Could not be parsed.");
-                                batchError("<strong>Error:</strong> " + errorMessage + " (<a href='" + login_url + "'>Login</a>) ");
-                                resetSearch();
-                                return false;
+                                log('Tab ID Could not be parsed.')
+                                batchError('<strong>Error:</strong> ' + errorMessage + " (<a href='" + login_url + "'>Login</a>) ")
+                                resetSearch()
+                                return false
                             }
-                            tab_id = requestVars.TAB_ID ? requestVars.TAB_ID : "";
-                            log("New Tab ID: " + tab_id);
-                            batchError(false);
-                            form_submit_url = availability_url + tab_id;
-                            if (callback) callback();
+                            tab_id = requestVars.TAB_ID ? requestVars.TAB_ID : ''
+                            log('New Tab ID: ' + tab_id)
+                            batchError(false)
+                            form_submit_url = availability_url + tab_id
+                            if (callback) callback()
                         } else if (response.readyState == 4) {
-                            errorBOM = response_parser(response.responseText, /errorBom = ([^;]+)/);
-                            if (errorBOM?.modelObject?.step == "Error") {
-                                errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage;
+                            errorBOM = response_parser(response.responseText, /errorBom = ([^;]+)/)
+                            if (errorBOM?.modelObject?.step == 'Error') {
+                                errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
                             }
-                            log("Failed to receive Tab ID.");
-                            resetSearch();
-                            batchError("<strong>Error:</strong> " + errorMessage + " ( <a href='" + login_url + "'>Login</a> ) ");
+                            log('Failed to receive Tab ID.')
+                            resetSearch()
+                            batchError('<strong>Error:</strong> ' + errorMessage + " ( <a href='" + login_url + "'>Login</a> ) ")
                         }
                     }
-                }, true);
+                }, true)
             }
-        });
+        })
     }
 
-    //============================================================
+    //= ===========================================================
     // Regular Search
-    //============================================================
+    //= ===========================================================
 
     function regularSearch(route = [{
-        from: "TPE",
-        to: "TYO",
+        from: 'TPE',
+        to: 'TYO',
         date: dateAdd(14)
     }], passengers = {
         adult: 1,
         child: 0
-    }, cabinclass = "Y", is_cont_query = false, is_cont_batch = false, is_cont_saved = false) {
-        var cx_string;
+    }, cabinclass = 'Y', is_cont_query = false, is_cont_batch = false, is_cont_saved = false) {
+        let cx_string
         if (route.length == 1) {
-            cx_string = JSON.stringify(newQueryPayload(route[0], passengers, cabinclass, true));
+            cx_string = JSON.stringify(newQueryPayload(route[0], passengers, cabinclass, true))
         } else if (route.length > 1) {
-            cx_string = JSON.stringify(newMultiPayload(route, passengers, cabinclass));
+            cx_string = JSON.stringify(newMultiPayload(route, passengers, cabinclass))
         } else {
-            return;
+            return
         }
 
-        //var cx_string = JSON.stringify(newQueryPayload(uef_from, uef_to, uef_date, uef_adult, uef_child));
-        log("cx_string:");
-        log(cx_string);
-        btn_search.innerHTML = lang.searching;
-        btn_search.classList.add("searching");
+        // var cx_string = JSON.stringify(newQueryPayload(uef_from, uef_to, uef_date, uef_adult, uef_child));
+        log('cx_string:')
+        log(cx_string)
+        btn_search.innerHTML = lang.searching
+        btn_search.classList.add('searching')
         httpRequest({
-            method: "POST",
-            url: "https://api.cathaypacific.com/redibe/standardAward/create",
+            method: 'POST',
+            url: 'https://api.cathaypacific.com/redibe/standardAward/create',
             headers: {
-                "Content-Type": "application/json"
+                'Content-Type': 'application/json'
             },
-            withCredentials: "true",
+            withCredentials: 'true',
             data: cx_string,
             onload: function(response) {
-                var data = JSON.parse(response.responseText);
-                var parameters = data.parameters;
-                var urlToPost = data.urlToPost || "https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability";
-                log("regularSearch parameters:");
-                log(parameters);
-                var action_url = new URL(urlToPost);
-                if (is_cont_query) value_set("cont_query", "1");
-                if (is_cont_batch) value_set("cont_batch", "1");
-                if (is_cont_saved) value_set("cont_saved", "1");
-                value_set("cont_ts", Date.now());
+                const data = JSON.parse(response.responseText)
+                const parameters = data.parameters
+                const urlToPost = data.urlToPost || 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability'
+                log('regularSearch parameters:')
+                log(parameters)
+                const action_url = new URL(urlToPost)
+                if (is_cont_query) value_set('cont_query', '1')
+                if (is_cont_batch) value_set('cont_batch', '1')
+                if (is_cont_saved) value_set('cont_saved', '1')
+                value_set('cont_ts', Date.now())
                 // Create a form dynamically
-                var form = document.createElement("form");
-                form.setAttribute("name", "regular_search_form");
-                form.setAttribute("method", "post");
-                form.setAttribute("action", action_url);
+                const form = document.createElement('form')
+                form.setAttribute('name', 'regular_search_form')
+                form.setAttribute('method', 'post')
+                form.setAttribute('action', action_url)
 
-                for (var item in parameters) {
-                    var input = document.createElement("input");
-                    input.setAttribute("type", "hidden");
-                    input.setAttribute("name", item);
-                    input.setAttribute("value", parameters[item]);
-                    form.appendChild(input);
+                for (const item in parameters) {
+                    const input = document.createElement('input')
+                    input.setAttribute('type', 'hidden')
+                    input.setAttribute('name', item)
+                    input.setAttribute('value', parameters[item])
+                    form.appendChild(input)
                 }
 
-                document.getElementsByTagName("body")[0].appendChild(form);
-                //document.forms.regular_search_form.submit();
-                form.submit();
+                document.getElementsByTagName('body')[0].appendChild(form)
+                // document.forms.regular_search_form.submit();
+                form.submit()
             }
-        });
+        })
     }
 
-    //============================================================
+    //= ===========================================================
     // Bulk Search
-    //============================================================
+    //= ===========================================================
 
-    var bulk_date = "";
+    let bulk_date = ''
 
     function bulk_search(single_date = false) {
-
-        log("bulk_search start, remaining_days:" + remaining_days);
-        var no_continue = false;
+        log('bulk_search start, remaining_days:' + remaining_days)
+        let no_continue = false
         if (remaining_days-- == 0) {
-            stop_batch();
-            no_continue = true;
+            stop_batch()
+            no_continue = true
         }
 
-        log("remaining_days: " + remaining_days);
+        log('remaining_days: ' + remaining_days)
 
-        uef_from = input_from.value;
-        uef_to = input_to.value;
-        uef_date = input_date.value;
-        uef_adult = input_adult.value;
-        uef_child = input_child.value;
+        uef_from = input_from.value
+        uef_to = input_to.value
+        uef_date = input_date.value
+        uef_adult = input_adult.value
+        uef_child = input_child.value
 
         if (!cont_query) {
             regularSearch([{
@@ -2310,39 +2296,39 @@
             }], {
                 adult: uef_adult,
                 child: uef_child
-            }, "Y", true, true);
-            return;
+            }, 'Y', true, true)
+            return
         }
 
-        bulk_date = bulk_date ? bulk_date : input_date.value;
+        bulk_date = bulk_date || input_date.value
 
         if (route_changed) {
-            div_table_body.innerHTML = "";
-            bulk_date = input_date.value;
+            div_table_body.innerHTML = ''
+            bulk_date = input_date.value
             div_ue_container.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-            route_changed = false;
+                behavior: 'smooth',
+                block: 'start'
+            })
+            route_changed = false
         }
-        var routes = [];
-        var rt_from = uef_from.split(",");
-        var rt_to = uef_to.split(",");
-        var query_count = (rt_from.length * rt_to.length);
+        const routes = []
+        const rt_from = uef_from.split(',')
+        const rt_to = uef_to.split(',')
+        const query_count = (rt_from.length * rt_to.length)
 
         if (!no_continue & remaining_days > Math.ceil(25 / query_count)) {
-            remaining_days = (Math.ceil(25 / query_count) - 1);
+            remaining_days = (Math.ceil(25 / query_count) - 1)
         }
 
         if (r == t) {
             rt_from.forEach(from => {
                 rt_to.forEach(to => {
                     routes.push({
-                        from: from,
-                        to: to
+                        from,
+                        to
                     })
-                });
-            });
+                })
+            })
         } else {
             routes.push({
                 from: rt_from[0],
@@ -2350,36 +2336,35 @@
             })
         }
 
-        var this_route = routes.shift();
+        let this_route = routes.shift()
 
         var populate_next_route = function(flights) {
-
-            insertResults(this_route.from, this_route.to, bulk_date, flights);
+            insertResults(this_route.from, this_route.to, bulk_date, flights)
 
             if (routes.length <= 0) {
-                bulk_date = dateAdd(1, bulk_date);
-                if (single_date) stop_batch();
-                bulk_search();
+                bulk_date = dateAdd(1, bulk_date)
+                if (single_date) stop_batch()
+                bulk_search()
             } else {
-                this_route = routes.shift();
-                searchAvailability(this_route.from, this_route.to, bulk_date, uef_adult, uef_child, populate_next_route);
+                this_route = routes.shift()
+                searchAvailability(this_route.from, this_route.to, bulk_date, uef_adult, uef_child, populate_next_route)
             }
         }
-        searchAvailability(this_route.from, this_route.to, bulk_date, uef_adult, uef_child, populate_next_route);
+        searchAvailability(this_route.from, this_route.to, bulk_date, uef_adult, uef_child, populate_next_route)
     }
 
-    //============================================================
+    //= ===========================================================
     // Search Availability
-    //============================================================
+    //= ===========================================================
 
     function searchAvailability(from, to, date, adult, child, callback) {
         if (stop_search) {
-            stop_search = false;
-            searching = false;
-            return;
+            stop_search = false
+            searching = false
+            return
         }
 
-        searching = true;
+        searching = true
 
         // If destination is not valid, abort
         if (!/^[A-Z]{3}$/.test(to)) {
@@ -2390,155 +2375,154 @@
                         text: lang.invalid_code
                     }]
                 }
-            });
-            return;
+            })
+            return
         }
 
-        var requests = requestVars;
+        const requests = requestVars
 
-        log("searchAvailability() requests");
-        log(requests);
+        log('searchAvailability() requests')
+        log(requests)
 
-        requests.B_DATE_1 = date + "0000";
-        //requests.B_DATE_2 = dateAdd(1,date) + "0000";
-        requests.B_LOCATION_1 = from;
-        requests.E_LOCATION_1 = to;
-        //requests.B_LOCATION_2 = to;
-        //requests.E_LOCATION_2 = from;
-        delete requests.ENCT;
-        delete requests.SERVICE_ID;
-        delete requests.DIRECT_LOGIN;
-        delete requests.ENC;
+        requests.B_DATE_1 = date + '0000'
+        // requests.B_DATE_2 = dateAdd(1,date) + "0000";
+        requests.B_LOCATION_1 = from
+        requests.E_LOCATION_1 = to
+        // requests.B_LOCATION_2 = to;
+        // requests.E_LOCATION_2 = from;
+        delete requests.ENCT
+        delete requests.SERVICE_ID
+        delete requests.DIRECT_LOGIN
+        delete requests.ENC
 
-        var params = "";
-        for (var key in requests) {
-            params = params + key + "=" + requests[key] + "&";
+        let params = ''
+        for (const key in requests) {
+            params = params + key + '=' + requests[key] + '&'
         }
 
         httpRequest({
-            method: "POST",
+            method: 'POST',
             url: form_submit_url,
-            withCredentials: "true",
+            withCredentials: 'true',
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Accept": "application/json, text/plain, */*"
+                'Content-Type': 'application/x-www-form-urlencoded',
+                Accept: 'application/json, text/plain, */*'
             },
             data: params,
             onreadystatechange: function(response) {
-                var search_again = function() {
-                    searchAvailability(from, to, date, adult, child, callback);
+                const search_again = function() {
+                    searchAvailability(from, to, date, adult, child, callback)
                 }
                 if (response.readyState == 4 && response.status == 200) {
-                    batchError(false);;
+                    batchError(false)
                     try {
-                        var data = JSON.parse(response.responseText);
+                        var data = JSON.parse(response.responseText)
                     } catch {
                         /* var res = response.responseText;
-                        var incapsula_script = res.match(/<script src="(\/_Incapsula_[^]+.js)"><\/script>/);
-                        if (incapsula_script) {
-                            batchError("Cathay bot block triggered.");
-                        }*/
-                        batchError("Response not valid JSON.");
-                        return;
+						var incapsula_script = res.match(/<script src="(\/_Incapsula_[^]+.js)"><\/script>/);
+						if (incapsula_script) {
+						    batchError("Cathay bot block triggered.");
+						} */
+                        batchError('Response not valid JSON.')
+                        return
                     }
-                    var pageBom = JSON.parse(data.pageBom);
-                    callback(pageBom);
+                    const pageBom = JSON.parse(data.pageBom)
+                    callback(pageBom)
                 } else if (response.readyState == 4 && response.status == 404) {
-                    batchError(lang.key_exhausted);
-                    newTabID(search_again);
+                    batchError(lang.key_exhausted)
+                    newTabID(search_again)
                 } else if (response.readyState == 4 && response.status >= 300) {
                     batchError(lang.getting_key)
-                    newTabID(search_again);
+                    newTabID(search_again)
                 }
             }
-        }, true);
+        }, true)
     }
 
-    //============================================================
+    //= ===========================================================
     // Insert Search Results
-    //============================================================
+    //= ===========================================================
 
     function insertResults(from, to, date, pageBom) {
-
         if (!shadowRoot.querySelector('.bulk_table tr[data-date="' + date + '"]')) {
-            var results_row = "";
+            let results_row = ''
             results_row += `<tr data-date='${date}'><td class='bulk_date'>
         <a href='javascript:void(0);' data-book='true' data-date='${date}'>${toDashedDate(date)}</a>
         ${dateWeekday(date)}
-        </td><td class='bulk_flights'></td></tr>`;
-            shadowRoot.querySelector(".bulk_table tbody").insertAdjacentHTML("beforeend", results_row);
+        </td><td class='bulk_flights'></td></tr>`
+            shadowRoot.querySelector('.bulk_table tbody').insertAdjacentHTML('beforeend', results_row)
         }
 
-        let heart_svg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="heart_save" viewBox="0 0 16 16"> <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"></path></svg>`;
+        const heart_svg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="heart_save" viewBox="0 0 16 16"> <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"></path></svg>'
 
-        var noflights = true;
-        var flightHTML = `<div data-from="${from}" data-to="${to}">
+        let noflights = true
+        let flightHTML = `<div data-from="${from}" data-to="${to}">
     <span class="flight_title">${from} - ${to}
-    <a href="javascript:void(0)" class="bulk_save ${(saved[date+from+to] ? " bulk_saved" :"")}" data-save="true" data-date="${date}" data-from="${from}" data-dest="${to}">${heart_svg}</a>
+    <a href="javascript:void(0)" class="bulk_save ${(saved[date + from + to] ? ' bulk_saved' : '')}" data-save="true" data-date="${date}" data-from="${from}" data-dest="${to}">${heart_svg}</a>
     <a href="javascript:void(0)" class="bulk_go_book" data-book="true" data-date="${date}" data-from="${from}" data-dest="${to}">Book &raquo;</a>
-    </span><div class="flight_list">`;
+    </span><div class="flight_list">`
 
         if (pageBom.modelObject?.isContainingErrors) {
-            flightHTML += `<span class='bulk_response_error'><strong>Error:</strong> ${pageBom.modelObject?.messages[0]?.text}</span>`;
+            flightHTML += `<span class='bulk_response_error'><strong>Error:</strong> ${pageBom.modelObject?.messages[0]?.text}</span>`
             // stop_batch();
         } else {
-            var flights = pageBom.modelObject?.availabilities?.upsell?.bounds[0].flights;
+            const flights = pageBom.modelObject?.availabilities?.upsell?.bounds[0].flights
             flights.forEach((flight) => {
-                var available = "";
-                var f1 = +flight.segments[0].cabins?.F?.status || 0;
-                var j1 = +flight.segments[0].cabins?.B?.status || 0;
-                var p1 = +flight.segments[0].cabins?.N?.status || 0;
-                var y1 = (+flight.segments[0].cabins?.E?.status || 0) + (+flight.segments[0].cabins?.R?.status || 0);
-                var d_f = false;
-                var d_j = false;
-                var d_p = false;
-                var d_y = false;
-                var n_f = 0;
-                var n_j = 0;
-                var n_p = 0;
-                var n_y = 0;
-                var leg1_airline = flight.segments[0].flightIdentifier.marketingAirline;
-                var leg1_flight_no = flight.segments[0].flightIdentifier.flightNumber;
-                var leg1_dep_time = getFlightTime(flight.segments[0].flightIdentifier.originDate);
-                var leg1_arr_time = getFlightTime(flight.segments[0].destinationDate);
-                var leg1_duration = getFlightTime(flight.duration, true);
-                var flightkey;
+                let available = ''
+                const f1 = +flight.segments[0].cabins?.F?.status || 0
+                const j1 = +flight.segments[0].cabins?.B?.status || 0
+                const p1 = +flight.segments[0].cabins?.N?.status || 0
+                const y1 = (+flight.segments[0].cabins?.E?.status || 0) + (+flight.segments[0].cabins?.R?.status || 0)
+                let d_f = false
+                let d_j = false
+                let d_p = false
+                let d_y = false
+                let n_f = 0
+                let n_j = 0
+                let n_p = 0
+                let n_y = 0
+                const leg1_airline = flight.segments[0].flightIdentifier.marketingAirline
+                const leg1_flight_no = flight.segments[0].flightIdentifier.flightNumber
+                const leg1_dep_time = getFlightTime(flight.segments[0].flightIdentifier.originDate)
+                const leg1_arr_time = getFlightTime(flight.segments[0].destinationDate)
+                const leg1_duration = getFlightTime(flight.duration, true)
+                let flightkey
                 if (flight.segments.length == 1) {
                     if (f1 >= 1) {
-                        available = available + ` <span class='bulk_cabin bulk_f'>F <b>${f1}</b></span>`;
-                        d_f = true;
+                        available = available + ` <span class='bulk_cabin bulk_f'>F <b>${f1}</b></span>`
+                        d_f = true
                     }
                     if (j1 >= 1) {
-                        available = available + ` <span class='bulk_cabin bulk_j'>J <b>${j1}</b></span>`;
-                        d_j = true;
+                        available = available + ` <span class='bulk_cabin bulk_j'>J <b>${j1}</b></span>`
+                        d_j = true
                     }
                     if (p1 >= 1) {
-                        available = available + ` <span class='bulk_cabin bulk_p'>PY <b>${p1}</b></span>`;
-                        d_p = true;
+                        available = available + ` <span class='bulk_cabin bulk_p'>PY <b>${p1}</b></span>`
+                        d_p = true
                     }
                     if (y1 >= 1) {
-                        available = available + ` <span class='bulk_cabin bulk_y'>Y <b>${y1}</b></span>`;
-                        d_y = true;
+                        available = available + ` <span class='bulk_cabin bulk_y'>Y <b>${y1}</b></span>`
+                        d_y = true
                     }
-                    flightkey = date + from + to + "_" + leg1_airline + leg1_flight_no;
-                    if (available != "") {
-                        flightHTML += `<div class="flight_wrapper">`;
-                        flightHTML += `<div class='flight_item direct ${(saved_flights[flightkey] ? " saved" :"")}' data-flightinfo='${flightkey}' data-flightavail='${f1 + "_" + j1+ "_" + p1+ "_" + y1}' data-direct='1' data-f='${(d_f ? 1 : 0)}' data-j='${(d_j ? 1 : 0)}' data-p='${(d_p ? 1 : 0)}' data-y='${(d_y ? 1 : 0)}'>
+                    flightkey = date + from + to + '_' + leg1_airline + leg1_flight_no
+                    if (available != '') {
+                        flightHTML += '<div class="flight_wrapper">'
+                        flightHTML += `<div class='flight_item direct ${(saved_flights[flightkey] ? ' saved' : '')}' data-flightinfo='${flightkey}' data-flightavail='${f1 + '_' + j1 + '_' + p1 + '_' + y1}' data-direct='1' data-f='${(d_f ? 1 : 0)}' data-j='${(d_j ? 1 : 0)}' data-p='${(d_p ? 1 : 0)}' data-y='${(d_y ? 1 : 0)}'>
                         <img src='https://book.cathaypacific.com${static_path}common/skin/img/airlines/logo-${leg1_airline.toLowerCase()}.png'>
-                        <span class="flight_num">${leg1_airline+leg1_flight_no}</span>
+                        <span class="flight_num">${leg1_airline + leg1_flight_no}</span>
                         ${available}
                         <span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z" fill="currentColor"></path></svg></span>
                         <span class="flight_save">${heart_svg}</span>
                     </div>
                     <div class="flight_info">
-                        <span class="info_flight">${leg1_airline+leg1_flight_no}</span>
+                        <span class="info_flight">${leg1_airline + leg1_flight_no}</span>
                         <span class="info_dept"><span>Departs:</span> ${leg1_dep_time}</span>
                         <span class="info_arr"><span>Arrives:</span> ${leg1_arr_time}</span>
                         <span class="info_duration"><span>Total Flight Duration:</span> ${leg1_duration}</span>
                     </div>
-                    `;
-                        noflights = false;
-                        flightHTML += `</div>`;
+                    `
+                        noflights = false
+                        flightHTML += '</div>'
                     }
                     if (saved_flights[flightkey]) {
                         saved_flights[flightkey] = {
@@ -2546,45 +2530,45 @@
                             j: j1,
                             p: p1,
                             y: y1
-                        };
-                        update_saved_flights();
+                        }
+                        update_saved_flights()
                     }
                 } else {
-                    var f2 = +flight.segments[1].cabins?.F?.status || 0;
-                    var j2 = +flight.segments[1].cabins?.B?.status || 0;
-                    var p2 = +flight.segments[1].cabins?.N?.status || 0;
-                    var y2 = (+flight.segments[1].cabins?.E?.status || 0) + (+flight.segments[1].cabins?.R?.status || 0);
+                    const f2 = +flight.segments[1].cabins?.F?.status || 0
+                    const j2 = +flight.segments[1].cabins?.B?.status || 0
+                    const p2 = +flight.segments[1].cabins?.N?.status || 0
+                    const y2 = (+flight.segments[1].cabins?.E?.status || 0) + (+flight.segments[1].cabins?.R?.status || 0)
 
                     if (f1 >= 1 && f2 >= 1) {
-                        d_f = true;
-                        n_f = Math.min(f1, f2);
-                        available = available + ` <span class='bulk_cabin bulk_f'>F <b>${ n_f }</b></span>`;
+                        d_f = true
+                        n_f = Math.min(f1, f2)
+                        available = available + ` <span class='bulk_cabin bulk_f'>F <b>${n_f}</b></span>`
                     }
                     if (j1 >= 1 && j2 >= 1) {
-                        d_j = true;
-                        n_j = Math.min(j1, j2);
-                        available = available + ` <span class='bulk_cabin bulk_j'>J <b>${ n_j }</b></span>`;
+                        d_j = true
+                        n_j = Math.min(j1, j2)
+                        available = available + ` <span class='bulk_cabin bulk_j'>J <b>${n_j}</b></span>`
                     }
                     if (p1 >= 1 && p2 >= 1) {
-                        d_p = true;
-                        n_p = Math.min(p1, p2);
-                        available = available + ` <span class='bulk_cabin bulk_p'>PY <b>${ n_p }</b></span>`;
+                        d_p = true
+                        n_p = Math.min(p1, p2)
+                        available = available + ` <span class='bulk_cabin bulk_p'>PY <b>${n_p}</b></span>`
                     }
                     if (y1 >= 1 && y2 >= 1) {
-                        d_y = true;
-                        n_y = Math.min(y1, y2);
-                        available = available + ` <span class='bulk_cabin bulk_y'>Y <b>${ n_y }</b></span>`;
+                        d_y = true
+                        n_y = Math.min(y1, y2)
+                        available = available + ` <span class='bulk_cabin bulk_y'>Y <b>${n_y}</b></span>`
                     }
-                    var leg2_airline = flight.segments[1].flightIdentifier.marketingAirline;
-                    var leg2_flight_no = flight.segments[1].flightIdentifier.flightNumber;
-                    var leg2_dep_time = getFlightTime(flight.segments[1].flightIdentifier.originDate);
-                    var leg2_arr_time = getFlightTime(flight.segments[1].destinationDate);
-                    var transit_time = getFlightTime(flight.segments[1].flightIdentifier.originDate - flight.segments[0].destinationDate, true);
-                    var stopcity = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g.exec(flight.flightIdString)[1].replace(":", " / ");
-                    flightkey = date + from + to + "_" + leg1_airline + leg1_flight_no + "_" + stopcity + "_" + leg2_airline + leg2_flight_no;
-                    if (available != "") {
-                        flightHTML += `<div class="flight_wrapper">`;
-                        flightHTML += `<div class='flight_item ${(saved_flights[flightkey] ? " saved" :"")}' data-direct='0' data-flightinfo='${flightkey}'  data-flightavail='${n_f + "_" + n_j + "_" + n_p + "_" + n_y}' data-f='${ d_f ? 1 : 0 }' data-j='${ d_j ? 1 : 0 }' data-p='${ d_p ? 1 : 0 }' data-y='${ d_y ? 1 : 0 }'>
+                    const leg2_airline = flight.segments[1].flightIdentifier.marketingAirline
+                    const leg2_flight_no = flight.segments[1].flightIdentifier.flightNumber
+                    const leg2_dep_time = getFlightTime(flight.segments[1].flightIdentifier.originDate)
+                    const leg2_arr_time = getFlightTime(flight.segments[1].destinationDate)
+                    const transit_time = getFlightTime(flight.segments[1].flightIdentifier.originDate - flight.segments[0].destinationDate, true)
+                    const stopcity = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g.exec(flight.flightIdString)[1].replace(':', ' / ')
+                    flightkey = date + from + to + '_' + leg1_airline + leg1_flight_no + '_' + stopcity + '_' + leg2_airline + leg2_flight_no
+                    if (available != '') {
+                        flightHTML += '<div class="flight_wrapper">'
+                        flightHTML += `<div class='flight_item ${(saved_flights[flightkey] ? ' saved' : '')}' data-direct='0' data-flightinfo='${flightkey}'  data-flightavail='${n_f + '_' + n_j + '_' + n_p + '_' + n_y}' data-f='${d_f ? 1 : 0}' data-j='${d_j ? 1 : 0}' data-p='${d_p ? 1 : 0}' data-y='${d_y ? 1 : 0}'>
                         <img src='https://book.cathaypacific.com${static_path}common/skin/img/airlines/logo-${leg1_airline.toLowerCase()}.png'>
                         <span class="flight_num">${leg1_airline + leg1_flight_no}
                         <span class='stopover'>${stopcity}</span>
@@ -2594,18 +2578,18 @@
                         <span class="flight_save">${heart_svg}</span>
                     </div>
                     <div class="flight_info">
-                        <span class="info_flight">${leg1_airline+leg1_flight_no}</span>
+                        <span class="info_flight">${leg1_airline + leg1_flight_no}</span>
                         <span class="info_dept"><span>Departs:</span> ${leg1_dep_time}</span>
                         <span class="info_arr"><span>Arrives:</span> ${leg1_arr_time}</span>
                         <span class="info_transit"><span>Transit Time:</span> ${transit_time}</span>
-                        <span class="info_flight">${leg2_airline+leg2_flight_no}</span>
+                        <span class="info_flight">${leg2_airline + leg2_flight_no}</span>
                         <span class="info_dept"><span>Departs:</span> ${leg2_dep_time}</span>
                         <span class="info_arr"><span>Arrives:</span> ${leg2_arr_time}</span>
                         <span class="info_duration"><span>Total Flight Duration:</span> ${leg1_duration}</span>
                     </div>
-                    `;
-                        noflights = false;
-                        flightHTML += `</div>`;
+                    `
+                        noflights = false
+                        flightHTML += '</div>'
                     }
                     if (saved_flights[flightkey]) {
                         saved_flights[flightkey] = {
@@ -2613,68 +2597,68 @@
                             j: n_j,
                             p: n_p,
                             y: n_y
-                        };
-                        update_saved_flights();
+                        }
+                        update_saved_flights()
                     }
                 }
-            });
+            })
         }
-        flightHTML += "</div></div>"
+        flightHTML += '</div></div>'
 
-        shadowRoot.querySelector('.bulk_table tr[data-date="' + date + '"] .bulk_flights').insertAdjacentHTML("beforeend", flightHTML);
-        stickyFooter();
+        shadowRoot.querySelector('.bulk_table tr[data-date="' + date + '"] .bulk_flights').insertAdjacentHTML('beforeend', flightHTML)
+        stickyFooter()
     }
 
-    //============================================================
+    //= ===========================================================
     // Sticky Footer
-    //============================================================
+    //= ===========================================================
 
     function stickyFooter() {
-        var footerOffset = div_footer.getBoundingClientRect();
-        var ueformOffset = div_ue_container.getBoundingClientRect();
+        const footerOffset = div_footer.getBoundingClientRect()
+        const ueformOffset = div_ue_container.getBoundingClientRect()
         if (footerOffset.top < window.innerHeight - 55 || ueformOffset.top + div_ue_container.clientHeight > window.innerHeight - 72) {
-            div_footer.classList.remove("bulk_sticky");
+            div_footer.classList.remove('bulk_sticky')
         } else {
-            div_footer.classList.add("bulk_sticky");
+            div_footer.classList.add('bulk_sticky')
         }
     }
 
-    //============================================================
+    //= ===========================================================
     // Enable Advanced Features
-    //============================================================
+    //= ===========================================================
 
-    t = r;
+    t = r
 
-    //============================================================
+    //= ===========================================================
     // Check Version (Max once per day)
-    //============================================================
+    //= ===========================================================
 
-    let currentVersion = GM_info.script.version;
-    let lastCheck = value_get("lastCheck", 0)
-    let latestVersion = value_get("latestVersion", currentVersion)
+    const currentVersion = GM_info.script.version
+    let lastCheck = value_get('lastCheck', 0)
+    const latestVersion = value_get('latestVersion', currentVersion)
 
     function hasUpdate(newer, older) {
-        let latest = newer.trim().split('.');
-        let loaded = older.trim().split('.');
+        const latest = newer.trim().split('.')
+        const loaded = older.trim().split('.')
         for (let i = 0; i < Math.min(latest.length, loaded.length); i++) {
-            latest[i] = Number(latest[i]) || 0;
-            loaded[i] = Number(loaded[i]) || 0;
+            latest[i] = Number(latest[i]) || 0
+            loaded[i] = Number(loaded[i]) || 0
             if (latest[i] !== loaded[i]) {
-                return (latest[i] > loaded[i] ? newer : false);
+                return (latest[i] > loaded[i] ? newer : false)
             };
         }
-        return (latest.length > loaded.length ? newer : false);
+        return (latest.length > loaded.length ? newer : false)
     }
 
     function showUpdate(liveVersion) {
-        log("currentVersion: " + currentVersion);
-        log("metaData.version: " + liveVersion);
+        log('currentVersion: ' + currentVersion)
+        log('metaData.version: ' + liveVersion)
 
-        let newVersion = hasUpdate(liveVersion, currentVersion);
+        const newVersion = hasUpdate(liveVersion, currentVersion)
         if (newVersion) {
-            value_set("latestVersion", liveVersion);
-            div_update.classList.remove("hidden");
-            shadowRoot.querySelector("#upd_version").innerText = newVersion;
+            value_set('latestVersion', liveVersion)
+            div_update.classList.remove('hidden')
+            shadowRoot.querySelector('#upd_version').innerText = newVersion
         };
     }
 
@@ -2683,65 +2667,64 @@
             method: 'GET',
             url: 'https://userscripts.jayliu.net/latest.json?v=' + date,
             onload: function(e) {
-                const response = JSON.parse(e.responseText);
-                const version = response.latest_version;
-                //const key = /\/\/ @version +([0-9\.]+)/;
-                //const version = e.responseText.match(key) ? e.responseText.match(key)[1] : "0";
-                showUpdate(version);
+                const response = JSON.parse(e.responseText)
+                const version = response.latest_version
+                // const key = /\/\/ @version +([0-9\.]+)/;
+                // const version = e.responseText.match(key) ? e.responseText.match(key)[1] : "0";
+                showUpdate(version)
             }
         })
     }
 
     function versionCheck(update, updateurl, metaData) {
-        let date = new Date();
-        date = Math.floor(date.setHours(0, 0, 0) / 1000);
+        let date = new Date()
+        date = Math.floor(date.setHours(0, 0, 0) / 1000)
         if (date > lastCheck || !lastCheck) {
-            getLatest(date);
-            lastCheck = value_set("lastCheck", date)
+            getLatest(date)
+            lastCheck = value_set('lastCheck', date)
         } else {
             showUpdate(latestVersion)
         }
-        //value_set("lastCheck",0);
+        // value_set("lastCheck",0);
     }
 
-    //============================================================
+    //= ===========================================================
     // Initialize
-    //============================================================
+    //= ===========================================================
 
     function initSearchBox() {
-        initCXvars();
-        shadowContainer.appendChild(searchBox);
-        assignElements();
-        addFormListeners();
+        initCXvars()
+        shadowContainer.appendChild(searchBox)
+        assignElements()
+        addFormListeners()
         window.onscroll = function() {
             stickyFooter()
-        };
-        update_saved_count();
-        update_saved_flights();
-        autocomplete(input_from, "origins");
-        autocomplete(input_to, "origins");
-        getOrigins();
-        versionCheck();
+        }
+        update_saved_count()
+        update_saved_flights()
+        autocomplete(input_from, 'origins')
+        autocomplete(input_to, 'origins')
+        getOrigins()
+        versionCheck()
 
         if (cont_query) {
-            reset_cont_vars();
+            reset_cont_vars()
             // If over 5 minutes since cont query, don't auto search
-            if (Date.now() - cont_ts > 60 * 5 * 1000 && !debug) return;
-            btn_batch.innerHTML = lang.searching_w_cancel;
-            btn_batch.classList.add("bulk_searching");
-            document.body.classList.add("cont_query");
+            if (Date.now() - cont_ts > 60 * 5 * 1000 && !debug) return
+            btn_batch.innerHTML = lang.searching_w_cancel
+            btn_batch.classList.add('bulk_searching')
+            document.body.classList.add('cont_query')
             if (cont_saved) {
                 setTimeout(() => {
-                    saved_search();
-                }, "1000")
+                    saved_search()
+                }, '1000')
             } else {
                 setTimeout(() => {
-                    bulk_click(cont_batch ? false : true);
-                }, "1000")
+                    bulk_click(!cont_batch)
+                }, '1000')
             }
         }
     };
 
-    initRoot();
-
-})();
+    initRoot()
+})()
