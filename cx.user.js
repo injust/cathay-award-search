@@ -6,7 +6,6 @@
 // @description         Un-Elevate Your Cathay Award Search 2022.
 // @author              jayliutw
 // @connect             cathaypacific.com
-// @connect             userscripts.jayliu.net
 // @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/facade.html*
 // @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/redeem-flight-awards.html*
 // @match               https://book.cathaypacific.com/*
@@ -355,7 +354,6 @@
         error: 'Unknown Error... Try Again',
         bulk_batch: 'Batch Search',
         bulk_flights: 'Flights',
-        new_version: 'New Version Available:',
         login: 'Reminder: Login before searching.',
         tab_retrieve_fail: 'Failed to retrieve key. Try logging out and in again.',
         key_exhausted: 'Key request quota exhausted, attempting to get new key...',
@@ -387,8 +385,6 @@
             <div class='unelevated_title'><a href="https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html">Unelevated Award Search</a></div>
 
             <div class='login_prompt hidden'><span class='unelevated_error'><a href="${login_url}">${lang.login}</a></span></div>
-
-            <div class='unelevated_update hidden'><a href='https://pse.is/cxupdate' target='_blank'>${lang.new_version} <span id='upd_version'>3.2.1</span> &raquo;</a></div>
 
             <div class='unelevated_faves unelevated_faves_hidden'>
                 <div class="faves_tabs">
@@ -1028,11 +1024,6 @@
         span.info-j { background: #002e6c;}
         span.info-p { background: #487c93;}
         span.info-y { background: #016564;}
-        .unelevated_update.hidden { display:none; }
-        .unelevated_update { border-radius: 5px; background: #f27878; padding: 5px 10px; margin: 0px 8px 10px 0; text-align: center; }
-        .unelevated_update a { color:white !important; } .unelevated_update a:after { content:none !important; }
-        .unelevated_update a span { font-weight:bold; font-family: "GT Walsheim","Cathay Sans EN", CathaySans_Md, sans-serif; }
-        .unelevated_update.update_show { display:block; }
 
         .login_prompt {  height: 40px; line-height: 20px; overflow: hidden; transition: all 0.5s ease-out; margin-bottom: 10px; }
         .login_prompt.hidden { height: 0; overflow:hidden; margin: 0; }
@@ -1219,7 +1210,7 @@
     let input_from, input_to, input_date, input_adult, input_child
     let clear_from, clear_to
     let link_search_saved, link_search_multi, div_filters
-    let div_update, div_login_prompt, div_footer, div_ue_container, div_saved, div_faves_tabs, div_saved_queries
+    let div_login_prompt, div_footer, div_ue_container, div_saved, div_faves_tabs, div_saved_queries
     let div_saved_flights, div_multi_box, div_table, div_table_body
 
     function assignElements() {
@@ -1238,7 +1229,6 @@
         link_search_multi = shadowRoot.querySelector('.multi_search')
 
         div_filters = shadowRoot.querySelector('.filters')
-        div_update = shadowRoot.querySelector('.unelevated_update')
         div_login_prompt = shadowRoot.querySelector('.login_prompt')
         div_footer = shadowRoot.querySelector('.bulk_footer')
         div_ue_container = shadowRoot.querySelector('.unelevated_form')
@@ -2625,65 +2615,6 @@
     t = r
 
     // ============================================================
-    // Check Version (Max once per day)
-    // ============================================================
-
-    const currentVersion = GM.info.script.version
-    let lastCheck = value_get('lastCheck', 0)
-    const latestVersion = value_get('latestVersion', currentVersion)
-
-    function hasUpdate(newer, older) {
-        const latest = newer.trim().split('.')
-        const loaded = older.trim().split('.')
-        for (let i = 0; i < Math.min(latest.length, loaded.length); i++) {
-            latest[i] = Number(latest[i]) || 0
-            loaded[i] = Number(loaded[i]) || 0
-            if (latest[i] !== loaded[i]) {
-                return (latest[i] > loaded[i] ? newer : false)
-            };
-        }
-        return (latest.length > loaded.length ? newer : false)
-    }
-
-    function showUpdate(liveVersion) {
-        log('currentVersion: ' + currentVersion)
-        log('metaData.version: ' + liveVersion)
-
-        const newVersion = hasUpdate(liveVersion, currentVersion)
-        if (newVersion) {
-            value_set('latestVersion', liveVersion)
-            div_update.classList.remove('hidden')
-            shadowRoot.querySelector('#upd_version').innerText = newVersion
-        };
-    }
-
-    function getLatest(date) {
-        GM.xmlHttpRequest({
-            method: 'GET',
-            url: 'https://userscripts.jayliu.net/latest.json?v=' + date,
-            onload: function(e) {
-                const response = JSON.parse(e.responseText)
-                const version = response.latest_version
-                // const key = /\/\/ @version +([0-9\.]+)/;
-                // const version = e.responseText.match(key) ? e.responseText.match(key)[1] : "0";
-                showUpdate(version)
-            }
-        })
-    }
-
-    function versionCheck(update, updateurl, metaData) {
-        let date = new Date()
-        date = Math.floor(date.setHours(0, 0, 0) / 1000)
-        if (!lastCheck || date > lastCheck) {
-            getLatest(date)
-            lastCheck = value_set('lastCheck', date)
-        } else {
-            showUpdate(latestVersion)
-        }
-        // value_set("lastCheck",0);
-    }
-
-    // ============================================================
     // Initialize
     // ============================================================
 
@@ -2700,7 +2631,6 @@
         autocomplete(input_from, 'origins')
         autocomplete(input_to, 'origins')
         getOrigins()
-        versionCheck()
 
         if (cont_query) {
             reset_cont_vars()
