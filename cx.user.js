@@ -332,7 +332,7 @@
 	}
 
 	//============================================================
-	// Localisation
+	// Localization
 	//============================================================
 
 	var lang = {
@@ -380,18 +380,6 @@
 		"nosaves": "You do not have any saved queries. Click on ♥ in batch results to save.",
 		"loading": "Searching...",
 		"hu_prompt": "Looks like you're searching a lot. You might want to read this.",
-		"prem_title": "Enable Advanced Features",
-		"prem_intro": "Hey fellow award flyer! Hope you're enjoying this plugin. How would you like to enhance your search experience even further? Here are some advanced features I think you're gonna love:",
-		"prem_feat1": "Search multiple routes at once.",
-		"prem_text1": "Flexible with your routings? Select multiple origins and destinations (up to 6 each), and find availability between those cities across multiple days with a single search! Also excellent for those of you trying to find availability for complex round-the-world itineraries! For example, searching for TPE,HKG to NRT,KIX will search for flights from Taipei and Hong Kong to Tokyo and Osaka.",
-		"prem_feat2": "Bookmark your search queries.",
-		"prem_text2": "Found availability for a date and want to save it to come back to later? Have a particular route that you're regularly watching for availability？ Now you can save your date and itinerary simply by clicking a heart on the results page, and later search for that route again by simply selecting it from your list.",
-		"prem_feat3": "Batch search your saved routes.",
-		"prem_text3": "At the click of a button, search for all itineraries and dates you have previously saved, regardless of their origins, destinations, and dates. Say goodbye to endlessly changing your origin and destination search paramters!",
-		"prem_feat4": "Submit oneworld Multi-City Award Search",
-		"prem_text4": "From your saved routes, create a multi-city itinerary search that would have taken ages on Cathay's multicity search.",
-		"prem_feat5": "And more to come!",
-		"prem_donate": "To enable these extended features, please click below to view the Extras package on buymeacoffee.com.<a href='https://www.buymeacoffee.com/jayliutw/e/106024' target='_blank' class='unlock_btn'>Unlock Advanced Features</a>If you've previously donated to me through Buy Me a Coffee before the release of these features, you should have received an email inviting you to a BMaC membership, and you will be receiving these features for free. Seriously guys, thanks for your donations. I hope these exclusive features are a nice surprise for you. It takes quite some time and effort to build, maintain, and support this tweak, and the positive feedback and heartwarming support I've been receiving from the community has made it all the more worth it. Thank you guys, for your generous donations, especially seeing as you were all getting nothing extra in return.<br><br>If you haven't donated yet, and you've found this tool helpful, please consider buying me a coffee at: <a href='https://buymeacoffee.com/jayliutw' target='_blank'>https://buymeacoffee.com/jayliutw</a>",
 		"human": "Cathay's website needs you to prove you're a human:",
 		"bot_check": "Please Complete Cathay Bot Check",
 	};
@@ -503,29 +491,6 @@
             /*when navigating through the items using the arrow keys:*/
             background-color: DodgerBlue !important;
             color: #ffffff;
-        }
-
-        .prem_title {
-            display:block;
-            text-align:center;
-            font-size:17px;
-            font-weight:bold;
-            margin-bottom:8px;
-            color:#367778;
-        }
-
-        .prem_intro {
-            display:block;
-            margin:10px;
-            font-size:14px;
-        }
-
-        #activation_input {
-            font-size:17px;
-            margin:10px;
-            width: calc(100% - 20px);
-            padding: 10px;
-            text-transform:uppercase;
         }
 
         .feat_title {
@@ -1269,11 +1234,10 @@
 	let link_search_saved, link_search_multi, div_filters;
 	let div_update, div_login_prompt, div_footer, div_ue_container, div_saved, div_faves_tabs, div_saved_queries;
 	let div_saved_flights, div_multi_box, div_table, div_table_body;
-	let premium_switch;
 
-	function assignElemets() {
+	function assignElements() {
 
-		log("assignElemets()");
+		log("assignElements()");
 		btn_search = shadowRoot.querySelector(".uef_search"); // Search Button
 		btn_batch = shadowRoot.querySelector(".bulk_submit"); // Batch Search Button
 		input_from = shadowRoot.querySelector("#uef_from");
@@ -1299,8 +1263,6 @@
 		div_multi_box = shadowRoot.querySelector(".multi_box");
 		div_table = shadowRoot.querySelector(".bulk_table");
 		div_table_body = shadowRoot.querySelector(".bulk_table tbody");
-
-		premium_switch = shadowRoot.querySelector(".prem_title");
 	}
 
 	function addFormListeners() {
@@ -1629,21 +1591,6 @@
 			//alert(JSON.stringify(saved));
 			shadowRoot.querySelector(".unelevated_faves").classList.toggle("unelevated_faves_hidden");
 		});
-
-		let pt_count = 0
-		premium_switch.addEventListener("click", function(e) {
-			if (++pt_count == 9) {
-				let a_i = document.createElement("input");
-				a_i.type = "text";
-				a_i.setAttribute("id", "activation_input");
-				a_i.setAttribute("placeholder", "Activation Key");
-				premium_switch.after(a_i);
-				let cnft_script = document.createElement('script');
-				cnft_script.src = "https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js";
-				document.body.appendChild(cnft_script);
-			}
-		});
-
 	};
 
 	//============================================================
@@ -2765,7 +2712,7 @@
 	function initSearchBox() {
 		initCXvars();
 		shadowContainer.appendChild(searchBox);
-		assignElemets();
+		assignElements();
 		addFormListeners();
 		window.onscroll = function() {
 			stickyFooter()
