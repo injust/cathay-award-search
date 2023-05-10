@@ -1279,7 +1279,7 @@
 
         input_from.addEventListener('change', function(e) {
             this.value = this.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
-            checkCities(this)
+            checkAirportCodes(this)
 
             if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
             route_changed = true
@@ -1290,7 +1290,7 @@
 
         input_to.addEventListener('change', function(e) {
             this.value = this.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
-            checkCities(this)
+            checkAirportCodes(this)
 
             if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
             route_changed = true
@@ -1994,8 +1994,8 @@
         shadowRoot.querySelector('.unelevated_saved a span').innerText = saved_arr.length
     }
 
-    function checkCities(elem) {
-        log('checkCities()')
+    function checkAirportCodes(elem) {
+        log('checkAirportCodes()')
         let cities = elem.value.split(',')
         const errorCities = []
         cities = cities.filter(city => {
