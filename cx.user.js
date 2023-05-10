@@ -229,15 +229,15 @@
     const saved = value_get('saved', {})
     const saved_flights = value_get('saved_flights', {})
 
-    const cont_query = value_get('cont_query', '0') == '0' ? 0 : 1 /// cont_query/.test(window.location.hash); //urlParams.get('cont_query');
-    const cont_batch = value_get('cont_batch', '0') == '0' ? 0 : 1 /// cont_batch/.test(window.location.hash); //urlParams.get('cont_batch');
-    const cont_saved = value_get('cont_saved', '0') == '0' ? 0 : 1 /// cont_saved/.test(window.location.hash); //urlParams.get('cont_saved');
+    const cont_query = value_get('cont_query', false) /// cont_query/.test(window.location.hash); //urlParams.get('cont_query');
+    const cont_batch = value_get('cont_batch', false) /// cont_batch/.test(window.location.hash); //urlParams.get('cont_batch');
+    const cont_saved = value_get('cont_saved', false) /// cont_saved/.test(window.location.hash); //urlParams.get('cont_saved');
     const cont_ts = value_get('cont_ts', '0') // window.location.hash.match(/cont_ts=([0-9]+)&/) ? window.location.hash.match(/cont_ts=([0-9]+)&/)[1] : 0;
 
     function reset_cont_vars() {
-        value_set('cont_query', '0')
-        value_set('cont_batch', '0')
-        value_set('cont_saved', '0')
+        value_set('cont_query', false)
+        value_set('cont_batch', false)
+        value_set('cont_saved', false)
         value_set('cont_ts', '0')
     }
 
@@ -2224,9 +2224,9 @@
                 const urlToPost = data.urlToPost || 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability'
                 log('regularSearch parameters:', parameters)
                 const action_url = new URL(urlToPost)
-                if (is_cont_query) value_set('cont_query', '1')
-                if (is_cont_batch) value_set('cont_batch', '1')
-                if (is_cont_saved) value_set('cont_saved', '1')
+                if (is_cont_query) value_set('cont_query', true)
+                if (is_cont_batch) value_set('cont_batch', true)
+                if (is_cont_saved) value_set('cont_saved', true)
                 value_set('cont_ts', Date.now())
                 // Create a form dynamically
                 const form = document.createElement('form')
