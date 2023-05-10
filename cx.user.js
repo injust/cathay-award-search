@@ -1278,6 +1278,9 @@
         })
 
         input_from.addEventListener('change', function(e) {
+            this.value = this.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
+            checkCities(this)
+
             if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
             route_changed = true
             batchLabel(`${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`)
@@ -1286,6 +1289,9 @@
         })
 
         input_to.addEventListener('change', function(e) {
+            this.value = this.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
+            checkCities(this)
+
             if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
             route_changed = true
             batchLabel(`${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`)
@@ -1313,8 +1319,6 @@
         [input_from, input_to].forEach(item => {
             item.addEventListener('blur', function(e) {
                 inFocus = false
-                this.value = this.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
-                checkCities(this)
             })
         })
 
@@ -1992,24 +1996,22 @@
 
     function checkCities(elem) {
         log('checkCities()')
-        setTimeout(function() {
-            let cities = elem.value.split(',')
-            const errorCities = []
-            cities = cities.filter(city => {
-                if (city.match(/^[A-Z]{3}$/)) {
-                    return true
-                } else {
-                    if (city) errorCities.push(city)
-                    return false
-                }
-            })
-
-            if (errorCities.length > 0) {
-                elem.value = cities.join(',')
-                elem.dispatchEvent(new Event('change'))
-                alert(`${errorCities.length > 1 ? lang.invalid_airports : lang.invalid_airport} Removed: ${errorCities.join(',')}`)
+        let cities = elem.value.split(',')
+        const errorCities = []
+        cities = cities.filter(city => {
+            if (city.match(/^[A-Z]{3}$/)) {
+                return true
+            } else {
+                if (city) errorCities.push(city)
+                return false
             }
-        }, 500)
+        })
+
+        if (errorCities.length > 0) {
+            elem.value = cities.join(',')
+            elem.dispatchEvent(new Event('change')) // TODO: See if this is needed, will the line above trigger a change event?
+            alert(`${errorCities.length > 1 ? lang.invalid_airports : lang.invalid_airport} Removed: ${errorCities.join(',')}`)
+        }
     }
 
     function checkLogin() {
