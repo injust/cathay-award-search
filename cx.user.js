@@ -1279,29 +1279,33 @@
 
         input_from.addEventListener('change', function(e) {
             this.value = this.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
-            setTimeout(() => checkAirportCodes(this), 0)
-
-            if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
-            route_changed = true
-            batchLabel(`${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`)
-            const dest = this.value.match(/[A-Z]{3}$/)
-            if (dest) getDestinations(dest[0])
+            // setTimeout(fn, 0) lets the page reflect the updated DOM
+            setTimeout(() => {
+                checkAirportCodes(this)
+                if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
+                route_changed = true
+                batchLabel(`${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`)
+                const dest = this.value.match(/[A-Z]{3}$/)
+                if (dest) getDestinations(dest[0])
+            }, 0)
         })
 
         input_to.addEventListener('change', function(e) {
             this.value = this.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
-            setTimeout(() => checkAirportCodes(this), 0)
-
-            if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
-            route_changed = true
-            batchLabel(`${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`)
+            // setTimeout(fn, 0) lets the page reflect the updated DOM
+            setTimeout(() => {
+                checkAirportCodes(this)
+                if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
+                route_changed = true
+                batchLabel(`${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`)
+            }, 0)
         })
 
         let inFocus = false;
 
         [input_from, input_to].forEach(item => {
             item.addEventListener('focus', function(e) {
-                if (this.value.length > 0 && r == t) this.value = this.value + ','
+                if (this.value.length > 0 && r == t) this.value += ','
             })
         });
 
@@ -1318,6 +1322,7 @@
 
         [input_from, input_to].forEach(item => {
             item.addEventListener('blur', function(e) {
+                this.value = this.value.replace(/,+$/, '')
                 inFocus = false
             })
         })
@@ -2009,8 +2014,7 @@
 
         if (errorCities.length > 0) {
             elem.value = cities.join(',')
-            elem.dispatchEvent(new Event('change')) // TODO: See if this is needed, will the line above trigger a change event?
-            alert(`${errorCities.length > 1 ? lang.invalid_airports : lang.invalid_airport} Removed: ${errorCities.join(',')}`)
+            alert(`Removing ${errorCities.length > 1 ? lang.invalid_airports : lang.invalid_airport}: ${errorCities.join(',')}`)
         }
     }
 
