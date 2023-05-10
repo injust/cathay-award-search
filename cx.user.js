@@ -26,10 +26,7 @@
     // ============================================================
 
     const debug = false
-
-    function log(...data) {
-        if (debug) console.debug(...data)
-    }
+    const log = console.debug
 
     // ============================================================
     // Greasymonkey Function Wrappers
