@@ -1314,7 +1314,6 @@
             item.addEventListener('blur', function(e) {
                 inFocus = false
                 this.value = this.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
-                this.dispatchEvent(new Event('change'))
                 checkCities(this)
             })
         })
