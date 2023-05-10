@@ -1279,7 +1279,7 @@
 
         input_from.addEventListener('change', function(e) {
             this.value = this.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
-            checkAirportCodes(this)
+            setTimeout(() => checkAirportCodes(this), 0)
 
             if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
             route_changed = true
@@ -1290,7 +1290,7 @@
 
         input_to.addEventListener('change', function(e) {
             this.value = this.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
-            checkAirportCodes(this)
+            setTimeout(() => checkAirportCodes(this), 0)
 
             if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
             route_changed = true
