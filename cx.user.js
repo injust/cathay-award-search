@@ -1402,18 +1402,18 @@
                 elm.classList.remove('active')
             })
         })
-//         value_set('saved', {
-//             '20230809TPETYO': 1,
-//             '20230816TYOCDG': 1,
-//             '20230816TYOLHR': 1,
-//             '20230823CDGAMS': 1,
-//             '20230823CDGMAD': 1,
-//             '20230826AMSHKG': 1,
-//             '20230826MADLHR': 1,
-//             '20230906LHRHKG': 1,
-//             '20230906LHRDOH': 1,
-//             '20230913HKGTPE': 1
-//         })
+        // value_set('saved', {
+        //     '20230809TPETYO': 1,
+        //     '20230816TYOCDG': 1,
+        //     '20230816TYOLHR': 1,
+        //     '20230823CDGAMS': 1,
+        //     '20230823CDGMAD': 1,
+        //     '20230826AMSHKG': 1,
+        //     '20230826MADLHR': 1,
+        //     '20230906LHRHKG': 1,
+        //     '20230906LHRDOH': 1,
+        //     '20230913HKGTPE': 1
+        // })
 
         div_saved.addEventListener('click', function(e) {
             if (e.target.dataset.remove) {
@@ -2387,11 +2387,9 @@
                     try {
                         var data = JSON.parse(response.responseText)
                     } catch {
-                        /* var res = response.responseText;
-						var incapsula_script = res.match(/<script src="(\/_Incapsula_[^]+.js)"><\/script>/);
-						if (incapsula_script) {
-						    batchError("Cathay bot block triggered.");
-						} */
+                        // const res = response.responseText
+                        // const incapsula_script = res.match(/<script src='(\/_Incapsula_[^]+.js)'><\/script>/)
+                        // if (incapsula_script) batchError('Cathay bot block triggered.')
                         batchError('Response not valid JSON')
                         return
                     }
