@@ -475,7 +475,7 @@
             background-color: #e9e9e9;
         }
         .unelevated_form .autocomplete-active {
-            /*when navigating through the items using the arrow keys:*/
+            /* when navigating through the items using the arrow keys */
             background-color: DodgerBlue !important;
             color: #ffffff;
         }
@@ -1131,7 +1131,7 @@
         .bulk_error_hidden span { height:0; margin-top: 0; overflow:hidden; padding:0;}
 
         .unelevated_form .autocomplete {
-            /*the container must be positioned relative:*/
+            /* the container must be positioned relative */
             position: relative;
             display: inline-block;
         }
@@ -1173,11 +1173,11 @@
         }
 
         .unelevated_form .autocomplete-items div:hover {
-            /*when hovering an item:*/
+            /* when hovering an item */
             background-color: #e9e9e9;
         }
         .unelevated_form .autocomplete-active, .unelevated_form div.autocomplete-active span.sc_code {
-            /*when navigating through the items using the arrow keys:*/
+            /* when navigating through the items using the arrow keys */
             background-color: DodgerBlue !important;
             color: #ffffff;
         }
@@ -1402,19 +1402,18 @@
                 elm.classList.remove('active')
             })
         })
-        /*
-		        value_set("saved",{
-		       "20230809TPETYO":1,
-		       "20230816TYOCDG":1,
-		       "20230816TYOLHR":1,
-		       "20230823CDGAMS":1,
-		       "20230823CDGMAD":1,
-		       "20230826AMSHKG":1,
-		       "20230826MADLHR":1,
-		       "20230906LHRHKG":1,
-		       "20230906LHRDOH":1,
-		       "20230913HKGTPE":1
-		        }); */
+//         value_set('saved', {
+//             '20230809TPETYO': 1,
+//             '20230816TYOCDG': 1,
+//             '20230816TYOLHR': 1,
+//             '20230823CDGAMS': 1,
+//             '20230823CDGMAD': 1,
+//             '20230826AMSHKG': 1,
+//             '20230826MADLHR': 1,
+//             '20230906LHRHKG': 1,
+//             '20230906LHRDOH': 1,
+//             '20230913HKGTPE': 1
+//         })
 
         div_saved.addEventListener('click', function(e) {
             if (e.target.dataset.remove) {
