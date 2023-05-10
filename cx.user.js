@@ -2011,7 +2011,7 @@
             if (errorCities.length > 0) {
                 elem.value = cities.join(',')
                 elem.dispatchEvent(new Event('change'))
-                alert((errorCities.length > 1 ? lang.invalid_airports : lang.invalid_airport) + ' Removed: ' + errorCities.join(','))
+                alert(`${errorCities.length > 1 ? lang.invalid_airports : lang.invalid_airport} Removed: ${errorCities.join(',')}`)
             }
         }, 500)
     }
