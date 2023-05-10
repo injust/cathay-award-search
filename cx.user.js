@@ -122,16 +122,6 @@
     // Helper Functions
     // ============================================================
 
-    function debounce(func, delay) {
-        let timer
-        return (...args) => {
-            clearTimeout(timer)
-            timer = setTimeout(() => {
-                func.apply(this, args)
-            }, delay)
-        }
-    }
-
     // Wait for Element to Load
     function waitForElm(selector) {
         return new Promise(resolve => {
@@ -2001,25 +1991,27 @@
         shadowRoot.querySelector('.unelevated_saved a span').innerText = saved_arr.length
     }
 
-    const checkCities = debounce(elem => {
+    function checkCities(elem) {
         log('checkCities()')
-        let cities = elem.value.split(',')
-        const errorCities = []
-        cities = cities.filter(city => {
-            if (city.match(/^[A-Z]{3}$/)) {
-                return true
-            } else {
-                if (city) errorCities.push(city)
-                return false
-            }
-        })
+        setTimeout(function() {
+            let cities = elem.value.split(',')
+            const errorCities = []
+            cities = cities.filter(city => {
+                if (city.match(/^[A-Z]{3}$/)) {
+                    return true
+                } else {
+                    if (city) errorCities.push(city)
+                    return false
+                }
+            })
 
-        if (errorCities.length > 0) {
-            elem.value = cities.join(',')
-            elem.dispatchEvent(new Event('change'))
-            alert(`${errorCities.length > 1 ? lang.invalid_airports : lang.invalid_airport} Removed: ${errorCities.join(',')}`)
-        }
-    }, 500)
+            if (errorCities.length > 0) {
+                elem.value = cities.join(',')
+                elem.dispatchEvent(new Event('change'))
+                alert(`${errorCities.length > 1 ? lang.invalid_airports : lang.invalid_airport} Removed: ${errorCities.join(',')}`)
+            }
+        }, 500)
+    }
 
     function checkLogin() {
         log('checkLogin()')
