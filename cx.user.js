@@ -221,8 +221,8 @@
     let uef_from = value_get('uef_from', 'HKG')
     let uef_to = value_get('uef_to', 'TYO')
     let uef_date = value_get('uef_date', dateAdd(14))
-    let uef_adult = value_get('uef_adult', '1')
-    let uef_child = value_get('uef_child', '0')
+    let uef_adult = value_get('uef_adult', 1)
+    let uef_child = value_get('uef_child', 0)
 
     // Saved Queries
 
@@ -1247,8 +1247,8 @@
             uef_from = value_set('uef_from', input_from.value)
             uef_to = value_set('uef_to', input_to.value)
             uef_date = value_set('uef_date', input_date.value)
-            uef_adult = value_set('uef_adult', input_adult.value)
-            uef_child = value_set('uef_child', input_child.value)
+            uef_adult = value_set('uef_adult', parseInt(input_adult.value))
+            uef_child = value_set('uef_child', parseInt(input_child.value))
             regularSearch([{
                 from: uef_from.substring(0, 3),
                 to: uef_to.substring(0, 3),
@@ -1834,8 +1834,8 @@
             uef_from = value_set('uef_from', input_from.value)
             uef_to = value_set('uef_to', input_to.value)
             uef_date = value_set('uef_date', input_date.value)
-            uef_adult = value_set('uef_adult', input_adult.value)
-            uef_child = value_set('uef_child', input_child.value)
+            uef_adult = value_set('uef_adult', parseInt(input_adult.value))
+            uef_child = value_set('uef_child', parseInt(input_child.value))
             btn_batch.innerHTML = lang.searching_w_cancel
             btn_batch.classList.add('bulk_searching')
             bulk_search(single_date)
@@ -2268,8 +2268,8 @@
         uef_from = input_from.value
         uef_to = input_to.value
         uef_date = input_date.value
-        uef_adult = input_adult.value
-        uef_child = input_child.value
+        uef_adult = parseInt(input_adult.value)
+        uef_child = parseInt(input_child.value)
 
         if (!cont_query) {
             regularSearch([{
