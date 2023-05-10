@@ -3,7 +3,7 @@
 // @name:zh-TW          國泰獎勵機票搜尋引擎修復神器 2022
 // @namespace           jayliutw
 // @version             3.3.0
-// @description         Un-Elevate Your Cathay Award Search 2022.
+// @description         Un-Elevate Your Cathay Award Search 2022
 // @author              jayliutw
 // @connect             cathaypacific.com
 // @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/facade.html*
