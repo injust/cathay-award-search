@@ -2622,13 +2622,11 @@
             btn_batch.classList.add('bulk_searching')
             document.body.classList.add('cont_query')
             if (cont_saved) {
-                setTimeout(() => {
-                    saved_search()
-                }, '1000')
+                setTimeout(() => saved_search, 1000)
             } else {
                 setTimeout(() => {
                     bulk_click(!cont_batch)
-                }, '1000')
+                }, 1000)
             }
         }
     };
