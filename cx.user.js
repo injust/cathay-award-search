@@ -1630,7 +1630,7 @@
         }
     }
 
-    function batchError(label) {
+    function batchError(label = false) {
         if (label) {
             shadowRoot.querySelector('.bulk_error span').innerHTML = label
             shadowRoot.querySelector('.bulk_error').classList.remove('bulk_error_hidden')
@@ -1823,7 +1823,7 @@
         searching = false
         shadowRoot.querySelector('.bulk_submit').innerText = lang.next_batch
         shadowRoot.querySelector('.bulk_submit').classList.remove('bulk_searching')
-        batchError(false)
+        batchError()
         remaining_days = 20
     }
 
@@ -2167,7 +2167,7 @@
                             }
                             tab_id = requestVars.TAB_ID ? requestVars.TAB_ID : ''
                             log('New Tab ID:', tab_id)
-                            batchError(false)
+                            batchError()
                             form_submit_url = availability_url + tab_id
                             if (callback) callback()
                         } else if (response.readyState == 4) {
@@ -2396,7 +2396,7 @@
                     searchAvailability(from, to, date, adult, child, callback)
                 }
                 if (response.readyState == 4 && response.status == 200) {
-                    batchError(false)
+                    batchError()
                     try {
                         var data = JSON.parse(response.responseText)
                     } catch {
