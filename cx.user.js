@@ -1,6 +1,5 @@
 // ==UserScript==
 // @name                Cathay Award Search Fixer 2022
-// @name:zh-TW          國泰獎勵機票搜尋引擎修復神器 2022
 // @namespace           jayliutw
 // @version             3.3.0+injust
 // @description         Un-Elevate Your Cathay Award Search 2022
