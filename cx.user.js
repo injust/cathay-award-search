@@ -56,8 +56,8 @@
             http.withCredentials = true
             http.open(request.method, request.url, true)
             if (request.headers) {
-                for (const key in request.headers) {
-                    http.setRequestHeader(key, request.headers[key])
+                for (const [key, value] of Object.entries(request.headers)) {
+                    http.setRequestHeader(key, value)
                 }
             }
             if (request.onreadystatechange) {
@@ -2133,10 +2133,7 @@
                 const data = JSON.parse(response.responseText)
                 const parameters = data.parameters
                 const urlToPost = data.urlToPost || 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability'
-                let form_data = ''
-                for (const key in parameters) {
-                    form_data = form_data + key + '=' + parameters[key] + '&'
-                }
+                const form_data = Object.entries(parameters).map(([key, value]) => `${key}=${value}`).join('&')
 
                 log('Requesting New Tab ID...')
                 httpRequest({
@@ -2234,11 +2231,11 @@
                 form.setAttribute('method', 'post')
                 form.setAttribute('action', action_url)
 
-                for (const item in parameters) {
+                for (const [key, value] of Object.entries(parameters)) {
                     const input = document.createElement('input')
                     input.setAttribute('type', 'hidden')
-                    input.setAttribute('name', item)
-                    input.setAttribute('value', parameters[item])
+                    input.setAttribute('name', key)
+                    input.setAttribute('value', value)
                     form.appendChild(input)
                 }
 
@@ -2363,7 +2360,6 @@
         }
 
         const requests = requestVars
-
         log('searchAvailability() requests:', requests)
 
         requests.B_DATE_1 = date + '0000'
@@ -2377,10 +2373,7 @@
         delete requests.DIRECT_LOGIN
         delete requests.ENC
 
-        let params = ''
-        for (const key in requests) {
-            params = params + key + '=' + requests[key] + '&'
-        }
+        const params = Object.entries(requests).map(([key, value]) => `${key}=${value}`).join('&')
 
         httpRequest({
             method: 'POST',
