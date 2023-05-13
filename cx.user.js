@@ -2116,7 +2116,10 @@
                 const data = JSON.parse(response.responseText)
                 const parameters = data.parameters
                 const urlToPost = data.urlToPost || 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability'
-                const form_data = Object.entries(parameters).map(([key, value]) => `${key}=${value}`).join('&')
+                let form_data = ''
+                for (const key in parameters) {
+                    form_data += `${key}=${parameters[key]}&`
+                }
 
                 log('Requesting New Tab ID...')
                 httpRequest({
