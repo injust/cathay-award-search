@@ -90,7 +90,7 @@
 
     function initCXvars() {
         if (typeof staticFilesPath !== 'undefined' && static_path != staticFilesPath) {
-            log(typeof staticFilesPath)
+            log('typeof staticFilesPath:', typeof staticFilesPath)
             static_path = staticFilesPath
             value_set('static_path', static_path)
         }
