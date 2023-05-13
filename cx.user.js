@@ -263,18 +263,18 @@
         const current_url = window.location.href
 
         if (current_url.includes('redeem-flight-awards.html')) {
-            reset_cont_vars()
-
             log('initRoot redeem-flight-awards.html')
+
+            reset_cont_vars()
             waitForElm('.redibe-v3-flightsearch form').then((elm) => {
                 elm.before(shadowWrapper)
                 initSearchBox()
                 checkLogin()
             })
         } else if (current_url.includes('facade.html')) {
-            reset_cont_vars()
-
             log('initRoot facade.html')
+
+            reset_cont_vars()
             waitForElm('.ibered__search-panel').then((elm) => {
                 elm.before(shadowWrapper)
                 initSearchBox()
@@ -283,6 +283,7 @@
         } else if (current_url.includes('air/booking/availability')) {
             if (cont_query) {
                 log('initRoot air/booking/availability with cont_query')
+
                 waitForElm('body > header').then((elm) => {
                     const boxes = document.querySelectorAll('body > div')
                     boxes.forEach(box => {
@@ -294,9 +295,9 @@
                     checkLogin()
                 })
             } else {
-                reset_cont_vars()
-
                 log('initRoot air/booking/availability without cont_query')
+
+                reset_cont_vars()
                 waitForElm('#section-flights .bound-route, #section-flights-departure .bound-route').then((elm) => {
                     shadowWrapper.style.margin = '30px 20px 0px 20px'
                     shadowWrapper.style.padding = 0
@@ -306,9 +307,9 @@
                 })
             }
         } else if (current_url.includes('air/booking/complexAvailability')) {
-            reset_cont_vars()
-
             log('initRoot air/booking/complexAvailability')
+
+            reset_cont_vars()
             waitForElm('.mc-trips .bound-route').then((elm) => {
                 shadowWrapper.style.margin = '30px 20px 0px 20px'
                 shadowWrapper.style.padding = 0
@@ -1809,6 +1810,7 @@
 
     function stop_batch() {
         log('Batch Clicked. Stopping Search')
+
         stop_search = true
         searching = false
         batchLabel(route_changed ? `${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}` : lang.next_batch)
@@ -2268,13 +2270,12 @@
 
     function bulk_search(single_date = false) {
         log('bulk_search start, remaining_days:', remaining_days)
+
         let no_continue = false
         if (remaining_days-- == 0) {
             stop_batch()
             no_continue = true
         }
-
-        log('remaining_days:', remaining_days)
 
         if (!cont_query) {
             regularSearch([{
