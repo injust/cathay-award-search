@@ -1841,7 +1841,7 @@
                 })
             }
 
-            btn_batch.innerHTML = lang.searching_w_cancel
+            batchLabel(lang.searching_w_cancel)
             btn_batch.classList.add('bulk_searching')
             bulk_search(single_date)
         } else {
@@ -1865,7 +1865,7 @@
         let ss_query = to_search.shift()
 
         shadowRoot.querySelector('.bulk_results').classList.remove('bulk_results_hidden')
-        btn_batch.innerHTML = lang.searching_w_cancel
+        batchLabel(lang.searching_w_cancel)
         btn_batch.classList.add('bulk_searching')
         div_table_body.innerHTML = ''
 
@@ -2623,7 +2623,7 @@
             reset_cont_vars()
             // If over 5 minutes since cont query, don't auto search
             if (Date.now() - cont_ts > 60 * 5 * 1000 && !debug) return
-            btn_batch.innerHTML = lang.searching_w_cancel
+            batchLabel(lang.searching_w_cancel)
             btn_batch.classList.add('bulk_searching')
             document.body.classList.add('cont_query')
             if (cont_saved) {
