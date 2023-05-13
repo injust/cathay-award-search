@@ -1205,20 +1205,21 @@
     let btn_search, btn_batch
     let input_from, input_to, input_date, input_adult, input_child
     let clear_from, clear_to
-    let link_search_saved, link_search_multi, div_filters
-    let div_login_prompt, div_footer, div_ue_container, div_saved, div_faves_tabs, div_saved_queries
-    let div_saved_flights, div_multi_box, div_table, div_table_body
+    let link_search_saved, link_search_multi
+    let div_filters, div_login_prompt, div_footer, div_ue_container, div_saved, div_faves_tabs, div_saved_queries, div_saved_flights, div_multi_box, div_table, div_table_body
 
     function assignElements() {
         log('assignElements()')
 
         btn_search = shadowRoot.querySelector('.uef_search') // Search Button
         btn_batch = shadowRoot.querySelector('.bulk_submit') // Batch Search Button
+
         input_from = shadowRoot.querySelector('#uef_from')
         input_to = shadowRoot.querySelector('#uef_to')
         input_date = shadowRoot.querySelector('#uef_date')
         input_adult = shadowRoot.querySelector('#uef_adult')
         input_child = shadowRoot.querySelector('#uef_child')
+
         clear_from = shadowRoot.querySelector('.clear_from')
         clear_to = shadowRoot.querySelector('.clear_to')
 
@@ -1867,7 +1868,7 @@
         shadowRoot.querySelector('.bulk_results').classList.remove('bulk_results_hidden')
         btn_batch.innerHTML = lang.searching_w_cancel
         btn_batch.classList.add('bulk_searching')
-        shadowRoot.querySelector('.bulk_table tbody').innerHTML = ''
+        div_table_body.innerHTML = ''
 
         if (!cont_query) {
             regularSearch([{
@@ -1881,7 +1882,7 @@
             return
         }
 
-        var populate_next_query = function(flights) {
+        const populate_next_query = function(flights) {
             if (!to_search.length) {
                 link_search_saved.innerText = `${lang.search_selected} »`
                 insertResults(ss_query.from, ss_query.to, ss_query.date, flights)
@@ -2218,7 +2219,7 @@
             return
         }
 
-        // var cx_string = JSON.stringify(newQueryPayload(uef_from, uef_to, uef_date, uef_adult, uef_child));
+        // cx_string = JSON.stringify(newQueryPayload(uef_from, uef_to, uef_date, uef_adult, uef_child));
         log('cx_string:', cx_string)
         btn_search.innerHTML = lang.searching
         btn_search.classList.add('searching')
@@ -2318,7 +2319,7 @@
 
         let this_route = routes.shift()
 
-        var populate_next_route = function(flights) {
+        const populate_next_route = function(flights) {
             insertResults(this_route.from, this_route.to, bulk_date, flights)
 
             if (!routes.length) {
@@ -2418,12 +2419,11 @@
 
     function insertResults(from, to, date, pageBom) {
         if (!shadowRoot.querySelector(`.bulk_table tr[data-date="${date}"]`)) {
-            let results_row = ''
-            results_row += `<tr data-date='${date}'><td class='bulk_date'>
+            const results_row = `<tr data-date='${date}'><td class='bulk_date'>
         <a href='javascript:void(0)' data-book='true' data-date='${date}'>${toDashedDate(date)}</a>
         ${dateWeekday(date)}
         </td><td class='bulk_flights'></td></tr>`
-            shadowRoot.querySelector('.bulk_table tbody').insertAdjacentHTML('beforeend', results_row)
+            div_table_body.insertAdjacentHTML('beforeend', results_row)
         }
 
         const heart_svg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="heart_save" viewBox="0 0 16 16"> <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"></path></svg>'
