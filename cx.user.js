@@ -2238,11 +2238,11 @@
                 form.setAttribute('method', 'post')
                 form.setAttribute('action', action_url)
 
-                for (const [key, value] of Object.entries(parameters)) {
+                for (const key in parameters) {
                     const input = document.createElement('input')
                     input.setAttribute('type', 'hidden')
                     input.setAttribute('name', key)
-                    input.setAttribute('value', value)
+                    input.setAttribute('value', parameters[key])
                     form.appendChild(input)
                 }
 
