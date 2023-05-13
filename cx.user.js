@@ -1817,13 +1817,27 @@
 
     function bulk_click(single_date = false) {
         shadowRoot.querySelector('.bulk_results').classList.remove('bulk_results_hidden')
+
         if (!searching) {
             log('Batch Clicked. Starting Search')
+
             uef_from = value_set('uef_from', input_from.value)
             uef_to = value_set('uef_to', input_to.value)
             uef_date = value_set('uef_date', input_date.value)
             uef_adult = value_set('uef_adult', parseInt(input_adult.value))
             uef_child = value_set('uef_child', parseInt(input_child.value))
+
+            if (route_changed) {
+                bulk_date = uef_date
+                route_changed = false
+
+                div_table_body.innerHTML = ''
+                div_ue_container.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                })
+            }
+
             btn_batch.innerHTML = lang.searching_w_cancel
             btn_batch.classList.add('bulk_searching')
             bulk_search(single_date)
@@ -2258,12 +2272,6 @@
 
         log('remaining_days:', remaining_days)
 
-        uef_from = input_from.value
-        uef_to = input_to.value
-        uef_date = input_date.value
-        uef_adult = parseInt(input_adult.value)
-        uef_child = parseInt(input_child.value)
-
         if (!cont_query) {
             regularSearch([{
                 from: uef_from.substring(0, 3),
@@ -2276,17 +2284,8 @@
             return
         }
 
-        bulk_date ||= input_date.value
+        bulk_date ||= uef_date
 
-        if (route_changed) {
-            div_table_body.innerHTML = ''
-            bulk_date = input_date.value
-            div_ue_container.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            })
-            route_changed = false
-        }
         const routes = []
         const rt_from = uef_from.split(',')
         const rt_to = uef_to.split(',')
@@ -2317,7 +2316,7 @@
         var populate_next_route = function(flights) {
             insertResults(this_route.from, this_route.to, bulk_date, flights)
 
-            if (routes.length <= 0) {
+            if (!routes.length) {
                 bulk_date = dateAdd(1, bulk_date)
                 if (single_date) stop_batch()
                 bulk_search()
