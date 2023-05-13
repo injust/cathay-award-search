@@ -1885,15 +1885,17 @@
                 stop_batch()
                 // Override stop_batch()
                 stop_search = false
-                // Clear results on the next search
-                route_changed = true
-                // TODO: Make sure the button changes back to a normal bulk search button
             } else {
                 insertResults(ss_query.from, ss_query.to, ss_query.date, flights)
                 ss_query = to_search.shift()
                 searchAvailability(ss_query.from, ss_query.to, ss_query.date, 1, 0, populate_next_query)
             }
         }
+        
+        // You can't resume a saved search after stopping it
+        // It will actually start a bulk search and append the results to the saved search results
+        route_changed = true // To clear the saved search results
+        // TODO: Make sure the button changes back to a normal bulk search button
 
         searchAvailability(ss_query.from, ss_query.to, ss_query.date, 1, 0, populate_next_query)
     }
