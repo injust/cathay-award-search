@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name                Cathay Award Search Fixer
 // @namespace           https://github.com/injust
-// @copyright           GPL
+// @copyright           GPL (original by jayliutw)
 // @version             3.3.0+injust
 // @description         Un-elevate your Cathay award search
 // @grant               GM.xmlHttpRequest
