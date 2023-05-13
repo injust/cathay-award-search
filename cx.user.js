@@ -7,7 +7,6 @@
 // @grant               GM.xmlHttpRequest
 // @grant               GM_getValue
 // @grant               GM_setValue
-// @grant               unsafeWindow
 // @author              injust
 // @homepageURL         https://github.com/injust/cathay-award-search
 // @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/facade.html
