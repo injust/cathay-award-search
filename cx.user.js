@@ -1813,6 +1813,7 @@
         searching = false
         batchLabel(route_changed ? `${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}` : lang.next_batch)
         btn_batch.classList.remove('bulk_searching')
+        link_search_saved.innerText = `${lang.search_selected} »`
         batchError()
         remaining_days = 20
     }
@@ -1882,7 +1883,6 @@
 
         const populate_next_query = function(flights) {
             if (!to_search.length) {
-                link_search_saved.innerText = `${lang.search_selected} »`
                 insertResults(ss_query.from, ss_query.to, ss_query.date, flights)
                 stop_batch()
                 // Override stop_batch()
