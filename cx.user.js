@@ -1442,7 +1442,7 @@
                     e.target.parentNode.parentNode.classList.remove('selected')
                     e.target.parentNode.parentNode.querySelector('.leg').innerText = ''
                     delete e.target.parentNode.parentNode.dataset.segment
-                    if (div_saved_queries.querySelectorAll('.selected').length == 0) {
+                    if (!div_saved_queries.querySelectorAll('.selected').length) {
                         div_saved_queries.parentNode.classList.remove('multi_on')
                         div_multi_box.classList.add('hidden')
                     }
@@ -1513,7 +1513,7 @@
         })
 
         link_search_saved.addEventListener('click', function(e) {
-            if (Object.keys(saved).length == 0) {
+            if (!Object.keys(saved).length) {
                 alert('No Saved Queries')
             } else {
                 this.innerText = lang.loading
@@ -1522,7 +1522,7 @@
         })
 
         link_search_multi.addEventListener('click', function(e) {
-            if (shadowRoot.querySelectorAll('.saved_query.selected').length == 0) {
+            if (!shadowRoot.querySelectorAll('.saved_query.selected').length) {
                 alert('No Selected Segments')
             } else {
                 this.innerText = lang.loading
@@ -1861,7 +1861,7 @@
         }
 
         var populate_next_query = function(flights) {
-            if (to_search.length == 0) {
+            if (!to_search.length) {
                 link_search_saved.innerText = `${lang.search_selected} »`
                 insertResults(ss_query.from, ss_query.to, ss_query.date, flights)
                 stop_batch()
