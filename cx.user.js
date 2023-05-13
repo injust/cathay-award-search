@@ -1337,6 +1337,7 @@
                 this.value = uef_date
             } else {
                 route_changed = true
+                if (!searching) btn_batch.innerHTML = `${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`
             }
         })
 
