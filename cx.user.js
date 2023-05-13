@@ -1868,9 +1868,11 @@
                 link_search_saved.innerText = lang.search_selected
                 insertResults(ss_query.from, ss_query.to, ss_query.date, flights)
                 stop_batch()
+                // Override stop_batch()
                 stop_search = false
-                searching = false
+                // Clear results on the next search
                 route_changed = true
+                // TODO: Make sure the button changes back to a normal bulk search button
             } else {
                 insertResults(ss_query.from, ss_query.to, ss_query.date, flights)
                 ss_query = to_search.shift()
