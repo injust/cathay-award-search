@@ -1862,7 +1862,7 @@
 
         var populate_next_query = function(flights) {
             if (to_search.length == 0) {
-                link_search_saved.innerText = lang.search_selected
+                link_search_saved.innerText = `${lang.search_selected} »`
                 insertResults(ss_query.from, ss_query.to, ss_query.date, flights)
                 stop_batch()
                 // Override stop_batch()
