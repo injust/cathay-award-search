@@ -330,6 +330,7 @@
         search: 'Search',
         searching: `<img src='https://book.cathaypacific.com${static_path}common/skin/img/icons/cx/icon-loading.gif'> Searching...`,
         searching_w_cancel: `<img src='https://book.cathaypacific.com${static_path}common/skin/img/icons/cx/icon-loading.gif'> Searching... (Click to Stop)`,
+        searching_cont: `<img src='https://book.cathaypacific.com${static_path}common/skin/img/icons/cx/icon-loading.gif'> Please wait... (Page will refresh)`,
         next_batch: 'Load More...',
         search_20: 'Batch Availability for 20 Days',
         search_all_cabins: 'Search Availability in All Cabins',
@@ -346,7 +347,6 @@
         date: 'Date',
         no_flights: 'No Redemption Availability',
         expired: 'Search Next 20 (Requires Refresh)',
-        searching_cont: "<img src='https://book.cathaypacific.com" + static_path + "common/skin/img/icons/cx/icon-loading.gif'> Please wait... (Page will refresh)",
         super: 'SuperCharged Award Search',
         error: 'Unknown Error... Try Again',
         bulk_batch: 'Batch Search',
@@ -1353,8 +1353,8 @@
             let key
             if (e.target.dataset.book) {
                 stop_batch()
-                // stop_search = true;
-                // searching = false;
+                // stop_search = true
+                // searching = false
                 e.target.innerText = lang.loading
                 regularSearch([{
                     from: (e.target.dataset.from ? e.target.dataset.from : uef_from.substring(0, 3)),
@@ -1556,7 +1556,7 @@
         })
 
         shadowRoot.querySelector('.unelevated_saved a').addEventListener('click', function(e) {
-            // alert(JSON.stringify(saved));
+            // alert(JSON.stringify(saved))
             shadowRoot.querySelector('.unelevated_faves').classList.toggle('unelevated_faves_hidden')
         })
     };
@@ -1623,9 +1623,7 @@
 
     // Batch Button Text
     function batchLabel(label) {
-        if (shadowRoot.querySelector('.bulk_submit')) {
-            shadowRoot.querySelector('.bulk_submit').innerHTML = label
-        }
+        btn_batch.innerHTML = label
     }
 
     function batchError(label = false) {
@@ -1645,7 +1643,7 @@
             newAC(this, e)
         })
         inp.addEventListener('click', function(e) {
-            // newAC(this,e);
+            // newAC(this, e)
         })
         /* execute a function presses a key on the keyboard */
         inp.addEventListener('keydown', function(e) {
@@ -1805,7 +1803,7 @@
     function resetSearch() {
         searching = false
         batchLabel(lang.search_20)
-        shadowRoot.querySelector('.bulk_submit').classList.remove('bulk_searching')
+        btn_batch.classList.remove('bulk_searching')
     }
 
     let remaining_days = 20
@@ -1815,7 +1813,7 @@
         stop_search = true
         searching = false
         batchLabel(route_changed ? `${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}` : lang.next_batch)
-        shadowRoot.querySelector('.bulk_submit').classList.remove('bulk_searching')
+        btn_batch.classList.remove('bulk_searching')
         batchError()
         remaining_days = 20
     }
@@ -2220,7 +2218,7 @@
             return
         }
 
-        // cx_string = JSON.stringify(newQueryPayload(uef_from, uef_to, uef_date, uef_adult, uef_child));
+        // cx_string = JSON.stringify(newQueryPayload(uef_from, uef_to, uef_date, uef_adult, uef_child))
         log('cx_string:', cx_string)
         btn_search.innerHTML = lang.searching
         btn_search.classList.add('searching')
@@ -2257,7 +2255,7 @@
                 }
 
                 document.getElementsByTagName('body')[0].appendChild(form)
-                // document.forms.regular_search_form.submit();
+                // document.forms.regular_search_form.submit()
                 form.submit()
             }
         })
@@ -2365,11 +2363,11 @@
         log('searchAvailability() requests:', requests)
 
         requests.B_DATE_1 = date + '0000'
-        // requests.B_DATE_2 = dateAdd(1,date) + "0000";
+        // requests.B_DATE_2 = dateAdd(1, date) + '0000'
         requests.B_LOCATION_1 = from
         requests.E_LOCATION_1 = to
-        // requests.B_LOCATION_2 = to;
-        // requests.E_LOCATION_2 = from;
+        // requests.B_LOCATION_2 = to
+        // requests.E_LOCATION_2 = from
         delete requests.ENCT
         delete requests.SERVICE_ID
         delete requests.DIRECT_LOGIN
@@ -2438,7 +2436,7 @@
 
         if (pageBom.modelObject?.isContainingErrors) {
             flightHTML += `<span class='bulk_response_error'><strong>Error:</strong> ${pageBom.modelObject?.messages[0]?.text}</span>`
-            // stop_batch();
+            // stop_batch()
         } else {
             const flights = pageBom.modelObject?.availabilities?.upsell?.bounds[0].flights
             flights.forEach((flight) => {
