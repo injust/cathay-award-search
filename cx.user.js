@@ -1264,7 +1264,8 @@
             const to = input_to.value
             input_from.value = to
             input_to.value = from
-            route_changed = true
+            input_from.dispatchEvent(new Event('change'))
+            input_to.dispatchEvent(new Event('change'))
         });
 
         [input_from, input_to].forEach(item => {
