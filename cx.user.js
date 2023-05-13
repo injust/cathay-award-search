@@ -1367,7 +1367,7 @@
                     update_saved_count()
                 } else {
                     e.target.classList.add('bulk_saved')
-                    saved[key] = 1
+                    saved[key] = true
                     update_saved_count()
                 }
                 value_set('saved', saved)
@@ -1406,18 +1406,6 @@
                 elm.classList.remove('active')
             })
         })
-        // value_set('saved', {
-        //     '20230809TPETYO': 1,
-        //     '20230816TYOCDG': 1,
-        //     '20230816TYOLHR': 1,
-        //     '20230823CDGAMS': 1,
-        //     '20230823CDGMAD': 1,
-        //     '20230826AMSHKG': 1,
-        //     '20230826MADLHR': 1,
-        //     '20230906LHRHKG': 1,
-        //     '20230906LHRDOH': 1,
-        //     '20230913HKGTPE': 1
-        // })
 
         div_saved.addEventListener('click', function(e) {
             if (e.target.dataset.remove) {
