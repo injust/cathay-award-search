@@ -435,7 +435,7 @@
             </div>
             <div class="bulk_footer">
                 <div class="bulk_footer_container">
-                    <button class='bulk_submit'>${lang.search_20}</button>
+                    <button class='bulk_submit'>${lang.bulk_batch} ${uef_from} - ${uef_to} ${lang.bulk_flights}</button>
                     <div class="bulk_error bulk_error_hidden"><span></span></div>
                 </div>
             </div>
@@ -1809,7 +1809,7 @@
         log('Batch Clicked. Stopping Search')
         stop_search = true
         searching = false
-        shadowRoot.querySelector('.bulk_submit').innerText = lang.next_batch
+        batchLabel(route_changed ? `${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}` : lang.next_batch)
         shadowRoot.querySelector('.bulk_submit').classList.remove('bulk_searching')
         batchError()
         remaining_days = 20
@@ -1891,7 +1891,7 @@
                 searchAvailability(ss_query.from, ss_query.to, ss_query.date, 1, 0, populate_next_query)
             }
         }
-        
+
         // You can't resume a saved search after stopping it
         // It will actually start a bulk search and append the results to the saved search results
         route_changed = true // To clear the saved search results
