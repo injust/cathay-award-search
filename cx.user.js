@@ -225,10 +225,11 @@
     const saved = value_get('saved', {})
     const saved_flights = value_get('saved_flights', {})
 
-    const cont_query = value_get('cont_query', false) /// cont_query/.test(window.location.hash); //urlParams.get('cont_query');
-    const cont_batch = value_get('cont_batch', false) /// cont_batch/.test(window.location.hash); //urlParams.get('cont_batch');
-    const cont_saved = value_get('cont_saved', false) /// cont_saved/.test(window.location.hash); //urlParams.get('cont_saved');
-    const cont_ts = value_get('cont_ts', 0) // window.location.hash.match(/cont_ts=([0-9]+)&/) ? window.location.hash.match(/cont_ts=([0-9]+)&/)[1] : 0;
+    // const urlParams = new URLSearchParams(window.location.search)
+    const cont_query = value_get('cont_query', false) // urlParams.has('cont_query')
+    const cont_batch = value_get('cont_batch', false) // urlParams.has('cont_batch')
+    const cont_saved = value_get('cont_saved', false) // urlParams.has('cont_saved')
+    const cont_ts = value_get('cont_ts', 0) // urlParams.has('cont_ts') ? parseInt(urlParams.get('cont_ts')) : 0
 
     function reset_cont_vars() {
         value_set('cont_query', false)
