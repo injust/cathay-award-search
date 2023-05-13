@@ -1289,7 +1289,7 @@
                 checkAirportCodes(this)
                 if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
                 route_changed = true
-                batchLabel(`${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`)
+                if (!searching) batchLabel(`${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`)
                 const dest = this.value.match(/[A-Z]{3}$/)
                 if (dest) getDestinations(dest[0])
             }, 0)
@@ -1302,7 +1302,7 @@
                 checkAirportCodes(this)
                 if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
                 route_changed = true
-                batchLabel(`${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`)
+                if (!searching) batchLabel(`${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`)
             }, 0)
         })
 
