@@ -332,7 +332,6 @@
         searching_w_cancel: `<img src='https://book.cathaypacific.com${static_path}common/skin/img/icons/cx/icon-loading.gif'> Searching... (Click to Stop)`,
         searching_cont: `<img src='https://book.cathaypacific.com${static_path}common/skin/img/icons/cx/icon-loading.gif'> Please wait... (Page will refresh)`,
         next_batch: 'Load More...',
-        search_20: 'Batch Availability for 20 Days',
         search_all_cabins: 'Search Availability in All Cabins',
         flights: 'Available Flights',
         nonstop: 'Non-Stop',
@@ -1797,27 +1796,25 @@
     // Application Logic
     // ============================================================
 
-    let searching
+    let searching = false
     let stop_search = false
+    let remaining_days = 20
 
     function resetSearch() {
         searching = false
-        batchLabel(lang.search_20)
+        remaining_days = 20
+        batchLabel(`${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`)
         btn_batch.classList.remove('bulk_searching')
+        link_search_saved.innerText = `${lang.search_selected} »`
     }
-
-    let remaining_days = 20
 
     function stop_batch() {
         log('Batch Clicked. Stopping Search')
 
         stop_search = true
-        searching = false
-        batchLabel(route_changed ? `${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}` : lang.next_batch)
-        btn_batch.classList.remove('bulk_searching')
-        link_search_saved.innerText = `${lang.search_selected} »`
+        resetSearch()
+        if (!route_changed) batchLabel(lang.next_batch) // Override resetSearch()
         batchError()
-        remaining_days = 20
     }
 
     function bulk_click(single_date = false) {
@@ -1887,8 +1884,7 @@
             if (!to_search.length) {
                 insertResults(ss_query.from, ss_query.to, ss_query.date, flights)
                 stop_batch()
-                // Override stop_batch()
-                stop_search = false
+                stop_search = false // Override stop_batch()
             } else {
                 insertResults(ss_query.from, ss_query.to, ss_query.date, flights)
                 ss_query = to_search.shift()
