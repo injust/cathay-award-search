@@ -1208,6 +1208,7 @@
 
     function assignElements() {
         log('assignElements()')
+
         btn_search = shadowRoot.querySelector('.uef_search') // Search Button
         btn_batch = shadowRoot.querySelector('.bulk_submit') // Batch Search Button
         input_from = shadowRoot.querySelector('#uef_from')
@@ -1236,6 +1237,7 @@
 
     function addFormListeners() {
         log('addFormListeners()')
+
         btn_search.addEventListener('click', function(e) {
             uef_from = value_set('uef_from', input_from.value)
             uef_to = value_set('uef_to', input_to.value)
@@ -1565,6 +1567,7 @@
 
     function getOrigins() {
         log('getOrigins()')
+
         httpRequest({
             method: 'GET',
             url: `https://api.cathaypacific.com/redibe/airport/origin/${lang.el}/`,
@@ -1588,6 +1591,7 @@
     function getDestinations(from) {
         if (!airports.origins[from]) return
         log('getDestinations()')
+
         httpRequest({
             method: 'GET',
             url: `https://api.cathaypacific.com/redibe/airport/destination/${from}/${lang.el}/`,
@@ -1882,6 +1886,7 @@
 
     function update_saved_count() {
         log('update_saved_count()')
+
         let saved_list = ''
         const saved_arr = []
         Object.keys(saved).forEach(query => {
@@ -1918,6 +1923,7 @@
 
     function update_saved_flights() {
         log('update_saved_flights()')
+
         let saved_list = ''
         const saved_arr = []
         Object.keys(saved_flights).forEach(query => {
@@ -1989,6 +1995,7 @@
 
     function checkAirportCodes(elem) {
         log('checkAirportCodes()')
+
         let cities = elem.value.split(',')
         const errorCities = []
         cities = cities.filter(city => {
@@ -2008,6 +2015,7 @@
 
     function checkLogin() {
         log('checkLogin()')
+
         httpRequest({
             method: 'GET',
             url: 'https://api.cathaypacific.com/redibe/login/getProfile',
@@ -2039,6 +2047,7 @@
         child: 0
     }, cabinclass = 'Y', oneway = false) {
         log('newQueryPayload()')
+
         return {
             awardType: 'Standard',
             brand: 'CX',
@@ -2062,6 +2071,7 @@
 
     function newMultiPayload(routes, passengers, cabinclass = 'Y') {
         log('newMultiPayload()')
+
         const legs = []
         routes.forEach(segment => {
             legs.push({
