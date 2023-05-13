@@ -1288,7 +1288,7 @@
                 checkAirportCodes(this)
                 if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
                 route_changed = true
-                if (!searching) batchLabel(`${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`)
+                if (!searching) btn_batch.innerHTML = `${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`
                 const dest = this.value.match(/[A-Z]{3}$/)
                 if (dest) getDestinations(dest[0])
             }, 0)
@@ -1301,7 +1301,7 @@
                 checkAirportCodes(this)
                 if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
                 route_changed = true
-                if (!searching) batchLabel(`${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`)
+                if (!searching) btn_batch.innerHTML = `${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`
             }, 0)
         })
 
@@ -1620,11 +1620,6 @@
     // UI Logic
     // ============================================================
 
-    // Batch Button Text
-    function batchLabel(label) {
-        btn_batch.innerHTML = label
-    }
-
     function batchError(label = false) {
         if (label) {
             shadowRoot.querySelector('.bulk_error span').innerHTML = label
@@ -1803,7 +1798,7 @@
     function resetSearch() {
         searching = false
         remaining_days = 20
-        batchLabel(`${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`)
+        btn_batch.innerHTML = `${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`
         btn_batch.classList.remove('bulk_searching')
         link_search_saved.innerText = `${lang.search_selected} »`
     }
@@ -1813,7 +1808,7 @@
 
         stop_search = true
         resetSearch()
-        if (!route_changed) batchLabel(lang.next_batch) // Override resetSearch()
+        if (!route_changed) btn_batch.innerHTML = lang.next_batch // Override resetSearch()
         batchError()
     }
 
@@ -1840,7 +1835,7 @@
                 })
             }
 
-            batchLabel(lang.searching_w_cancel)
+            btn_batch.innerHTML = lang.searching_w_cancel
             btn_batch.classList.add('bulk_searching')
             bulk_search(single_date)
         } else {
@@ -1864,7 +1859,7 @@
         let ss_query = to_search.shift()
 
         shadowRoot.querySelector('.bulk_results').classList.remove('bulk_results_hidden')
-        batchLabel(lang.searching_w_cancel)
+        btn_batch.innerHTML = lang.searching_w_cancel
         btn_batch.classList.add('bulk_searching')
         div_table_body.innerHTML = ''
 
@@ -2619,7 +2614,7 @@
             reset_cont_vars()
             // If over 5 minutes since cont query, don't auto search
             if (Date.now() - cont_ts > 60 * 5 * 1000 && !debug) return
-            batchLabel(lang.searching_w_cancel)
+            btn_batch.innerHTML = lang.searching_w_cancel
             btn_batch.classList.add('bulk_searching')
             document.body.classList.add('cont_query')
             if (cont_saved) {
