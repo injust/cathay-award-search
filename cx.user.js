@@ -32,17 +32,17 @@
     // ============================================================
 
     // Get and Set Stored Values
-    function value_get(valueName, defaultValue) {
+    const value_get = (valueName, defaultValue) => {
         return GM_getValue(valueName, defaultValue)
     }
 
-    function value_set(valueName, setValue) {
+    const value_set = (valueName, setValue) => {
         GM_setValue(valueName, setValue)
         return setValue
     }
 
     // XMLHttpRequest and GM.xmlHttpRequest
-    function httpRequest(request, native = false) {
+    const httpRequest = (request, native = false) => {
         if (!native && !debug) {
             GM.xmlHttpRequest(request)
         } else {
@@ -1398,7 +1398,7 @@
                 if (e.target.classList.contains('active')) {
                     e.target.classList.remove('active')
                 } else {
-                    shadowRoot.querySelectorAll('.flight_item').forEach(function(elm) {
+                    shadowRoot.querySelectorAll('.flight_item').forEach((elm) => {
                         elm.classList.remove('active')
                     })
                     e.target.classList.add('active')
@@ -1406,8 +1406,8 @@
             }
         })
 
-        document.addEventListener('scroll', function() {
-            shadowRoot.querySelectorAll('.flight_item').forEach(function(elm) {
+        document.addEventListener('scroll', () => {
+            shadowRoot.querySelectorAll('.flight_item').forEach((elm) => {
                 elm.classList.remove('active')
             })
         })
@@ -1436,7 +1436,7 @@
                     child: 0
                 })
             } else if (e.target.type == 'checkbox') {
-                div_saved_queries.querySelectorAll('.selected').forEach(function(elm) {
+                div_saved_queries.querySelectorAll('.selected').forEach((elm) => {
                     delete elm.dataset.new
                 })
 
@@ -1468,12 +1468,12 @@
                 }
 
                 let pos = 1
-                Array.from(segments_array).sort(function(a, b) {
+                Array.from(segments_array).sort((a, b) => {
                     if (+a.dataset.date > +b.dataset.date) return 1
                     log(a.dataset.date, b.dataset.date)
                     if (a.dataset.date == b.dataset.date) return (a.dataset.new ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1))
                     return false
-                }).forEach(function(elm) {
+                }).forEach((elm) => {
                     elm.dataset.segment = pos
                     elm.querySelector('.leg').innerText = 'Segment ' + pos
                     pos++
@@ -1481,6 +1481,7 @@
             }
         })
 
+        // TODO: What is this???
         div_saved_flights.addEventListener('click', function(e) {})
 
         div_filters.querySelectorAll('input').forEach(item => {
@@ -1534,7 +1535,7 @@
             } else {
                 this.innerText = lang.loading
                 const to_search = []
-                Array.from(shadowRoot.querySelectorAll('.saved_query.selected')).sort(function(a, b) {
+                Array.from(shadowRoot.querySelectorAll('.saved_query.selected')).sort((a, b) => {
                     return a.dataset.segment - b.dataset.segment
                 }).forEach(segment => {
                     to_search.push({
@@ -1576,7 +1577,7 @@
         httpRequest({
             method: 'GET',
             url: `https://api.cathaypacific.com/redibe/airport/origin/${lang.el}/`,
-            onload: function(response) {
+            onload: (response) => {
                 const data = JSON.parse(response.responseText)
                 if (data.airports) {
                     data.airports.forEach(airport => {
@@ -1600,7 +1601,7 @@
         httpRequest({
             method: 'GET',
             url: `https://api.cathaypacific.com/redibe/airport/destination/${from}/${lang.el}/`,
-            onload: function(response) {
+            onload: (response) => {
                 const data = JSON.parse(response.responseText)
                 if (data.airports) {
                     data.airports.forEach(airport => {
@@ -1621,7 +1622,7 @@
     // UI Logic
     // ============================================================
 
-    function batchError(label = false) {
+    const batchError = (label = false) => {
         if (label) {
             shadowRoot.querySelector('.bulk_error span').innerHTML = label
             shadowRoot.querySelector('.bulk_error').classList.remove('bulk_error_hidden')
@@ -1630,16 +1631,16 @@
         }
     }
 
-    function autocomplete(inp, list) {
+    const autocomplete = (inp, list) => {
         /* the autocomplete function takes two arguments: the text field element and an array of possible autocomplete values */
         let currentFocus
         /* execute a function when someone writes in the text field */
         inp.addEventListener('input', function(e) {
             newAC(this, e)
         })
-        inp.addEventListener('click', function(e) {
-            // newAC(this, e)
-        })
+//         inp.addEventListener('click', function(e) {
+//             newAC(this, e)
+//         })
         /* execute a function presses a key on the keyboard */
         inp.addEventListener('keydown', function(e) {
             let x = shadowRoot.getElementById(this.id + 'autocomplete-list')
@@ -1672,7 +1673,7 @@
             }
         })
 
-        function addActive(x) {
+        const addActive = (x) => {
             /* a function to classify an item as "active" */
             if (!x) return false
             /* start by removing the "active" class on all items */
@@ -1683,14 +1684,14 @@
             x[currentFocus].classList.add('autocomplete-active')
         }
 
-        function removeActive(x) {
+        const removeActive = (x) => {
             /* a function to remove the "active" class from all autocomplete items */
             for (let i = 0; i < x.length; i++) {
                 x[i].classList.remove('autocomplete-active')
             }
         }
 
-        function closeAllLists(elmnt) {
+        const closeAllLists = (elmnt) => {
             /* close all autocomplete lists in the document, except the one passed as an argument */
             const x = shadowRoot.querySelectorAll('.autocomplete-items')
             for (let i = 0; i < x.length; i++) {
@@ -1700,11 +1701,11 @@
             }
         }
 
-        function checkLocale(code) {
+        const checkLocale = (code) => {
             return code.replace('Taiwan China', 'Taiwan').replace('中國台灣', '台灣')
         }
 
-        function newAC(elm, e) {
+        const newAC = (elm, e) => {
             const arr = airports[list] || []
             let a
             let b
@@ -1796,7 +1797,7 @@
     let stop_search = false
     let remaining_days = 20
 
-    function resetSearch() {
+    const resetSearch = () => {
         searching = false
         remaining_days = 20
         btn_batch.innerHTML = `${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`
@@ -1804,7 +1805,7 @@
         link_search_saved.innerText = `${lang.search_selected} »`
     }
 
-    function stop_batch() {
+    const stop_batch = () => {
         log('Batch Clicked. Stopping Search')
 
         stop_search = true
@@ -1813,7 +1814,7 @@
         batchError()
     }
 
-    function bulk_click(single_date = false) {
+    const bulk_click = (single_date = false) => {
         shadowRoot.querySelector('.bulk_results').classList.remove('bulk_results_hidden')
 
         if (!searching) {
@@ -1844,7 +1845,7 @@
         }
     }
 
-    function saved_search() {
+    const saved_search = () => {
         const to_search = []
         Object.keys(saved).forEach(query => {
             to_search.push({
@@ -1853,7 +1854,7 @@
                 to: query.substring(11, 14)
             })
         })
-        to_search.sort(function(a, b) {
+        to_search.sort((a, b) => {
             return a.date - b.date
         })
 
@@ -1876,7 +1877,7 @@
             return
         }
 
-        const populate_next_query = function(flights) {
+        const populate_next_query = (flights) => {
             if (!to_search.length) {
                 insertResults(ss_query.from, ss_query.to, ss_query.date, flights)
                 stop_batch()
@@ -1896,7 +1897,7 @@
         searchAvailability(ss_query.from, ss_query.to, ss_query.date, 1, 0, populate_next_query)
     }
 
-    function update_saved_count() {
+    const update_saved_count = () => {
         log('update_saved_count()')
 
         let saved_list = ''
@@ -1914,7 +1915,7 @@
                 to: query.substring(11, 14).toUpperCase()
             })
         })
-        saved_arr.sort(function(a, b) {
+        saved_arr.sort((a, b) => {
             return a.date - b.date
         })
 
@@ -1933,7 +1934,7 @@
         shadowRoot.querySelector('.unelevated_saved a span').innerText = saved_arr.length
     }
 
-    function update_saved_flights() {
+    const update_saved_flights = () => {
         log('update_saved_flights()')
 
         let saved_list = ''
@@ -1959,7 +1960,7 @@
                 y: saved_flights[query].y
             })
         })
-        saved_arr.sort(function(a, b) {
+        saved_arr.sort((a, b) => {
             return a.date - b.date
         })
 
@@ -2005,7 +2006,7 @@
         shadowRoot.querySelector('.unelevated_saved a span').innerText = saved_arr.length
     }
 
-    function checkAirportCodes(elem) {
+    const checkAirportCodes = (elem) => {
         log('checkAirportCodes()')
 
         let cities = elem.value.split(',')
@@ -2025,7 +2026,7 @@
         }
     }
 
-    function checkLogin() {
+    const checkLogin = () => {
         log('checkLogin()')
 
         httpRequest({
@@ -2035,7 +2036,7 @@
                 'Content-Type': 'application/json'
             },
             withCredentials: 'true',
-            onload: function(response) {
+            onload: (response) => {
                 log('getProfile')
                 const data = JSON.parse(response.responseText)
                 if (data.membershipNumber) return
@@ -2050,14 +2051,14 @@
 
     // Default Search JSON
 
-    function newQueryPayload(route = {
+    const newQueryPayload = (route = {
         from: 'HND',
         to: 'ITM',
         date: dateAdd(14)
     }, passengers = {
         adult: 1,
         child: 0
-    }, cabinclass = 'Y', oneway = false) {
+    }, cabinclass = 'Y', oneway = false) => {
         log('newQueryPayload()')
 
         return {
@@ -2081,7 +2082,7 @@
         }
     }
 
-    function newMultiPayload(routes, passengers, cabinclass = 'Y') {
+    const newMultiPayload = (routes, passengers, cabinclass = 'Y') => {
         log('newMultiPayload()')
 
         const legs = []
@@ -2113,7 +2114,7 @@
     // Get New TAB_ID
     // ============================================================
 
-    function response_parser(response, regex) {
+    const response_parser = (response, regex) => {
         let result = response.match(regex)
         try {
             result = JSON.parse(result[1])
@@ -2123,7 +2124,7 @@
         return result
     }
 
-    function newTabID(callback) {
+    const newTabID = (callback) => {
         log('Creating New Request Parameters...')
         httpRequest({
             method: 'POST',
@@ -2133,7 +2134,7 @@
             },
             withCredentials: 'true',
             data: JSON.stringify(newQueryPayload()),
-            onload: function(response) {
+            onload: (response) => {
                 log('Initial Request Parameters Received')
                 const data = JSON.parse(response.responseText)
                 const parameters = data.parameters
@@ -2152,7 +2153,7 @@
                     },
                     data: form_data,
                     withCredentials: 'true',
-                    onreadystatechange: function(response) {
+                    onreadystatechange: (response) => {
                         let errorBOM = ''
                         let errorMessage = lang.tab_retrieve_fail
                         if (response.readyState == 4 && response.status == 200) {
@@ -2194,14 +2195,14 @@
     // Regular Search
     // ============================================================
 
-    function regularSearch(route = [{
+    const regularSearch = (route = [{
         from: 'TPE',
         to: 'TYO',
         date: dateAdd(14)
     }], passengers = {
         adult: 1,
         child: 0
-    }, cabinclass = 'Y', is_cont_query = false, is_cont_batch = false, is_cont_saved = false) {
+    }, cabinclass = 'Y', is_cont_query = false, is_cont_batch = false, is_cont_saved = false) => {
         let cx_string
         if (route.length == 1) {
             cx_string = JSON.stringify(newQueryPayload(route[0], passengers, cabinclass, true))
@@ -2223,7 +2224,7 @@
             },
             withCredentials: 'true',
             data: cx_string,
-            onload: function(response) {
+            onload: (response) => {
                 const data = JSON.parse(response.responseText)
                 const parameters = data.parameters
                 const urlToPost = data.urlToPost || 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability'
@@ -2260,7 +2261,7 @@
 
     let bulk_date = ''
 
-    function bulk_search(single_date = false) {
+    const bulk_search = (single_date = false) => {
         log('bulk_search start, remaining_days:', remaining_days)
 
         let no_continue = false
@@ -2310,7 +2311,7 @@
 
         let this_route = routes.shift()
 
-        const populate_next_route = function(flights) {
+        const populate_next_route = (flights) => {
             insertResults(this_route.from, this_route.to, bulk_date, flights)
 
             if (!routes.length) {
@@ -2329,7 +2330,7 @@
     // Search Availability
     // ============================================================
 
-    function searchAvailability(from, to, date, adult, child, callback) {
+    const searchAvailability = (from, to, date, adult, child, callback) => {
         if (stop_search) {
             stop_search = false
             searching = false
@@ -2376,8 +2377,8 @@
                 Accept: 'application/json, text/plain, */*'
             },
             data: params,
-            onreadystatechange: function(response) {
-                const search_again = function() {
+            onreadystatechange: (response) => {
+                const search_again = () => {
                     searchAvailability(from, to, date, adult, child, callback)
                 }
                 if (response.readyState == 4 && response.status == 200) {
@@ -2408,7 +2409,7 @@
     // Insert Search Results
     // ============================================================
 
-    function insertResults(from, to, date, pageBom) {
+    const insertResults = (from, to, date, pageBom) => {
         if (!shadowRoot.querySelector(`.bulk_table tr[data-date="${date}"]`)) {
             const results_row = `<tr data-date='${date}'><td class='bulk_date'>
         <a href='javascript:void(0)' data-book='true' data-date='${date}'>${toDashedDate(date)}</a>
@@ -2577,7 +2578,7 @@
     // Sticky Footer
     // ============================================================
 
-    function stickyFooter() {
+    const stickyFooter = () => {
         const footerOffset = div_footer.getBoundingClientRect()
         const ueformOffset = div_ue_container.getBoundingClientRect()
         if (footerOffset.top < window.innerHeight - 55 || ueformOffset.top + div_ue_container.clientHeight > window.innerHeight - 72) {
@@ -2597,14 +2598,12 @@
     // Initialize
     // ============================================================
 
-    function initSearchBox() {
+    const initSearchBox = () => {
         initCXvars()
         shadowContainer.appendChild(searchBox)
         assignElements()
         addFormListeners()
-        window.onscroll = function() {
-            stickyFooter()
-        }
+        window.onscroll = stickyFooter
         update_saved_count()
         update_saved_flights()
         autocomplete(input_from, 'origins')
