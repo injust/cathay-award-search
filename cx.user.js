@@ -1,18 +1,21 @@
 // ==UserScript==
-// @name                Cathay Award Search Fixer 2022
-// @namespace           jayliutw
+// @name                Cathay Award Search Fixer
+// @namespace           https://github.com/injust
+// @copyright           GPL
 // @version             3.3.0+injust
-// @description         Un-Elevate Your Cathay Award Search 2022
-// @author              jayliutw
-// @connect             cathaypacific.com
-// @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/facade.html*
-// @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/redeem-flight-awards.html*
-// @match               https://book.cathaypacific.com/*
+// @description         Un-elevate your Cathay award search
 // @grant               GM.xmlHttpRequest
 // @grant               GM_getValue
 // @grant               GM_setValue
 // @grant               unsafeWindow
-// @license             GPL
+// @author              injust
+// @homepageURL         https://github.com/injust/cathay-award-search
+// @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/facade.html
+// @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/redeem-flight-awards.html
+// @match               https://book.cathaypacific.com/*
+// @sandbox             DOM
+// @connect             cathaypacific.com
+// @downloadURL         https://github.com/injust/cathay-award-search/raw/main/cx.user.js
 // ==/UserScript==
 
 (function() {
