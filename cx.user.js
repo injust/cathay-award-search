@@ -32,11 +32,11 @@
     // ============================================================
 
     // Get and Set Stored Values
-    const value_get = (valueName, defaultValue) => {
+    const valueGet = (valueName, defaultValue) => {
         return GM_getValue(valueName, defaultValue)
     }
 
-    const value_set = (valueName, setValue) => {
+    const valueSet = (valueName, setValue) => {
         GM_setValue(valueName, setValue)
         return setValue
     }
@@ -81,7 +81,7 @@
 
     // Retrieve CX Parameters
 
-    let static_path = value_get('static_path', '/CathayPacificAwardV3/AML_IT3.1.14/')
+    let static_path = valueGet('static_path', '/CathayPacificAwardV3/AML_IT3.1.14/')
     let requestVars = {}
     let tab_id = ''
     const availability_url = 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability?TAB_ID='
@@ -91,7 +91,7 @@
         if (typeof staticFilesPath !== 'undefined' && static_path != staticFilesPath) {
             log('typeof staticFilesPath:', typeof staticFilesPath)
             static_path = staticFilesPath
-            value_set('static_path', static_path)
+            valueSet('static_path', static_path)
         }
 
         if (typeof requestParams === 'string') {
@@ -210,28 +210,28 @@
 
     // Set Search Parameters
 
-    let uef_from = value_get('uef_from', 'HKG')
-    let uef_to = value_get('uef_to', 'TYO')
-    let uef_date = value_get('uef_date', dateAdd(14))
-    let uef_adult = value_get('uef_adult', 1)
-    let uef_child = value_get('uef_child', 0)
+    let uef_from = valueGet('uef_from', 'HKG')
+    let uef_to = valueGet('uef_to', 'TYO')
+    let uef_date = valueGet('uef_date', dateAdd(14))
+    let uef_adult = valueGet('uef_adult', 1)
+    let uef_child = valueGet('uef_child', 0)
 
     // Saved Queries
 
-    const saved = value_get('saved', {})
-    const saved_flights = value_get('saved_flights', {})
+    const saved = valueGet('saved', {})
+    const saved_flights = valueGet('saved_flights', {})
 
     // const urlParams = new URLSearchParams(window.location.search)
-    const cont_query = value_get('cont_query', false) // urlParams.has('cont_query')
-    const cont_batch = value_get('cont_batch', false) // urlParams.has('cont_batch')
-    const cont_saved = value_get('cont_saved', false) // urlParams.has('cont_saved')
-    const cont_ts = value_get('cont_ts', 0) // urlParams.has('cont_ts') ? parseInt(urlParams.get('cont_ts')) : 0
+    const cont_query = valueGet('cont_query', false) // urlParams.has('cont_query')
+    const cont_batch = valueGet('cont_batch', false) // urlParams.has('cont_batch')
+    const cont_saved = valueGet('cont_saved', false) // urlParams.has('cont_saved')
+    const cont_ts = valueGet('cont_ts', 0) // urlParams.has('cont_ts') ? parseInt(urlParams.get('cont_ts')) : 0
 
     const reset_cont_vars = () => {
-        value_set('cont_query', false)
-        value_set('cont_batch', false)
-        value_set('cont_saved', false)
-        value_set('cont_ts', 0)
+        valueSet('cont_query', false)
+        valueSet('cont_batch', false)
+        valueSet('cont_saved', false)
+        valueSet('cont_ts', 0)
     }
 
     // ============================================================
@@ -1240,11 +1240,11 @@
         log('addFormListeners()')
 
         btn_search.addEventListener('click', function (e) {
-            uef_from = value_set('uef_from', input_from.value)
-            uef_to = value_set('uef_to', input_to.value)
-            uef_date = value_set('uef_date', input_date.value)
-            uef_adult = value_set('uef_adult', parseInt(input_adult.value))
-            uef_child = value_set('uef_child', parseInt(input_child.value))
+            uef_from = valueSet('uef_from', input_from.value)
+            uef_to = valueSet('uef_to', input_to.value)
+            uef_date = valueSet('uef_date', input_date.value)
+            uef_adult = valueSet('uef_adult', parseInt(input_adult.value))
+            uef_child = valueSet('uef_child', parseInt(input_child.value))
             regularSearch([{
                 from: uef_from.substring(0, 3),
                 to: uef_to.substring(0, 3),
@@ -1372,7 +1372,7 @@
                     saved[key] = true
                     update_saved_count()
                 }
-                value_set('saved', saved)
+                valueSet('saved', saved)
             } else if (e.target.classList.contains('flight_save')) {
                 key = e.target.parentNode.dataset.flightinfo
                 const flightavail = e.target.parentNode.dataset.flightavail.split('_')
@@ -1390,7 +1390,7 @@
                     }
                     update_saved_flights()
                 }
-                value_set('saved_flights', saved_flights)
+                valueSet('saved_flights', saved_flights)
             } else if (e.target.classList.contains('flight_item')) {
                 if (e.target.classList.contains('active')) {
                     e.target.classList.remove('active')
@@ -1415,8 +1415,8 @@
                 delete saved_flights[e.target.dataset.remove]
                 update_saved_count()
                 update_saved_flights()
-                value_set('saved', saved)
-                value_set('saved_flights', saved_flights)
+                valueSet('saved', saved)
+                valueSet('saved_flights', saved_flights)
             }
         })
 
@@ -1806,11 +1806,11 @@
         if (!searching) {
             log('Batch Clicked. Starting Search')
 
-            uef_from = value_set('uef_from', input_from.value)
-            uef_to = value_set('uef_to', input_to.value)
-            uef_date = value_set('uef_date', input_date.value)
-            uef_adult = value_set('uef_adult', parseInt(input_adult.value))
-            uef_child = value_set('uef_child', parseInt(input_child.value))
+            uef_from = valueSet('uef_from', input_from.value)
+            uef_to = valueSet('uef_to', input_to.value)
+            uef_date = valueSet('uef_date', input_date.value)
+            uef_adult = valueSet('uef_adult', parseInt(input_adult.value))
+            uef_child = valueSet('uef_child', parseInt(input_child.value))
 
             if (route_changed) {
                 bulk_date = uef_date
@@ -2216,10 +2216,10 @@
                 const urlToPost = data.urlToPost || 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability'
                 log('regularSearch parameters:', parameters)
                 const action_url = new URL(urlToPost)
-                if (is_cont_query) value_set('cont_query', true)
-                if (is_cont_batch) value_set('cont_batch', true)
-                if (is_cont_saved) value_set('cont_saved', true)
-                value_set('cont_ts', Date.now())
+                if (is_cont_query) valueSet('cont_query', true)
+                if (is_cont_batch) valueSet('cont_batch', true)
+                if (is_cont_saved) valueSet('cont_saved', true)
+                valueSet('cont_ts', Date.now())
                 // Create a form dynamically
                 const form = document.createElement('form')
                 form.setAttribute('name', 'regular_search_form')
