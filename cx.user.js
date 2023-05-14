@@ -360,7 +360,7 @@
         query: 'Search',
         delete: 'Remove',
         search_selected: 'Search All Saved',
-        book_multi: 'Book Multicity Award',
+        book_multi: 'Book Multi-City Award',
         nosaves: 'You do not have any saved queries. Click on ♥ in batch results to save.',
         loading: 'Searching...',
         human: "Cathay's website needs you to prove you're a human:",
@@ -384,7 +384,7 @@
                     <a href="javascript:void(0);" class="tabs tab_flights">Flights</a>
                 </div>
                 <a href="javascript:void(0);" class="search_selected">${lang.search_selected} &raquo;</a>
-                <a href="javascript:void(0);" class="search_multicity">${lang.book_multi} &raquo;</a>
+                <a href="javascript:void(0);" class="search_multi_city">${lang.book_multi} &raquo;</a>
                 <div class="saved_flights"></div>
                 <div class="saved_queries"></div>
             </div>
@@ -1067,7 +1067,7 @@
             font-weight: bold !important;
             display:none;
         }
-        a.search_multicity {
+        a.search_multi_city {
             position: absolute;
             right: 15px;
             top: 6px;
@@ -1094,7 +1094,7 @@
         .flights .saved_remove {
             line-height: 36px !important;
         }
-        .multi_on .search_multicity {
+        .multi_on .search_multi_city {
             position: absolute;
             right: 15px;
             top: 6px;
