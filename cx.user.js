@@ -80,39 +80,39 @@
     // Initialize Variables
     // ============================================================
 
+    // TODO: Auto-detect from CX URL
+    const browserLang = 'en'
+    const browserCountry = 'CA'
+
     let routeChanged = false
 
     // Retrieve CX Parameters
 
-    let staticPath = valueGet('static_path', '/CathayPacificAwardV3/AML_IT3.1.14/')
+    const availabilityUrl = 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability?TAB_ID='
+    // TODO: Use the membership number URL
+    const loginUrl = `https://www.cathaypacific.com/content/cx/${browserLang}_${browserCountry}/sign-in.html?loginreferrer=${encodeURI(`https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`)}`
+
+    let staticPath = valueGet('static_path', '/CathayPacificAwardV3/AML_IT3.3.18/')
     let requestVars = {}
     let tabId = ''
-    const availabilityUrl = 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability?TAB_ID='
     let formSubmitUrl = availabilityUrl + tabId
 
     const initCxVars = () => {
-        if (typeof staticFilesPath !== 'undefined' && staticPath !== staticFilesPath) {
-            log('typeof staticFilesPath:', typeof staticFilesPath)
-            staticPath = staticFilesPath
-            valueSet('static_path', staticPath)
+        if (typeof window.staticFilesPath !== 'undefined' && staticPath !== window.staticFilesPath) {
+            log('typeof window.staticFilesPath:', typeof window.staticFilesPath)
+            staticPath = valueSet('static_path', window.staticFilesPath)
         }
 
-        if (typeof requestParams === 'string') {
-            requestVars = JSON.parse(requestParams)
-            tabId = requestVars.TAB_ID
-        } else if (typeof requestParams === 'object') {
-            requestVars = requestParams
-            tabId = requestParams.TAB_ID || ''
+        if (typeof window.requestParams === 'string') {
+            requestVars = JSON.parse(window.requestParams)
+        } else if (typeof window.requestParams === 'object') {
+            requestVars = window.requestParams
         }
 
-        formSubmitUrl = typeof formSubmitUrl !== 'undefined' ? formSubmitUrl : availabilityUrl + tabId
+        tabId = requestVars.TAB_ID || tabId
+
+        formSubmitUrl = typeof window.formSubmitUrl !== 'undefined' ? window.formSubmitUrl : availabilityUrl + tabId
     }
-
-    const browserLocale = navigator.language
-    const browserLang = 'en'
-    const browserCountry = 'CA'
-
-    const loginUrl = `https://www.cathaypacific.com/content/cx/${browserLang}_${browserCountry}/sign-in.html?loginreferrer=${encodeURI(`https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`)}`
 
     const r = Math.random()
     let t = tabId || ''
@@ -2156,7 +2156,7 @@
                                 resetSearch()
                                 return false
                             }
-                            tabId = requestVars.TAB_ID ? requestVars.TAB_ID : ''
+                            tabId = requestVars.TAB_ID || ''
                             log('New Tab ID:', tabId)
                             batchError()
                             formSubmitUrl = availabilityUrl + tabId
