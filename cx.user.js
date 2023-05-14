@@ -84,28 +84,28 @@
 
     // Retrieve CX Parameters
 
-    let static_path = valueGet('static_path', '/CathayPacificAwardV3/AML_IT3.1.14/')
+    let staticPath = valueGet('static_path', '/CathayPacificAwardV3/AML_IT3.1.14/')
     let requestVars = {}
-    let tab_id = ''
-    const availability_url = 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability?TAB_ID='
-    let formSubmitUrl = availability_url + tab_id
+    let tabId = ''
+    const availabilityUrl = 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability?TAB_ID='
+    let formSubmitUrl = availabilityUrl + tabId
 
     const initCXvars = () => {
-        if (typeof staticFilesPath !== 'undefined' && static_path !== staticFilesPath) {
+        if (typeof staticFilesPath !== 'undefined' && staticPath !== staticFilesPath) {
             log('typeof staticFilesPath:', typeof staticFilesPath)
-            static_path = staticFilesPath
-            valueSet('static_path', static_path)
+            staticPath = staticFilesPath
+            valueSet('static_path', staticPath)
         }
 
         if (typeof requestParams === 'string') {
             requestVars = JSON.parse(requestParams)
-            tab_id = requestVars.TAB_ID
+            tabId = requestVars.TAB_ID
         } else if (typeof requestParams === 'object') {
             requestVars = requestParams
-            tab_id = requestParams.TAB_ID || ''
+            tabId = requestParams.TAB_ID || ''
         }
 
-        formSubmitUrl = typeof formSubmitUrl !== 'undefined' ? formSubmitUrl : availability_url + tab_id
+        formSubmitUrl = typeof formSubmitUrl !== 'undefined' ? formSubmitUrl : availabilityUrl + tabId
     }
 
     const browserLocale = navigator.language
@@ -115,7 +115,7 @@
     const loginUrl = `https://www.cathaypacific.com/content/cx/${browserLang}_${browserCountry}/sign-in.html?loginreferrer=${encodeURI(`https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`)}`
 
     const r = Math.random()
-    let t = tab_id || ''
+    let t = tabId || ''
 
     // ============================================================
     // Helper Functions
@@ -213,22 +213,22 @@
 
     // Set Search Parameters
 
-    let uef_from = valueGet('uef_from', 'HKG')
-    let uef_to = valueGet('uef_to', 'TYO')
-    let uef_date = valueGet('uef_date', dateAdd(14))
-    let uef_adult = valueGet('uef_adult', 1)
-    let uef_child = valueGet('uef_child', 0)
+    let uefFrom = valueGet('uef_from', 'HKG')
+    let uefTo = valueGet('uef_to', 'TYO')
+    let uefDate = valueGet('uef_date', dateAdd(14))
+    let uefAdult = valueGet('uef_adult', 1)
+    let uefChild = valueGet('uef_child', 0)
 
     // Saved Queries
 
     const saved = valueGet('saved', {})
-    const saved_flights = valueGet('saved_flights', {})
+    const savedFlights = valueGet('saved_flights', {})
 
     // const urlParams = new URLSearchParams(window.location.search)
-    const cont_query = valueGet('cont_query', false) // urlParams.has('cont_query')
-    const cont_batch = valueGet('cont_batch', false) // urlParams.has('cont_batch')
-    const cont_saved = valueGet('cont_saved', false) // urlParams.has('cont_saved')
-    const cont_ts = valueGet('cont_ts', 0) // urlParams.has('cont_ts') ? parseInt(urlParams.get('cont_ts')) : 0
+    const contQuery = valueGet('cont_query', false) // urlParams.has('cont_query')
+    const contBatch = valueGet('cont_batch', false) // urlParams.has('cont_batch')
+    const contSaved = valueGet('cont_saved', false) // urlParams.has('cont_saved')
+    const contTs = valueGet('cont_ts', 0) // urlParams.has('cont_ts') ? parseInt(urlParams.get('cont_ts')) : 0
 
     const resetContVars = () => {
         valueSet('cont_query', false)
@@ -277,7 +277,7 @@
                 checkLogin()
             })
         } else if (currentUrl.includes('air/booking/availability')) {
-            if (cont_query) {
+            if (contQuery) {
                 log('initRoot air/booking/availability with cont_query')
 
                 waitForEl('body > header').then((el) => {
@@ -324,9 +324,9 @@
         ec: browserCountry,
         el: browserLang,
         search: 'Search',
-        searching: `<img src='https://book.cathaypacific.com${static_path}common/skin/img/icons/cx/icon-loading.gif'> Searching...`,
-        searching_w_cancel: `<img src='https://book.cathaypacific.com${static_path}common/skin/img/icons/cx/icon-loading.gif'> Searching... (Click to Stop)`,
-        searching_cont: `<img src='https://book.cathaypacific.com${static_path}common/skin/img/icons/cx/icon-loading.gif'> Please wait... (Page will refresh)`,
+        searching: `<img src='https://book.cathaypacific.com${staticPath}common/skin/img/icons/cx/icon-loading.gif'> Searching...`,
+        searching_w_cancel: `<img src='https://book.cathaypacific.com${staticPath}common/skin/img/icons/cx/icon-loading.gif'> Searching... (Click to Stop)`,
+        searching_cont: `<img src='https://book.cathaypacific.com${staticPath}common/skin/img/icons/cx/icon-loading.gif'> Please wait... (Page will refresh)`,
         next_batch: 'Load More...',
         search_all_cabins: 'Search Availability in All Cabins',
         flights: 'Available Flights',
@@ -394,15 +394,15 @@
             <div class='labels'>
                 <a href="javascript:void(0);" class="switch"><svg height="16px" width="16px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 365.352 365.352" xml:space="preserve" stroke-width="0" transform="rotate(180)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g> <path d="M363.155,169.453l-14.143-14.143c-1.407-1.407-3.314-2.197-5.304-2.197 c-1.989,0-3.897,0.79-5.304,2.197l-45.125,45.125v-57.503c0-50.023-40.697-90.721-90.721-90.721H162.3c-4.143,0-7.5,3.358-7.5,7.5 v20c0,4.142,3.357,7.5,7.5,7.5h40.26c30.725,0,55.721,24.996,55.721,55.721v57.503l-45.125-45.125 c-1.407-1.407-3.314-2.197-5.304-2.197c-1.989,0-3.896,0.79-5.304,2.197l-14.143,14.143c-1.406,1.406-2.196,3.314-2.196,5.303 c0,1.989,0.79,3.897,2.196,5.303l82.071,82.071c1.465,1.464,3.385,2.197,5.304,2.197c1.919,0,3.839-0.732,5.304-2.197 l82.071-82.071c1.405-1.406,2.196-3.314,2.196-5.303C365.352,172.767,364.561,170.859,363.155,169.453z"></path> <path d="M203.052,278.14h-40.26c-30.725,0-55.721-24.996-55.721-55.721v-57.503l45.125,45.126 c1.407,1.407,3.314,2.197,5.304,2.197c1.989,0,3.896-0.79,5.304-2.197l14.143-14.143c1.406-1.406,2.196-3.314,2.196-5.303 c0-1.989-0.79-3.897-2.196-5.303l-82.071-82.071c-2.93-2.929-7.678-2.929-10.607,0L2.196,185.292C0.79,186.699,0,188.607,0,190.596 c0,1.989,0.79,3.897,2.196,5.303l14.143,14.143c1.407,1.407,3.314,2.197,5.304,2.197s3.897-0.79,5.304-2.197l45.125-45.126v57.503 c0,50.023,40.697,90.721,90.721,90.721h40.26c4.143,0,7.5-3.358,7.5-7.5v-20C210.552,281.498,207.194,278.14,203.052,278.14z"></path> </svg></a>
                 <label class="labels_left"><span>From</span>
-                    <input tabindex="1" type='text' id='uef_from' name='uef_from' placeholder='TPE,HKG' value='${uef_from}'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clearFrom" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></a></label>
+                    <input tabindex="1" type='text' id='uef_from' name='uef_from' placeholder='TPE,HKG' value='${uefFrom}'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clearFrom" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></a></label>
                 <label class="labels_right"><span>Adults</span>
-                    <input tabindex="4" type='number' inputmode='decimal' onClick='this.select()' id='uef_adult' name='uef_adult' placeholder='Adults' value='${uef_adult}' min='0'></label>
+                    <input tabindex="4" type='number' inputmode='decimal' onClick='this.select()' id='uef_adult' name='uef_adult' placeholder='Adults' value='${uefAdult}' min='0'></label>
                 <label class="labels_left"><span>To</span>
-                    <input tabindex="2" type='text' id='uef_to' name='uef_to' placeholder='TYO,LHR,SFO' value='${uef_to}'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clearTo" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></label>
+                    <input tabindex="2" type='text' id='uef_to' name='uef_to' placeholder='TYO,LHR,SFO' value='${uefTo}'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clearTo" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></label>
                 <label class="labels_right"><span>Children</span>
-                    <input tabindex="5" type='number' inputmode='decimal' onClick='this.select()' id='uef_child' name='uef_child' placeholder='Children' value='${uef_child}' min='0'></label>
+                    <input tabindex="5" type='number' inputmode='decimal' onClick='this.select()' id='uef_child' name='uef_child' placeholder='Children' value='${uefChild}' min='0'></label>
                 <label class="labels_left"><span>Date</span>
-                    <input tabindex="3" class='uef_date' onClick='this.setSelectionRange(6, 8)' id='uef_date' inputmode='decimal' name='uef_date' placeholder='${dateAdd(30)}' value='${uef_date}'></label>
+                    <input tabindex="3" class='uef_date' onClick='this.setSelectionRange(6, 8)' id='uef_date' inputmode='decimal' name='uef_date' placeholder='${dateAdd(30)}' value='${uefDate}'></label>
                 <button class='uef_search'>${lang.search}</button>
             </div>
         </div>
@@ -434,7 +434,7 @@
             </div>
             <div class="bulk_footer">
                 <div class="bulk_footer_container">
-                    <button class='bulk_submit'>${lang.bulk_batch} ${uef_from} - ${uef_to} ${lang.bulk_flights}</button>
+                    <button class='bulk_submit'>${lang.bulk_batch} ${uefFrom} - ${uefTo} ${lang.bulk_flights}</button>
                     <div class="bulk_error bulk_error_hidden"><span></span></div>
                 </div>
             </div>
@@ -1239,19 +1239,19 @@
         log('addFormListeners()')
 
         btnSearch.addEventListener('click', function (e) {
-            uef_from = valueSet('uef_from', inputFrom.value)
-            uef_to = valueSet('uef_to', inputTo.value)
-            uef_date = valueSet('uef_date', inputDate.value)
-            uef_adult = valueSet('uef_adult', parseInt(inputAdult.value))
-            uef_child = valueSet('uef_child', parseInt(inputChild.value))
+            uefFrom = valueSet('uef_from', inputFrom.value)
+            uefTo = valueSet('uef_to', inputTo.value)
+            uefDate = valueSet('uef_date', inputDate.value)
+            uefAdult = valueSet('uef_adult', parseInt(inputAdult.value))
+            uefChild = valueSet('uef_child', parseInt(inputChild.value))
             regularSearch([{
-                from: uef_from.substring(0, 3),
-                to: uef_to.substring(0, 3),
-                date: uef_date
+                from: uefFrom.substring(0, 3),
+                to: uefTo.substring(0, 3),
+                date: uefDate
             }], {
-                adult: uef_adult,
-                child: uef_child
-            }, 'Y', (uef_to.length > 3), false)
+                adult: uefAdult,
+                child: uefChild
+            }, 'Y', (uefTo.length > 3), false)
         })
 
         btnBatch.addEventListener('click', (e) => {
@@ -1330,7 +1330,7 @@
         inputDate.addEventListener('change', function (e) {
             if (!isValidDate(this.value)) {
                 alert(lang.invalid_date)
-                this.value = uef_date
+                this.value = uefDate
             } else {
                 routeChanged = true
                 if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${inputFrom.value} - ${inputTo.value} ${lang.bulk_flights}`
@@ -1353,12 +1353,12 @@
                 // searching = false
                 e.target.innerText = lang.loading
                 regularSearch([{
-                    from: (e.target.dataset.from ? e.target.dataset.from : uef_from.substring(0, 3)),
-                    to: (e.target.dataset.dest ? e.target.dataset.dest : uef_to.substring(0, 3)),
+                    from: (e.target.dataset.from ? e.target.dataset.from : uefFrom.substring(0, 3)),
+                    to: (e.target.dataset.dest ? e.target.dataset.dest : uefTo.substring(0, 3)),
                     date: e.target.dataset.date
                 }], {
-                    adult: uef_adult,
-                    child: uef_child
+                    adult: uefAdult,
+                    child: uefChild
                 })
             } else if (e.target.dataset.save) {
                 key = e.target.dataset.date + e.target.dataset.from + e.target.dataset.dest
@@ -1377,11 +1377,11 @@
                 const flightavail = e.target.parentNode.dataset.flightavail.split('_')
                 if (e.target.parentNode.classList.contains('saved')) {
                     e.target.parentNode.classList.remove('saved')
-                    delete saved_flights[key]
+                    delete savedFlights[key]
                     updateSavedFlights()
                 } else {
                     e.target.parentNode.classList.add('saved')
-                    saved_flights[key] = {
+                    savedFlights[key] = {
                         f: flightavail[0],
                         j: flightavail[1],
                         p: flightavail[2],
@@ -1389,7 +1389,7 @@
                     }
                     updateSavedFlights()
                 }
-                valueSet('saved_flights', saved_flights)
+                valueSet('saved_flights', savedFlights)
             } else if (e.target.classList.contains('flight_item')) {
                 if (e.target.classList.contains('active')) {
                     e.target.classList.remove('active')
@@ -1411,11 +1411,11 @@
         divSaved.addEventListener('click', function (e) {
             if (e.target.dataset.remove) {
                 delete saved[e.target.dataset.remove]
-                delete saved_flights[e.target.dataset.remove]
+                delete savedFlights[e.target.dataset.remove]
                 updateSavedCount()
                 updateSavedFlights()
                 valueSet('saved', saved)
-                valueSet('saved_flights', saved_flights)
+                valueSet('saved_flights', savedFlights)
             }
         })
 
@@ -1424,8 +1424,8 @@
                 stopBatch()
                 e.target.innerText = lang.loading
                 regularSearch([{
-                    from: (e.target.dataset.from ? e.target.dataset.from : uef_from),
-                    to: (e.target.dataset.dest ? e.target.dataset.dest : uef_to),
+                    from: (e.target.dataset.from ? e.target.dataset.from : uefFrom),
+                    to: (e.target.dataset.dest ? e.target.dataset.dest : uefTo),
                     date: e.target.dataset.date
                 }], {
                     adult: 1,
@@ -1805,14 +1805,14 @@
         if (!searching) {
             log('Batch Clicked. Starting Search')
 
-            uef_from = valueSet('uef_from', inputFrom.value)
-            uef_to = valueSet('uef_to', inputTo.value)
-            uef_date = valueSet('uef_date', inputDate.value)
-            uef_adult = valueSet('uef_adult', parseInt(inputAdult.value))
-            uef_child = valueSet('uef_child', parseInt(inputChild.value))
+            uefFrom = valueSet('uef_from', inputFrom.value)
+            uefTo = valueSet('uef_to', inputTo.value)
+            uefDate = valueSet('uef_date', inputDate.value)
+            uefAdult = valueSet('uef_adult', parseInt(inputAdult.value))
+            uefChild = valueSet('uef_child', parseInt(inputChild.value))
 
             if (routeChanged) {
-                bulkDate = uef_date
+                bulkDate = uefDate
                 routeChanged = false
 
                 divTableBody.innerHTML = ''
@@ -1850,7 +1850,7 @@
         btnBatch.classList.add('bulkSearching')
         divTableBody.innerHTML = ''
 
-        if (!cont_query) {
+        if (!contQuery) {
             regularSearch([{
                 from: ssQuery.from,
                 to: ssQuery.to,
@@ -1862,7 +1862,7 @@
             return
         }
 
-        const populate_next_query = (flights) => {
+        const populateNextQuery = (flights) => {
             if (!toSearch.length) {
                 insertResults(ssQuery.from, ssQuery.to, ssQuery.date, flights)
                 stopBatch()
@@ -1870,7 +1870,7 @@
             } else {
                 insertResults(ssQuery.from, ssQuery.to, ssQuery.date, flights)
                 ssQuery = toSearch.shift()
-                searchAvailability(ssQuery.from, ssQuery.to, ssQuery.date, 1, 0, populate_next_query)
+                searchAvailability(ssQuery.from, ssQuery.to, ssQuery.date, 1, 0, populateNextQuery)
             }
         }
 
@@ -1879,7 +1879,7 @@
         routeChanged = true // To clear the saved search results
         // TODO: Make sure the button changes back to a normal bulk search button
 
-        searchAvailability(ssQuery.from, ssQuery.to, ssQuery.date, 1, 0, populate_next_query)
+        searchAvailability(ssQuery.from, ssQuery.to, ssQuery.date, 1, 0, populateNextQuery)
     }
 
     const updateSavedCount = () => {
@@ -1924,11 +1924,11 @@
 
         let savedList = ''
         const savedArr = []
-        Object.keys(saved_flights).forEach(query => {
+        Object.keys(savedFlights).forEach(query => {
             const sdate = new Date(query.substring(0, 4), query.substring(4, 6) - 1, query.substring(6, 8))
             const ndate = new Date()
             if (sdate <= ndate) {
-                delete saved_flights[query]
+                delete savedFlights[query]
                 return
             }
             savedArr.push({
@@ -1939,10 +1939,10 @@
                 leg1: query.split('_')[1] || '',
                 stop: query.split('_')[2] || '',
                 leg2: query.split('_')[3] || '',
-                f: saved_flights[query].f,
-                j: saved_flights[query].j,
-                p: saved_flights[query].p,
-                y: saved_flights[query].y
+                f: savedFlights[query].f,
+                j: savedFlights[query].j,
+                p: savedFlights[query].p,
+                y: savedFlights[query].y
             })
         })
         savedArr.sort((a, b) => {
@@ -2156,10 +2156,10 @@
                                 resetSearch()
                                 return false
                             }
-                            tab_id = requestVars.TAB_ID ? requestVars.TAB_ID : ''
-                            log('New Tab ID:', tab_id)
+                            tabId = requestVars.TAB_ID ? requestVars.TAB_ID : ''
+                            log('New Tab ID:', tabId)
                             batchError()
-                            formSubmitUrl = availability_url + tab_id
+                            formSubmitUrl = availabilityUrl + tabId
                             if (cb) cb()
                         } else if (response.readyState === 4) {
                             errorBOM = responseParser(response.responseText, /errorBom = ([^;]+)/)
@@ -2255,23 +2255,23 @@
             noContinue = true
         }
 
-        if (!cont_query) {
+        if (!contQuery) {
             regularSearch([{
-                from: uef_from.substring(0, 3),
-                to: uef_to.substring(0, 3),
-                date: uef_date
+                from: uefFrom.substring(0, 3),
+                to: uefTo.substring(0, 3),
+                date: uefDate
             }], {
-                adult: uef_adult,
-                child: uef_child
+                adult: uefAdult,
+                child: uefChild
             }, 'Y', true, true)
             return
         }
 
-        bulkDate ||= uef_date
+        bulkDate ||= uefDate
 
         const routes = []
-        const rtFrom = uef_from.split(',')
-        const rtTo = uef_to.split(',')
+        const rtFrom = uefFrom.split(',')
+        const rtTo = uefTo.split(',')
         const queryCount = rtFrom.length * rtTo.length
 
         if (!noContinue & remainingDays > Math.ceil(25 / queryCount)) {
@@ -2305,10 +2305,10 @@
                 bulkSearch()
             } else {
                 thisRoute = routes.shift()
-                searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uef_adult, uef_child, populateNextRoute)
+                searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uefAdult, uefChild, populateNextRoute)
             }
         }
-        searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uef_adult, uef_child, populateNextRoute)
+        searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uefAdult, uefChild, populateNextRoute)
     }
 
     // ============================================================
@@ -2431,12 +2431,12 @@
                 let n_j = 0
                 let n_p = 0
                 let n_y = 0
-                const leg1_airline = flight.segments[0].flightIdentifier.marketingAirline
-                const leg1_flight_no = flight.segments[0].flightIdentifier.flightNumber
-                const leg1_dep_time = getFlightTime(flight.segments[0].flightIdentifier.originDate)
-                const leg1_arr_time = getFlightTime(flight.segments[0].destinationDate)
-                const leg1_duration = getFlightTime(flight.duration, true)
-                let flightkey
+                const leg1Airline = flight.segments[0].flightIdentifier.marketingAirline
+                const leg1FlightNum = flight.segments[0].flightIdentifier.flightNumber
+                const leg1DepTime = getFlightTime(flight.segments[0].flightIdentifier.originDate)
+                const leg1ArrTime = getFlightTime(flight.segments[0].destinationDate)
+                const leg1Duration = getFlightTime(flight.duration, true)
+                let flightKey
                 if (flight.segments.length === 1) {
                     if (f1 >= 1) {
                         available += ` <span class='bulk_cabin bulk_f'>F <b>${f1}</b></span>`
@@ -2454,28 +2454,28 @@
                         available += ` <span class='bulk_cabin bulk_y'>Y <b>${y1}</b></span>`
                         d_y = true
                     }
-                    flightkey = `${date}${from}${to}_${leg1_airline}${leg1_flight_no}`
+                    flightKey = `${date}${from}${to}_${leg1Airline}${leg1FlightNum}`
                     if (available !== '') {
                         flightHTML += '<div class="flight_wrapper">'
-                        flightHTML += `<div class='flight_item direct ${(saved_flights[flightkey] ? ' saved' : '')}' data-flightinfo='${flightkey}' data-flightavail='${f1 + '_' + j1 + '_' + p1 + '_' + y1}' data-direct='1' data-f='${(d_f ? 1 : 0)}' data-j='${(d_j ? 1 : 0)}' data-p='${(d_p ? 1 : 0)}' data-y='${(d_y ? 1 : 0)}'>
-                        <img src='https://book.cathaypacific.com${static_path}common/skin/img/airlines/logo-${leg1_airline.toLowerCase()}.png'>
-                        <span class="flight_num">${leg1_airline + leg1_flight_no}</span>
+                        flightHTML += `<div class='flight_item direct ${(savedFlights[flightKey] ? ' saved' : '')}' data-flightinfo='${flightKey}' data-flightavail='${f1 + '_' + j1 + '_' + p1 + '_' + y1}' data-direct='1' data-f='${(d_f ? 1 : 0)}' data-j='${(d_j ? 1 : 0)}' data-p='${(d_p ? 1 : 0)}' data-y='${(d_y ? 1 : 0)}'>
+                        <img src='https://book.cathaypacific.com${staticPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png'>
+                        <span class="flight_num">${leg1Airline + leg1FlightNum}</span>
                         ${available}
                         <span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z" fill="currentColor"></path></svg></span>
                         <span class="flight_save">${heartSvg}</span>
                     </div>
                     <div class="flight_info">
-                        <span class="info_flight">${leg1_airline + leg1_flight_no}</span>
-                        <span class="info_dept"><span>Departs:</span> ${leg1_dep_time}</span>
-                        <span class="info_arr"><span>Arrives:</span> ${leg1_arr_time}</span>
-                        <span class="info_duration"><span>Total Flight Duration:</span> ${leg1_duration}</span>
+                        <span class="info_flight">${leg1Airline + leg1FlightNum}</span>
+                        <span class="info_dept"><span>Departs:</span> ${leg1DepTime}</span>
+                        <span class="info_arr"><span>Arrives:</span> ${leg1ArrTime}</span>
+                        <span class="info_duration"><span>Total Flight Duration:</span> ${leg1Duration}</span>
                     </div>
                     `
                         noFlights = false
                         flightHTML += '</div>'
                     }
-                    if (saved_flights[flightkey]) {
-                        saved_flights[flightkey] = {
+                    if (savedFlights[flightKey]) {
+                        savedFlights[flightKey] = {
                             f: f1,
                             j: j1,
                             p: p1,
@@ -2509,40 +2509,40 @@
                         n_y = Math.min(y1, y2)
                         available += ` <span class='bulk_cabin bulk_y'>Y <b>${n_y}</b></span>`
                     }
-                    const leg2_airline = flight.segments[1].flightIdentifier.marketingAirline
-                    const leg2_flight_no = flight.segments[1].flightIdentifier.flightNumber
-                    const leg2_dep_time = getFlightTime(flight.segments[1].flightIdentifier.originDate)
-                    const leg2_arr_time = getFlightTime(flight.segments[1].destinationDate)
-                    const transit_time = getFlightTime(flight.segments[1].flightIdentifier.originDate - flight.segments[0].destinationDate, true)
-                    const stopcity = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g.exec(flight.flightIdString)[1].replace(':', ' / ')
-                    flightkey = `${date}${from}${to}_${leg1_airline}${leg1_flight_no}_${stopcity}_${leg2_airline}${leg2_flight_no}`
+                    const leg2Airline = flight.segments[1].flightIdentifier.marketingAirline
+                    const leg2FlightNum = flight.segments[1].flightIdentifier.flightNumber
+                    const leg2DepTime = getFlightTime(flight.segments[1].flightIdentifier.originDate)
+                    const leg2ArrTime = getFlightTime(flight.segments[1].destinationDate)
+                    const transitTime = getFlightTime(flight.segments[1].flightIdentifier.originDate - flight.segments[0].destinationDate, true)
+                    const transitAirportCode = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g.exec(flight.flightIdString)[1].replace(':', ' / ')
+                    flightKey = `${date}${from}${to}_${leg1Airline}${leg1FlightNum}_${transitAirportCode}_${leg2Airline}${leg2FlightNum}`
                     if (available !== '') {
                         flightHTML += '<div class="flight_wrapper">'
-                        flightHTML += `<div class='flight_item ${(saved_flights[flightkey] ? ' saved' : '')}' data-direct='0' data-flightinfo='${flightkey}'  data-flightavail='${n_f + '_' + n_j + '_' + n_p + '_' + n_y}' data-f='${d_f ? 1 : 0}' data-j='${d_j ? 1 : 0}' data-p='${d_p ? 1 : 0}' data-y='${d_y ? 1 : 0}'>
-                        <img src='https://book.cathaypacific.com${static_path}common/skin/img/airlines/logo-${leg1_airline.toLowerCase()}.png'>
-                        <span class="flight_num">${leg1_airline + leg1_flight_no}
-                        <span class='stopover'>${stopcity}</span>
-                        ${leg2_airline + leg2_flight_no}</span>
+                        flightHTML += `<div class='flight_item ${(savedFlights[flightKey] ? ' saved' : '')}' data-direct='0' data-flightinfo='${flightKey}'  data-flightavail='${n_f + '_' + n_j + '_' + n_p + '_' + n_y}' data-f='${d_f ? 1 : 0}' data-j='${d_j ? 1 : 0}' data-p='${d_p ? 1 : 0}' data-y='${d_y ? 1 : 0}'>
+                        <img src='https://book.cathaypacific.com${staticPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png'>
+                        <span class="flight_num">${leg1Airline + leg1FlightNum}
+                        <span class='stopover'>${transitAirportCode}</span>
+                        ${leg2Airline + leg2FlightNum}</span>
                         ${available}
                         <span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z" fill="currentColor"></path></svg></span>
                         <span class="flight_save">${heartSvg}</span>
                     </div>
                     <div class="flight_info">
-                        <span class="info_flight">${leg1_airline + leg1_flight_no}</span>
-                        <span class="info_dept"><span>Departs:</span> ${leg1_dep_time}</span>
-                        <span class="info_arr"><span>Arrives:</span> ${leg1_arr_time}</span>
-                        <span class="info_transit"><span>Transit Time:</span> ${transit_time}</span>
-                        <span class="info_flight">${leg2_airline + leg2_flight_no}</span>
-                        <span class="info_dept"><span>Departs:</span> ${leg2_dep_time}</span>
-                        <span class="info_arr"><span>Arrives:</span> ${leg2_arr_time}</span>
-                        <span class="info_duration"><span>Total Flight Duration:</span> ${leg1_duration}</span>
+                        <span class="info_flight">${leg1Airline + leg1FlightNum}</span>
+                        <span class="info_dept"><span>Departs:</span> ${leg1DepTime}</span>
+                        <span class="info_arr"><span>Arrives:</span> ${leg1ArrTime}</span>
+                        <span class="info_transit"><span>Transit Time:</span> ${transitTime}</span>
+                        <span class="info_flight">${leg2Airline + leg2FlightNum}</span>
+                        <span class="info_dept"><span>Departs:</span> ${leg2DepTime}</span>
+                        <span class="info_arr"><span>Arrives:</span> ${leg2ArrTime}</span>
+                        <span class="info_duration"><span>Total Flight Duration:</span> ${leg1Duration}</span>
                     </div>
                     `
                         noFlights = false
                         flightHTML += '</div>'
                     }
-                    if (saved_flights[flightkey]) {
-                        saved_flights[flightkey] = {
+                    if (savedFlights[flightKey]) {
+                        savedFlights[flightKey] = {
                             f: n_f,
                             j: n_j,
                             p: n_p,
@@ -2595,18 +2595,18 @@
         autocomplete(inputTo, 'origins')
         getOrigins()
 
-        if (cont_query) {
+        if (contQuery) {
             resetContVars()
             // If over 5 minutes since cont query, don't auto search
-            if (Date.now() - cont_ts > 60 * 5 * 1000 && !debug) return
+            if (Date.now() - contTs > 60 * 5 * 1000 && !debug) return
             btnBatch.innerHTML = lang.searching_w_cancel
             btnBatch.classList.add('bulkSearching')
             document.body.classList.add('cont_query')
             setTimeout(() => {
-                if (cont_saved) {
+                if (contSaved) {
                     savedSearch()
                 } else {
-                    bulkClick(!cont_batch)
+                    bulkClick(!contBatch)
                 }
             }, 1000)
         }
