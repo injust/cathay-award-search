@@ -248,10 +248,6 @@
     shadowContainer.classList.add('elevated_on')
     shadowRoot.appendChild(shadowContainer)
 
-    if (debug && unsafeWindow.shadowRoot == undefined) {
-        unsafeWindow.shadowRoot = shadowRoot
-    }
-
     const initRoot = () => {
         log('initRoot()')
 
