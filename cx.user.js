@@ -340,7 +340,7 @@
         premium_full: 'Premium Economy',
         economy_full: 'Economy Class',
         date: 'Date',
-        no_flights: 'No Redemption Availability',
+        no_availability: 'No Redemption Availability',
         expired: 'Search Next 20 (Requires Refresh)',
         super: 'SuperCharged Award Search',
         error: 'Unknown Error... Try Again',
@@ -810,7 +810,7 @@
         .bulk_table td.bulk_flights .flight_list:empty:after {
             display: block;
             height: 24px;
-            content: "${lang.no_flights}";
+            content: "${lang.no_availability}";
             margin-bottom: 5px;
             margin-top: -3px;
             margin-left: 10px;
@@ -820,7 +820,6 @@
             color: #AAA;
            }
         .bulk_table td.bulk_flights .flight_list span.bulk_response_error { line-height: 24px;}
-        .bulk_table .bulk_flights .bulk_no_flights { display:block;padding-bottom:5px; }
         .bulk_response_error { display:block;padding-bottom:5px;padding-left:5px;padding-right:5px; color:red; }
         .bulk_table .flight_title { display: block; background: #dde8e8; font-size: 12px; line-height: 15px; padding: 3px 7px; margin-bottom: 7px; margin-top: 2px; border-bottom: 3px solid #357677; position:relative; }
         .bulk_go_book { float:right; margin-right:5px; margin-left:10px; font-weight:bold;}
@@ -2415,7 +2414,6 @@
 
         if (pageBom.modelObject?.isContainingErrors) {
             flightHTML += `<span class='bulk_response_error'><strong>Error:</strong> ${pageBom.modelObject?.messages[0]?.text}</span>`
-            // stopBatch()
         } else {
             const flights = pageBom.modelObject?.availabilities?.upsell?.bounds[0].flights
             flights.forEach((flight) => {
