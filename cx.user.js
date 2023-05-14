@@ -77,7 +77,7 @@
     // Initialize Variables
     // ============================================================
 
-    let route_changed = false
+    let routeChanged = false
 
     // Retrieve CX Parameters
 
@@ -85,7 +85,7 @@
     let requestVars = {}
     let tab_id = ''
     const availability_url = 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability?TAB_ID='
-    let form_submit_url = availability_url + tab_id
+    let formSubmitUrl = availability_url + tab_id
 
     const initCXvars = () => {
         if (typeof staticFilesPath !== 'undefined' && static_path != staticFilesPath) {
@@ -102,14 +102,14 @@
             tab_id = requestParams.TAB_ID || ''
         }
 
-        form_submit_url = typeof formSubmitUrl !== 'undefined' ? formSubmitUrl : availability_url + tab_id
+        formSubmitUrl = typeof formSubmitUrl !== 'undefined' ? formSubmitUrl : availability_url + tab_id
     }
 
-    const browser_locale = navigator.language
-    const browser_lang = 'en'
-    const browser_country = 'CA'
+    const browserLocale = navigator.language
+    const browserLang = 'en'
+    const browserCountry = 'CA'
 
-    const login_url = `https://www.cathaypacific.com/content/cx/${browser_lang}_${browser_country}/sign-in.html?loginreferrer=${encodeURI(`https://www.cathaypacific.com/cx/${browser_lang}_${browser_country}/book-a-trip/redeem-flights/redeem-flight-awards.html`)}`
+    const loginUrl = `https://www.cathaypacific.com/content/cx/${browserLang}_${browserCountry}/sign-in.html?loginreferrer=${encodeURI(`https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`)}`
 
     const r = Math.random()
     let t = tab_id || ''
@@ -322,8 +322,8 @@
     // ============================================================
 
     const lang = {
-        ec: browser_country,
-        el: browser_lang,
+        ec: browserCountry,
+        el: browserLang,
         search: 'Search',
         searching: `<img src='https://book.cathaypacific.com${static_path}common/skin/img/icons/cx/icon-loading.gif'> Searching...`,
         searching_w_cancel: `<img src='https://book.cathaypacific.com${static_path}common/skin/img/icons/cx/icon-loading.gif'> Searching... (Click to Stop)`,
@@ -377,7 +377,7 @@
         <div class='unelevated_form'>
             <div class='unelevated_title'><a href="https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html">Unelevated Award Search</a></div>
 
-            <div class='login_prompt hidden'><span class='unelevated_error'><a href="${login_url}">${lang.login}</a></span></div>
+            <div class='login_prompt hidden'><span class='unelevated_error'><a href="${loginUrl}">${lang.login}</a></span></div>
 
             <div class='unelevated_faves unelevated_faves_hidden'>
                 <div class="faves_tabs">
@@ -431,7 +431,7 @@
 <label><input type="checkbox" id="filter_premium" checked>${lang.premium}</label>
 <label><input type="checkbox" id="filter_economy" checked>${lang.economy}</label>
 </div>
-                <table class='bulk_table show_first show_business show_premium show_economy'><thead><th class='bulk_date'>${lang.date}</th><th class='bulk_flights'>${lang.flights} <span class='info-x info-f'>${lang.first}</span><span class='info-x info-j'>${lang.business}</span><span class='info-x info-p'>${lang.premium}</span><span class='info-x info-y'>${lang.economy}</span></th></thead><tbody></tbody></table>
+                <table class='bulk_table show_first show_business show_premium show_economy'><thead><th class='bulkDate'>${lang.date}</th><th class='bulk_flights'>${lang.flights} <span class='info-x info-f'>${lang.first}</span><span class='info-x info-j'>${lang.business}</span><span class='info-x info-p'>${lang.premium}</span><span class='info-x info-y'>${lang.economy}</span></th></thead><tbody></tbody></table>
             </div>
             <div class="bulk_footer">
                 <div class="bulk_footer_container">
@@ -805,8 +805,8 @@
         .bulk_table td { background:white; }
         .bulk_table tr:nth-child(even) td { background:#f9f9f9; }
         .bulk_table th, .bulk_table td { border: 1px solid #c6c2c1; padding: 5px; }
-        .bulk_table .bulk_date { width:80px; text-align:center; }
-        .bulk_table .bulk_date a { text-decoration:underline !important; font-family: "Cathay Sans EN", CathaySans_Md, sans-serif; font-weight: 400; display:block;margin-bottom:5px;}
+        .bulk_table .bulkDate { width:80px; text-align:center; }
+        .bulk_table .bulkDate a { text-decoration:underline !important; font-family: "Cathay Sans EN", CathaySans_Md, sans-serif; font-weight: 400; display:block;margin-bottom:5px;}
         .bulk_table td.bulk_flights { padding:5px 5px 0 5px; font-family: "Cathay Sans EN", CathaySans_Rg, sans-serif; font-weight: 400; line-height:0px; }
         .bulk_table td.bulk_flights .flight_list:empty:after {
             display: block;
@@ -1010,7 +1010,7 @@
         @media screen and (max-width: 500px) { .bulk_footer.bulk_sticky .bulk_footer_container  { max-width: 838px;} }
         button.bulk_submit {position:relative;background-color: #367778; border: none; color: white; vertical-align: middle; margin: 0px auto; height: 45px; line-height: 35px; padding: 5px 0; width: 100%; display: block; font-family: "GT Walsheim","Cathay Sans EN", CathaySans_Rg, sans-serif !important;font-size:15px}
         .bulk_submit img, button.uef_search img {line-height: 35px; height: 25px; width:auto; display: inline-block; margin-right: 10px; vertical-align: -7px;}
-        .bulk_searching, .uef_search.searching  {background-color: #b9cdc9 !important;}
+        .bulkSearching, .uef_search.searching  {background-color: #b9cdc9 !important;}
         .col-select-departure-flight > .row:last-of-type { padding-bottom: 140px; }
         span.info-x { border-radius: 5px; padding: 2px 5px; margin-left: 5px; color:white; font-size:10px; font-family: CathaySans_Md, Cathay Sans EN; font-weight: 400; }
         span.info-f { background: #832c40;}
@@ -1256,7 +1256,7 @@
         })
 
         btnBatch.addEventListener('click', (e) => {
-            bulk_click()
+            bulkClick()
         })
 
         shadowRoot.querySelector('.switch').addEventListener('click', (e) => {
@@ -1284,7 +1284,7 @@
             setTimeout(() => {
                 checkAirportCodes(this)
                 if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
-                route_changed = true
+                routeChanged = true
                 if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${inputFrom.value} - ${inputTo.value} ${lang.bulk_flights}`
                 const dest = this.value.match(/[A-Z]{3}$/)
                 if (dest) getDestinations(dest[0])
@@ -1297,7 +1297,7 @@
             setTimeout(() => {
                 checkAirportCodes(this)
                 if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
-                route_changed = true
+                routeChanged = true
                 if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${inputFrom.value} - ${inputTo.value} ${lang.bulk_flights}`
             }, 0)
         })
@@ -1333,7 +1333,7 @@
                 alert(lang.invalid_date)
                 this.value = uef_date
             } else {
-                route_changed = true
+                routeChanged = true
                 if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${inputFrom.value} - ${inputTo.value} ${lang.bulk_flights}`
             }
         })
@@ -1349,8 +1349,8 @@
         divTable.addEventListener('click', function (e) {
             let key
             if (e.target.dataset.book) {
-                stop_batch()
-                // stop_search = true
+                stopBatch()
+                // stopSearch = true
                 // searching = false
                 e.target.innerText = lang.loading
                 regularSearch([{
@@ -1366,11 +1366,11 @@
                 if (e.target.classList.contains('bulk_saved')) {
                     e.target.classList.remove('bulk_saved')
                     delete saved[key]
-                    update_saved_count()
+                    updateSavedCount()
                 } else {
                     e.target.classList.add('bulk_saved')
                     saved[key] = true
-                    update_saved_count()
+                    updateSavedCount()
                 }
                 valueSet('saved', saved)
             } else if (e.target.classList.contains('flight_save')) {
@@ -1379,7 +1379,7 @@
                 if (e.target.parentNode.classList.contains('saved')) {
                     e.target.parentNode.classList.remove('saved')
                     delete saved_flights[key]
-                    update_saved_flights()
+                    updateSavedFlights()
                 } else {
                     e.target.parentNode.classList.add('saved')
                     saved_flights[key] = {
@@ -1388,7 +1388,7 @@
                         p: flightavail[2],
                         y: flightavail[3]
                     }
-                    update_saved_flights()
+                    updateSavedFlights()
                 }
                 valueSet('saved_flights', saved_flights)
             } else if (e.target.classList.contains('flight_item')) {
@@ -1413,8 +1413,8 @@
             if (e.target.dataset.remove) {
                 delete saved[e.target.dataset.remove]
                 delete saved_flights[e.target.dataset.remove]
-                update_saved_count()
-                update_saved_flights()
+                updateSavedCount()
+                updateSavedFlights()
                 valueSet('saved', saved)
                 valueSet('saved_flights', saved_flights)
             }
@@ -1422,7 +1422,7 @@
 
         divSavedQueries.addEventListener('click', (e) => {
             if (e.target.dataset.book) {
-                stop_batch()
+                stopBatch()
                 e.target.innerText = lang.loading
                 regularSearch([{
                     from: (e.target.dataset.from ? e.target.dataset.from : uef_from),
@@ -1452,9 +1452,9 @@
                     }
                 }
 
-                const segments_array = divSavedQueries.querySelectorAll('.selected')
+                const segmentsArray = divSavedQueries.querySelectorAll('.selected')
 
-                if (segments_array.length == 6) {
+                if (segmentsArray.length == 6) {
                     divSavedQueries.querySelectorAll('input:not(:checked)').forEach(item => {
                         item.disabled = true
                     })
@@ -1465,7 +1465,7 @@
                 }
 
                 let pos = 1
-                Array.from(segments_array).sort((a, b) => {
+                Array.from(segmentsArray).sort((a, b) => {
                     if (+a.dataset.date > +b.dataset.date) return 1
                     log(a.dataset.date, b.dataset.date)
                     if (a.dataset.date == b.dataset.date) return (a.dataset.new ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1))
@@ -1519,7 +1519,7 @@
                 alert('No Saved Queries')
             } else {
                 this.innerText = lang.loading
-                saved_search()
+                savedSearch()
             }
         })
 
@@ -1528,17 +1528,17 @@
                 alert('No Selected Segments')
             } else {
                 this.innerText = lang.loading
-                const to_search = []
+                const toSearch = []
                 Array.from(shadowRoot.querySelectorAll('.saved_query.selected')).sort((a, b) => {
                     return a.dataset.segment - b.dataset.segment
                 }).forEach(segment => {
-                    to_search.push({
+                    toSearch.push({
                         date: segment.dataset.date,
                         from: segment.dataset.route.substring(0, 3),
                         to: segment.dataset.route.substring(3, 6)
                     })
                 })
-                regularSearch(to_search, {
+                regularSearch(toSearch, {
                     adult: shadowRoot.querySelector('#multi_adult').value,
                     child: shadowRoot.querySelector('#multi_child').value
                 }, shadowRoot.querySelector('#multi_cabin').value)
@@ -1780,27 +1780,27 @@
     // ============================================================
 
     let searching = false
-    let stop_search = false
-    let remaining_days = 20
+    let stopSearch = false
+    let remainingDays = 20
 
     const resetSearch = () => {
         searching = false
-        remaining_days = 20
+        remainingDays = 20
         btnBatch.innerHTML = `${lang.bulk_batch} ${inputFrom.value} - ${inputTo.value} ${lang.bulk_flights}`
-        btnBatch.classList.remove('bulk_searching')
+        btnBatch.classList.remove('bulkSearching')
         linkSearchSaved.innerText = `${lang.search_selected} »`
     }
 
-    const stop_batch = () => {
+    const stopBatch = () => {
         log('Batch Clicked. Stopping Search')
 
-        stop_search = true
+        stopSearch = true
         resetSearch()
-        if (!route_changed) btnBatch.innerHTML = lang.next_batch // Override resetSearch()
+        if (!routeChanged) btnBatch.innerHTML = lang.next_batch // Override resetSearch()
         batchError()
     }
 
-    const bulk_click = (single_date = false) => {
+    const bulkClick = (singleDate = false) => {
         shadowRoot.querySelector('.bulk_results').classList.remove('bulk_results_hidden')
 
         if (!searching) {
@@ -1812,9 +1812,9 @@
             uef_adult = valueSet('uef_adult', parseInt(inputAdult.value))
             uef_child = valueSet('uef_child', parseInt(inputChild.value))
 
-            if (route_changed) {
-                bulk_date = uef_date
-                route_changed = false
+            if (routeChanged) {
+                bulkDate = uef_date
+                routeChanged = false
 
                 divTableBody.innerHTML = ''
                 divUeContainer.scrollIntoView({
@@ -1824,38 +1824,38 @@
             }
 
             btnBatch.innerHTML = lang.searching_w_cancel
-            btnBatch.classList.add('bulk_searching')
-            bulk_search(single_date)
+            btnBatch.classList.add('bulkSearching')
+            bulkSearch(singleDate)
         } else {
-            stop_batch()
+            stopBatch()
         }
     }
 
-    const saved_search = () => {
-        const to_search = []
+    const savedSearch = () => {
+        const toSearch = []
         Object.keys(saved).forEach(query => {
-            to_search.push({
+            toSearch.push({
                 date: query.substring(0, 8),
                 from: query.substring(8, 11),
                 to: query.substring(11, 14)
             })
         })
-        to_search.sort((a, b) => {
+        toSearch.sort((a, b) => {
             return a.date - b.date
         })
 
-        let ss_query = to_search.shift()
+        let ssQuery = toSearch.shift()
 
         shadowRoot.querySelector('.bulk_results').classList.remove('bulk_results_hidden')
         btnBatch.innerHTML = lang.searching_w_cancel
-        btnBatch.classList.add('bulk_searching')
+        btnBatch.classList.add('bulkSearching')
         divTableBody.innerHTML = ''
 
         if (!cont_query) {
             regularSearch([{
-                from: ss_query.from,
-                to: ss_query.to,
-                date: ss_query.date
+                from: ssQuery.from,
+                to: ssQuery.to,
+                date: ssQuery.date
             }], {
                 adult: 1,
                 child: 0
@@ -1864,30 +1864,30 @@
         }
 
         const populate_next_query = (flights) => {
-            if (!to_search.length) {
-                insertResults(ss_query.from, ss_query.to, ss_query.date, flights)
-                stop_batch()
-                stop_search = false // Override stop_batch()
+            if (!toSearch.length) {
+                insertResults(ssQuery.from, ssQuery.to, ssQuery.date, flights)
+                stopBatch()
+                stopSearch = false // Override stopBatch()
             } else {
-                insertResults(ss_query.from, ss_query.to, ss_query.date, flights)
-                ss_query = to_search.shift()
-                searchAvailability(ss_query.from, ss_query.to, ss_query.date, 1, 0, populate_next_query)
+                insertResults(ssQuery.from, ssQuery.to, ssQuery.date, flights)
+                ssQuery = toSearch.shift()
+                searchAvailability(ssQuery.from, ssQuery.to, ssQuery.date, 1, 0, populate_next_query)
             }
         }
 
         // You can't resume a saved search after stopping it
         // It will actually start a bulk search and append the results to the saved search results
-        route_changed = true // To clear the saved search results
+        routeChanged = true // To clear the saved search results
         // TODO: Make sure the button changes back to a normal bulk search button
 
-        searchAvailability(ss_query.from, ss_query.to, ss_query.date, 1, 0, populate_next_query)
+        searchAvailability(ssQuery.from, ssQuery.to, ssQuery.date, 1, 0, populate_next_query)
     }
 
-    const update_saved_count = () => {
-        log('update_saved_count()')
+    const updateSavedCount = () => {
+        log('updateSavedCount()')
 
-        let saved_list = ''
-        const saved_arr = []
+        let savedList = ''
+        const savedArr = []
         Object.keys(saved).forEach(query => {
             const sdate = new Date(query.substring(0, 4), query.substring(4, 6) - 1, query.substring(6, 8))
             const ndate = new Date()
@@ -1895,36 +1895,36 @@
                 delete saved[query]
                 return
             }
-            saved_arr.push({
+            savedArr.push({
                 date: query.substring(0, 8),
                 from: query.substring(8, 11).toUpperCase(),
                 to: query.substring(11, 14).toUpperCase()
             })
         })
-        saved_arr.sort((a, b) => {
+        savedArr.sort((a, b) => {
             return a.date - b.date
         })
 
-        saved_arr.forEach(query => {
+        savedArr.forEach(query => {
             const date = query.date
             const from = query.from
             const to = query.to
-            saved_list += `<div class="saved_query" data-date="${date}" data-route="${from + to}"><label><input type="checkbox" data-route="${date}${from}${to}" data-date="${date}"> ${toDashedDate(date)} ${from}-${to}</label>
+            savedList += `<div class="saved_query" data-date="${date}" data-route="${from + to}"><label><input type="checkbox" data-route="${date}${from}${to}" data-date="${date}"> ${toDashedDate(date)} ${from}-${to}</label>
             <a href="javascript:void(0);" class="saved_book" data-book="true" data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
             <span class="leg"></span>
             <a href="javascript:void(0);" class="saved_remove" data-remove="${date}${from}${to}">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg>
             </a></div>`
         })
-        divSavedQueries.innerHTML = saved_list
-        shadowRoot.querySelector('.unelevated_saved a span').innerText = saved_arr.length
+        divSavedQueries.innerHTML = savedList
+        shadowRoot.querySelector('.unelevated_saved a span').innerText = savedArr.length
     }
 
-    const update_saved_flights = () => {
-        log('update_saved_flights()')
+    const updateSavedFlights = () => {
+        log('updateSavedFlights()')
 
-        let saved_list = ''
-        const saved_arr = []
+        let savedList = ''
+        const savedArr = []
         Object.keys(saved_flights).forEach(query => {
             const sdate = new Date(query.substring(0, 4), query.substring(4, 6) - 1, query.substring(6, 8))
             const ndate = new Date()
@@ -1932,7 +1932,7 @@
                 delete saved_flights[query]
                 return
             }
-            saved_arr.push({
+            savedArr.push({
                 fullquery: query,
                 date: query.substring(0, 8),
                 from: query.substring(8, 11).toUpperCase(),
@@ -1946,11 +1946,11 @@
                 y: saved_flights[query].y
             })
         })
-        saved_arr.sort((a, b) => {
+        savedArr.sort((a, b) => {
             return a.date - b.date
         })
 
-        saved_arr.forEach(query => {
+        savedArr.forEach(query => {
             const fullquery = query.fullquery
             const date = query.date
             const from = query.from
@@ -1964,7 +1964,7 @@
                 p: query.p,
                 y: query.y
             }
-            saved_list += `<div class="saved_flight" data-date="${date}" data-route="${from + to}">
+            savedList += `<div class="saved_flight" data-date="${date}" data-route="${from + to}">
             <label>
                 <input type="checkbox" data-route="${date}${from}${to}" data-date="${date}">
                 <span>
@@ -1988,8 +1988,8 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg>
             </a></div>`
         })
-        divSavedFlights.innerHTML = saved_list
-        shadowRoot.querySelector('.unelevated_saved a span').innerText = saved_arr.length
+        divSavedFlights.innerHTML = savedList
+        shadowRoot.querySelector('.unelevated_saved a span').innerText = savedArr.length
     }
 
     const checkAirportCodes = (elem) => {
@@ -2100,7 +2100,7 @@
     // Get New TAB_ID
     // ============================================================
 
-    const response_parser = (response, regex) => {
+    const responseParser = (response, regex) => {
         let result = response.match(regex)
         try {
             result = JSON.parse(result[1])
@@ -2125,9 +2125,9 @@
                 const data = JSON.parse(response.responseText)
                 const parameters = data.parameters
                 const urlToPost = data.urlToPost || 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability'
-                let form_data = ''
+                let formData = ''
                 for (const key in parameters) {
-                    form_data += `${key}=${parameters[key]}&`
+                    formData += `${key}=${parameters[key]}&`
                 }
 
                 log('Requesting New Tab ID...')
@@ -2137,7 +2137,7 @@
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    data: form_data,
+                    data: formData,
                     withCredentials: 'true',
                     onreadystatechange: (response) => {
                         let errorBOM = ''
@@ -2145,31 +2145,31 @@
                         if (response.readyState == 4 && response.status == 200) {
                             log('Tab ID Response Received. Parsing...')
                             const data = response.responseText
-                            requestVars = response_parser(data, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
+                            requestVars = responseParser(data, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
                             log('requestVars:', requestVars)
                             if (!requestVars) {
-                                errorBOM = response_parser(data, /errorBom = ([^;]+)/)
+                                errorBOM = responseParser(data, /errorBom = ([^;]+)/)
                                 if (errorBOM?.modelObject?.step == 'Error') {
                                     errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
                                 }
                                 log('Tab ID Could not be parsed')
-                                batchError(`<strong>Error:</strong> ${errorMessage} (<a href='${login_url}'>Login</a>) `)
+                                batchError(`<strong>Error:</strong> ${errorMessage} (<a href='${loginUrl}'>Login</a>) `)
                                 resetSearch()
                                 return false
                             }
                             tab_id = requestVars.TAB_ID ? requestVars.TAB_ID : ''
                             log('New Tab ID:', tab_id)
                             batchError()
-                            form_submit_url = availability_url + tab_id
+                            formSubmitUrl = availability_url + tab_id
                             if (callback) callback()
                         } else if (response.readyState == 4) {
-                            errorBOM = response_parser(response.responseText, /errorBom = ([^;]+)/)
+                            errorBOM = responseParser(response.responseText, /errorBom = ([^;]+)/)
                             if (errorBOM?.modelObject?.step == 'Error') {
                                 errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
                             }
                             log('Failed to receive Tab ID')
                             resetSearch()
-                            batchError(`<strong>Error:</strong> ${errorMessage} ( <a href='${login_url}'>Login</a> ) `)
+                            batchError(`<strong>Error:</strong> ${errorMessage} ( <a href='${loginUrl}'>Login</a> ) `)
                         }
                     }
                 }, true)
@@ -2188,18 +2188,18 @@
     }], passengers = {
         adult: 1,
         child: 0
-    }, cabinclass = 'Y', is_cont_query = false, is_cont_batch = false, is_cont_saved = false) => {
-        let cx_string
+    }, cabinclass = 'Y', isContQuery = false, isContBatch = false, isContSaved = false) => {
+        let cxString
         if (route.length == 1) {
-            cx_string = JSON.stringify(newQueryPayload(route[0], passengers, cabinclass, true))
+            cxString = JSON.stringify(newQueryPayload(route[0], passengers, cabinclass, true))
         } else if (route.length > 1) {
-            cx_string = JSON.stringify(newMultiPayload(route, passengers, cabinclass))
+            cxString = JSON.stringify(newMultiPayload(route, passengers, cabinclass))
         } else {
             return
         }
 
-        // cx_string = JSON.stringify(newQueryPayload(uef_from, uef_to, uef_date, uef_adult, uef_child))
-        log('cx_string:', cx_string)
+        // cxString = JSON.stringify(newQueryPayload(uef_from, uef_to, uef_date, uef_adult, uef_child))
+        log('cxString:', cxString)
         btnSearch.innerHTML = lang.searching
         btnSearch.classList.add('searching')
         httpRequest({
@@ -2209,22 +2209,22 @@
                 'Content-Type': 'application/json'
             },
             withCredentials: 'true',
-            data: cx_string,
+            data: cxString,
             onload: (response) => {
                 const data = JSON.parse(response.responseText)
                 const parameters = data.parameters
                 const urlToPost = data.urlToPost || 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability'
                 log('regularSearch parameters:', parameters)
-                const action_url = new URL(urlToPost)
-                if (is_cont_query) valueSet('cont_query', true)
-                if (is_cont_batch) valueSet('cont_batch', true)
-                if (is_cont_saved) valueSet('cont_saved', true)
+                const actionUrl = new URL(urlToPost)
+                if (isContQuery) valueSet('cont_query', true)
+                if (isContBatch) valueSet('cont_batch', true)
+                if (isContSaved) valueSet('cont_saved', true)
                 valueSet('cont_ts', Date.now())
                 // Create a form dynamically
                 const form = document.createElement('form')
                 form.setAttribute('name', 'regular_search_form')
                 form.setAttribute('method', 'post')
-                form.setAttribute('action', action_url)
+                form.setAttribute('action', actionUrl)
 
                 for (const key in parameters) {
                     const input = document.createElement('input')
@@ -2245,15 +2245,15 @@
     // Bulk Search
     // ============================================================
 
-    let bulk_date = ''
+    let bulkDate = ''
 
-    const bulk_search = (single_date = false) => {
-        log('bulk_search start, remaining_days:', remaining_days)
+    const bulkSearch = (singleDate = false) => {
+        log('bulkSearch start, remainingDays:', remainingDays)
 
-        let no_continue = false
-        if (remaining_days-- == 0) {
-            stop_batch()
-            no_continue = true
+        let noContinue = false
+        if (remainingDays-- == 0) {
+            stopBatch()
+            noContinue = true
         }
 
         if (!cont_query) {
@@ -2268,20 +2268,20 @@
             return
         }
 
-        bulk_date ||= uef_date
+        bulkDate ||= uef_date
 
         const routes = []
-        const rt_from = uef_from.split(',')
-        const rt_to = uef_to.split(',')
-        const query_count = rt_from.length * rt_to.length
+        const rtFrom = uef_from.split(',')
+        const rtTo = uef_to.split(',')
+        const queryCount = rtFrom.length * rtTo.length
 
-        if (!no_continue & remaining_days > Math.ceil(25 / query_count)) {
-            remaining_days = Math.ceil(25 / query_count) - 1
+        if (!noContinue & remainingDays > Math.ceil(25 / queryCount)) {
+            remainingDays = Math.ceil(25 / queryCount) - 1
         }
 
         if (r == t) {
-            rt_from.forEach(from => {
-                rt_to.forEach(to => {
+            rtFrom.forEach(from => {
+                rtTo.forEach(to => {
                     routes.push({
                         from,
                         to
@@ -2290,26 +2290,26 @@
             })
         } else {
             routes.push({
-                from: rt_from[0],
-                to: rt_to[0]
+                from: rtFrom[0],
+                to: rtTo[0]
             })
         }
 
-        let this_route = routes.shift()
+        let thisRoute = routes.shift()
 
-        const populate_next_route = (flights) => {
-            insertResults(this_route.from, this_route.to, bulk_date, flights)
+        const populateNextRoute = (flights) => {
+            insertResults(thisRoute.from, thisRoute.to, bulkDate, flights)
 
             if (!routes.length) {
-                bulk_date = dateAdd(1, bulk_date)
-                if (single_date) stop_batch()
-                bulk_search()
+                bulkDate = dateAdd(1, bulkDate)
+                if (singleDate) stopBatch()
+                bulkSearch()
             } else {
-                this_route = routes.shift()
-                searchAvailability(this_route.from, this_route.to, bulk_date, uef_adult, uef_child, populate_next_route)
+                thisRoute = routes.shift()
+                searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uef_adult, uef_child, populateNextRoute)
             }
         }
-        searchAvailability(this_route.from, this_route.to, bulk_date, uef_adult, uef_child, populate_next_route)
+        searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uef_adult, uef_child, populateNextRoute)
     }
 
     // ============================================================
@@ -2317,8 +2317,8 @@
     // ============================================================
 
     const searchAvailability = (from, to, date, adult, child, callback) => {
-        if (stop_search) {
-            stop_search = false
+        if (stopSearch) {
+            stopSearch = false
             searching = false
             return
         }
@@ -2356,7 +2356,7 @@
 
         httpRequest({
             method: 'POST',
-            url: form_submit_url,
+            url: formSubmitUrl,
             withCredentials: 'true',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -2364,7 +2364,7 @@
             },
             data: params,
             onreadystatechange: (response) => {
-                const search_again = () => {
+                const searchAgain = () => {
                     searchAvailability(from, to, date, adult, child, callback)
                 }
                 if (response.readyState == 4 && response.status == 200) {
@@ -2382,10 +2382,10 @@
                     callback(pageBom)
                 } else if (response.readyState == 4 && response.status == 404) {
                     batchError(lang.key_exhausted)
-                    newTabID(search_again)
+                    newTabID(searchAgain)
                 } else if (response.readyState == 4 && response.status >= 300) {
                     batchError(lang.getting_key)
-                    newTabID(search_again)
+                    newTabID(searchAgain)
                 }
             }
         }, true)
@@ -2397,25 +2397,25 @@
 
     const insertResults = (from, to, date, pageBom) => {
         if (!shadowRoot.querySelector(`.bulk_table tr[data-date="${date}"]`)) {
-            const results_row = `<tr data-date='${date}'><td class='bulk_date'>
+            const resultsRow = `<tr data-date='${date}'><td class='bulkDate'>
         <a href='javascript:void(0)' data-book='true' data-date='${date}'>${toDashedDate(date)}</a>
         ${dateWeekday(date)}
         </td><td class='bulk_flights'></td></tr>`
-            divTableBody.insertAdjacentHTML('beforeend', results_row)
+            divTableBody.insertAdjacentHTML('beforeend', resultsRow)
         }
 
-        const heart_svg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="heart_save" viewBox="0 0 16 16"> <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"></path></svg>'
+        const heartSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="heart_save" viewBox="0 0 16 16"> <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"></path></svg>'
 
-        let noflights = true
+        let noFlights = true
         let flightHTML = `<div data-from="${from}" data-to="${to}">
     <span class="flight_title">${from} - ${to}
-    <a href="javascript:void(0)" class="bulk_save ${(saved[date + from + to] ? ' bulk_saved' : '')}" data-save="true" data-date="${date}" data-from="${from}" data-dest="${to}">${heart_svg}</a>
+    <a href="javascript:void(0)" class="bulk_save ${(saved[date + from + to] ? ' bulk_saved' : '')}" data-save="true" data-date="${date}" data-from="${from}" data-dest="${to}">${heartSvg}</a>
     <a href="javascript:void(0)" class="bulk_go_book" data-book="true" data-date="${date}" data-from="${from}" data-dest="${to}">Book &raquo;</a>
     </span><div class="flight_list">`
 
         if (pageBom.modelObject?.isContainingErrors) {
             flightHTML += `<span class='bulk_response_error'><strong>Error:</strong> ${pageBom.modelObject?.messages[0]?.text}</span>`
-            // stop_batch()
+            // stopBatch()
         } else {
             const flights = pageBom.modelObject?.availabilities?.upsell?.bounds[0].flights
             flights.forEach((flight) => {
@@ -2463,7 +2463,7 @@
                         <span class="flight_num">${leg1_airline + leg1_flight_no}</span>
                         ${available}
                         <span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z" fill="currentColor"></path></svg></span>
-                        <span class="flight_save">${heart_svg}</span>
+                        <span class="flight_save">${heartSvg}</span>
                     </div>
                     <div class="flight_info">
                         <span class="info_flight">${leg1_airline + leg1_flight_no}</span>
@@ -2472,7 +2472,7 @@
                         <span class="info_duration"><span>Total Flight Duration:</span> ${leg1_duration}</span>
                     </div>
                     `
-                        noflights = false
+                        noFlights = false
                         flightHTML += '</div>'
                     }
                     if (saved_flights[flightkey]) {
@@ -2482,7 +2482,7 @@
                             p: p1,
                             y: y1
                         }
-                        update_saved_flights()
+                        updateSavedFlights()
                     }
                 } else {
                     const f2 = +flight.segments[1].cabins?.F?.status || 0
@@ -2526,7 +2526,7 @@
                         ${leg2_airline + leg2_flight_no}</span>
                         ${available}
                         <span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z" fill="currentColor"></path></svg></span>
-                        <span class="flight_save">${heart_svg}</span>
+                        <span class="flight_save">${heartSvg}</span>
                     </div>
                     <div class="flight_info">
                         <span class="info_flight">${leg1_airline + leg1_flight_no}</span>
@@ -2539,7 +2539,7 @@
                         <span class="info_duration"><span>Total Flight Duration:</span> ${leg1_duration}</span>
                     </div>
                     `
-                        noflights = false
+                        noFlights = false
                         flightHTML += '</div>'
                     }
                     if (saved_flights[flightkey]) {
@@ -2549,7 +2549,7 @@
                             p: n_p,
                             y: n_y
                         }
-                        update_saved_flights()
+                        updateSavedFlights()
                     }
                 }
             })
@@ -2590,8 +2590,8 @@
         assignElements()
         addFormListeners()
         window.onscroll = stickyFooter
-        update_saved_count()
-        update_saved_flights()
+        updateSavedCount()
+        updateSavedFlights()
         autocomplete(inputFrom, 'origins')
         autocomplete(inputTo, 'origins')
         getOrigins()
@@ -2601,13 +2601,13 @@
             // If over 5 minutes since cont query, don't auto search
             if (Date.now() - cont_ts > 60 * 5 * 1000 && !debug) return
             btnBatch.innerHTML = lang.searching_w_cancel
-            btnBatch.classList.add('bulk_searching')
+            btnBatch.classList.add('bulkSearching')
             document.body.classList.add('cont_query')
             setTimeout(() => {
                 if (cont_saved) {
-                    saved_search()
+                    savedSearch()
                 } else {
-                    bulk_click(!cont_batch)
+                    bulkClick(!cont_batch)
                 }
             }, 1000)
         }
