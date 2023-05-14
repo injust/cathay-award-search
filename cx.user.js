@@ -2325,6 +2325,7 @@
 
         // If destination is not valid, abort
         if (!/^[A-Z]{3}$/.test(to)) {
+            // eslint-disable-next-line node/no-callback-literal
             cb({
                 modelObject: {
                     isContainingErrors: true,
