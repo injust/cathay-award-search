@@ -1373,8 +1373,8 @@
                 }
                 valueSet('saved', saved)
             } else if (e.target.classList.contains('flight_save')) {
-                key = e.target.parentNode.dataset.flightinfo
-                const flightAvail = e.target.parentNode.dataset.flightavail.split('_')
+                key = e.target.parentNode.dataset.flightInfo
+                const flightAvail = e.target.parentNode.dataset.flightAvail.split('_')
                 if (e.target.parentNode.classList.contains('saved')) {
                     e.target.parentNode.classList.remove('saved')
                     delete savedFlights[key]
@@ -2457,7 +2457,7 @@
                     flightKey = `${date}${from}${to}_${leg1Airline}${leg1FlightNum}`
                     if (available !== '') {
                         flightHTML += '<div class="flight_wrapper">'
-                        flightHTML += `<div class='flight_item direct ${(savedFlights[flightKey] ? ' saved' : '')}' data-flightinfo='${flightKey}' data-flightavail='${f1}_${j1}_${p1}_${y1}' data-direct='1' data-f='${(displayF ? 1 : 0)}' data-j='${(displayJ ? 1 : 0)}' data-p='${(displayP ? 1 : 0)}' data-y='${(displayY ? 1 : 0)}'>
+                        flightHTML += `<div class='flight_item direct ${(savedFlights[flightKey] ? ' saved' : '')}' data-flight-info='${flightKey}' data-flight-avail='${f1}_${j1}_${p1}_${y1}' data-direct='1' data-f='${(displayF ? 1 : 0)}' data-j='${(displayJ ? 1 : 0)}' data-p='${(displayP ? 1 : 0)}' data-y='${(displayY ? 1 : 0)}'>
                         <img src='https://book.cathaypacific.com${staticPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png'>
                         <span class="flight_num">${leg1Airline + leg1FlightNum}</span>
                         ${available}
@@ -2518,7 +2518,7 @@
                     flightKey = `${date}${from}${to}_${leg1Airline}${leg1FlightNum}_${transitAirportCode}_${leg2Airline}${leg2FlightNum}`
                     if (available !== '') {
                         flightHTML += '<div class="flight_wrapper">'
-                        flightHTML += `<div class='flight_item ${(savedFlights[flightKey] ? ' saved' : '')}' data-direct='0' data-flightinfo='${flightKey}'  data-flightavail='${numF}_${numJ}_${numP}_${numY}' data-f='${displayF ? 1 : 0}' data-j='${displayJ ? 1 : 0}' data-p='${displayP ? 1 : 0}' data-y='${displayY ? 1 : 0}'>
+                        flightHTML += `<div class='flight_item ${(savedFlights[flightKey] ? ' saved' : '')}' data-direct='0' data-flight-info='${flightKey}'  data-flight-avail='${numF}_${numJ}_${numP}_${numY}' data-f='${displayF ? 1 : 0}' data-j='${displayJ ? 1 : 0}' data-p='${displayP ? 1 : 0}' data-y='${displayY ? 1 : 0}'>
                         <img src='https://book.cathaypacific.com${staticPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png'>
                         <span class="flight_num">${leg1Airline + leg1FlightNum}
                         <span class='stopover'>${transitAirportCode}</span>
