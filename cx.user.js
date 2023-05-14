@@ -227,7 +227,7 @@
     const cont_saved = valueGet('cont_saved', false) // urlParams.has('cont_saved')
     const cont_ts = valueGet('cont_ts', 0) // urlParams.has('cont_ts') ? parseInt(urlParams.get('cont_ts')) : 0
 
-    const reset_cont_vars = () => {
+    const resetContVars = () => {
         valueSet('cont_query', false)
         valueSet('cont_batch', false)
         valueSet('cont_saved', false)
@@ -253,27 +253,27 @@
 
         addCss(styleCss)
 
-        const current_url = window.location.href
+        const currentUrl = window.location.href
 
-        if (current_url.includes('redeem-flight-awards.html')) {
+        if (currentUrl.includes('redeem-flight-awards.html')) {
             log('initRoot redeem-flight-awards.html')
 
-            reset_cont_vars()
+            resetContVars()
             waitForEl('.redibe-v3-flightsearch form').then((el) => {
                 el.before(shadowWrapper)
                 initSearchBox()
                 checkLogin()
             })
-        } else if (current_url.includes('facade.html')) {
+        } else if (currentUrl.includes('facade.html')) {
             log('initRoot facade.html')
 
-            reset_cont_vars()
+            resetContVars()
             waitForEl('.ibered__search-panel').then((el) => {
                 el.before(shadowWrapper)
                 initSearchBox()
                 checkLogin()
             })
-        } else if (current_url.includes('air/booking/availability')) {
+        } else if (currentUrl.includes('air/booking/availability')) {
             if (cont_query) {
                 log('initRoot air/booking/availability with cont_query')
 
@@ -290,7 +290,7 @@
             } else {
                 log('initRoot air/booking/availability without cont_query')
 
-                reset_cont_vars()
+                resetContVars()
                 waitForEl('#section-flights .bound-route, #section-flights-departure .bound-route').then((el) => {
                     shadowWrapper.style.margin = '30px 20px 0px 20px'
                     shadowWrapper.style.padding = 0
@@ -299,10 +299,10 @@
                     checkLogin()
                 })
             }
-        } else if (current_url.includes('air/booking/complexAvailability')) {
+        } else if (currentUrl.includes('air/booking/complexAvailability')) {
             log('initRoot air/booking/complexAvailability')
 
-            reset_cont_vars()
+            resetContVars()
             waitForEl('.mc-trips .bound-route').then((el) => {
                 shadowWrapper.style.margin = '30px 20px 0px 20px'
                 shadowWrapper.style.padding = 0
@@ -2593,7 +2593,7 @@
         getOrigins()
 
         if (cont_query) {
-            reset_cont_vars()
+            resetContVars()
             // If over 5 minutes since cont query, don't auto search
             if (Date.now() - cont_ts > 60 * 5 * 1000 && !debug) return
             btnBatch.innerHTML = lang.searching_w_cancel
