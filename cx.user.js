@@ -1746,12 +1746,12 @@
                     c += '</span>'
                     /* insert a input field that will hold the current array item's value */
                     c += `<input type='hidden' value='${airportCode}'>`
-                    b.dataset.city = airportCode
+                    b.dataset.airportCode = airportCode
                     b.innerHTML = c
                     /* execute a function when someone clicks on the item value (DIV element) */
                     b.addEventListener('click', function (e) {
                         /* insert the value for the autocomplete text field */
-                        inp.value = [inp.value.replace(/([,]?[^,]*)$/, ''), this.dataset.city].filter(Boolean).join(',')
+                        inp.value = [inp.value.replace(/([,]?[^,]*)$/, ''), this.dataset.airportCode].filter(Boolean).join(',')
                         inp.dispatchEvent(new Event('change'))
                         /* close the list of autocomplete values (or any other open lists of autocomplete values) */
                         closeAllLists()
@@ -1994,20 +1994,20 @@
     const checkAirportCodes = (el) => {
         log('checkAirportCodes()')
 
-        let cities = el.value.split(',')
-        const errorCities = []
-        cities = cities.filter(city => {
-            if (city.match(/^[A-Z]{3}$/)) {
+        let airportCodes = el.value.split(',')
+        const errorAirportCodes = []
+        airportCodes = airportCodes.filter(airportCode => {
+            if (airportCode.match(/^[A-Z]{3}$/)) {
                 return true
             } else {
-                if (city) errorCities.push(city)
+                if (airportCode) errorAirportCodes.push(airportCode)
                 return false
             }
         })
 
-        if (errorCities.length > 0) {
-            el.value = cities.join(',')
-            alert(`Removing ${errorCities.length > 1 ? lang.invalid_airports : lang.invalid_airport}: ${errorCities.join(',')}`)
+        if (errorAirportCodes.length > 0) {
+            el.value = airportCodes.join(',')
+            alert(`Removing ${errorAirportCodes.length > 1 ? lang.invalid_airports : lang.invalid_airport}: ${errorAirportCodes.join(',')}`)
         }
     }
 
