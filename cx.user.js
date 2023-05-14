@@ -395,11 +395,11 @@
             <div class='labels'>
                 <a href="javascript:void(0);" class="switch"><svg height="16px" width="16px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 365.352 365.352" xml:space="preserve" stroke-width="0" transform="rotate(180)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g> <path d="M363.155,169.453l-14.143-14.143c-1.407-1.407-3.314-2.197-5.304-2.197 c-1.989,0-3.897,0.79-5.304,2.197l-45.125,45.125v-57.503c0-50.023-40.697-90.721-90.721-90.721H162.3c-4.143,0-7.5,3.358-7.5,7.5 v20c0,4.142,3.357,7.5,7.5,7.5h40.26c30.725,0,55.721,24.996,55.721,55.721v57.503l-45.125-45.125 c-1.407-1.407-3.314-2.197-5.304-2.197c-1.989,0-3.896,0.79-5.304,2.197l-14.143,14.143c-1.406,1.406-2.196,3.314-2.196,5.303 c0,1.989,0.79,3.897,2.196,5.303l82.071,82.071c1.465,1.464,3.385,2.197,5.304,2.197c1.919,0,3.839-0.732,5.304-2.197 l82.071-82.071c1.405-1.406,2.196-3.314,2.196-5.303C365.352,172.767,364.561,170.859,363.155,169.453z"></path> <path d="M203.052,278.14h-40.26c-30.725,0-55.721-24.996-55.721-55.721v-57.503l45.125,45.126 c1.407,1.407,3.314,2.197,5.304,2.197c1.989,0,3.896-0.79,5.304-2.197l14.143-14.143c1.406-1.406,2.196-3.314,2.196-5.303 c0-1.989-0.79-3.897-2.196-5.303l-82.071-82.071c-2.93-2.929-7.678-2.929-10.607,0L2.196,185.292C0.79,186.699,0,188.607,0,190.596 c0,1.989,0.79,3.897,2.196,5.303l14.143,14.143c1.407,1.407,3.314,2.197,5.304,2.197s3.897-0.79,5.304-2.197l45.125-45.126v57.503 c0,50.023,40.697,90.721,90.721,90.721h40.26c4.143,0,7.5-3.358,7.5-7.5v-20C210.552,281.498,207.194,278.14,203.052,278.14z"></path> </svg></a>
                 <label class="labels_left"><span>From</span>
-                    <input tabindex="1" type='text' id='uef_from' name='uef_from' placeholder='TPE,HKG' value='${uef_from}'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clear_from" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></a></label>
+                    <input tabindex="1" type='text' id='uef_from' name='uef_from' placeholder='TPE,HKG' value='${uef_from}'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clearFrom" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></a></label>
                 <label class="labels_right"><span>Adults</span>
                     <input tabindex="4" type='number' inputmode='decimal' onClick='this.select()' id='uef_adult' name='uef_adult' placeholder='Adults' value='${uef_adult}' min='0'></label>
                 <label class="labels_left"><span>To</span>
-                    <input tabindex="2" type='text' id='uef_to' name='uef_to' placeholder='TYO,LHR,SFO' value='${uef_to}'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clear_to" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></label>
+                    <input tabindex="2" type='text' id='uef_to' name='uef_to' placeholder='TYO,LHR,SFO' value='${uef_to}'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clearTo" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></label>
                 <label class="labels_right"><span>Children</span>
                     <input tabindex="5" type='number' inputmode='decimal' onClick='this.select()' id='uef_child' name='uef_child' placeholder='Children' value='${uef_child}' min='0'></label>
                 <label class="labels_left"><span>Date</span>
@@ -754,7 +754,7 @@
         .unelevated_form .labels label.labels_right {width:35%;}
         .unelevated_form .labels label > span { position: absolute; top: 0px; left: 5px; color: #66686a; font-family: Cathay Sans EN, CathaySans_Rg, sans-serif; line-height: 25px; font-size: 10px;}
         .unelevated_form .labels input {  font-family: Cathay Sans EN, CathaySans_Rg, sans-serif; padding: 19px 5px 5px 5px; border-radius: 0px; border: 1px solid #bcbec0; display: inline-block; margin: 0px 8px 8px 0px; height: 45px; width: 100%; font-size:16px}
-        svg.clear_from, svg.clear_to {
+        svg.clearFrom, svg.clearTo {
             position: absolute;
             right: 20px;
             top: 15px;
@@ -1199,52 +1199,52 @@
     // Form Listeners
     // ============================================================
 
-    let btn_search, btn_batch
-    let input_from, input_to, input_date, input_adult, input_child
-    let clear_from, clear_to
-    let link_search_saved, link_search_multi
-    let div_filters, div_login_prompt, div_footer, div_ue_container, div_saved, div_faves_tabs, div_saved_queries, div_saved_flights, div_multi_box, div_table, div_table_body
+    let btnSearch, btnBatch
+    let inputFrom, inputTo, inputDate, inputAdult, inputChild
+    let clearFrom, clearTo
+    let linkSearchSaved, linkSearchMulti
+    let divFilters, divLoginPrompt, divFooter, divUeContainer, divSaved, divFavesTabs, divSavedQueries, divSavedFlights, divMultiBox, divTable, divTableBody
 
     const assignElements = () => {
         log('assignElements()')
 
-        btn_search = shadowRoot.querySelector('.uef_search') // Search Button
-        btn_batch = shadowRoot.querySelector('.bulk_submit') // Batch Search Button
+        btnSearch = shadowRoot.querySelector('.uef_search') // Search Button
+        btnBatch = shadowRoot.querySelector('.bulk_submit') // Batch Search Button
 
-        input_from = shadowRoot.querySelector('#uef_from')
-        input_to = shadowRoot.querySelector('#uef_to')
-        input_date = shadowRoot.querySelector('#uef_date')
-        input_adult = shadowRoot.querySelector('#uef_adult')
-        input_child = shadowRoot.querySelector('#uef_child')
+        inputFrom = shadowRoot.querySelector('#uef_from')
+        inputTo = shadowRoot.querySelector('#uef_to')
+        inputDate = shadowRoot.querySelector('#uef_date')
+        inputAdult = shadowRoot.querySelector('#uef_adult')
+        inputChild = shadowRoot.querySelector('#uef_child')
 
-        clear_from = shadowRoot.querySelector('.clear_from')
-        clear_to = shadowRoot.querySelector('.clear_to')
+        clearFrom = shadowRoot.querySelector('.clearFrom')
+        clearTo = shadowRoot.querySelector('.clearTo')
 
-        link_search_saved = shadowRoot.querySelector('.search_selected')
-        link_search_multi = shadowRoot.querySelector('.multi_search')
+        linkSearchSaved = shadowRoot.querySelector('.search_selected')
+        linkSearchMulti = shadowRoot.querySelector('.multi_search')
 
-        div_filters = shadowRoot.querySelector('.filters')
-        div_login_prompt = shadowRoot.querySelector('.login_prompt')
-        div_footer = shadowRoot.querySelector('.bulk_footer')
-        div_ue_container = shadowRoot.querySelector('.unelevated_form')
-        div_saved = shadowRoot.querySelector('.unelevated_faves')
-        div_faves_tabs = shadowRoot.querySelector('.unelevated_faves .faves_tabs')
-        div_saved_queries = shadowRoot.querySelector('.unelevated_faves .saved_queries')
-        div_saved_flights = shadowRoot.querySelector('.unelevated_faves .saved_flights')
-        div_multi_box = shadowRoot.querySelector('.multi_box')
-        div_table = shadowRoot.querySelector('.bulk_table')
-        div_table_body = shadowRoot.querySelector('.bulk_table tbody')
+        divFilters = shadowRoot.querySelector('.filters')
+        divLoginPrompt = shadowRoot.querySelector('.login_prompt')
+        divFooter = shadowRoot.querySelector('.bulk_footer')
+        divUeContainer = shadowRoot.querySelector('.unelevated_form')
+        divSaved = shadowRoot.querySelector('.unelevated_faves')
+        divFavesTabs = shadowRoot.querySelector('.unelevated_faves .faves_tabs')
+        divSavedQueries = shadowRoot.querySelector('.unelevated_faves .saved_queries')
+        divSavedFlights = shadowRoot.querySelector('.unelevated_faves .saved_flights')
+        divMultiBox = shadowRoot.querySelector('.multi_box')
+        divTable = shadowRoot.querySelector('.bulk_table')
+        divTableBody = shadowRoot.querySelector('.bulk_table tbody')
     }
 
     const addFormListeners = () => {
         log('addFormListeners()')
 
-        btn_search.addEventListener('click', function (e) {
-            uef_from = valueSet('uef_from', input_from.value)
-            uef_to = valueSet('uef_to', input_to.value)
-            uef_date = valueSet('uef_date', input_date.value)
-            uef_adult = valueSet('uef_adult', parseInt(input_adult.value))
-            uef_child = valueSet('uef_child', parseInt(input_child.value))
+        btnSearch.addEventListener('click', function (e) {
+            uef_from = valueSet('uef_from', inputFrom.value)
+            uef_to = valueSet('uef_to', inputTo.value)
+            uef_date = valueSet('uef_date', inputDate.value)
+            uef_adult = valueSet('uef_adult', parseInt(inputAdult.value))
+            uef_child = valueSet('uef_child', parseInt(inputChild.value))
             regularSearch([{
                 from: uef_from.substring(0, 3),
                 to: uef_to.substring(0, 3),
@@ -1255,20 +1255,20 @@
             }, 'Y', (uef_to.length > 3), false)
         })
 
-        btn_batch.addEventListener('click', (e) => {
+        btnBatch.addEventListener('click', (e) => {
             bulk_click()
         })
 
         shadowRoot.querySelector('.switch').addEventListener('click', (e) => {
-            const from = input_from.value
-            const to = input_to.value
-            input_from.value = to
-            input_to.value = from
-            input_from.dispatchEvent(new Event('change'))
-            input_to.dispatchEvent(new Event('change'))
+            const from = inputFrom.value
+            const to = inputTo.value
+            inputFrom.value = to
+            inputTo.value = from
+            inputFrom.dispatchEvent(new Event('change'))
+            inputTo.dispatchEvent(new Event('change'))
         });
 
-        [input_from, input_to].forEach(item => {
+        [inputFrom, inputTo].forEach(item => {
             item.addEventListener('keyup', function (e) {
                 if (r != t) return
                 if (e.keyCode == 32 || e.keyCode == 188 || e.keyCode == 13) {
@@ -1278,39 +1278,39 @@
             })
         })
 
-        input_from.addEventListener('change', function (e) {
+        inputFrom.addEventListener('change', function (e) {
             this.value = this.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
             // setTimeout(fn, 0) lets the page reflect the updated DOM
             setTimeout(() => {
                 checkAirportCodes(this)
                 if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
                 route_changed = true
-                if (!searching) btn_batch.innerHTML = `${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`
+                if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${inputFrom.value} - ${inputTo.value} ${lang.bulk_flights}`
                 const dest = this.value.match(/[A-Z]{3}$/)
                 if (dest) getDestinations(dest[0])
             }, 0)
         })
 
-        input_to.addEventListener('change', function (e) {
+        inputTo.addEventListener('change', function (e) {
             this.value = this.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
             // setTimeout(fn, 0) lets the page reflect the updated DOM
             setTimeout(() => {
                 checkAirportCodes(this)
                 if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
                 route_changed = true
-                if (!searching) btn_batch.innerHTML = `${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`
+                if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${inputFrom.value} - ${inputTo.value} ${lang.bulk_flights}`
             }, 0)
         })
 
         let inFocus = false;
 
-        [input_from, input_to].forEach(item => {
+        [inputFrom, inputTo].forEach(item => {
             item.addEventListener('focus', function (e) {
                 if (this.value.length > 0 && r == t) this.value += ','
             })
         });
 
-        [input_from, input_to].forEach(item => {
+        [inputFrom, inputTo].forEach(item => {
             item.addEventListener('click', function (e) {
                 if (r == t) {
                     if (!inFocus) this.setSelectionRange(this.value.length, this.value.length)
@@ -1321,32 +1321,32 @@
             })
         });
 
-        [input_from, input_to].forEach(item => {
+        [inputFrom, inputTo].forEach(item => {
             item.addEventListener('blur', function (e) {
                 this.value = this.value.replace(/,+$/, '')
                 inFocus = false
             })
         })
 
-        input_date.addEventListener('change', function (e) {
+        inputDate.addEventListener('change', function (e) {
             if (!isValidDate(this.value)) {
                 alert(lang.invalid_date)
                 this.value = uef_date
             } else {
                 route_changed = true
-                if (!searching) btn_batch.innerHTML = `${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`
+                if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${inputFrom.value} - ${inputTo.value} ${lang.bulk_flights}`
             }
         })
 
-        clear_from.addEventListener('click', (e) => {
-            input_from.value = ''
+        clearFrom.addEventListener('click', (e) => {
+            inputFrom.value = ''
         })
 
-        clear_to.addEventListener('click', (e) => {
-            input_to.value = ''
+        clearTo.addEventListener('click', (e) => {
+            inputTo.value = ''
         })
 
-        div_table.addEventListener('click', function (e) {
+        divTable.addEventListener('click', function (e) {
             let key
             if (e.target.dataset.book) {
                 stop_batch()
@@ -1409,7 +1409,7 @@
             })
         })
 
-        div_saved.addEventListener('click', function (e) {
+        divSaved.addEventListener('click', function (e) {
             if (e.target.dataset.remove) {
                 delete saved[e.target.dataset.remove]
                 delete saved_flights[e.target.dataset.remove]
@@ -1420,7 +1420,7 @@
             }
         })
 
-        div_saved_queries.addEventListener('click', (e) => {
+        divSavedQueries.addEventListener('click', (e) => {
             if (e.target.dataset.book) {
                 stop_batch()
                 e.target.innerText = lang.loading
@@ -1433,33 +1433,33 @@
                     child: 0
                 })
             } else if (e.target.type == 'checkbox') {
-                div_saved_queries.querySelectorAll('.selected').forEach((elm) => {
+                divSavedQueries.querySelectorAll('.selected').forEach((elm) => {
                     delete elm.dataset.new
                 })
 
                 if (e.target.checked) {
                     e.target.parentNode.parentNode.dataset.new = true
                     e.target.parentNode.parentNode.classList.add('selected')
-                    div_saved_queries.parentNode.classList.add('multi_on')
-                    div_multi_box.classList.remove('hidden')
+                    divSavedQueries.parentNode.classList.add('multi_on')
+                    divMultiBox.classList.remove('hidden')
                 } else {
                     e.target.parentNode.parentNode.classList.remove('selected')
                     e.target.parentNode.parentNode.querySelector('.leg').innerText = ''
                     delete e.target.parentNode.parentNode.dataset.segment
-                    if (!div_saved_queries.querySelectorAll('.selected').length) {
-                        div_saved_queries.parentNode.classList.remove('multi_on')
-                        div_multi_box.classList.add('hidden')
+                    if (!divSavedQueries.querySelectorAll('.selected').length) {
+                        divSavedQueries.parentNode.classList.remove('multi_on')
+                        divMultiBox.classList.add('hidden')
                     }
                 }
 
-                const segments_array = div_saved_queries.querySelectorAll('.selected')
+                const segments_array = divSavedQueries.querySelectorAll('.selected')
 
                 if (segments_array.length == 6) {
-                    div_saved_queries.querySelectorAll('input:not(:checked)').forEach(item => {
+                    divSavedQueries.querySelectorAll('input:not(:checked)').forEach(item => {
                         item.disabled = true
                     })
                 } else {
-                    div_saved_queries.querySelectorAll('input').forEach(item => {
+                    divSavedQueries.querySelectorAll('input').forEach(item => {
                         item.disabled = false
                     })
                 }
@@ -1478,43 +1478,43 @@
             }
         })
 
-        div_filters.querySelectorAll('input').forEach(item => {
+        divFilters.querySelectorAll('input').forEach(item => {
             item.addEventListener('click', (e) => {
                 if (e.target.id == 'filter_nonstop') {
                     if (e.target.checked) {
-                        div_table.classList.add('nonstop_only')
+                        divTable.classList.add('nonstop_only')
                     } else {
-                        div_table.classList.remove('nonstop_only')
+                        divTable.classList.remove('nonstop_only')
                     }
                 } else if (e.target.id == 'filter_first') {
                     if (e.target.checked) {
-                        div_table.classList.add('show_first')
+                        divTable.classList.add('show_first')
                     } else {
-                        div_table.classList.remove('show_first')
+                        divTable.classList.remove('show_first')
                     }
                 } else if (e.target.id == 'filter_business') {
                     if (e.target.checked) {
-                        div_table.classList.add('show_business')
+                        divTable.classList.add('show_business')
                     } else {
-                        div_table.classList.remove('show_business')
+                        divTable.classList.remove('show_business')
                     }
                 } else if (e.target.id == 'filter_premium') {
                     if (e.target.checked) {
-                        div_table.classList.add('show_premium')
+                        divTable.classList.add('show_premium')
                     } else {
-                        div_table.classList.remove('show_premium')
+                        divTable.classList.remove('show_premium')
                     }
                 } else if (e.target.id == 'filter_economy') {
                     if (e.target.checked) {
-                        div_table.classList.add('show_economy')
+                        divTable.classList.add('show_economy')
                     } else {
-                        div_table.classList.remove('show_economy')
+                        divTable.classList.remove('show_economy')
                     }
                 }
             })
         })
 
-        link_search_saved.addEventListener('click', function (e) {
+        linkSearchSaved.addEventListener('click', function (e) {
             if (!Object.keys(saved).length) {
                 alert('No Saved Queries')
             } else {
@@ -1523,7 +1523,7 @@
             }
         })
 
-        link_search_multi.addEventListener('click', function (e) {
+        linkSearchMulti.addEventListener('click', function (e) {
             if (!shadowRoot.querySelectorAll('.saved_query.selected').length) {
                 alert('No Selected Segments')
             } else {
@@ -1545,14 +1545,14 @@
             }
         })
 
-        div_faves_tabs.addEventListener('click', function (e) {
+        divFavesTabs.addEventListener('click', function (e) {
             if (e.target.classList.contains('tab_flights')) this.parentNode.classList.add('flights')
             if (e.target.classList.contains('tab_queries')) this.parentNode.classList.remove('flights')
         })
 
         shadowRoot.querySelector('.unelevated_saved a').addEventListener('click', function (e) {
             // alert(JSON.stringify(saved))
-            div_saved.classList.toggle('unelevated_faves_hidden')
+            divSaved.classList.toggle('unelevated_faves_hidden')
         })
     }
 
@@ -1786,9 +1786,9 @@
     const resetSearch = () => {
         searching = false
         remaining_days = 20
-        btn_batch.innerHTML = `${lang.bulk_batch} ${input_from.value} - ${input_to.value} ${lang.bulk_flights}`
-        btn_batch.classList.remove('bulk_searching')
-        link_search_saved.innerText = `${lang.search_selected} »`
+        btnBatch.innerHTML = `${lang.bulk_batch} ${inputFrom.value} - ${inputTo.value} ${lang.bulk_flights}`
+        btnBatch.classList.remove('bulk_searching')
+        linkSearchSaved.innerText = `${lang.search_selected} »`
     }
 
     const stop_batch = () => {
@@ -1796,7 +1796,7 @@
 
         stop_search = true
         resetSearch()
-        if (!route_changed) btn_batch.innerHTML = lang.next_batch // Override resetSearch()
+        if (!route_changed) btnBatch.innerHTML = lang.next_batch // Override resetSearch()
         batchError()
     }
 
@@ -1806,25 +1806,25 @@
         if (!searching) {
             log('Batch Clicked. Starting Search')
 
-            uef_from = valueSet('uef_from', input_from.value)
-            uef_to = valueSet('uef_to', input_to.value)
-            uef_date = valueSet('uef_date', input_date.value)
-            uef_adult = valueSet('uef_adult', parseInt(input_adult.value))
-            uef_child = valueSet('uef_child', parseInt(input_child.value))
+            uef_from = valueSet('uef_from', inputFrom.value)
+            uef_to = valueSet('uef_to', inputTo.value)
+            uef_date = valueSet('uef_date', inputDate.value)
+            uef_adult = valueSet('uef_adult', parseInt(inputAdult.value))
+            uef_child = valueSet('uef_child', parseInt(inputChild.value))
 
             if (route_changed) {
                 bulk_date = uef_date
                 route_changed = false
 
-                div_table_body.innerHTML = ''
-                div_ue_container.scrollIntoView({
+                divTableBody.innerHTML = ''
+                divUeContainer.scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
                 })
             }
 
-            btn_batch.innerHTML = lang.searching_w_cancel
-            btn_batch.classList.add('bulk_searching')
+            btnBatch.innerHTML = lang.searching_w_cancel
+            btnBatch.classList.add('bulk_searching')
             bulk_search(single_date)
         } else {
             stop_batch()
@@ -1847,9 +1847,9 @@
         let ss_query = to_search.shift()
 
         shadowRoot.querySelector('.bulk_results').classList.remove('bulk_results_hidden')
-        btn_batch.innerHTML = lang.searching_w_cancel
-        btn_batch.classList.add('bulk_searching')
-        div_table_body.innerHTML = ''
+        btnBatch.innerHTML = lang.searching_w_cancel
+        btnBatch.classList.add('bulk_searching')
+        divTableBody.innerHTML = ''
 
         if (!cont_query) {
             regularSearch([{
@@ -1916,7 +1916,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg>
             </a></div>`
         })
-        div_saved_queries.innerHTML = saved_list
+        divSavedQueries.innerHTML = saved_list
         shadowRoot.querySelector('.unelevated_saved a span').innerText = saved_arr.length
     }
 
@@ -1988,7 +1988,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg>
             </a></div>`
         })
-        div_saved_flights.innerHTML = saved_list
+        divSavedFlights.innerHTML = saved_list
         shadowRoot.querySelector('.unelevated_saved a span').innerText = saved_arr.length
     }
 
@@ -2026,7 +2026,7 @@
                 log('getProfile')
                 const data = JSON.parse(response.responseText)
                 if (data.membershipNumber) return
-                div_login_prompt.classList.remove('hidden')
+                divLoginPrompt.classList.remove('hidden')
             }
         })
     }
@@ -2200,8 +2200,8 @@
 
         // cx_string = JSON.stringify(newQueryPayload(uef_from, uef_to, uef_date, uef_adult, uef_child))
         log('cx_string:', cx_string)
-        btn_search.innerHTML = lang.searching
-        btn_search.classList.add('searching')
+        btnSearch.innerHTML = lang.searching
+        btnSearch.classList.add('searching')
         httpRequest({
             method: 'POST',
             url: 'https://api.cathaypacific.com/redibe/standardAward/create',
@@ -2401,7 +2401,7 @@
         <a href='javascript:void(0)' data-book='true' data-date='${date}'>${toDashedDate(date)}</a>
         ${dateWeekday(date)}
         </td><td class='bulk_flights'></td></tr>`
-            div_table_body.insertAdjacentHTML('beforeend', results_row)
+            divTableBody.insertAdjacentHTML('beforeend', results_row)
         }
 
         const heart_svg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="heart_save" viewBox="0 0 16 16"> <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"></path></svg>'
@@ -2565,12 +2565,12 @@
     // ============================================================
 
     const stickyFooter = () => {
-        const footerOffset = div_footer.getBoundingClientRect()
-        const ueformOffset = div_ue_container.getBoundingClientRect()
-        if (footerOffset.top < window.innerHeight - 55 || ueformOffset.top + div_ue_container.clientHeight > window.innerHeight - 72) {
-            div_footer.classList.remove('bulk_sticky')
+        const footerOffset = divFooter.getBoundingClientRect()
+        const ueformOffset = divUeContainer.getBoundingClientRect()
+        if (footerOffset.top < window.innerHeight - 55 || ueformOffset.top + divUeContainer.clientHeight > window.innerHeight - 72) {
+            divFooter.classList.remove('bulk_sticky')
         } else {
-            div_footer.classList.add('bulk_sticky')
+            divFooter.classList.add('bulk_sticky')
         }
     }
 
@@ -2592,16 +2592,16 @@
         window.onscroll = stickyFooter
         update_saved_count()
         update_saved_flights()
-        autocomplete(input_from, 'origins')
-        autocomplete(input_to, 'origins')
+        autocomplete(inputFrom, 'origins')
+        autocomplete(inputTo, 'origins')
         getOrigins()
 
         if (cont_query) {
             reset_cont_vars()
             // If over 5 minutes since cont query, don't auto search
             if (Date.now() - cont_ts > 60 * 5 * 1000 && !debug) return
-            btn_batch.innerHTML = lang.searching_w_cancel
-            btn_batch.classList.add('bulk_searching')
+            btnBatch.innerHTML = lang.searching_w_cancel
+            btnBatch.classList.add('bulk_searching')
             document.body.classList.add('cont_query')
             setTimeout(() => {
                 if (cont_saved) {
