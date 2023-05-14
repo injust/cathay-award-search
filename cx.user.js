@@ -87,7 +87,7 @@
     const availability_url = 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability?TAB_ID='
     let form_submit_url = availability_url + tab_id
 
-    function initCXvars() {
+    const initCXvars = () => {
         if (typeof staticFilesPath !== 'undefined' && static_path != staticFilesPath) {
             log('typeof staticFilesPath:', typeof staticFilesPath)
             static_path = staticFilesPath
@@ -122,7 +122,7 @@
     // ============================================================
 
     // Wait for Element to Load
-    function waitForElm(selector) {
+    const waitForElm = (selector) => {
         return new Promise(resolve => {
             if (document.querySelector(selector)) {
                 return resolve(document.querySelector(selector))
@@ -141,7 +141,7 @@
     }
 
     // Check CX Date String Validity (dateString YYYYMMDD)
-    function isValidDate(dateString) {
+    const isValidDate = (dateString) => {
         if (!/^\d{8}$/.test(dateString)) return false
         const year = dateString.substring(0, 4)
         const month = dateString.substring(4, 6)
@@ -157,7 +157,7 @@
     };
 
     // Add to Date and Return CX Date String
-    function dateAdd(days = 0, date = null) {
+    const dateAdd = (days = 0, date = null) => {
         let new_date = new Date()
         if (date) {
             const year = +date.substring(0, 4)
@@ -170,12 +170,12 @@
     };
 
     // Convert CX Date String to Dashed Date String
-    function toDashedDate(date) {
+    const toDashedDate = (date) => {
         return `${date.substring(0, 4).toString()}-${date.substring(4, 6).toString().padStart(2, '0')}-${date.substring(6, 8).toString().padStart(2, '0')}`
     }
 
     // Get Weekday from CX Date String
-    function dateWeekday(date) {
+    const dateWeekday = (date) => {
         const newdate = new Date(+date.substring(0, 4), (+date.substring(4, 6) - 1), +date.substring(6, 8))
         const weekday = {
             1: 'Mon',
@@ -190,7 +190,7 @@
     };
 
     // Get Time
-    function getFlightTime(timestamp, timeonly = false) {
+    const getFlightTime = (timestamp, timeonly = false) => {
         const date = new Date(timestamp)
         if (timeonly) {
             const hours = (date.getUTCDate() - 1) * 24 + date.getUTCHours()
@@ -201,7 +201,7 @@
     };
 
     // Append CSS to DOM Element (Default to Shadow Root)
-    function addCss(cssString, target = shadowRoot) {
+    const addCss = (cssString, target = shadowRoot) => {
         const styleSheet = document.createElement('style')
         styleSheet.innerHTML = cssString
         target.appendChild(styleSheet)
@@ -230,7 +230,7 @@
     const cont_saved = value_get('cont_saved', false) // urlParams.has('cont_saved')
     const cont_ts = value_get('cont_ts', 0) // urlParams.has('cont_ts') ? parseInt(urlParams.get('cont_ts')) : 0
 
-    function reset_cont_vars() {
+    const reset_cont_vars = () => {
         value_set('cont_query', false)
         value_set('cont_batch', false)
         value_set('cont_saved', false)
@@ -255,7 +255,7 @@
         unsafeWindow.shadowRoot = shadowRoot
     }
 
-    function initRoot() {
+    const initRoot = () => {
         log('initRoot()')
 
         addCss(styleCss)
@@ -1208,7 +1208,7 @@
     let link_search_saved, link_search_multi
     let div_filters, div_login_prompt, div_footer, div_ue_container, div_saved, div_faves_tabs, div_saved_queries, div_saved_flights, div_multi_box, div_table, div_table_body
 
-    function assignElements() {
+    const assignElements = () => {
         log('assignElements()')
 
         btn_search = shadowRoot.querySelector('.uef_search') // Search Button
@@ -1239,7 +1239,7 @@
         div_table_body = shadowRoot.querySelector('.bulk_table tbody')
     }
 
-    function addFormListeners() {
+    const addFormListeners = () => {
         log('addFormListeners()')
 
         btn_search.addEventListener('click', function(e) {
@@ -1258,11 +1258,11 @@
             }, 'Y', (uef_to.length > 3), false)
         })
 
-        btn_batch.addEventListener('click', function(e) {
+        btn_batch.addEventListener('click', (e) => {
             bulk_click()
         })
 
-        shadowRoot.querySelector('.switch').addEventListener('click', function(e) {
+        shadowRoot.querySelector('.switch').addEventListener('click', (e) => {
             const from = input_from.value
             const to = input_to.value
             input_from.value = to
@@ -1341,11 +1341,11 @@
             }
         })
 
-        clear_from.addEventListener('click', function(e) {
+        clear_from.addEventListener('click', (e) => {
             input_from.value = ''
         })
 
-        clear_to.addEventListener('click', function(e) {
+        clear_to.addEventListener('click', (e) => {
             input_to.value = ''
         })
 
@@ -1423,7 +1423,7 @@
             }
         })
 
-        div_saved_queries.addEventListener('click', function(e) {
+        div_saved_queries.addEventListener('click', (e) => {
             if (e.target.dataset.book) {
                 stop_batch()
                 e.target.innerText = lang.loading
@@ -1481,11 +1481,8 @@
             }
         })
 
-        // TODO: What is this???
-        div_saved_flights.addEventListener('click', function(e) {})
-
         div_filters.querySelectorAll('input').forEach(item => {
-            item.addEventListener('click', function(e) {
+            item.addEventListener('click', (e) => {
                 if (e.target.id == 'filter_nonstop') {
                     if (e.target.checked) {
                         div_table.classList.add('nonstop_only')
@@ -1571,7 +1568,7 @@
         dest: []
     }
 
-    function getOrigins() {
+    const getOrigins = () => {
         log('getOrigins()')
 
         httpRequest({
@@ -1594,7 +1591,7 @@
         })
     }
 
-    function getDestinations(from) {
+    const getDestinations = (from) => {
         if (!airports.origins[from]) return
         log('getDestinations()')
 
@@ -1642,7 +1639,7 @@
 //             newAC(this, e)
 //         })
         /* execute a function presses a key on the keyboard */
-        inp.addEventListener('keydown', function(e) {
+        inp.addEventListener('keydown', function (e) {
             let x = shadowRoot.getElementById(this.id + 'autocomplete-list')
             if (x) x = x.getElementsByTagName('div')
             if (e.keyCode == 40) {
