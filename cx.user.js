@@ -1374,7 +1374,7 @@
                 valueSet('saved', saved)
             } else if (e.target.classList.contains('flight_save')) {
                 key = e.target.parentNode.dataset.flightinfo
-                const flightavail = e.target.parentNode.dataset.flightavail.split('_')
+                const flightAvail = e.target.parentNode.dataset.flightavail.split('_')
                 if (e.target.parentNode.classList.contains('saved')) {
                     e.target.parentNode.classList.remove('saved')
                     delete savedFlights[key]
@@ -1382,10 +1382,10 @@
                 } else {
                     e.target.parentNode.classList.add('saved')
                     savedFlights[key] = {
-                        f: flightavail[0],
-                        j: flightavail[1],
-                        p: flightavail[2],
-                        y: flightavail[3]
+                        F: flightAvail[0],
+                        J: flightAvail[1],
+                        P: flightAvail[2],
+                        Y: flightAvail[3]
                     }
                     updateSavedFlights()
                 }
@@ -1939,10 +1939,10 @@
                 leg1: query.split('_')[1] || '',
                 stop: query.split('_')[2] || '',
                 leg2: query.split('_')[3] || '',
-                f: savedFlights[query].f,
-                j: savedFlights[query].j,
-                p: savedFlights[query].p,
-                y: savedFlights[query].y
+                F: savedFlights[query].F,
+                J: savedFlights[query].J,
+                P: savedFlights[query].P,
+                Y: savedFlights[query].Y
             })
         })
         savedArr.sort((a, b) => {
@@ -1958,10 +1958,10 @@
             const stop = query.stop
             const leg2 = query.leg2
             const avail = {
-                f: query.f,
-                j: query.j,
-                p: query.p,
-                y: query.y
+                F: query.F,
+                J: query.J,
+                P: query.P,
+                Y: query.Y
             }
             savedList += `<div class="saved_flight" data-date="${date}" data-route="${from + to}">
             <label>
@@ -1972,10 +1972,10 @@
                     </span><span class="sf_flights">
                         ${leg1}${leg2 ? ' + ' + leg2 : ''}
                         <span class="sf_avail">
-                            ${avail.f > 0 ? '<span class="av_f">F ' + avail.f + '</span>' : ''}
-                            ${avail.j > 0 ? '<span class="av_j">J ' + avail.j + '</span>' : ''}
-                            ${avail.p > 0 ? '<span class="av_p">PY ' + avail.p + '</span>' : ''}
-                            ${avail.y > 0 ? '<span class="av_y">Y ' + avail.y + '</span>' : ''}
+                            ${avail.F > 0 ? '<span class="av_f">F ' + avail.F + '</span>' : ''}
+                            ${avail.J > 0 ? '<span class="av_j">J ' + avail.J + '</span>' : ''}
+                            ${avail.P > 0 ? '<span class="av_p">PY ' + avail.P + '</span>' : ''}
+                            ${avail.Y > 0 ? '<span class="av_y">Y ' + avail.Y + '</span>' : ''}
                         </span>
                     </span>
 
@@ -2423,14 +2423,14 @@
                 const j1 = +flight.segments[0].cabins?.B?.status || 0
                 const p1 = +flight.segments[0].cabins?.N?.status || 0
                 const y1 = (+flight.segments[0].cabins?.E?.status || 0) + (+flight.segments[0].cabins?.R?.status || 0)
-                let d_f = false
-                let d_j = false
-                let d_p = false
-                let d_y = false
-                let n_f = 0
-                let n_j = 0
-                let n_p = 0
-                let n_y = 0
+                let displayF = false
+                let displayJ = false
+                let displayP = false
+                let displayY = false
+                let numF = 0
+                let numJ = 0
+                let numP = 0
+                let numY = 0
                 const leg1Airline = flight.segments[0].flightIdentifier.marketingAirline
                 const leg1FlightNum = flight.segments[0].flightIdentifier.flightNumber
                 const leg1DepTime = getFlightTime(flight.segments[0].flightIdentifier.originDate)
@@ -2440,24 +2440,24 @@
                 if (flight.segments.length === 1) {
                     if (f1 >= 1) {
                         available += ` <span class='bulk_cabin bulk_f'>F <b>${f1}</b></span>`
-                        d_f = true
+                        displayF = true
                     }
                     if (j1 >= 1) {
                         available += ` <span class='bulk_cabin bulk_j'>J <b>${j1}</b></span>`
-                        d_j = true
+                        displayJ = true
                     }
                     if (p1 >= 1) {
                         available += ` <span class='bulk_cabin bulk_p'>PY <b>${p1}</b></span>`
-                        d_p = true
+                        displayP = true
                     }
                     if (y1 >= 1) {
                         available += ` <span class='bulk_cabin bulk_y'>Y <b>${y1}</b></span>`
-                        d_y = true
+                        displayY = true
                     }
                     flightKey = `${date}${from}${to}_${leg1Airline}${leg1FlightNum}`
                     if (available !== '') {
                         flightHTML += '<div class="flight_wrapper">'
-                        flightHTML += `<div class='flight_item direct ${(savedFlights[flightKey] ? ' saved' : '')}' data-flightinfo='${flightKey}' data-flightavail='${f1 + '_' + j1 + '_' + p1 + '_' + y1}' data-direct='1' data-f='${(d_f ? 1 : 0)}' data-j='${(d_j ? 1 : 0)}' data-p='${(d_p ? 1 : 0)}' data-y='${(d_y ? 1 : 0)}'>
+                        flightHTML += `<div class='flight_item direct ${(savedFlights[flightKey] ? ' saved' : '')}' data-flightinfo='${flightKey}' data-flightavail='${f1 + '_' + j1 + '_' + p1 + '_' + y1}' data-direct='1' data-f='${(displayF ? 1 : 0)}' data-j='${(displayJ ? 1 : 0)}' data-p='${(displayP ? 1 : 0)}' data-y='${(displayY ? 1 : 0)}'>
                         <img src='https://book.cathaypacific.com${staticPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png'>
                         <span class="flight_num">${leg1Airline + leg1FlightNum}</span>
                         ${available}
@@ -2476,10 +2476,10 @@
                     }
                     if (savedFlights[flightKey]) {
                         savedFlights[flightKey] = {
-                            f: f1,
-                            j: j1,
-                            p: p1,
-                            y: y1
+                            F: f1,
+                            J: j1,
+                            P: p1,
+                            Y: y1
                         }
                         updateSavedFlights()
                     }
@@ -2490,24 +2490,24 @@
                     const y2 = (+flight.segments[1].cabins?.E?.status || 0) + (+flight.segments[1].cabins?.R?.status || 0)
 
                     if (f1 >= 1 && f2 >= 1) {
-                        d_f = true
-                        n_f = Math.min(f1, f2)
-                        available += ` <span class='bulk_cabin bulk_f'>F <b>${n_f}</b></span>`
+                        displayF = true
+                        numF = Math.min(f1, f2)
+                        available += ` <span class='bulk_cabin bulk_f'>F <b>${numF}</b></span>`
                     }
                     if (j1 >= 1 && j2 >= 1) {
-                        d_j = true
-                        n_j = Math.min(j1, j2)
-                        available += ` <span class='bulk_cabin bulk_j'>J <b>${n_j}</b></span>`
+                        displayJ = true
+                        numJ = Math.min(j1, j2)
+                        available += ` <span class='bulk_cabin bulk_j'>J <b>${numJ}</b></span>`
                     }
                     if (p1 >= 1 && p2 >= 1) {
-                        d_p = true
-                        n_p = Math.min(p1, p2)
-                        available += ` <span class='bulk_cabin bulk_p'>PY <b>${n_p}</b></span>`
+                        displayP = true
+                        numP = Math.min(p1, p2)
+                        available += ` <span class='bulk_cabin bulk_p'>PY <b>${numP}</b></span>`
                     }
                     if (y1 >= 1 && y2 >= 1) {
-                        d_y = true
-                        n_y = Math.min(y1, y2)
-                        available += ` <span class='bulk_cabin bulk_y'>Y <b>${n_y}</b></span>`
+                        displayY = true
+                        numY = Math.min(y1, y2)
+                        available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
                     }
                     const leg2Airline = flight.segments[1].flightIdentifier.marketingAirline
                     const leg2FlightNum = flight.segments[1].flightIdentifier.flightNumber
@@ -2518,7 +2518,7 @@
                     flightKey = `${date}${from}${to}_${leg1Airline}${leg1FlightNum}_${transitAirportCode}_${leg2Airline}${leg2FlightNum}`
                     if (available !== '') {
                         flightHTML += '<div class="flight_wrapper">'
-                        flightHTML += `<div class='flight_item ${(savedFlights[flightKey] ? ' saved' : '')}' data-direct='0' data-flightinfo='${flightKey}'  data-flightavail='${n_f + '_' + n_j + '_' + n_p + '_' + n_y}' data-f='${d_f ? 1 : 0}' data-j='${d_j ? 1 : 0}' data-p='${d_p ? 1 : 0}' data-y='${d_y ? 1 : 0}'>
+                        flightHTML += `<div class='flight_item ${(savedFlights[flightKey] ? ' saved' : '')}' data-direct='0' data-flightinfo='${flightKey}'  data-flightavail='${numF + '_' + numJ + '_' + numP + '_' + numY}' data-f='${displayF ? 1 : 0}' data-j='${displayJ ? 1 : 0}' data-p='${displayP ? 1 : 0}' data-y='${displayY ? 1 : 0}'>
                         <img src='https://book.cathaypacific.com${staticPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png'>
                         <span class="flight_num">${leg1Airline + leg1FlightNum}
                         <span class='stopover'>${transitAirportCode}</span>
@@ -2543,10 +2543,10 @@
                     }
                     if (savedFlights[flightKey]) {
                         savedFlights[flightKey] = {
-                            f: n_f,
-                            j: n_j,
-                            p: n_p,
-                            y: n_y
+                            F: numF,
+                            J: numJ,
+                            P: numP,
+                            Y: numY
                         }
                         updateSavedFlights()
                     }
