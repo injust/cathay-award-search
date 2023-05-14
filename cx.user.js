@@ -1707,23 +1707,15 @@
 
         const newAC = (elm, e) => {
             const arr = airports[list] || []
-            let a
-            let b
-            let c
-            let i
-            let sa
-            let sc
-            let se
-            let val = elm.value
             /* close any already open lists of autocomplete values */
             closeAllLists()
-            val = elm.value.match(/[^,]+$/) ? elm.value.match(/[^,]+$/)[0] : false
+            let val = elm.value.match(/[^,]+$/) ? elm.value.match(/[^,]+$/)[0] : false
             if (!val) {
                 return false
             }
             currentFocus = -1
             /* create a DIV element that will contain the items (values) */
-            a = document.createElement('DIV')
+            let a = document.createElement('DIV')
             a.setAttribute('id', elm.id + 'autocomplete-list')
             a.setAttribute('class', 'autocomplete-items')
             /* append the DIV element as a child of the autocomplete container */
@@ -1749,13 +1741,13 @@
                 const shortName = arr[key].shortName
                 if (airportCode.length > 3) return
                 if (val.toUpperCase() == airportCode.substr(0, val.length).toUpperCase() || val.toUpperCase() == countryName.substr(0, val.length).toUpperCase() || val.toUpperCase() == shortName.substr(0, val.length).toUpperCase()) {
-                    sa = airportCode.substr(0, val.length).toUpperCase() == val.toUpperCase() ? val.length : 0
-                    se = shortName.substr(0, val.length).toUpperCase() == val.toUpperCase() ? val.length : 0
-                    sc = countryName.substr(0, val.length).toUpperCase() == val.toUpperCase() ? val.length : 0
+                    let sa = airportCode.substr(0, val.length).toUpperCase() == val.toUpperCase() ? val.length : 0
+                    let se = shortName.substr(0, val.length).toUpperCase() == val.toUpperCase() ? val.length : 0
+                    let sc = countryName.substr(0, val.length).toUpperCase() == val.toUpperCase() ? val.length : 0
                     /* create a DIV element for each matching element */
-                    b = document.createElement('DIV')
+                    let b = document.createElement('DIV')
                     /* make the matching letters bold */
-                    c = "<span class='sa_code'><strong>" + airportCode.substr(0, sa) + '</strong>' + airportCode.substr(sa) + '</span>'
+                    let c = "<span class='sa_code'><strong>" + airportCode.substr(0, sa) + '</strong>' + airportCode.substr(sa) + '</span>'
                     c += "<span class='sc_code'><strong>" + shortName.substr(0, se) + '</strong>' + shortName.substr(se) + ''
                     c += ' - <strong>' + countryName.substr(0, sc) + '</strong>' + countryName.substr(sc) + '</span>'
                     c += '</span>'
