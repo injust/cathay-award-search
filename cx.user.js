@@ -2368,8 +2368,9 @@
                 }
                 if (response.readyState === 4 && response.status === 200) {
                     batchError()
+                    let data
                     try {
-                        var data = JSON.parse(response.responseText)
+                        data = JSON.parse(response.responseText)
                     } catch {
                         // const res = response.responseText
                         // const incapsula_script = res.match(/<script src='(\/_Incapsula_[^]+.js)'><\/script>/)
