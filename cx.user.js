@@ -1932,7 +1932,7 @@
                 return
             }
             savedArr.push({
-                fullquery: query,
+                fullQuery: query,
                 date: query.substring(0, 8),
                 from: query.substring(8, 11).toUpperCase(),
                 to: query.substring(11, 14).toUpperCase(),
@@ -1950,7 +1950,7 @@
         })
 
         savedArr.forEach(query => {
-            const fullquery = query.fullquery
+            const fullQuery = query.fullQuery
             const date = query.date
             const from = query.from
             const to = query.to
@@ -1983,7 +1983,7 @@
             </label>
             <a href="javascript:void(0);" class="saved_book" data-book="true" "data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
             <span class="leg"></span>
-            <a href="javascript:void(0);" class="saved_remove" data-remove="${fullquery}">
+            <a href="javascript:void(0);" class="saved_remove" data-remove="${fullQuery}">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg>
             </a></div>`
         })
