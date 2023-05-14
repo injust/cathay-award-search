@@ -2110,7 +2110,7 @@
         return result
     }
 
-    const newTabID = (callback) => {
+    const newTabID = (cb) => {
         log('Creating New Request Parameters...')
         httpRequest({
             method: 'POST',
@@ -2161,7 +2161,7 @@
                             log('New Tab ID:', tab_id)
                             batchError()
                             formSubmitUrl = availability_url + tab_id
-                            if (callback) callback()
+                            if (cb) cb()
                         } else if (response.readyState == 4) {
                             errorBOM = responseParser(response.responseText, /errorBom = ([^;]+)/)
                             if (errorBOM?.modelObject?.step == 'Error') {
@@ -2316,7 +2316,7 @@
     // Search Availability
     // ============================================================
 
-    const searchAvailability = (from, to, date, adult, child, callback) => {
+    const searchAvailability = (from, to, date, adult, child, cb) => {
         if (stopSearch) {
             stopSearch = false
             searching = false
@@ -2327,7 +2327,7 @@
 
         // If destination is not valid, abort
         if (!/^[A-Z]{3}$/.test(to)) {
-            callback({
+            cb({
                 modelObject: {
                     isContainingErrors: true,
                     messages: [{
@@ -2365,7 +2365,7 @@
             data: params,
             onreadystatechange: (response) => {
                 const searchAgain = () => {
-                    searchAvailability(from, to, date, adult, child, callback)
+                    searchAvailability(from, to, date, adult, child, cb)
                 }
                 if (response.readyState == 4 && response.status == 200) {
                     batchError()
@@ -2379,7 +2379,7 @@
                         return
                     }
                     const pageBom = JSON.parse(data.pageBom)
-                    callback(pageBom)
+                    cb(pageBom)
                 } else if (response.readyState == 4 && response.status == 404) {
                     batchError(lang.key_exhausted)
                     newTabID(searchAgain)
