@@ -355,13 +355,13 @@
         invalid_code: 'Invalid Destination Code',
         invalid_date: 'Invalid Date',
         saved_queries: 'Saved Flight Queries',
-        maxsegments: 'Max 6 Sectors Accepted',
+        max_segments: 'Max 6 Sectors Accepted',
         multi_book: 'Book Multi-City Award',
         query: 'Search',
         delete: 'Remove',
         search_selected: 'Search All Saved',
         book_multi: 'Book Multi-City Award',
-        nosaves: 'You do not have any saved queries. Click on ♥ in batch results to save.',
+        no_saved: 'You do not have any saved queries. Click on ♥ in batch results to save.',
         loading: 'Searching...',
         human: "Cathay's website needs you to prove you're a human:",
         bot_check: 'Please Complete Cathay Bot Check'
@@ -559,7 +559,7 @@
         }
         .saved_queries:empty:after {
             display:flex;
-            content:"${lang.nosaves}";
+            content:"${lang.no_saved}";
             text-align: center;
             font-size: 14px;
             align-items: center;
@@ -609,7 +609,7 @@
         }
         .saved_flights:empty:after {
             display:flex;
-            content:"${lang.nosaves}";
+            content:"${lang.no_saved}";
             text-align: center;
             font-size: 14px;
             align-items: center;
