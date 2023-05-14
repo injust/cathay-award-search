@@ -17,7 +17,7 @@
 // @downloadURL         https://github.com/injust/cathay-award-search/raw/main/cx.user.js
 // ==/UserScript==
 
-(function() {
+(function () {
     'use strict'
 
     // ============================================================
@@ -56,12 +56,12 @@
                 }
             }
             if (request.onreadystatechange) {
-                http.onreadystatechange = function() {
+                http.onreadystatechange = function () {
                     request.onreadystatechange(this)
                 }
             }
             if (request.onload) {
-                http.onload = function() {
+                http.onload = function () {
                     request.onload(this)
                 }
             }
@@ -151,7 +151,7 @@
         const date = new Date(year, month - 1, day)
         if ((date - today) / 24 / 60 / 60 / 1000 >= 366 || (date - today) / 24 / 60 / 60 / 1000 < -1) return false
         return true
-    };
+    }
 
     // Add to Date and Return CX Date String
     const dateAdd = (days = 0, date = null) => {
@@ -164,7 +164,7 @@
         };
         new_date.setDate(new_date.getDate() + days)
         return `${new_date.getFullYear()}${(new_date.getMonth() + 1).toString().padStart(2, '0')}${new_date.getDate().toString().padStart(2, '0')}`
-    };
+    }
 
     // Convert CX Date String to Dashed Date String
     const toDashedDate = (date) => {
@@ -184,7 +184,7 @@
             0: 'Sun'
         }
         return weekday[newdate.getDay()]
-    };
+    }
 
     // Get Time
     const getFlightTime = (timestamp, timeonly = false) => {
@@ -195,7 +195,7 @@
         } else {
             return `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1).toString().padStart(2, '0')}-${date.getUTCDate().toString().padStart(2, '0')} ${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')}`
         };
-    };
+    }
 
     // Append CSS to DOM Element (Default to Shadow Root)
     const addCss = (cssString, target = shadowRoot) => {
@@ -1239,7 +1239,7 @@
     const addFormListeners = () => {
         log('addFormListeners()')
 
-        btn_search.addEventListener('click', function(e) {
+        btn_search.addEventListener('click', function (e) {
             uef_from = value_set('uef_from', input_from.value)
             uef_to = value_set('uef_to', input_to.value)
             uef_date = value_set('uef_date', input_date.value)
@@ -1269,7 +1269,7 @@
         });
 
         [input_from, input_to].forEach(item => {
-            item.addEventListener('keyup', function(e) {
+            item.addEventListener('keyup', function (e) {
                 if (r != t) return
                 if (e.keyCode == 32 || e.keyCode == 188 || e.keyCode == 13) {
                     if (e.keyCode == 13) this.value += ','
@@ -1278,7 +1278,7 @@
             })
         })
 
-        input_from.addEventListener('change', function(e) {
+        input_from.addEventListener('change', function (e) {
             this.value = this.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
             // setTimeout(fn, 0) lets the page reflect the updated DOM
             setTimeout(() => {
@@ -1291,7 +1291,7 @@
             }, 0)
         })
 
-        input_to.addEventListener('change', function(e) {
+        input_to.addEventListener('change', function (e) {
             this.value = this.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
             // setTimeout(fn, 0) lets the page reflect the updated DOM
             setTimeout(() => {
@@ -1305,13 +1305,13 @@
         let inFocus = false;
 
         [input_from, input_to].forEach(item => {
-            item.addEventListener('focus', function(e) {
+            item.addEventListener('focus', function (e) {
                 if (this.value.length > 0 && r == t) this.value += ','
             })
         });
 
         [input_from, input_to].forEach(item => {
-            item.addEventListener('click', function(e) {
+            item.addEventListener('click', function (e) {
                 if (r == t) {
                     if (!inFocus) this.setSelectionRange(this.value.length, this.value.length)
                     inFocus = true
@@ -1322,13 +1322,13 @@
         });
 
         [input_from, input_to].forEach(item => {
-            item.addEventListener('blur', function(e) {
+            item.addEventListener('blur', function (e) {
                 this.value = this.value.replace(/,+$/, '')
                 inFocus = false
             })
         })
 
-        input_date.addEventListener('change', function(e) {
+        input_date.addEventListener('change', function (e) {
             if (!isValidDate(this.value)) {
                 alert(lang.invalid_date)
                 this.value = uef_date
@@ -1346,7 +1346,7 @@
             input_to.value = ''
         })
 
-        div_table.addEventListener('click', function(e) {
+        div_table.addEventListener('click', function (e) {
             let key
             if (e.target.dataset.book) {
                 stop_batch()
@@ -1409,7 +1409,7 @@
             })
         })
 
-        div_saved.addEventListener('click', function(e) {
+        div_saved.addEventListener('click', function (e) {
             if (e.target.dataset.remove) {
                 delete saved[e.target.dataset.remove]
                 delete saved_flights[e.target.dataset.remove]
@@ -1514,7 +1514,7 @@
             })
         })
 
-        link_search_saved.addEventListener('click', function(e) {
+        link_search_saved.addEventListener('click', function (e) {
             if (!Object.keys(saved).length) {
                 alert('No Saved Queries')
             } else {
@@ -1523,7 +1523,7 @@
             }
         })
 
-        link_search_multi.addEventListener('click', function(e) {
+        link_search_multi.addEventListener('click', function (e) {
             if (!shadowRoot.querySelectorAll('.saved_query.selected').length) {
                 alert('No Selected Segments')
             } else {
@@ -1545,16 +1545,16 @@
             }
         })
 
-        div_faves_tabs.addEventListener('click', function(e) {
+        div_faves_tabs.addEventListener('click', function (e) {
             if (e.target.classList.contains('tab_flights')) this.parentNode.classList.add('flights')
             if (e.target.classList.contains('tab_queries')) this.parentNode.classList.remove('flights')
         })
 
-        shadowRoot.querySelector('.unelevated_saved a').addEventListener('click', function(e) {
+        shadowRoot.querySelector('.unelevated_saved a').addEventListener('click', function (e) {
             // alert(JSON.stringify(saved))
             div_saved.classList.toggle('unelevated_faves_hidden')
         })
-    };
+    }
 
     // ============================================================
     // Data Retrievers
@@ -1629,12 +1629,12 @@
         /* the autocomplete function takes two arguments: the text field element and an array of possible autocomplete values */
         let currentFocus
         /* execute a function when someone writes in the text field */
-        inp.addEventListener('input', function(e) {
+        inp.addEventListener('input', function (e) {
             newAC(this, e)
         })
-//         inp.addEventListener('click', function(e) {
-//             newAC(this, e)
-//         })
+        //         inp.addEventListener('click', function(e) {
+        //             newAC(this, e)
+        //         })
         /* execute a function presses a key on the keyboard */
         inp.addEventListener('keydown', function (e) {
             let x = shadowRoot.getElementById(this.id + 'autocomplete-list')
@@ -1703,13 +1703,13 @@
             const arr = airports[list] || []
             /* close any already open lists of autocomplete values */
             closeAllLists()
-            let val = elm.value.match(/[^,]+$/) ? elm.value.match(/[^,]+$/)[0] : false
+            const val = elm.value.match(/[^,]+$/) ? elm.value.match(/[^,]+$/)[0] : false
             if (!val) {
                 return false
             }
             currentFocus = -1
             /* create a DIV element that will contain the items (values) */
-            let a = document.createElement('DIV')
+            const a = document.createElement('DIV')
             a.setAttribute('id', elm.id + 'autocomplete-list')
             a.setAttribute('class', 'autocomplete-items')
             /* append the DIV element as a child of the autocomplete container */
@@ -1735,11 +1735,11 @@
                 const shortName = arr[key].shortName
                 if (airportCode.length > 3) return
                 if (val.toUpperCase() == airportCode.substr(0, val.length).toUpperCase() || val.toUpperCase() == countryName.substr(0, val.length).toUpperCase() || val.toUpperCase() == shortName.substr(0, val.length).toUpperCase()) {
-                    let sa = airportCode.substr(0, val.length).toUpperCase() == val.toUpperCase() ? val.length : 0
-                    let se = shortName.substr(0, val.length).toUpperCase() == val.toUpperCase() ? val.length : 0
-                    let sc = countryName.substr(0, val.length).toUpperCase() == val.toUpperCase() ? val.length : 0
+                    const sa = airportCode.substr(0, val.length).toUpperCase() == val.toUpperCase() ? val.length : 0
+                    const se = shortName.substr(0, val.length).toUpperCase() == val.toUpperCase() ? val.length : 0
+                    const sc = countryName.substr(0, val.length).toUpperCase() == val.toUpperCase() ? val.length : 0
                     /* create a DIV element for each matching element */
-                    let b = document.createElement('DIV')
+                    const b = document.createElement('DIV')
                     /* make the matching letters bold */
                     let c = "<span class='sa_code'><strong>" + airportCode.substr(0, sa) + '</strong>' + airportCode.substr(sa) + '</span>'
                     c += "<span class='sc_code'><strong>" + shortName.substr(0, se) + '</strong>' + shortName.substr(se) + ''
@@ -1750,7 +1750,7 @@
                     b.dataset.city = airportCode
                     b.innerHTML = c
                     /* execute a function when someone clicks on the item value (DIV element) */
-                    b.addEventListener('click', function(e) {
+                    b.addEventListener('click', function (e) {
                         /* insert the value for the autocomplete text field */
                         inp.value = [inp.value.replace(/([,]?[^,]*)$/, ''), this.dataset.city].filter(Boolean).join(',')
                         inp.dispatchEvent(new Event('change'))
@@ -1769,7 +1769,7 @@
             })
         }
         /* execute a function when someone clicks in the document */
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (e.target == inp) return
             closeAllLists(e.target)
         })
@@ -2611,7 +2611,7 @@
                 }
             }, 1000)
         }
-    };
+    }
 
     initRoot()
 })()
