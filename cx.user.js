@@ -194,7 +194,7 @@
         const date = new Date(timestamp)
         if (timeonly) {
             const hours = (date.getUTCDate() - 1) * 24 + date.getUTCHours()
-            return (hours > 0 ? hours.toString() + 'hr ' : '') + date.getUTCMinutes().toString() + 'mins'
+            return (hours ? hours.toString() + 'hr ' : '') + date.getUTCMinutes().toString() + 'mins'
         } else {
             return `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1).toString().padStart(2, '0')}-${date.getUTCDate().toString().padStart(2, '0')} ${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')}`
         };
@@ -1305,7 +1305,7 @@
 
         [inputFrom, inputTo].forEach(item => {
             item.addEventListener('focus', function (e) {
-                if (this.value.length > 0 && r === t) this.value += ','
+                if (this.value.length && r === t) this.value += ','
             })
         });
 
@@ -1972,10 +1972,10 @@
                     </span><span class="sf_flights">
                         ${leg1}${leg2 ? ' + ' + leg2 : ''}
                         <span class="sf_avail">
-                            ${avail.F > 0 ? '<span class="av_f">F ' + avail.F + '</span>' : ''}
-                            ${avail.J > 0 ? '<span class="av_j">J ' + avail.J + '</span>' : ''}
-                            ${avail.P > 0 ? '<span class="av_p">PY ' + avail.P + '</span>' : ''}
-                            ${avail.Y > 0 ? '<span class="av_y">Y ' + avail.Y + '</span>' : ''}
+                            ${avail.F ? '<span class="av_f">F ' + avail.F + '</span>' : ''}
+                            ${avail.J ? '<span class="av_j">J ' + avail.J + '</span>' : ''}
+                            ${avail.P ? '<span class="av_p">PY ' + avail.P + '</span>' : ''}
+                            ${avail.Y ? '<span class="av_y">Y ' + avail.Y + '</span>' : ''}
                         </span>
                     </span>
 
@@ -2005,7 +2005,7 @@
             }
         })
 
-        if (errorAirportCodes.length > 0) {
+        if (errorAirportCodes.length) {
             el.value = airportCodes.join(',')
             alert(`Removing ${errorAirportCodes.length > 1 ? lang.invalid_airports : lang.invalid_airport}: ${errorAirportCodes.join(',')}`)
         }
@@ -2191,7 +2191,7 @@
         let cxString
         if (route.length === 1) {
             cxString = JSON.stringify(newQueryPayload(route[0], passengers, cabinclass, true))
-        } else if (route.length > 1) {
+        } else if (route.length) {
             cxString = JSON.stringify(newMultiPayload(route, passengers, cabinclass))
         } else {
             return
