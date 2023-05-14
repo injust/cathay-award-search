@@ -17,6 +17,9 @@
 // @downloadURL         https://github.com/injust/cathay-award-search/raw/main/cx.user.js
 // ==/UserScript==
 
+/* eslint-env browser */
+/* global GM, GM_getValue, GM_setValue */
+
 (function () {
     'use strict'
 
