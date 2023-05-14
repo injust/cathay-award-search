@@ -90,7 +90,7 @@
     const availabilityUrl = 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability?TAB_ID='
     let formSubmitUrl = availabilityUrl + tabId
 
-    const initCXvars = () => {
+    const initCxVars = () => {
         if (typeof staticFilesPath !== 'undefined' && staticPath !== staticFilesPath) {
             log('typeof staticFilesPath:', typeof staticFilesPath)
             staticPath = staticFilesPath
@@ -2584,7 +2584,7 @@
     // ============================================================
 
     const initSearchBox = () => {
-        initCXvars()
+        initCxVars()
         shadowContainer.appendChild(searchBox)
         assignElements()
         addFormListeners()
