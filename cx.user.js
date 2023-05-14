@@ -119,7 +119,7 @@
     // ============================================================
 
     // Wait for Element to Load
-    const waitForElm = (selector) => {
+    const waitForEl = (selector) => {
         return new Promise(resolve => {
             if (document.querySelector(selector)) {
                 return resolve(document.querySelector(selector))
@@ -263,8 +263,8 @@
             log('initRoot redeem-flight-awards.html')
 
             reset_cont_vars()
-            waitForElm('.redibe-v3-flightsearch form').then((elm) => {
-                elm.before(shadowWrapper)
+            waitForEl('.redibe-v3-flightsearch form').then((el) => {
+                el.before(shadowWrapper)
                 initSearchBox()
                 checkLogin()
             })
@@ -272,8 +272,8 @@
             log('initRoot facade.html')
 
             reset_cont_vars()
-            waitForElm('.ibered__search-panel').then((elm) => {
-                elm.before(shadowWrapper)
+            waitForEl('.ibered__search-panel').then((el) => {
+                el.before(shadowWrapper)
                 initSearchBox()
                 checkLogin()
             })
@@ -281,7 +281,7 @@
             if (cont_query) {
                 log('initRoot air/booking/availability with cont_query')
 
-                waitForElm('body > header').then((elm) => {
+                waitForEl('body > header').then((el) => {
                     const boxes = document.querySelectorAll('body > div')
                     boxes.forEach(box => {
                         box.remove()
@@ -295,7 +295,7 @@
                 log('initRoot air/booking/availability without cont_query')
 
                 reset_cont_vars()
-                waitForElm('#section-flights .bound-route, #section-flights-departure .bound-route').then((elm) => {
+                waitForEl('#section-flights .bound-route, #section-flights-departure .bound-route').then((el) => {
                     shadowWrapper.style.margin = '30px 20px 0px 20px'
                     shadowWrapper.style.padding = 0
                     document.querySelector('#section-flights, #section-flights-departure').before(shadowWrapper)
@@ -307,7 +307,7 @@
             log('initRoot air/booking/complexAvailability')
 
             reset_cont_vars()
-            waitForElm('.mc-trips .bound-route').then((elm) => {
+            waitForEl('.mc-trips .bound-route').then((el) => {
                 shadowWrapper.style.margin = '30px 20px 0px 20px'
                 shadowWrapper.style.padding = 0
                 document.querySelector('.mc-trips').before(shadowWrapper)
@@ -1395,8 +1395,8 @@
                 if (e.target.classList.contains('active')) {
                     e.target.classList.remove('active')
                 } else {
-                    shadowRoot.querySelectorAll('.flight_item').forEach((elm) => {
-                        elm.classList.remove('active')
+                    shadowRoot.querySelectorAll('.flight_item').forEach((el) => {
+                        el.classList.remove('active')
                     })
                     e.target.classList.add('active')
                 }
@@ -1404,8 +1404,8 @@
         })
 
         document.addEventListener('scroll', () => {
-            shadowRoot.querySelectorAll('.flight_item').forEach((elm) => {
-                elm.classList.remove('active')
+            shadowRoot.querySelectorAll('.flight_item').forEach((el) => {
+                el.classList.remove('active')
             })
         })
 
@@ -1433,8 +1433,8 @@
                     child: 0
                 })
             } else if (e.target.type == 'checkbox') {
-                divSavedQueries.querySelectorAll('.selected').forEach((elm) => {
-                    delete elm.dataset.new
+                divSavedQueries.querySelectorAll('.selected').forEach((el) => {
+                    delete el.dataset.new
                 })
 
                 if (e.target.checked) {
@@ -1470,9 +1470,9 @@
                     log(a.dataset.date, b.dataset.date)
                     if (a.dataset.date == b.dataset.date) return (a.dataset.new ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1))
                     return false
-                }).forEach((elm) => {
-                    elm.dataset.segment = pos
-                    elm.querySelector('.leg').innerText = 'Segment ' + pos
+                }).forEach((el) => {
+                    el.dataset.segment = pos
+                    el.querySelector('.leg').innerText = 'Segment ' + pos
                     pos++
                 })
             }
@@ -1685,11 +1685,11 @@
             }
         }
 
-        const closeAllLists = (elmnt) => {
+        const closeAllLists = (el) => {
             /* close all autocomplete lists in the document, except the one passed as an argument */
             const x = shadowRoot.querySelectorAll('.autocomplete-items')
             for (let i = 0; i < x.length; i++) {
-                if (elmnt != x[i] && elmnt != inp) {
+                if (el != x[i] && el != inp) {
                     x[i].parentNode.removeChild(x[i])
                 }
             }
@@ -1699,21 +1699,21 @@
             return code.replace('Taiwan China', 'Taiwan').replace('中國台灣', '台灣')
         }
 
-        const newAC = (elm, e) => {
+        const newAC = (el, e) => {
             const arr = airports[list] || []
             /* close any already open lists of autocomplete values */
             closeAllLists()
-            const val = elm.value.match(/[^,]+$/) ? elm.value.match(/[^,]+$/)[0] : false
+            const val = el.value.match(/[^,]+$/) ? el.value.match(/[^,]+$/)[0] : false
             if (!val) {
                 return false
             }
             currentFocus = -1
             /* create a DIV element that will contain the items (values) */
             const a = document.createElement('DIV')
-            a.setAttribute('id', elm.id + 'autocomplete-list')
+            a.setAttribute('id', el.id + 'autocomplete-list')
             a.setAttribute('class', 'autocomplete-items')
             /* append the DIV element as a child of the autocomplete container */
-            elm.parentNode.appendChild(a)
+            el.parentNode.appendChild(a)
             const sep = document.createElement('span')
             sep.style.display = 'none'
             sep.classList.add('ac_separator')
@@ -1992,10 +1992,10 @@
         shadowRoot.querySelector('.unelevated_saved a span').innerText = savedArr.length
     }
 
-    const checkAirportCodes = (elem) => {
+    const checkAirportCodes = (el) => {
         log('checkAirportCodes()')
 
-        let cities = elem.value.split(',')
+        let cities = el.value.split(',')
         const errorCities = []
         cities = cities.filter(city => {
             if (city.match(/^[A-Z]{3}$/)) {
@@ -2007,7 +2007,7 @@
         })
 
         if (errorCities.length > 0) {
-            elem.value = cities.join(',')
+            el.value = cities.join(',')
             alert(`Removing ${errorCities.length > 1 ? lang.invalid_airports : lang.invalid_airport}: ${errorCities.join(',')}`)
         }
     }
