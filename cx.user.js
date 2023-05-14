@@ -94,9 +94,6 @@
             value_set('static_path', static_path)
         }
 
-        if (typeof tabId === 'string') {
-            tab_id = tabId
-        }
         if (typeof requestParams === 'string') {
             requestVars = JSON.parse(requestParams)
             tab_id = requestVars.TAB_ID
