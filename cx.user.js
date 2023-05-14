@@ -170,13 +170,13 @@
     }
 
     // Convert CX Date String to Dashed Date String
-    const toDashedDate = (date) => {
-        return `${date.substring(0, 4).toString()}-${date.substring(4, 6).toString().padStart(2, '0')}-${date.substring(6, 8).toString().padStart(2, '0')}`
+    const dateStringToDashedDateString = (dateString) => {
+        return `${dateString.substring(0, 4).toString()}-${dateString.substring(4, 6).toString().padStart(2, '0')}-${dateString.substring(6, 8).toString().padStart(2, '0')}`
     }
 
     // Get Weekday from CX Date String
-    const dateWeekday = (date) => {
-        const newdate = new Date(+date.substring(0, 4), (+date.substring(4, 6) - 1), +date.substring(6, 8))
+    const dateStringToWeekday = (dateString) => {
+        const date = new Date(+dateString.substring(0, 4), (+dateString.substring(4, 6) - 1), +dateString.substring(6, 8))
         const weekday = {
             1: 'Mon',
             2: 'Tue',
@@ -186,7 +186,7 @@
             6: 'Sat',
             0: 'Sun'
         }
-        return weekday[newdate.getDay()]
+        return weekday[date.getDay()]
     }
 
     // Get Time
@@ -1908,7 +1908,7 @@
             const date = query.date
             const from = query.from
             const to = query.to
-            savedList += `<div class="saved_query" data-date="${date}" data-route="${from + to}"><label><input type="checkbox" data-route="${date}${from}${to}" data-date="${date}"> ${toDashedDate(date)} ${from}-${to}</label>
+            savedList += `<div class="saved_query" data-date="${date}" data-route="${from + to}"><label><input type="checkbox" data-route="${date}${from}${to}" data-date="${date}"> ${dateStringToDashedDateString(date)} ${from}-${to}</label>
             <a href="javascript:void(0);" class="saved_book" data-book="true" data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
             <span class="leg"></span>
             <a href="javascript:void(0);" class="saved_remove" data-remove="${date}${from}${to}">
@@ -1967,7 +1967,7 @@
             <label>
                 <input type="checkbox" data-route="${date}${from}${to}" data-date="${date}">
                 <span>
-                    <span class="sf_date">${toDashedDate(date)}</span>
+                    <span class="sf_date">${dateStringToDashedDateString(date)}</span>
                     <span class="sf_route">${from}-${stop ? stop + '-' : ''}${to}
                     </span><span class="sf_flights">
                         ${leg1}${leg2 ? ' + ' + leg2 : ''}
@@ -2397,8 +2397,8 @@
     const insertResults = (from, to, date, pageBom) => {
         if (!shadowRoot.querySelector(`.bulk_table tr[data-date="${date}"]`)) {
             const resultsRow = `<tr data-date='${date}'><td class='bulkDate'>
-        <a href='javascript:void(0)' data-book='true' data-date='${date}'>${toDashedDate(date)}</a>
-        ${dateWeekday(date)}
+        <a href='javascript:void(0)' data-book='true' data-date='${date}'>${dateStringToDashedDateString(date)}</a>
+        ${dateStringToWeekday(date)}
         </td><td class='bulk_flights'></td></tr>`
             divTableBody.insertAdjacentHTML('beforeend', resultsRow)
         }
