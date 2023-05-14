@@ -1888,9 +1888,9 @@
         let savedList = ''
         const savedArr = []
         Object.keys(saved).forEach(query => {
-            const sdate = new Date(query.substring(0, 4), query.substring(4, 6) - 1, query.substring(6, 8))
-            const ndate = new Date()
-            if (sdate <= ndate) {
+            const savedDate = new Date(query.substring(0, 4), query.substring(4, 6) - 1, query.substring(6, 8))
+            const today = new Date()
+            if (savedDate <= today) {
                 delete saved[query]
                 return
             }
@@ -1925,9 +1925,9 @@
         let savedList = ''
         const savedArr = []
         Object.keys(savedFlights).forEach(query => {
-            const sdate = new Date(query.substring(0, 4), query.substring(4, 6) - 1, query.substring(6, 8))
-            const ndate = new Date()
-            if (sdate <= ndate) {
+            const savedDate = new Date(query.substring(0, 4), query.substring(4, 6) - 1, query.substring(6, 8))
+            const today = new Date()
+            if (savedDate <= today) {
                 delete savedFlights[query]
                 return
             }
