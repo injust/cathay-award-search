@@ -155,15 +155,15 @@
 
     // Add to Date and Return CX Date String
     const dateAdd = (days = 0, date = null) => {
-        let new_date = new Date()
+        let newDate = new Date()
         if (date) {
             const year = +date.substring(0, 4)
             const month = +date.substring(4, 6)
             const day = +date.substring(6, 8)
-            new_date = new Date(year, month - 1, day)
+            newDate = new Date(year, month - 1, day)
         };
-        new_date.setDate(new_date.getDate() + days)
-        return `${new_date.getFullYear()}${(new_date.getMonth() + 1).toString().padStart(2, '0')}${new_date.getDate().toString().padStart(2, '0')}`
+        newDate.setDate(newDate.getDate() + days)
+        return `${newDate.getFullYear()}${(newDate.getMonth() + 1).toString().padStart(2, '0')}${newDate.getDate().toString().padStart(2, '0')}`
     }
 
     // Convert CX Date String to Dashed Date String
