@@ -2606,13 +2606,13 @@
             btn_batch.innerHTML = lang.searching_w_cancel
             btn_batch.classList.add('bulk_searching')
             document.body.classList.add('cont_query')
-            if (cont_saved) {
-                setTimeout(() => saved_search, 1000)
-            } else {
-                setTimeout(() => {
+            setTimeout(() => {
+                if (cont_saved) {
+                    saved_search()
+                } else {
                     bulk_click(!cont_batch)
-                }, 1000)
-            }
+                }
+            }, 1000)
         }
     };
 
