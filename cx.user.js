@@ -88,7 +88,7 @@
     let formSubmitUrl = availability_url + tab_id
 
     const initCXvars = () => {
-        if (typeof staticFilesPath !== 'undefined' && static_path != staticFilesPath) {
+        if (typeof staticFilesPath !== 'undefined' && static_path !== staticFilesPath) {
             log('typeof staticFilesPath:', typeof staticFilesPath)
             static_path = staticFilesPath
             valueSet('static_path', static_path)
@@ -143,9 +143,9 @@
         const year = dateString.substring(0, 4)
         const month = dateString.substring(4, 6)
         const day = dateString.substring(6, 8)
-        if (year < 1000 || year > 3000 || month == 0 || month > 12) return false
+        if (year < 1000 || year > 3000 || month === 0 || month > 12) return false
         const monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-        if (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)) monthLength[1] = 29
+        if (year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0)) monthLength[1] = 29
         if (day <= 0 || day > monthLength[month - 1]) return false
         const today = new Date()
         const date = new Date(year, month - 1, day)
@@ -1266,9 +1266,9 @@
 
         [inputFrom, inputTo].forEach(item => {
             item.addEventListener('keyup', function (e) {
-                if (r != t) return
-                if (e.keyCode == 32 || e.keyCode == 188 || e.keyCode == 13) {
-                    if (e.keyCode == 13) this.value += ','
+                if (r !== t) return
+                if (e.keyCode === 32 || e.keyCode === 188 || e.keyCode === 13) {
+                    if (e.keyCode === 13) this.value += ','
                     this.value = this.value.toUpperCase().split(/[ ,]+/).join(',')
                 }
             })
@@ -1279,7 +1279,7 @@
             // setTimeout(fn, 0) lets the page reflect the updated DOM
             setTimeout(() => {
                 checkAirportCodes(this)
-                if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
+                if (r !== t) this.value = this.value.toUpperCase().substring(0, 3)
                 routeChanged = true
                 if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${inputFrom.value} - ${inputTo.value} ${lang.bulk_flights}`
                 const dest = this.value.match(/[A-Z]{3}$/)
@@ -1292,7 +1292,7 @@
             // setTimeout(fn, 0) lets the page reflect the updated DOM
             setTimeout(() => {
                 checkAirportCodes(this)
-                if (r != t) this.value = this.value.toUpperCase().substring(0, 3)
+                if (r !== t) this.value = this.value.toUpperCase().substring(0, 3)
                 routeChanged = true
                 if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${inputFrom.value} - ${inputTo.value} ${lang.bulk_flights}`
             }, 0)
@@ -1302,13 +1302,13 @@
 
         [inputFrom, inputTo].forEach(item => {
             item.addEventListener('focus', function (e) {
-                if (this.value.length > 0 && r == t) this.value += ','
+                if (this.value.length > 0 && r === t) this.value += ','
             })
         });
 
         [inputFrom, inputTo].forEach(item => {
             item.addEventListener('click', function (e) {
-                if (r == t) {
+                if (r === t) {
                     if (!inFocus) this.setSelectionRange(this.value.length, this.value.length)
                     inFocus = true
                 } else {
@@ -1428,7 +1428,7 @@
                     adult: 1,
                     child: 0
                 })
-            } else if (e.target.type == 'checkbox') {
+            } else if (e.target.type === 'checkbox') {
                 divSavedQueries.querySelectorAll('.selected').forEach((el) => {
                     delete el.dataset.new
                 })
@@ -1450,7 +1450,7 @@
 
                 const segmentsArray = divSavedQueries.querySelectorAll('.selected')
 
-                if (segmentsArray.length == 6) {
+                if (segmentsArray.length === 6) {
                     divSavedQueries.querySelectorAll('input:not(:checked)').forEach(item => {
                         item.disabled = true
                     })
@@ -1464,7 +1464,7 @@
                 Array.from(segmentsArray).sort((a, b) => {
                     if (+a.dataset.date > +b.dataset.date) return 1
                     log(a.dataset.date, b.dataset.date)
-                    if (a.dataset.date == b.dataset.date) return (a.dataset.new ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1))
+                    if (a.dataset.date === b.dataset.date) return (a.dataset.new ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1))
                     return false
                 }).forEach((el) => {
                     el.dataset.segment = pos
@@ -1476,31 +1476,31 @@
 
         divFilters.querySelectorAll('input').forEach(item => {
             item.addEventListener('click', (e) => {
-                if (e.target.id == 'filter_nonstop') {
+                if (e.target.id === 'filter_nonstop') {
                     if (e.target.checked) {
                         divTable.classList.add('nonstop_only')
                     } else {
                         divTable.classList.remove('nonstop_only')
                     }
-                } else if (e.target.id == 'filter_first') {
+                } else if (e.target.id === 'filter_first') {
                     if (e.target.checked) {
                         divTable.classList.add('show_first')
                     } else {
                         divTable.classList.remove('show_first')
                     }
-                } else if (e.target.id == 'filter_business') {
+                } else if (e.target.id === 'filter_business') {
                     if (e.target.checked) {
                         divTable.classList.add('show_business')
                     } else {
                         divTable.classList.remove('show_business')
                     }
-                } else if (e.target.id == 'filter_premium') {
+                } else if (e.target.id === 'filter_premium') {
                     if (e.target.checked) {
                         divTable.classList.add('show_premium')
                     } else {
                         divTable.classList.remove('show_premium')
                     }
-                } else if (e.target.id == 'filter_economy') {
+                } else if (e.target.id === 'filter_economy') {
                     if (e.target.checked) {
                         divTable.classList.add('show_economy')
                     } else {
@@ -1635,17 +1635,17 @@
         inp.addEventListener('keydown', function (e) {
             let x = shadowRoot.getElementById(this.id + 'autocomplete-list')
             if (x) x = x.getElementsByTagName('div')
-            if (e.keyCode == 40) {
+            if (e.keyCode === 40) {
                 /* If the arrow DOWN key is pressed, increase the currentFocus variable */
                 currentFocus++
                 /* and and make the current item more visible */
                 addActive(x)
-            } else if (e.keyCode == 38) { // up
+            } else if (e.keyCode === 38) { // up
                 /* If the arrow UP key is pressed, decrease the currentFocus variable */
                 currentFocus--
                 /* and make the current item more visible */
                 addActive(x)
-            } else if (e.keyCode == 13) {
+            } else if (e.keyCode === 13) {
                 /* If the ENTER key is pressed, prevent the form from being submitted */
                 e.preventDefault()
                 closeAllLists()
@@ -1655,7 +1655,7 @@
                 } else {
                     if (x) x.querySelector(':not').click()
                 }
-            } else if (e.keyCode == 32 || e.keyCode == 9) {
+            } else if (e.keyCode === 32 || e.keyCode === 9) {
                 /* If the SPACE or TAB key is pressed, select first option */
                 closeAllLists()
                 /* and simulate a click on the "active" item */
@@ -1685,7 +1685,7 @@
             /* close all autocomplete lists in the document, except the one passed as an argument */
             const x = shadowRoot.querySelectorAll('.autocomplete-items')
             for (let i = 0; i < x.length; i++) {
-                if (el != x[i] && el != inp) {
+                if (el !== x[i] && el !== inp) {
                     x[i].parentNode.removeChild(x[i])
                 }
             }
@@ -1730,10 +1730,10 @@
                 const countryName = checkLocale(arr[key].countryName)
                 const shortName = arr[key].shortName
                 if (airportCode.length > 3) return
-                if (val.toUpperCase() == airportCode.substr(0, val.length).toUpperCase() || val.toUpperCase() == countryName.substr(0, val.length).toUpperCase() || val.toUpperCase() == shortName.substr(0, val.length).toUpperCase()) {
-                    const sa = airportCode.substr(0, val.length).toUpperCase() == val.toUpperCase() ? val.length : 0
-                    const se = shortName.substr(0, val.length).toUpperCase() == val.toUpperCase() ? val.length : 0
-                    const sc = countryName.substr(0, val.length).toUpperCase() == val.toUpperCase() ? val.length : 0
+                if (val.toUpperCase() === airportCode.substr(0, val.length).toUpperCase() || val.toUpperCase() === countryName.substr(0, val.length).toUpperCase() || val.toUpperCase() === shortName.substr(0, val.length).toUpperCase()) {
+                    const sa = airportCode.substr(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
+                    const se = shortName.substr(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
+                    const sc = countryName.substr(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
                     /* create a DIV element for each matching element */
                     const b = document.createElement('DIV')
                     /* make the matching letters bold */
@@ -1766,7 +1766,7 @@
         }
         /* execute a function when someone clicks in the document */
         document.addEventListener('click', function (e) {
-            if (e.target == inp) return
+            if (e.target === inp) return
             closeAllLists(e.target)
         })
     }
@@ -2138,14 +2138,14 @@
                     onreadystatechange: (response) => {
                         let errorBOM = ''
                         let errorMessage = lang.tab_retrieve_fail
-                        if (response.readyState == 4 && response.status == 200) {
+                        if (response.readyState === 4 && response.status === 200) {
                             log('Tab ID Response Received. Parsing...')
                             const data = response.responseText
                             requestVars = responseParser(data, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
                             log('requestVars:', requestVars)
                             if (!requestVars) {
                                 errorBOM = responseParser(data, /errorBom = ([^;]+)/)
-                                if (errorBOM?.modelObject?.step == 'Error') {
+                                if (errorBOM?.modelObject?.step === 'Error') {
                                     errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
                                 }
                                 log('Tab ID Could not be parsed')
@@ -2158,9 +2158,9 @@
                             batchError()
                             formSubmitUrl = availability_url + tab_id
                             if (cb) cb()
-                        } else if (response.readyState == 4) {
+                        } else if (response.readyState === 4) {
                             errorBOM = responseParser(response.responseText, /errorBom = ([^;]+)/)
-                            if (errorBOM?.modelObject?.step == 'Error') {
+                            if (errorBOM?.modelObject?.step === 'Error') {
                                 errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
                             }
                             log('Failed to receive Tab ID')
@@ -2186,7 +2186,7 @@
         child: 0
     }, cabinclass = 'Y', isContQuery = false, isContBatch = false, isContSaved = false) => {
         let cxString
-        if (route.length == 1) {
+        if (route.length === 1) {
             cxString = JSON.stringify(newQueryPayload(route[0], passengers, cabinclass, true))
         } else if (route.length > 1) {
             cxString = JSON.stringify(newMultiPayload(route, passengers, cabinclass))
@@ -2247,7 +2247,7 @@
         log('bulkSearch start, remainingDays:', remainingDays)
 
         let noContinue = false
-        if (remainingDays-- == 0) {
+        if (remainingDays-- === 0) {
             stopBatch()
             noContinue = true
         }
@@ -2275,7 +2275,7 @@
             remainingDays = Math.ceil(25 / queryCount) - 1
         }
 
-        if (r == t) {
+        if (r === t) {
             rtFrom.forEach(from => {
                 rtTo.forEach(to => {
                     routes.push({
@@ -2363,7 +2363,7 @@
                 const searchAgain = () => {
                     searchAvailability(from, to, date, adult, child, cb)
                 }
-                if (response.readyState == 4 && response.status == 200) {
+                if (response.readyState === 4 && response.status === 200) {
                     batchError()
                     try {
                         var data = JSON.parse(response.responseText)
@@ -2376,10 +2376,10 @@
                     }
                     const pageBom = JSON.parse(data.pageBom)
                     cb(pageBom)
-                } else if (response.readyState == 4 && response.status == 404) {
+                } else if (response.readyState === 4 && response.status === 404) {
                     batchError(lang.key_exhausted)
                     newTabID(searchAgain)
-                } else if (response.readyState == 4 && response.status >= 300) {
+                } else if (response.readyState === 4 && response.status >= 300) {
                     batchError(lang.getting_key)
                     newTabID(searchAgain)
                 }
@@ -2434,7 +2434,7 @@
                 const leg1_arr_time = getFlightTime(flight.segments[0].destinationDate)
                 const leg1_duration = getFlightTime(flight.duration, true)
                 let flightkey
-                if (flight.segments.length == 1) {
+                if (flight.segments.length === 1) {
                     if (f1 >= 1) {
                         available += ` <span class='bulk_cabin bulk_f'>F <b>${f1}</b></span>`
                         d_f = true
@@ -2452,7 +2452,7 @@
                         d_y = true
                     }
                     flightkey = `${date}${from}${to}_${leg1_airline}${leg1_flight_no}`
-                    if (available != '') {
+                    if (available !== '') {
                         flightHTML += '<div class="flight_wrapper">'
                         flightHTML += `<div class='flight_item direct ${(saved_flights[flightkey] ? ' saved' : '')}' data-flightinfo='${flightkey}' data-flightavail='${f1 + '_' + j1 + '_' + p1 + '_' + y1}' data-direct='1' data-f='${(d_f ? 1 : 0)}' data-j='${(d_j ? 1 : 0)}' data-p='${(d_p ? 1 : 0)}' data-y='${(d_y ? 1 : 0)}'>
                         <img src='https://book.cathaypacific.com${static_path}common/skin/img/airlines/logo-${leg1_airline.toLowerCase()}.png'>
@@ -2513,7 +2513,7 @@
                     const transit_time = getFlightTime(flight.segments[1].flightIdentifier.originDate - flight.segments[0].destinationDate, true)
                     const stopcity = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g.exec(flight.flightIdString)[1].replace(':', ' / ')
                     flightkey = `${date}${from}${to}_${leg1_airline}${leg1_flight_no}_${stopcity}_${leg2_airline}${leg2_flight_no}`
-                    if (available != '') {
+                    if (available !== '') {
                         flightHTML += '<div class="flight_wrapper">'
                         flightHTML += `<div class='flight_item ${(saved_flights[flightkey] ? ' saved' : '')}' data-direct='0' data-flightinfo='${flightkey}'  data-flightavail='${n_f + '_' + n_j + '_' + n_p + '_' + n_y}' data-f='${d_f ? 1 : 0}' data-j='${d_j ? 1 : 0}' data-p='${d_p ? 1 : 0}' data-y='${d_y ? 1 : 0}'>
                         <img src='https://book.cathaypacific.com${static_path}common/skin/img/airlines/logo-${leg1_airline.toLowerCase()}.png'>
