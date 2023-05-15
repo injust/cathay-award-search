@@ -2267,7 +2267,7 @@
         const rtTo = uefTo.split(',')
         const queryCount = rtFrom.length * rtTo.length
 
-        if (!noContinue & remainingDays > Math.ceil(25 / queryCount)) {
+        if (!noContinue && remainingDays > Math.ceil(25 / queryCount)) {
             remainingDays = Math.ceil(25 / queryCount) - 1
         }
 
