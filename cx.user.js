@@ -1837,9 +1837,7 @@
                 to: query.substring(11, 14)
             })
         })
-        toSearch.sort((a, b) => {
-            return a.date - b.date
-        })
+        toSearch.sort((a, b) => a.date - b.date)
 
         let ssQuery = toSearch.shift()
 
@@ -1898,9 +1896,7 @@
                 to: query.substring(11, 14).toUpperCase()
             })
         })
-        savedArr.sort((a, b) => {
-            return a.date - b.date
-        })
+        savedArr.sort((a, b) => a.date - b.date)
 
         savedArr.forEach(query => {
             const date = query.date
@@ -1943,9 +1939,7 @@
                 Y: savedFlights[query].Y
             })
         })
-        savedArr.sort((a, b) => {
-            return a.date - b.date
-        })
+        savedArr.sort((a, b) => a.date - b.date)
 
         savedArr.forEach(query => {
             const fullQuery = query.fullQuery
