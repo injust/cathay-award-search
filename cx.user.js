@@ -95,7 +95,7 @@
     const loginUrl = `https://www.cathaypacific.com/content/cx/${browserLang}_${browserCountry}/sign-in.html?loginreferrer=${encodeURI(`https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`)}`
 
     let staticPath = valueGet('static_path', '/CathayPacificAwardV3/AML_IT3.3.18/')
-    let requestVars = {}
+    let requestParams = {}
     let tabId = ''
     let formSubmitUrl = availabilityUrl + tabId
 
@@ -106,12 +106,12 @@
         }
 
         if (typeof window.requestParams === 'string') {
-            requestVars = JSON.parse(window.requestParams)
+            requestParams = JSON.parse(window.requestParams)
         } else if (typeof window.requestParams === 'object') {
-            requestVars = window.requestParams
+            requestParams = window.requestParams
         }
 
-        tabId = requestVars.TAB_ID || tabId
+        tabId = requestParams.TAB_ID || tabId
 
         formSubmitUrl = typeof window.formSubmitUrl === 'undefined' ? availabilityUrl + tabId : window.formSubmitUrl
     }
@@ -2117,10 +2117,10 @@
                         if (response.readyState === 4 && response.status === 200) {
                             log('Tab ID Response Received. Parsing...')
                             const data = response.responseText
-                            requestVars = responseParser(data, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
-                            log('requestVars:', requestVars)
+                            requestParams = responseParser(data, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
+                            log('requestParams:', requestParams)
 
-                            if (!requestVars) {
+                            if (!requestParams) {
                                 errorBOM = responseParser(data, /errorBom = ([^;]+)/)
                                 if (errorBOM?.modelObject?.step === 'Error') {
                                     errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
@@ -2132,7 +2132,7 @@
                                 return
                             }
 
-                            tabId = requestVars.TAB_ID || ''
+                            tabId = requestParams.TAB_ID || ''
                             log('New Tab ID:', tabId)
                             batchError()
                             formSubmitUrl = availabilityUrl + tabId
@@ -2312,7 +2312,7 @@
             return
         }
 
-        const requests = requestVars
+        const requests = requestParams
         log('searchAvailability() requests:', requests)
 
         requests.B_DATE_1 = `${date}0000`
