@@ -34,9 +34,7 @@
     // ============================================================
 
     // Get and Set Stored Values
-    const valueGet = (valueName, defaultValue) => {
-        return GM_getValue(valueName, defaultValue)
-    }
+    const valueGet = (valueName, defaultValue) => GM_getValue(valueName, defaultValue)
 
     const valueSet = (valueName, setValue) => {
         GM_setValue(valueName, setValue)
@@ -49,24 +47,29 @@
             GM.xmlHttpRequest(request)
         } else {
             if (!request.method || !request.url) return
+
             const http = new XMLHttpRequest()
             http.withCredentials = true
             http.open(request.method, request.url, true)
+
             if (request.headers) {
                 for (const [key, value] of Object.entries(request.headers)) {
                     http.setRequestHeader(key, value)
                 }
             }
+
             if (request.onreadystatechange) {
                 http.onreadystatechange = function () {
                     request.onreadystatechange(this)
                 }
             }
+
             if (request.onload) {
                 http.onload = function () {
                     request.onload(this)
                 }
             }
+
             if (request.data) {
                 http.send(request.data)
             } else {
@@ -110,7 +113,7 @@
 
         tabId = requestVars.TAB_ID || tabId
 
-        formSubmitUrl = typeof window.formSubmitUrl !== 'undefined' ? window.formSubmitUrl : availabilityUrl + tabId
+        formSubmitUrl = typeof window.formSubmitUrl === 'undefined' ? availabilityUrl + tabId : window.formSubmitUrl
     }
 
     const r = Math.random()
@@ -121,23 +124,23 @@
     // ============================================================
 
     // Wait for Element to Load
-    const waitForEl = (selector) => {
-        return new Promise(resolve => {
+    const waitForEl = selector => new Promise((resolve) => {
+        if (document.querySelector(selector)) {
+            resolve(document.querySelector(selector))
+            return
+        }
+
+        const observer = new MutationObserver((mutations) => {
             if (document.querySelector(selector)) {
-                return resolve(document.querySelector(selector))
+                resolve(document.querySelector(selector))
+                observer.disconnect()
             }
-            const observer = new MutationObserver(mutations => {
-                if (document.querySelector(selector)) {
-                    resolve(document.querySelector(selector))
-                    observer.disconnect()
-                }
-            })
-            observer.observe(document.body, {
-                childList: true,
-                subtree: true
-            })
         })
-    }
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        })
+    })
 
     // Check CX Date String Validity (dateString YYYYMMDD)
     const isValidDate = (dateString) => {
@@ -163,15 +166,13 @@
             const month = +date.substring(4, 6)
             const day = +date.substring(6, 8)
             newDate = new Date(year, month - 1, day)
-        };
+        }
         newDate.setDate(newDate.getDate() + days)
         return `${newDate.getFullYear()}${(newDate.getMonth() + 1).toString().padStart(2, '0')}${newDate.getDate().toString().padStart(2, '0')}`
     }
 
     // Convert CX Date String to Dashed Date String
-    const dateStringToDashedDateString = (dateString) => {
-        return `${dateString.substring(0, 4).toString()}-${dateString.substring(4, 6).toString().padStart(2, '0')}-${dateString.substring(6, 8).toString().padStart(2, '0')}`
-    }
+    const dateStringToDashedDateString = dateString => `${dateString.substring(0, 4).toString()}-${dateString.substring(4, 6).toString().padStart(2, '0')}-${dateString.substring(6, 8).toString().padStart(2, '0')}`
 
     // Get Weekday from CX Date String
     const dateStringToWeekday = (dateString) => {
@@ -193,10 +194,9 @@
         const date = new Date(timestamp)
         if (timeonly) {
             const hours = (date.getUTCDate() - 1) * 24 + date.getUTCHours()
-            return (hours ? hours.toString() + 'hr ' : '') + date.getUTCMinutes().toString() + 'mins'
-        } else {
-            return `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1).toString().padStart(2, '0')}-${date.getUTCDate().toString().padStart(2, '0')} ${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')}`
-        };
+            return `${(hours ? `${hours.toString()}hr ` : '') + date.getUTCMinutes().toString()}mins`
+        }
+        return `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1).toString().padStart(2, '0')}-${date.getUTCDate().toString().padStart(2, '0')} ${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')}`
     }
 
     // Append CSS to DOM Element (Default to Shadow Root)
@@ -243,9 +243,7 @@
     const shadowWrapper = document.createElement('div')
     shadowWrapper.style.margin = 0
     shadowWrapper.style.padding = 0
-    const shadowRoot = shadowWrapper.attachShadow({
-        mode: 'closed'
-    })
+    const shadowRoot = shadowWrapper.attachShadow({ mode: 'closed' })
     const shadowContainer = document.createElement('div')
     shadowContainer.classList.add('elevated_on')
     shadowRoot.appendChild(shadowContainer)
@@ -281,7 +279,7 @@
 
                 waitForEl('body > header').then((el) => {
                     const boxes = document.querySelectorAll('body > div')
-                    boxes.forEach(box => {
+                    boxes.forEach((box) => {
                         box.remove()
                     })
                     document.body.append(shadowWrapper)
@@ -1265,7 +1263,7 @@
             inputTo.dispatchEvent(new Event('change'))
         });
 
-        [inputFrom, inputTo].forEach(item => {
+        [inputFrom, inputTo].forEach((item) => {
             item.addEventListener('keyup', function (e) {
                 if (r !== t) return
                 if (e.keyCode === 32 || e.keyCode === 188 || e.keyCode === 13) {
@@ -1302,13 +1300,13 @@
 
         let inFocus = false;
 
-        [inputFrom, inputTo].forEach(item => {
+        [inputFrom, inputTo].forEach((item) => {
             item.addEventListener('focus', function (e) {
                 if (this.value.length && r === t) this.value += ','
             })
         });
 
-        [inputFrom, inputTo].forEach(item => {
+        [inputFrom, inputTo].forEach((item) => {
             item.addEventListener('click', function (e) {
                 if (r === t) {
                     if (!inFocus) this.setSelectionRange(this.value.length, this.value.length)
@@ -1319,7 +1317,7 @@
             })
         });
 
-        [inputFrom, inputTo].forEach(item => {
+        [inputFrom, inputTo].forEach((item) => {
             item.addEventListener('blur', function (e) {
                 this.value = this.value.replace(/,+$/, '')
                 inFocus = false
@@ -1327,12 +1325,12 @@
         })
 
         inputDate.addEventListener('change', function (e) {
-            if (!isValidDate(this.value)) {
-                alert(lang.invalid_date)
-                this.value = uefDate
-            } else {
+            if (isValidDate(this.value)) {
                 routeChanged = true
                 if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${inputFrom.value} - ${inputTo.value} ${lang.bulk_flights}`
+            } else {
+                alert(lang.invalid_date)
+                this.value = uefDate
             }
         })
 
@@ -1453,11 +1451,11 @@
                 const segmentsArray = divSavedQueries.querySelectorAll('.selected')
 
                 if (segmentsArray.length === 6) {
-                    divSavedQueries.querySelectorAll('input:not(:checked)').forEach(item => {
+                    divSavedQueries.querySelectorAll('input:not(:checked)').forEach((item) => {
                         item.disabled = true
                     })
                 } else {
-                    divSavedQueries.querySelectorAll('input').forEach(item => {
+                    divSavedQueries.querySelectorAll('input').forEach((item) => {
                         item.disabled = false
                     })
                 }
@@ -1470,13 +1468,13 @@
                     return false
                 }).forEach((el) => {
                     el.dataset.segment = pos
-                    el.querySelector('.leg').innerText = 'Segment ' + pos
+                    el.querySelector('.leg').innerText = `Segment ${pos}`
                     pos++
                 })
             }
         })
 
-        divFilters.querySelectorAll('input').forEach(item => {
+        divFilters.querySelectorAll('input').forEach((item) => {
             item.addEventListener('click', (e) => {
                 if (e.target.id === 'filter_nonstop') {
                     if (e.target.checked) {
@@ -1515,32 +1513,32 @@
         linkSearchSaved.addEventListener('click', function (e) {
             if (!Object.keys(saved).length) {
                 alert('No Saved Queries')
-            } else {
-                this.innerText = lang.loading
-                savedSearch()
+                return
             }
+
+            this.innerText = lang.loading
+            savedSearch()
         })
 
         linkSearchMulti.addEventListener('click', function (e) {
             if (!shadowRoot.querySelectorAll('.saved_query.selected').length) {
                 alert('No Selected Segments')
-            } else {
-                this.innerText = lang.loading
-                const toSearch = []
-                Array.from(shadowRoot.querySelectorAll('.saved_query.selected')).sort((a, b) => {
-                    return a.dataset.segment - b.dataset.segment
-                }).forEach(segment => {
-                    toSearch.push({
-                        date: segment.dataset.date,
-                        from: segment.dataset.route.substring(0, 3),
-                        to: segment.dataset.route.substring(3, 6)
-                    })
-                })
-                regularSearch(toSearch, {
-                    adult: shadowRoot.querySelector('#multi_adult').value,
-                    child: shadowRoot.querySelector('#multi_child').value
-                }, shadowRoot.querySelector('#multi_cabin').value)
+                return
             }
+
+            this.innerText = lang.loading
+            const toSearch = []
+            Array.from(shadowRoot.querySelectorAll('.saved_query.selected')).sort((a, b) => a.dataset.segment - b.dataset.segment).forEach((segment) => {
+                toSearch.push({
+                    date: segment.dataset.date,
+                    from: segment.dataset.route.substring(0, 3),
+                    to: segment.dataset.route.substring(3, 6)
+                })
+            })
+            regularSearch(toSearch, {
+                adult: shadowRoot.querySelector('#multi_adult').value,
+                child: shadowRoot.querySelector('#multi_child').value
+            }, shadowRoot.querySelector('#multi_cabin').value)
         })
 
         divFavesTabs.addEventListener('click', function (e) {
@@ -1572,7 +1570,7 @@
             onload: (response) => {
                 const data = JSON.parse(response.responseText)
                 if (data.airports) {
-                    data.airports.forEach(airport => {
+                    data.airports.forEach((airport) => {
                         airports.origins[airport.airportCode] = {
                             airportCode: airport.airportCode,
                             shortName: airport.shortName,
@@ -1596,7 +1594,7 @@
             onload: (response) => {
                 const data = JSON.parse(response.responseText)
                 if (data.airports) {
-                    data.airports.forEach(airport => {
+                    data.airports.forEach((airport) => {
                         airports.dest[airport.airportCode] = {
                             airportCode: airport.airportCode,
                             shortName: airport.shortName,
@@ -1635,7 +1633,7 @@
         //         })
         /* execute a function presses a key on the keyboard */
         inp.addEventListener('keydown', function (e) {
-            let x = shadowRoot.getElementById(this.id + 'autocomplete-list')
+            let x = shadowRoot.getElementById(`${this.id}autocomplete-list`)
             if (x) x = x.getElementsByTagName('div')
             if (e.keyCode === 40) {
                 /* If the arrow DOWN key is pressed, increase the currentFocus variable */
@@ -1654,8 +1652,8 @@
                 if (currentFocus > -1) {
                     /* and simulate a click on the "active" item */
                     if (x) x[currentFocus].click()
-                } else {
-                    if (x) x.querySelector(':not').click()
+                } else if (x) {
+                    x.querySelector(':not').click()
                 }
             } else if (e.keyCode === 32 || e.keyCode === 9) {
                 /* If the SPACE or TAB key is pressed, select first option */
@@ -1667,7 +1665,7 @@
 
         const addActive = (x) => {
             /* a function to classify an item as "active" */
-            if (!x) return false
+            if (!x) return
             /* start by removing the "active" class on all items */
             removeActive(x)
             if (currentFocus >= x.length) currentFocus = 0
@@ -1693,22 +1691,19 @@
             }
         }
 
-        const checkLocale = (code) => {
-            return code.replace('Taiwan China', 'Taiwan').replace('中國台灣', '台灣')
-        }
+        const checkLocale = code => code.replace('Taiwan China', 'Taiwan').replace('中國台灣', '台灣')
 
         const newAC = (el, e) => {
             const arr = airports[list] || []
             /* close any already open lists of autocomplete values */
             closeAllLists()
             const val = el.value.match(/[^,]+$/) ? el.value.match(/[^,]+$/)[0] : false
-            if (!val) {
-                return false
-            }
+            if (!val) return
+
             currentFocus = -1
             /* create a DIV element that will contain the items (values) */
             const a = document.createElement('DIV')
-            a.setAttribute('id', el.id + 'autocomplete-list')
+            a.setAttribute('id', `${el.id}autocomplete-list`)
             a.setAttribute('class', 'autocomplete-items')
             /* append the DIV element as a child of the autocomplete container */
             el.parentNode.appendChild(a)
@@ -1717,16 +1712,8 @@
             sep.classList.add('ac_separator')
             a.appendChild(sep)
             /* for each item in the array... */
-            const favs = ['TPE', 'TSA', 'KHH', 'RMQ', 'TYO', 'HND', 'NRT', 'KIX', 'ITM', 'CTS', 'FUK', 'NGO', 'OKA', 'ICN', 'PUS',
-                'GMP', 'CJU', 'HKG', 'MFM', 'BKK', 'CNX', 'HKT', 'CGK', 'DPS', 'SUB', 'KUL', 'BKI', 'PEN', 'DAD', 'HAN', 'SGN',
-                'CEB', 'MNL', 'SIN', 'PNH', 'DEL', 'BOM', 'DXB', 'DOH', 'TLV', 'BCN', 'MAD', 'MXP', 'CDG', 'ZRH', 'MUC',
-                'FCO', 'FRA', 'CDG', 'AMS', 'LHR', 'LGW', 'LON', 'MAN', 'FCO', 'BOS', 'JFK', 'YYZ', 'ORD', 'IAD', 'YVR',
-                'SFO', 'LAX', 'SAN', 'SEA', 'JNB', 'PER', 'SYD', 'BNE', 'MEL', 'AKL', 'HEL', 'BLR', 'SHA', 'PVG', 'PEK',
-                'CAN', 'KTM', 'ADL', 'CPT', 'ATH', 'IST', 'SOF', 'VCE', 'BUD', 'PRG', 'VIE', 'BER', 'WAW', 'KBP', 'CPH',
-                'DUS', 'BRU', 'OSL', 'ARN', 'DUB', 'MIA', 'ATL', 'IAH', 'DFW', 'PHL', 'CMN', 'LAS', 'SJC', 'DEN', 'AUS',
-                'MSY', 'MCO', 'EWR', 'NYC', 'LIS', 'OPO', 'SPU', 'DBV', 'ZAG', 'MLE', 'LIM', 'BOG', 'CNS', 'GRU', 'SCL', 'GIG', 'EZE', 'MEX', 'CUN'
-            ]
-            Object.keys(arr).forEach(key => {
+            const favs = ['TPE', 'TSA', 'KHH', 'RMQ', 'TYO', 'HND', 'NRT', 'KIX', 'ITM', 'CTS', 'FUK', 'NGO', 'OKA', 'ICN', 'PUS', 'GMP', 'CJU', 'HKG', 'MFM', 'BKK', 'CNX', 'HKT', 'CGK', 'DPS', 'SUB', 'KUL', 'BKI', 'PEN', 'DAD', 'HAN', 'SGN', 'CEB', 'MNL', 'SIN', 'PNH', 'DEL', 'BOM', 'DXB', 'DOH', 'TLV', 'BCN', 'MAD', 'MXP', 'CDG', 'ZRH', 'MUC', 'FCO', 'FRA', 'CDG', 'AMS', 'LHR', 'LGW', 'LON', 'MAN', 'FCO', 'BOS', 'JFK', 'YYZ', 'ORD', 'IAD', 'YVR', 'SFO', 'LAX', 'SAN', 'SEA', 'JNB', 'PER', 'SYD', 'BNE', 'MEL', 'AKL', 'HEL', 'BLR', 'SHA', 'PVG', 'PEK', 'CAN', 'KTM', 'ADL', 'CPT', 'ATH', 'IST', 'SOF', 'VCE', 'BUD', 'PRG', 'VIE', 'BER', 'WAW', 'KBP', 'CPH', 'DUS', 'BRU', 'OSL', 'ARN', 'DUB', 'MIA', 'ATL', 'IAH', 'DFW', 'PHL', 'CMN', 'LAS', 'SJC', 'DEN', 'AUS', 'MSY', 'MCO', 'EWR', 'NYC', 'LIS', 'OPO', 'SPU', 'DBV', 'ZAG', 'MLE', 'LIM', 'BOG', 'CNS', 'GRU', 'SCL', 'GIG', 'EZE', 'MEX', 'CUN']
+            Object.keys(arr).forEach((key) => {
                 /* check if the item starts with the same letters as the text field value */
                 const airportCode = arr[key].airportCode
                 const countryName = checkLocale(arr[key].countryName)
@@ -1739,9 +1726,9 @@
                     /* create a DIV element for each matching element */
                     const b = document.createElement('DIV')
                     /* make the matching letters bold */
-                    let c = "<span class='sa_code'><strong>" + airportCode.substr(0, sa) + '</strong>' + airportCode.substr(sa) + '</span>'
-                    c += "<span class='sc_code'><strong>" + shortName.substr(0, se) + '</strong>' + shortName.substr(se) + ''
-                    c += ' - <strong>' + countryName.substr(0, sc) + '</strong>' + countryName.substr(sc) + '</span>'
+                    let c = `<span class='sa_code'><strong>${airportCode.substr(0, sa)}</strong>${airportCode.substr(sa)}</span>`
+                    c += `<span class='sc_code'><strong>${shortName.substr(0, se)}</strong>${shortName.substr(se)}`
+                    c += ` - <strong>${countryName.substr(0, sc)}</strong>${countryName.substr(sc)}</span>`
                     c += '</span>'
                     /* insert a input field that will hold the current array item's value */
                     c += `<input type='hidden' value='${airportCode}'>`
@@ -1799,39 +1786,39 @@
     }
 
     const bulkClick = (singleDate = false) => {
-        shadowRoot.querySelector('.bulk_results').classList.remove('bulk_results_hidden')
-
-        if (!searching) {
-            log('Batch Clicked. Starting Search')
-
-            uefFrom = valueSet('uef_from', inputFrom.value)
-            uefTo = valueSet('uef_to', inputTo.value)
-            uefDate = valueSet('uef_date', inputDate.value)
-            uefAdult = valueSet('uef_adult', parseInt(inputAdult.value))
-            uefChild = valueSet('uef_child', parseInt(inputChild.value))
-
-            if (routeChanged) {
-                bulkDate = uefDate
-                routeChanged = false
-
-                divTableBody.innerHTML = ''
-                divUeContainer.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                })
-            }
-
-            btnBatch.innerHTML = lang.searching_w_cancel
-            btnBatch.classList.add('bulkSearching')
-            bulkSearch(singleDate)
-        } else {
+        if (searching) {
             stopBatch()
+            return
         }
+
+        log('Batch Clicked. Starting Search')
+
+        uefFrom = valueSet('uef_from', inputFrom.value)
+        uefTo = valueSet('uef_to', inputTo.value)
+        uefDate = valueSet('uef_date', inputDate.value)
+        uefAdult = valueSet('uef_adult', parseInt(inputAdult.value))
+        uefChild = valueSet('uef_child', parseInt(inputChild.value))
+
+        if (routeChanged) {
+            bulkDate = uefDate
+            routeChanged = false
+
+            divTableBody.innerHTML = ''
+            divUeContainer.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            })
+        }
+
+        shadowRoot.querySelector('.bulk_results').classList.remove('bulk_results_hidden')
+        btnBatch.innerHTML = lang.searching_w_cancel
+        btnBatch.classList.add('bulkSearching')
+        bulkSearch(singleDate)
     }
 
     const savedSearch = () => {
         const toSearch = []
-        Object.keys(saved).forEach(query => {
+        Object.keys(saved).forEach((query) => {
             toSearch.push({
                 date: query.substring(0, 8),
                 from: query.substring(8, 11),
@@ -1860,14 +1847,14 @@
         }
 
         const populateNextQuery = (flights) => {
-            if (!toSearch.length) {
-                insertResults(ssQuery.from, ssQuery.to, ssQuery.date, flights)
-                stopBatch()
-                stopSearch = false // Override stopBatch()
-            } else {
-                insertResults(ssQuery.from, ssQuery.to, ssQuery.date, flights)
+            insertResults(ssQuery.from, ssQuery.to, ssQuery.date, flights)
+
+            if (toSearch.length) {
                 ssQuery = toSearch.shift()
                 searchAvailability(ssQuery.from, ssQuery.to, ssQuery.date, 1, 0, populateNextQuery)
+            } else {
+                stopBatch()
+                stopSearch = false // Override stopBatch()
             }
         }
 
@@ -1884,7 +1871,7 @@
 
         let savedList = ''
         const savedArr = []
-        Object.keys(saved).forEach(query => {
+        Object.keys(saved).forEach((query) => {
             const savedDate = new Date(query.substring(0, 4), query.substring(4, 6) - 1, query.substring(6, 8))
             const today = new Date()
             if (savedDate <= today) {
@@ -1899,7 +1886,7 @@
         })
         savedArr.sort((a, b) => a.date - b.date)
 
-        savedArr.forEach(query => {
+        savedArr.forEach((query) => {
             const date = query.date
             const from = query.from
             const to = query.to
@@ -1919,7 +1906,7 @@
 
         let savedList = ''
         const savedArr = []
-        Object.keys(savedFlights).forEach(query => {
+        Object.keys(savedFlights).forEach((query) => {
             const savedDate = new Date(query.substring(0, 4), query.substring(4, 6) - 1, query.substring(6, 8))
             const today = new Date()
             if (savedDate <= today) {
@@ -1942,7 +1929,7 @@
         })
         savedArr.sort((a, b) => a.date - b.date)
 
-        savedArr.forEach(query => {
+        savedArr.forEach((query) => {
             const fullQuery = query.fullQuery
             const date = query.date
             const from = query.from
@@ -1961,14 +1948,14 @@
                 <input type="checkbox" data-route="${date}${from}${to}" data-date="${date}">
                 <span>
                     <span class="sf_date">${dateStringToDashedDateString(date)}</span>
-                    <span class="sf_route">${from}-${stop ? stop + '-' : ''}${to}
+                    <span class="sf_route">${from}-${stop ? `${stop}-` : ''}${to}
                     </span><span class="sf_flights">
-                        ${leg1}${leg2 ? ' + ' + leg2 : ''}
+                        ${leg1}${leg2 ? ` + ${leg2}` : ''}
                         <span class="sf_avail">
-                            ${avail.F ? '<span class="av_f">F ' + avail.F + '</span>' : ''}
-                            ${avail.J ? '<span class="av_j">J ' + avail.J + '</span>' : ''}
-                            ${avail.P ? '<span class="av_p">PY ' + avail.P + '</span>' : ''}
-                            ${avail.Y ? '<span class="av_y">Y ' + avail.Y + '</span>' : ''}
+                            ${avail.F ? `<span class="av_f">F ${avail.F}</span>` : ''}
+                            ${avail.J ? `<span class="av_j">J ${avail.J}</span>` : ''}
+                            ${avail.P ? `<span class="av_p">PY ${avail.P}</span>` : ''}
+                            ${avail.Y ? `<span class="av_y">Y ${avail.Y}</span>` : ''}
                         </span>
                     </span>
 
@@ -1989,13 +1976,12 @@
 
         let airportCodes = el.value.split(',')
         const errorAirportCodes = []
-        airportCodes = airportCodes.filter(airportCode => {
+        airportCodes = airportCodes.filter((airportCode) => {
             if (airportCode.match(/^[A-Z]{3}$/)) {
                 return true
-            } else {
-                if (airportCode) errorAirportCodes.push(airportCode)
-                return false
             }
+            if (airportCode) errorAirportCodes.push(airportCode)
+            return false
         })
 
         if (errorAirportCodes.length) {
@@ -2010,9 +1996,7 @@
         httpRequest({
             method: 'GET',
             url: 'https://api.cathaypacific.com/redibe/login/getProfile',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             withCredentials: 'true',
             onload: (response) => {
                 log('getProfile')
@@ -2064,7 +2048,7 @@
         log('newMultiPayload()')
 
         const legs = []
-        routes.forEach(segment => {
+        routes.forEach((segment) => {
             legs.push({
                 departureDate: segment.date,
                 origin: segment.from,
@@ -2107,9 +2091,7 @@
         httpRequest({
             method: 'POST',
             url: 'https://api.cathaypacific.com/redibe/standardAward/create',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             withCredentials: 'true',
             data: JSON.stringify(newQueryPayload()),
             onload: (response) => {
@@ -2126,9 +2108,7 @@
                 httpRequest({
                     method: 'POST',
                     url: urlToPost,
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     data: formData,
                     withCredentials: 'true',
                     onreadystatechange: (response) => {
@@ -2139,16 +2119,19 @@
                             const data = response.responseText
                             requestVars = responseParser(data, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
                             log('requestVars:', requestVars)
+
                             if (!requestVars) {
                                 errorBOM = responseParser(data, /errorBom = ([^;]+)/)
                                 if (errorBOM?.modelObject?.step === 'Error') {
                                     errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
                                 }
+
                                 log('Tab ID Could not be parsed')
                                 batchError(`<strong>Error:</strong> ${errorMessage} (<a href='${loginUrl}'>Login</a>) `)
                                 resetSearch()
-                                return false
+                                return
                             }
+
                             tabId = requestVars.TAB_ID || ''
                             log('New Tab ID:', tabId)
                             batchError()
@@ -2159,6 +2142,7 @@
                             if (errorBOM?.modelObject?.step === 'Error') {
                                 errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
                             }
+
                             log('Failed to receive Tab ID')
                             resetSearch()
                             batchError(`<strong>Error:</strong> ${errorMessage} ( <a href='${loginUrl}'>Login</a> ) `)
@@ -2197,9 +2181,7 @@
         httpRequest({
             method: 'POST',
             url: 'https://api.cathaypacific.com/redibe/standardAward/create',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             withCredentials: 'true',
             data: cxString,
             onload: (response) => {
@@ -2272,8 +2254,8 @@
         }
 
         if (r === t) {
-            rtFrom.forEach(from => {
-                rtTo.forEach(to => {
+            rtFrom.forEach((from) => {
+                rtTo.forEach((to) => {
                     routes.push({
                         from,
                         to
@@ -2292,15 +2274,16 @@
         const populateNextRoute = (flights) => {
             insertResults(thisRoute.from, thisRoute.to, bulkDate, flights)
 
-            if (!routes.length) {
+            if (routes.length) {
+                thisRoute = routes.shift()
+                searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uefAdult, uefChild, populateNextRoute)
+            } else {
                 bulkDate = dateAdd(1, bulkDate)
                 if (singleDate) stopBatch()
                 bulkSearch()
-            } else {
-                thisRoute = routes.shift()
-                searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uefAdult, uefChild, populateNextRoute)
             }
         }
+
         searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uefAdult, uefChild, populateNextRoute)
     }
 
@@ -2323,9 +2306,7 @@
             cb({
                 modelObject: {
                     isContainingErrors: true,
-                    messages: [{
-                        text: lang.invalid_code
-                    }]
+                    messages: [{ text: lang.invalid_code }]
                 }
             })
             return
@@ -2334,8 +2315,8 @@
         const requests = requestVars
         log('searchAvailability() requests:', requests)
 
-        requests.B_DATE_1 = date + '0000'
-        // requests.B_DATE_2 = dateAdd(1, date) + '0000'
+        requests.B_DATE_1 = `${date}0000`
+        // requests.B_DATE_2 = `${dateAdd(1, date)}0000`
         requests.B_LOCATION_1 = from
         requests.E_LOCATION_1 = to
         // requests.B_LOCATION_2 = to
