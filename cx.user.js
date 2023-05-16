@@ -94,15 +94,15 @@
     // TODO: Use the membership number URL
     const loginUrl = `https://www.cathaypacific.com/content/cx/${browserLang}_${browserCountry}/sign-in.html?loginreferrer=${encodeURI(`https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`)}`
 
-    let staticPath = valueGet('static_path', '/CathayPacificAwardV3/AML_IT3.3.18/')
+    let staticFilesPath = valueGet('static_files_path', '/CathayPacificAwardV3/AML_IT3.3.18/')
     let requestParams = {}
     let tabId = ''
     let formSubmitUrl = availabilityUrl + tabId
 
     const initCxVars = () => {
-        if (typeof window.staticFilesPath !== 'undefined' && staticPath !== window.staticFilesPath) {
+        if (typeof window.staticFilesPath !== 'undefined' && staticFilesPath !== window.staticFilesPath) {
             log('typeof window.staticFilesPath:', typeof window.staticFilesPath)
-            staticPath = valueSet('static_path', window.staticFilesPath)
+            staticFilesPath = valueSet('static_files_path', window.staticFilesPath)
         }
 
         if (typeof window.requestParams === 'string') {
@@ -321,9 +321,9 @@
         ec: browserCountry,
         el: browserLang,
         search: 'Search',
-        searching: `<img src='https://book.cathaypacific.com${staticPath}common/skin/img/icons/cx/icon-loading.gif'> Searching...`,
-        searching_w_cancel: `<img src='https://book.cathaypacific.com${staticPath}common/skin/img/icons/cx/icon-loading.gif'> Searching... (Click to Stop)`,
-        searching_cont: `<img src='https://book.cathaypacific.com${staticPath}common/skin/img/icons/cx/icon-loading.gif'> Please wait... (Page will refresh)`,
+        searching: `<img src='https://book.cathaypacific.com${staticFilesPath}common/skin/img/icons/cx/icon-loading.gif'> Searching...`,
+        searching_w_cancel: `<img src='https://book.cathaypacific.com${staticFilesPath}common/skin/img/icons/cx/icon-loading.gif'> Searching... (Click to Stop)`,
+        searching_cont: `<img src='https://book.cathaypacific.com${staticFilesPath}common/skin/img/icons/cx/icon-loading.gif'> Please wait... (Page will refresh)`,
         next_batch: 'Load More...',
         search_all_cabins: 'Search Availability in All Cabins',
         flights: 'Available Flights',
@@ -2432,7 +2432,7 @@
                     if (available !== '') {
                         flightHTML += '<div class="flight_wrapper">'
                         flightHTML += `<div class='flight_item direct ${(savedFlights[flightKey] ? ' saved' : '')}' data-flight-info='${flightKey}' data-flight-avail='${f1}_${j1}_${p1}_${y1}' data-direct='1' data-f='${(displayF ? 1 : 0)}' data-j='${(displayJ ? 1 : 0)}' data-p='${(displayP ? 1 : 0)}' data-y='${(displayY ? 1 : 0)}'>
-                        <img src='https://book.cathaypacific.com${staticPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png'>
+                        <img src='https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png'>
                         <span class="flight_num">${leg1Airline + leg1FlightNum}</span>
                         ${available}
                         <span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z" fill="currentColor"></path></svg></span>
@@ -2492,7 +2492,7 @@
                     if (available !== '') {
                         flightHTML += '<div class="flight_wrapper">'
                         flightHTML += `<div class='flight_item ${(savedFlights[flightKey] ? ' saved' : '')}' data-direct='0' data-flight-info='${flightKey}'  data-flight-avail='${numF}_${numJ}_${numP}_${numY}' data-f='${displayF ? 1 : 0}' data-j='${displayJ ? 1 : 0}' data-p='${displayP ? 1 : 0}' data-y='${displayY ? 1 : 0}'>
-                        <img src='https://book.cathaypacific.com${staticPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png'>
+                        <img src='https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png'>
                         <span class="flight_num">${leg1Airline + leg1FlightNum}
                         <span class='stopover'>${transitAirportCode}</span>
                         ${leg2Airline + leg2FlightNum}</span>
