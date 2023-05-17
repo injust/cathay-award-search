@@ -1379,10 +1379,10 @@
                 } else {
                     e.target.parentNode.classList.add('saved')
                     savedFlights[key] = {
-                        F: flightAvail[0],
-                        J: flightAvail[1],
-                        P: flightAvail[2],
-                        Y: flightAvail[3]
+                        F: parseInt(flightAvail[0]),
+                        J: parseInt(flightAvail[1]),
+                        P: parseInt(flightAvail[2]),
+                        Y: parseInt(flightAvail[3])
                     }
                     updateSavedFlights()
                 }
