@@ -1284,9 +1284,6 @@
                 if (r !== t) this.value = this.value.toUpperCase().substring(0, 3)
                 routeChanged = true
                 if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uefFrom} - ${uefTo} ${lang.bulk_flights}`
-                // TODO: dest is incorrectly named, also this should be a list of airport codes instead of a string
-                const dest = this.value.match(/[A-Z]{3}$/)
-                if (dest) getDestinations(dest[0]) // TODO: This doesn't get all destinations when searching from multiple origin airports
             }, 0)
         })
 
@@ -1560,13 +1557,10 @@
     // Data Retrievers
     // ============================================================
 
-    const airports = {
-        origins: {},
-        destinations: {}
-    }
+    const airports = {}
 
-    const getOrigins = () => {
-        log('getOrigins()')
+    const loadAirports = () => {
+        log('loadAirports()')
 
         httpRequest({
             method: 'GET',
@@ -1575,30 +1569,8 @@
                 const data = JSON.parse(response.responseText)
                 if (data.airports) {
                     data.airports.forEach(({ airportCode, countryName, shortName }) => {
-                        airports.origins[airportCode] = { airportCode, countryName, shortName }
+                        airports[airportCode] = { airportCode, countryName, shortName }
                     })
-                } else {
-                    airports.origins = {}
-                }
-            }
-        })
-    }
-
-    const getDestinations = (from) => {
-        if (!airports.origins[from]) return
-        log('getDestinations()')
-
-        httpRequest({
-            method: 'GET',
-            url: `https://api.cathaypacific.com/redibe/airport/destination/${from}/${lang.el}/`,
-            onload: (response) => {
-                const data = JSON.parse(response.responseText)
-                if (data.airports) {
-                    data.airports.forEach(({ airportCode, countryName, shortName }) => {
-                        airports.destinations[airportCode] = { airportCode, countryName, shortName }
-                    })
-                } else {
-                    airports.destinations = {}
                 }
             }
         })
@@ -2561,7 +2533,7 @@
         updateSavedFlights()
         autocomplete(inputFrom, 'origins')
         autocomplete(inputTo, 'origins')
-        getOrigins()
+        loadAirports()
 
         if (contQuery) {
             resetContVars()
