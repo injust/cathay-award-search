@@ -1562,7 +1562,7 @@
 
     const airports = {
         origins: {},
-        dest: {}
+        destinations: {}
     }
 
     const getOrigins = () => {
@@ -1595,10 +1595,10 @@
                 const data = JSON.parse(response.responseText)
                 if (data.airports) {
                     data.airports.forEach(({ airportCode, countryName, shortName }) => {
-                        airports.dest[airportCode] = { airportCode, countryName, shortName }
+                        airports.destinations[airportCode] = { airportCode, countryName, shortName }
                     })
                 } else {
-                    airports.dest = {}
+                    airports.destinations = {}
                 }
             }
         })
