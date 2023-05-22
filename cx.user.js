@@ -348,7 +348,6 @@
         key_exhausted: 'Key request quota exhausted, attempting to get new key...',
         getting_key: 'Attempting to retrieve API key...',
         invalid_airport: 'Invalid Airport',
-        invalid_airports: 'Invalid Airports',
         invalid_code: 'Invalid Destination Code',
         invalid_date: 'Invalid Date',
         saved_queries: 'Saved Flight Queries',
@@ -1951,7 +1950,7 @@
 
         if (errorAirportCodes.length) {
             el.value = airportCodes.join(',')
-            alert(`Removing ${errorAirportCodes.length > 1 ? lang.invalid_airports : lang.invalid_airport}: ${errorAirportCodes.join(',')}`)
+            alert(`Removing ${lang.invalid_airport}${errorAirportCodes.length > 1 ? 's' : ''}: ${errorAirportCodes.join(',')}`)
         }
     }
 
