@@ -1944,9 +1944,7 @@
         let airportCodes = el.value.split(',')
         const errorAirportCodes = []
         airportCodes = airportCodes.filter((airportCode) => {
-            if (airportCode.match(/^[A-Z]{3}$/)) {
-                return true
-            }
+            if (airports[airportCode]) return true
             if (airportCode) errorAirportCodes.push(airportCode)
             return false
         })
