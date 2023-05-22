@@ -1559,8 +1559,8 @@
     // ============================================================
 
     const airports = {
-        origins: [],
-        dest: []
+        origins: {},
+        dest: {}
     }
 
     const getOrigins = () => {
@@ -1580,7 +1580,7 @@
                         }
                     })
                 } else {
-                    airports.origins = []
+                    airports.origins = {}
                 }
             }
         })
@@ -1604,7 +1604,7 @@
                         }
                     })
                 } else {
-                    airports.dest = []
+                    airports.dest = {}
                 }
             }
         })
