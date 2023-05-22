@@ -463,8 +463,8 @@
         .unelevated_form .autocomplete-items div:hover{
             background-color: #e9e9e9;
         }
+        /* when navigating through the items using the arrow keys */
         .unelevated_form .autocomplete-active {
-            /* when navigating through the items using the arrow keys */
             background-color: DodgerBlue !important;
             color: #ffffff;
         }
@@ -1118,8 +1118,8 @@
         .bulk_error span {padding: 5px; line-height: 20px; height: 20px; max-height: 100%; display: block; background: #eae6d9; border-radius: 5px; text-align: center; color: #b54545; margin-top: 10px; font-size: 12px; transition: all 0.5s ease-out;font-family: CathaySans_Md, Cathay Sans EN; font-weight: 400;}
         .bulk_error_hidden span { height:0; margin-top: 0; overflow:hidden; padding:0;}
 
+        /* the container must be positioned relative */
         .unelevated_form .autocomplete {
-            /* the container must be positioned relative */
             position: relative;
             display: inline-block;
         }
@@ -1160,12 +1160,12 @@
             font-weight:normal;
         }
 
+        /* when hovering an item */
         .unelevated_form .autocomplete-items div:hover {
-            /* when hovering an item */
             background-color: #e9e9e9;
         }
+        /* when navigating through the items using the arrow keys */
         .unelevated_form .autocomplete-active, .unelevated_form div.autocomplete-active span.sc_code {
-            /* when navigating through the items using the arrow keys */
             background-color: DodgerBlue !important;
             color: #ffffff;
         }
@@ -1623,8 +1623,8 @@
         }
     }
 
+    // arguments: the text field element and an array of possible autocomplete values
     const autocomplete = (inp, list) => {
-        // the autocomplete function takes two arguments: the text field element and an array of possible autocomplete values
         let currentFocus
         // execute a function when someone writes in the text field
         inp.addEventListener('input', function (e) {
@@ -1637,36 +1637,40 @@
         inp.addEventListener('keydown', function (e) {
             let x = shadowRoot.getElementById(`${this.id}autocomplete-list`)
             if (x) x = x.getElementsByTagName('div')
+            // If the arrow DOWN key is pressed
             if (e.keyCode === 40) {
-                // If the arrow DOWN key is pressed, increase the currentFocus variable
+                // increase the currentFocus variable
                 currentFocus++
-                // and and make the current item more visible
+                // make the current item more visible
                 addActive(x)
+            // If the arrow UP key is pressed
             } else if (e.keyCode === 38) { // up
-                // If the arrow UP key is pressed, decrease the currentFocus variable
+                // decrease the currentFocus variable
                 currentFocus--
-                // and make the current item more visible
+                // make the current item more visible
                 addActive(x)
+            // If the ENTER key is pressed
             } else if (e.keyCode === 13) {
-                // If the ENTER key is pressed, prevent the form from being submitted
+                // prevent the form from being submitted
                 e.preventDefault()
                 closeAllLists()
                 if (currentFocus > -1) {
-                    // and simulate a click on the "active" item
+                    // simulate a click on the "active" item
                     if (x) x[currentFocus].click()
                 } else if (x) {
                     x.querySelector(':not').click()
                 }
+            // If the SPACE or TAB key is pressed
             } else if (e.keyCode === 32 || e.keyCode === 9) {
-                // If the SPACE or TAB key is pressed, select first option
+                // select the first option
                 closeAllLists()
-                // and simulate a click on the "active" item
+                // simulate a click on the "active" item
                 if (x) x[0].click()
             }
         })
 
+        // classify an item as "active"
         const addActive = (x) => {
-            // a function to classify an item as "active"
             if (!x) return
             // start by removing the "active" class on all items
             removeActive(x)
@@ -1676,15 +1680,15 @@
             x[currentFocus].classList.add('autocomplete-active')
         }
 
+        // remove the "active" class from all autocomplete items
         const removeActive = (x) => {
-            // a function to remove the "active" class from all autocomplete items
             for (let i = 0; i < x.length; i++) {
                 x[i].classList.remove('autocomplete-active')
             }
         }
 
+        // close all autocomplete lists in the document, except the one passed as an argument
         const closeAllLists = (el) => {
-            // close all autocomplete lists in the document, except the one passed as an argument
             const x = shadowRoot.querySelectorAll('.autocomplete-items')
             for (let i = 0; i < x.length; i++) {
                 if (el !== x[i] && el !== inp) {
@@ -1713,10 +1717,9 @@
             sep.style.display = 'none'
             sep.classList.add('ac_separator')
             a.appendChild(sep)
-            // for each item in the array...
             const favs = ['TPE', 'TSA', 'KHH', 'RMQ', 'TYO', 'HND', 'NRT', 'KIX', 'ITM', 'CTS', 'FUK', 'NGO', 'OKA', 'ICN', 'PUS', 'GMP', 'CJU', 'HKG', 'MFM', 'BKK', 'CNX', 'HKT', 'CGK', 'DPS', 'SUB', 'KUL', 'BKI', 'PEN', 'DAD', 'HAN', 'SGN', 'CEB', 'MNL', 'SIN', 'PNH', 'DEL', 'BOM', 'DXB', 'DOH', 'TLV', 'BCN', 'MAD', 'MXP', 'CDG', 'ZRH', 'MUC', 'FCO', 'FRA', 'CDG', 'AMS', 'LHR', 'LGW', 'LON', 'MAN', 'FCO', 'BOS', 'JFK', 'YYZ', 'ORD', 'IAD', 'YVR', 'SFO', 'LAX', 'SAN', 'SEA', 'JNB', 'PER', 'SYD', 'BNE', 'MEL', 'AKL', 'HEL', 'BLR', 'SHA', 'PVG', 'PEK', 'CAN', 'KTM', 'ADL', 'CPT', 'ATH', 'IST', 'SOF', 'VCE', 'BUD', 'PRG', 'VIE', 'BER', 'WAW', 'KBP', 'CPH', 'DUS', 'BRU', 'OSL', 'ARN', 'DUB', 'MIA', 'ATL', 'IAH', 'DFW', 'PHL', 'CMN', 'LAS', 'SJC', 'DEN', 'AUS', 'MSY', 'MCO', 'EWR', 'NYC', 'LIS', 'OPO', 'SPU', 'DBV', 'ZAG', 'MLE', 'LIM', 'BOG', 'CNS', 'GRU', 'SCL', 'GIG', 'EZE', 'MEX', 'CUN']
+            // for each item, check if it starts with the same letters as the text field value
             Object.keys(arr).forEach((key) => {
-                // check if the item starts with the same letters as the text field value
                 const airportCode = arr[key].airportCode
                 const countryName = checkLocale(arr[key].countryName)
                 const shortName = arr[key].shortName
