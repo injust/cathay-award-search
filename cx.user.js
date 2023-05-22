@@ -1266,8 +1266,8 @@
         [inputFrom, inputTo].forEach((item) => {
             item.addEventListener('keyup', function (e) {
                 if (r !== t) return
-                // If the SPACE or COMMA or ENTER key is pressed
-                if (e.keyCode === 32 || e.keyCode === 188 || e.keyCode === 13) {
+                // If the ENTER or SPACE or COMMA key is pressed
+                if (e.keyCode === 13 || e.keyCode === 32 || e.keyCode === 188) {
                     // If the ENTER key is pressed
                     if (e.keyCode === 13) this.value += ','
                     this.value = this.value.toUpperCase().split(/[ ,]+/).join(',')
@@ -1662,8 +1662,8 @@
                 } else if (x) {
                     x.querySelector(':not').click()
                 }
-            // If the SPACE or TAB key is pressed
-            } else if (e.keyCode === 32 || e.keyCode === 9) {
+            // If the TAB or SPACE key is pressed
+            } else if (e.keyCode === 9 || e.keyCode === 32) {
                 // Select the first option
                 closeAllLists()
                 // Simulate a click on the "active" item
