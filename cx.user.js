@@ -1278,9 +1278,10 @@
             // setTimeout(fn, 0) lets the page reflect the updated DOM
             setTimeout(() => {
                 checkAirportCodes(this)
+                uefFrom = this.value
                 if (r !== t) this.value = this.value.toUpperCase().substring(0, 3)
                 routeChanged = true
-                if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${inputFrom.value} - ${inputTo.value} ${lang.bulk_flights}`
+                if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uefFrom} - ${uefTo} ${lang.bulk_flights}`
                 // TODO: dest is incorrectly named, also this should be a list of airport codes instead of a string
                 const dest = this.value.match(/[A-Z]{3}$/)
                 if (dest) getDestinations(dest[0]) // TODO: This doesn't get all destinations when searching from multiple origin airports
@@ -1292,9 +1293,10 @@
             // setTimeout(fn, 0) lets the page reflect the updated DOM
             setTimeout(() => {
                 checkAirportCodes(this)
+                uefTo = this.value
                 if (r !== t) this.value = this.value.toUpperCase().substring(0, 3)
                 routeChanged = true
-                if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${inputFrom.value} - ${inputTo.value} ${lang.bulk_flights}`
+                if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uefFrom} - ${uefTo} ${lang.bulk_flights}`
             }, 0)
         })
 
@@ -1327,7 +1329,7 @@
         inputDate.addEventListener('change', function (e) {
             if (isValidDate(this.value)) {
                 routeChanged = true
-                if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${inputFrom.value} - ${inputTo.value} ${lang.bulk_flights}`
+                if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uefFrom} - ${uefTo} ${lang.bulk_flights}`
             } else {
                 alert(lang.invalid_date)
                 this.value = uefDate
@@ -1771,7 +1773,7 @@
     const resetSearch = () => {
         searching = false
         remainingDays = 20
-        btnBatch.innerHTML = `${lang.bulk_batch} ${inputFrom.value} - ${inputTo.value} ${lang.bulk_flights}`
+        btnBatch.innerHTML = `${lang.bulk_batch} ${uefFrom} - ${uefTo} ${lang.bulk_flights}`
         btnBatch.classList.remove('bulkSearching')
         linkSearchSaved.innerText = `${lang.search_selected} »`
     }
