@@ -1266,7 +1266,9 @@
         [inputFrom, inputTo].forEach((item) => {
             item.addEventListener('keyup', function (e) {
                 if (r !== t) return
+                // If the SPACE or COMMA or ENTER key is pressed
                 if (e.keyCode === 32 || e.keyCode === 188 || e.keyCode === 13) {
+                    // If the ENTER key is pressed
                     if (e.keyCode === 13) this.value += ','
                     this.value = this.value.toUpperCase().split(/[ ,]+/).join(',')
                 }
@@ -1637,14 +1639,14 @@
         inp.addEventListener('keydown', function (e) {
             let x = shadowRoot.getElementById(`${this.id}autocomplete-list`)
             if (x) x = x.getElementsByTagName('div')
-            // If the arrow DOWN key is pressed
+            // If the Arrow DOWN key is pressed
             if (e.keyCode === 40) {
                 // Increase the currentFocus variable
                 currentFocus++
                 // Make the current item more visible
                 addActive(x)
-            // If the arrow UP key is pressed
-            } else if (e.keyCode === 38) { // up
+            // If the Arrow UP key is pressed
+            } else if (e.keyCode === 38) {
                 // Decrease the currentFocus variable
                 currentFocus--
                 // Make the current item more visible
