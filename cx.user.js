@@ -1590,7 +1590,7 @@
     }
 
     // Arguments: the text field element and an array of possible autocomplete values
-    const autocomplete = (input, list) => {
+    const autocomplete = (input, values) => {
         let currentFocus
         // Execute a function when someone writes in the text field
         input.addEventListener('input', function (e) {
@@ -1666,7 +1666,6 @@
         const checkLocale = code => code.replace('Taiwan China', 'Taiwan').replace('中國台灣', '台灣')
 
         const newAC = (el, e) => {
-            const arr = airports[list] || []
             // Close any already open lists of autocomplete values
             closeAllLists()
             const val = el.value.match(/[^,]+$/) ? el.value.match(/[^,]+$/)[0] : false
@@ -1683,8 +1682,8 @@
             sep.style.display = 'none'
             a.appendChild(sep)
             const favs = ['TPE', 'TSA', 'KHH', 'RMQ', 'TYO', 'HND', 'NRT', 'KIX', 'ITM', 'CTS', 'FUK', 'NGO', 'OKA', 'ICN', 'PUS', 'GMP', 'CJU', 'HKG', 'MFM', 'BKK', 'CNX', 'HKT', 'CGK', 'DPS', 'SUB', 'KUL', 'BKI', 'PEN', 'DAD', 'HAN', 'SGN', 'CEB', 'MNL', 'SIN', 'PNH', 'DEL', 'BOM', 'DXB', 'DOH', 'TLV', 'BCN', 'MAD', 'MXP', 'CDG', 'ZRH', 'MUC', 'FCO', 'FRA', 'CDG', 'AMS', 'LHR', 'LGW', 'LON', 'MAN', 'FCO', 'BOS', 'JFK', 'YYZ', 'ORD', 'IAD', 'YVR', 'SFO', 'LAX', 'SAN', 'SEA', 'JNB', 'PER', 'SYD', 'BNE', 'MEL', 'AKL', 'HEL', 'BLR', 'SHA', 'PVG', 'PEK', 'CAN', 'KTM', 'ADL', 'CPT', 'ATH', 'IST', 'SOF', 'VCE', 'BUD', 'PRG', 'VIE', 'BER', 'WAW', 'KBP', 'CPH', 'DUS', 'BRU', 'OSL', 'ARN', 'DUB', 'MIA', 'ATL', 'IAH', 'DFW', 'PHL', 'CMN', 'LAS', 'SJC', 'DEN', 'AUS', 'MSY', 'MCO', 'EWR', 'NYC', 'LIS', 'OPO', 'SPU', 'DBV', 'ZAG', 'MLE', 'LIM', 'BOG', 'CNS', 'GRU', 'SCL', 'GIG', 'EZE', 'MEX', 'CUN']
-            // For each item, check if it starts with the same letters as the text field value
-            Object.values(arr).forEach(({ airportCode, countryName, shortName }) => {
+            // For each autocomplete value, check if it starts with the same letters as the text field value
+            Object.values(values).forEach(({ airportCode, countryName, shortName }) => {
                 countryName = checkLocale(countryName)
                 if (airportCode.length > 3) return
                 if (val.toUpperCase() === airportCode.substr(0, val.length).toUpperCase() || val.toUpperCase() === countryName.substr(0, val.length).toUpperCase() || val.toUpperCase() === shortName.substr(0, val.length).toUpperCase()) {
@@ -2531,9 +2530,9 @@
         window.onscroll = stickyFooter
         updateSavedCount()
         updateSavedFlights()
-        autocomplete(inputFrom, 'origins')
-        autocomplete(inputTo, 'origins')
         loadAirports()
+        autocomplete(inputFrom, airports)
+        autocomplete(inputTo, airports)
 
         if (contQuery) {
             resetContVars()
