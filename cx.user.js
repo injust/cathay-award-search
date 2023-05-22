@@ -463,7 +463,7 @@
         .unelevated_form .autocomplete-items div:hover{
             background-color: #e9e9e9;
         }
-        /* when navigating through the items using the arrow keys */
+        /* When navigating through the items using the arrow keys */
         .unelevated_form .autocomplete-active {
             background-color: DodgerBlue !important;
             color: #ffffff;
@@ -1118,7 +1118,7 @@
         .bulk_error span {padding: 5px; line-height: 20px; height: 20px; max-height: 100%; display: block; background: #eae6d9; border-radius: 5px; text-align: center; color: #b54545; margin-top: 10px; font-size: 12px; transition: all 0.5s ease-out;font-family: CathaySans_Md, Cathay Sans EN; font-weight: 400;}
         .bulk_error_hidden span { height:0; margin-top: 0; overflow:hidden; padding:0;}
 
-        /* the container must be positioned relative */
+        /* The container must be positioned relative */
         .unelevated_form .autocomplete {
             position: relative;
             display: inline-block;
@@ -1160,11 +1160,11 @@
             font-weight:normal;
         }
 
-        /* when hovering an item */
+        /* When hovering an item */
         .unelevated_form .autocomplete-items div:hover {
             background-color: #e9e9e9;
         }
-        /* when navigating through the items using the arrow keys */
+        /* When navigating through the items using the arrow keys */
         .unelevated_form .autocomplete-active, .unelevated_form div.autocomplete-active span.sc_code {
             background-color: DodgerBlue !important;
             color: #ffffff;
@@ -1623,71 +1623,71 @@
         }
     }
 
-    // arguments: the text field element and an array of possible autocomplete values
+    // Arguments: the text field element and an array of possible autocomplete values
     const autocomplete = (inp, list) => {
         let currentFocus
-        // execute a function when someone writes in the text field
+        // Execute a function when someone writes in the text field
         inp.addEventListener('input', function (e) {
             newAC(this, e)
         })
         // inp.addEventListener('click', function (e) {
         //     newAC(this, e)
         // })
-        // execute a function presses a key on the keyboard
+        // Execute a function presses a key on the keyboard
         inp.addEventListener('keydown', function (e) {
             let x = shadowRoot.getElementById(`${this.id}autocomplete-list`)
             if (x) x = x.getElementsByTagName('div')
             // If the arrow DOWN key is pressed
             if (e.keyCode === 40) {
-                // increase the currentFocus variable
+                // Increase the currentFocus variable
                 currentFocus++
-                // make the current item more visible
+                // Make the current item more visible
                 addActive(x)
             // If the arrow UP key is pressed
             } else if (e.keyCode === 38) { // up
-                // decrease the currentFocus variable
+                // Decrease the currentFocus variable
                 currentFocus--
-                // make the current item more visible
+                // Make the current item more visible
                 addActive(x)
             // If the ENTER key is pressed
             } else if (e.keyCode === 13) {
-                // prevent the form from being submitted
+                // Prevent the form from being submitted
                 e.preventDefault()
                 closeAllLists()
                 if (currentFocus > -1) {
-                    // simulate a click on the "active" item
+                    // Simulate a click on the "active" item
                     if (x) x[currentFocus].click()
                 } else if (x) {
                     x.querySelector(':not').click()
                 }
             // If the SPACE or TAB key is pressed
             } else if (e.keyCode === 32 || e.keyCode === 9) {
-                // select the first option
+                // Select the first option
                 closeAllLists()
-                // simulate a click on the "active" item
+                // Simulate a click on the "active" item
                 if (x) x[0].click()
             }
         })
 
-        // classify an item as "active"
+        // Classify an item as "active"
         const addActive = (x) => {
             if (!x) return
-            // start by removing the "active" class on all items
+            // Start by removing the "active" class on all items
             removeActive(x)
             if (currentFocus >= x.length) currentFocus = 0
             if (currentFocus < 0) currentFocus = x.length - 1
-            // add class "autocomplete-active"
+            // Add class "autocomplete-active"
             x[currentFocus].classList.add('autocomplete-active')
         }
 
-        // remove the "active" class from all autocomplete items
+        // Remove the "active" class from all autocomplete items
         const removeActive = (x) => {
             for (let i = 0; i < x.length; i++) {
                 x[i].classList.remove('autocomplete-active')
             }
         }
 
-        // close all autocomplete lists in the document, except the one passed as an argument
+        // Close all autocomplete lists in the document, except the one passed as an argument
         const closeAllLists = (el) => {
             const x = shadowRoot.querySelectorAll('.autocomplete-items')
             for (let i = 0; i < x.length; i++) {
@@ -1701,24 +1701,24 @@
 
         const newAC = (el, e) => {
             const arr = airports[list] || []
-            // close any already open lists of autocomplete values
+            // Close any already open lists of autocomplete values
             closeAllLists()
             const val = el.value.match(/[^,]+$/) ? el.value.match(/[^,]+$/)[0] : false
             if (!val) return
 
             currentFocus = -1
-            // create a DIV element that will contain the items (values)
+            // Create a DIV element that will contain the items (values)
             const a = document.createElement('DIV')
             a.setAttribute('id', `${el.id}autocomplete-list`)
             a.setAttribute('class', 'autocomplete-items')
-            // append the DIV element as a child of the autocomplete container
+            // Append the DIV element as a child of the autocomplete container
             el.parentNode.appendChild(a)
             const sep = document.createElement('span')
             sep.style.display = 'none'
             sep.classList.add('ac_separator')
             a.appendChild(sep)
             const favs = ['TPE', 'TSA', 'KHH', 'RMQ', 'TYO', 'HND', 'NRT', 'KIX', 'ITM', 'CTS', 'FUK', 'NGO', 'OKA', 'ICN', 'PUS', 'GMP', 'CJU', 'HKG', 'MFM', 'BKK', 'CNX', 'HKT', 'CGK', 'DPS', 'SUB', 'KUL', 'BKI', 'PEN', 'DAD', 'HAN', 'SGN', 'CEB', 'MNL', 'SIN', 'PNH', 'DEL', 'BOM', 'DXB', 'DOH', 'TLV', 'BCN', 'MAD', 'MXP', 'CDG', 'ZRH', 'MUC', 'FCO', 'FRA', 'CDG', 'AMS', 'LHR', 'LGW', 'LON', 'MAN', 'FCO', 'BOS', 'JFK', 'YYZ', 'ORD', 'IAD', 'YVR', 'SFO', 'LAX', 'SAN', 'SEA', 'JNB', 'PER', 'SYD', 'BNE', 'MEL', 'AKL', 'HEL', 'BLR', 'SHA', 'PVG', 'PEK', 'CAN', 'KTM', 'ADL', 'CPT', 'ATH', 'IST', 'SOF', 'VCE', 'BUD', 'PRG', 'VIE', 'BER', 'WAW', 'KBP', 'CPH', 'DUS', 'BRU', 'OSL', 'ARN', 'DUB', 'MIA', 'ATL', 'IAH', 'DFW', 'PHL', 'CMN', 'LAS', 'SJC', 'DEN', 'AUS', 'MSY', 'MCO', 'EWR', 'NYC', 'LIS', 'OPO', 'SPU', 'DBV', 'ZAG', 'MLE', 'LIM', 'BOG', 'CNS', 'GRU', 'SCL', 'GIG', 'EZE', 'MEX', 'CUN']
-            // for each item, check if it starts with the same letters as the text field value
+            // For each item, check if it starts with the same letters as the text field value
             Object.keys(arr).forEach((key) => {
                 const airportCode = arr[key].airportCode
                 const countryName = checkLocale(arr[key].countryName)
@@ -1728,23 +1728,23 @@
                     const sa = airportCode.substr(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
                     const se = shortName.substr(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
                     const sc = countryName.substr(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
-                    // create a DIV element for each matching element
+                    // Create a DIV element for each matching element
                     const b = document.createElement('DIV')
-                    // make the matching letters bold
+                    // Make the matching letters bold
                     let c = `<span class='sa_code'><strong>${airportCode.substr(0, sa)}</strong>${airportCode.substr(sa)}</span>`
                     c += `<span class='sc_code'><strong>${shortName.substr(0, se)}</strong>${shortName.substr(se)}`
                     c += ` - <strong>${countryName.substr(0, sc)}</strong>${countryName.substr(sc)}</span>`
                     c += '</span>'
-                    // insert a input field that will hold the current array item's value
+                    // Insert a input field that will hold the current array item's value
                     c += `<input type='hidden' value='${airportCode}'>`
                     b.dataset.airportCode = airportCode
                     b.innerHTML = c
-                    // execute a function when someone clicks on the item value (DIV element)
+                    // Execute a function when someone clicks on the item value (DIV element)
                     b.addEventListener('click', function (e) {
-                        // insert the value for the autocomplete text field
+                        // Insert the value for the autocomplete text field
                         inp.value = [inp.value.replace(/([,]?[^,]*)$/, ''), this.dataset.airportCode].filter(Boolean).join(',')
                         inp.dispatchEvent(new Event('change'))
-                        // close the list of autocomplete values (or any other open lists of autocomplete values)
+                        // Close the list of autocomplete values (or any other open lists of autocomplete values)
                         closeAllLists()
                     })
 
@@ -1758,7 +1758,7 @@
                 }
             })
         }
-        // execute a function when someone clicks in the document
+        // Execute a function when someone clicks in the document
         document.addEventListener('click', function (e) {
             if (e.target === inp) return
             closeAllLists(e.target)
