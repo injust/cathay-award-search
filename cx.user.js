@@ -1630,9 +1630,9 @@
         inp.addEventListener('input', function (e) {
             newAC(this, e)
         })
-        //         inp.addEventListener('click', function(e) {
-        //             newAC(this, e)
-        //         })
+        // inp.addEventListener('click', function (e) {
+        //     newAC(this, e)
+        // })
         /* execute a function presses a key on the keyboard */
         inp.addEventListener('keydown', function (e) {
             let x = shadowRoot.getElementById(`${this.id}autocomplete-list`)
