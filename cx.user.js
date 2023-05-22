@@ -1574,12 +1574,8 @@
             onload: (response) => {
                 const data = JSON.parse(response.responseText)
                 if (data.airports) {
-                    data.airports.forEach((airport) => {
-                        airports.origins[airport.airportCode] = {
-                            airportCode: airport.airportCode,
-                            shortName: airport.shortName,
-                            countryName: airport.countryName
-                        }
+                    data.airports.forEach(({ airportCode, countryName, shortName }) => {
+                        airports.origins[airportCode] = { airportCode, countryName, shortName }
                     })
                 } else {
                     airports.origins = {}
@@ -1598,12 +1594,8 @@
             onload: (response) => {
                 const data = JSON.parse(response.responseText)
                 if (data.airports) {
-                    data.airports.forEach((airport) => {
-                        airports.dest[airport.airportCode] = {
-                            airportCode: airport.airportCode,
-                            shortName: airport.shortName,
-                            countryName: airport.countryName
-                        }
+                    data.airports.forEach(({ airportCode, countryName, shortName }) => {
+                        airports.dest[airportCode] = { airportCode, countryName, shortName }
                     })
                 } else {
                     airports.dest = {}
@@ -1721,10 +1713,8 @@
             a.appendChild(sep)
             const favs = ['TPE', 'TSA', 'KHH', 'RMQ', 'TYO', 'HND', 'NRT', 'KIX', 'ITM', 'CTS', 'FUK', 'NGO', 'OKA', 'ICN', 'PUS', 'GMP', 'CJU', 'HKG', 'MFM', 'BKK', 'CNX', 'HKT', 'CGK', 'DPS', 'SUB', 'KUL', 'BKI', 'PEN', 'DAD', 'HAN', 'SGN', 'CEB', 'MNL', 'SIN', 'PNH', 'DEL', 'BOM', 'DXB', 'DOH', 'TLV', 'BCN', 'MAD', 'MXP', 'CDG', 'ZRH', 'MUC', 'FCO', 'FRA', 'CDG', 'AMS', 'LHR', 'LGW', 'LON', 'MAN', 'FCO', 'BOS', 'JFK', 'YYZ', 'ORD', 'IAD', 'YVR', 'SFO', 'LAX', 'SAN', 'SEA', 'JNB', 'PER', 'SYD', 'BNE', 'MEL', 'AKL', 'HEL', 'BLR', 'SHA', 'PVG', 'PEK', 'CAN', 'KTM', 'ADL', 'CPT', 'ATH', 'IST', 'SOF', 'VCE', 'BUD', 'PRG', 'VIE', 'BER', 'WAW', 'KBP', 'CPH', 'DUS', 'BRU', 'OSL', 'ARN', 'DUB', 'MIA', 'ATL', 'IAH', 'DFW', 'PHL', 'CMN', 'LAS', 'SJC', 'DEN', 'AUS', 'MSY', 'MCO', 'EWR', 'NYC', 'LIS', 'OPO', 'SPU', 'DBV', 'ZAG', 'MLE', 'LIM', 'BOG', 'CNS', 'GRU', 'SCL', 'GIG', 'EZE', 'MEX', 'CUN']
             // For each item, check if it starts with the same letters as the text field value
-            Object.keys(arr).forEach((key) => {
-                const airportCode = arr[key].airportCode
-                const countryName = checkLocale(arr[key].countryName)
-                const shortName = arr[key].shortName
+            Object.values(arr).forEach(({ airportCode, countryName, shortName }) => {
+                countryName = checkLocale(countryName)
                 if (airportCode.length > 3) return
                 if (val.toUpperCase() === airportCode.substr(0, val.length).toUpperCase() || val.toUpperCase() === countryName.substr(0, val.length).toUpperCase() || val.toUpperCase() === shortName.substr(0, val.length).toUpperCase()) {
                     const sa = airportCode.substr(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
