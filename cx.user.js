@@ -1618,17 +1618,17 @@
     }
 
     // Arguments: the text field element and an array of possible autocomplete values
-    const autocomplete = (inp, list) => {
+    const autocomplete = (input, list) => {
         let currentFocus
         // Execute a function when someone writes in the text field
-        inp.addEventListener('input', function (e) {
+        input.addEventListener('input', function (e) {
             newAC(this, e)
         })
-        // inp.addEventListener('click', function (e) {
+        // input.addEventListener('click', function (e) {
         //     newAC(this, e)
         // })
         // Execute a function presses a key on the keyboard
-        inp.addEventListener('keydown', function (e) {
+        input.addEventListener('keydown', function (e) {
             let x = shadowRoot.getElementById(`${this.id}autocomplete-list`)
             if (x) x = x.getElementsByTagName('div')
             // If the Arrow DOWN key is pressed
@@ -1685,7 +1685,7 @@
         const closeAllLists = (el) => {
             const x = shadowRoot.querySelectorAll('.autocomplete-items')
             for (let i = 0; i < x.length; i++) {
-                if (el !== x[i] && el !== inp) {
+                if (el !== x[i] && el !== input) {
                     x[i].parentNode.removeChild(x[i])
                 }
             }
@@ -1734,8 +1734,8 @@
                     // Execute a function when someone clicks on the item value (DIV element)
                     b.addEventListener('click', function (e) {
                         // Insert the value for the autocomplete text field
-                        inp.value = [inp.value.replace(/([,]?[^,]*)$/, ''), this.dataset.airportCode].filter(Boolean).join(',')
-                        inp.dispatchEvent(new Event('change'))
+                        input.value = [input.value.replace(/([,]?[^,]*)$/, ''), this.dataset.airportCode].filter(Boolean).join(',')
+                        input.dispatchEvent(new Event('change'))
                         // Close the list of autocomplete values (or any other open lists of autocomplete values)
                         closeAllLists()
                     })
@@ -1752,7 +1752,7 @@
         }
         // Execute a function when someone clicks in the document
         document.addEventListener('click', function (e) {
-            if (e.target === inp) return
+            if (e.target === input) return
             closeAllLists(e.target)
         })
     }
