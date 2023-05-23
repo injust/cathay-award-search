@@ -210,8 +210,7 @@
     // Get Stored Values
     // ============================================================
 
-    // Set Search Parameters
-
+    // Search Parameters
     let uefFrom = valueGet('uef_from', 'HKG')
     let uefTo = valueGet('uef_to', 'TYO')
     let uefDate = valueGet('uef_date', dateAdd(14))
@@ -219,7 +218,6 @@
     let uefChild = valueGet('uef_child', 0)
 
     // Saved Queries
-
     const saved = valueGet('saved', {})
     const savedFlights = valueGet('saved_flights', {})
 
