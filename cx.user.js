@@ -1988,7 +1988,7 @@
     }, passengers = {
         adult: 1,
         child: 0
-    }, cabinclass = 'Y', oneway = false) => {
+    }, cabinclass = 'Y') => {
         log('newQueryPayload()')
 
         return {
@@ -2135,7 +2135,7 @@
     }, cabinclass = 'Y', isContQuery = false, isContBatch = false, isContSaved = false) => {
         let cxString
         if (route.length === 1) {
-            cxString = JSON.stringify(newQueryPayload(route[0], passengers, cabinclass, true))
+            cxString = JSON.stringify(newQueryPayload(route[0], passengers, cabinclass))
         } else if (route.length) {
             cxString = JSON.stringify(newMultiPayload(route, passengers, cabinclass))
         } else {
