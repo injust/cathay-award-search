@@ -1988,13 +1988,13 @@
     }, passengers = {
         adult: 1,
         child: 0
-    }, cabinclass = 'Y') => {
+    }, cabinClass = 'Y') => {
         log('newQueryPayload()')
 
         return {
             awardType: 'Standard',
             brand: 'CX',
-            cabinClass: cabinclass,
+            cabinClass: cabinClass,
             entryCountry: lang.ec,
             entryLanguage: lang.el,
             entryPoint: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html`,
@@ -2012,7 +2012,7 @@
         }
     }
 
-    const newMultiPayload = (routes, passengers, cabinclass = 'Y') => {
+    const newMultiPayload = (routes, passengers, cabinClass = 'Y') => {
         log('newMultiPayload()')
 
         const legs = []
@@ -2026,7 +2026,7 @@
         return {
             awardType: 'Standard',
             brand: 'CX',
-            cabinClass: cabinclass,
+            cabinClass: cabinClass,
             entryCountry: lang.ec,
             entryLanguage: lang.el,
             entryPoint: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html`,
@@ -2132,12 +2132,12 @@
     }], passengers = {
         adult: 1,
         child: 0
-    }, cabinclass = 'Y', isContQuery = false, isContBatch = false, isContSaved = false) => {
+    }, cabinClass = 'Y', isContQuery = false, isContBatch = false, isContSaved = false) => {
         let cxString
         if (route.length === 1) {
-            cxString = JSON.stringify(newQueryPayload(route[0], passengers, cabinclass))
+            cxString = JSON.stringify(newQueryPayload(route[0], passengers, cabinClass))
         } else if (route.length) {
-            cxString = JSON.stringify(newMultiPayload(route, passengers, cabinclass))
+            cxString = JSON.stringify(newMultiPayload(route, passengers, cabinClass))
         } else {
             return
         }
