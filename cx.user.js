@@ -94,7 +94,7 @@
     // TODO: Use the membership number URL
     const loginUrl = `https://www.cathaypacific.com/content/cx/${browserLang}_${browserCountry}/sign-in.html?loginreferrer=${encodeURI(`https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`)}`
 
-    let staticFilesPath = valueGet('static_files_path', '/CathayPacificAwardV3/AML_IT3.3.18/')
+    let staticFilesPath = valueGet('static_files_path', '/CathayPacificAwardV3/AML_IT3.3.22/')
     let requestParams = {}
     let tabId = ''
     let formSubmitUrl = availabilityUrl + tabId
