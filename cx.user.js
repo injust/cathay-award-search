@@ -1242,6 +1242,7 @@
             uefDate = valueSet('uef_date', inputDate.value)
             uefAdult = valueSet('uef_adult', parseInt(inputAdult.value))
             uefChild = valueSet('uef_child', parseInt(inputChild.value))
+
             regularSearch([{
                 from: uefFrom.substring(0, 3),
                 to: uefTo.substring(0, 3),
@@ -2146,10 +2147,12 @@
                 const urlToPost = data.urlToPost || 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability'
                 log('regularSearch parameters:', parameters)
                 const actionUrl = new URL(urlToPost)
+
                 if (isContQuery) valueSet('cont_query', true)
                 if (isContBatch) valueSet('cont_batch', true)
                 if (isContSaved) valueSet('cont_saved', true)
                 valueSet('cont_ts', Date.now())
+
                 // Create a form dynamically
                 const form = document.createElement('form')
                 form.setAttribute('name', 'regular_search_form')
