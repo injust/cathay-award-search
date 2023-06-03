@@ -6,6 +6,7 @@
 // @grant               GM.xmlHttpRequest
 // @grant               GM_getValue
 // @grant               GM_setValue
+// @grant               unsafeWindow
 // @author              injust
 // @homepageURL         https://github.com/injust/cathay-award-search
 // @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/facade.html
@@ -17,7 +18,7 @@
 // ==/UserScript==
 
 /* eslint-env browser */
-/* global GM, GM_getValue, GM_setValue */
+/* global GM, GM_getValue, GM_setValue, unsafeWindow */
 
 (function () {
     'use strict'
@@ -100,20 +101,21 @@
     let formSubmitUrl = availabilityUrl + tabId
 
     const initCxVars = () => {
-        if (typeof window.staticFilesPath !== 'undefined' && staticFilesPath !== window.staticFilesPath) {
-            log('typeof window.staticFilesPath:', typeof window.staticFilesPath)
-            staticFilesPath = valueSet('static_files_path', window.staticFilesPath)
+        log('initCxVars()')
+        if (typeof unsafeWindow.staticFilesPath !== 'undefined' && staticFilesPath !== unsafeWindow.staticFilesPath) {
+            // log('typeof unsafeWindow.staticFilesPath:', typeof unsafeWindow.staticFilesPath)
+            staticFilesPath = valueSet('static_files_path', unsafeWindow.staticFilesPath)
         }
 
-        if (typeof window.requestParams === 'string') {
-            requestParams = JSON.parse(window.requestParams)
-        } else if (typeof window.requestParams === 'object') {
-            requestParams = window.requestParams
+        if (typeof unsafeWindow.requestParams === 'string') {
+            requestParams = JSON.parse(unsafeWindow.requestParams)
+        } else if (typeof unsafeWindow.requestParams === 'object') {
+            requestParams = unsafeWindow.requestParams
         }
 
         tabId = requestParams.TAB_ID || tabId
 
-        formSubmitUrl = typeof window.formSubmitUrl === 'undefined' ? availabilityUrl + tabId : window.formSubmitUrl
+        formSubmitUrl = unsafeWindow.formSubmitUrl || availabilityUrl + tabId
     }
 
     const r = Math.random()
