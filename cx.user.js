@@ -223,14 +223,14 @@
     const filters = { nonstop: false, first: true, business: true, premium: true, economy: true, ...valueGet('filters', {}) }
 
     // const urlParams = new URLSearchParams(window.location.search)
-    const contQuery = valueGet('cont_query', false) // urlParams.has('cont_query')
     const contBatch = valueGet('cont_batch', false) // urlParams.has('cont_batch')
+    const contQuery = valueGet('cont_query', false) // urlParams.has('cont_query')
     const contSaved = valueGet('cont_saved', false) // urlParams.has('cont_saved')
     const contTs = valueGet('cont_ts', 0) // urlParams.has('cont_ts') ? parseInt(urlParams.get('cont_ts')) : 0
 
     const resetContVars = () => {
-        valueSet('cont_query', false)
         valueSet('cont_batch', false)
+        valueSet('cont_query', false)
         valueSet('cont_saved', false)
         valueSet('cont_ts', 0)
     }
@@ -1247,7 +1247,7 @@
             }], {
                 adults: uef.adults,
                 children: uef.children
-            }, 'Y', (uef.to.length > 3), false)
+            }, 'Y', false, uef.to.length > 3)
         })
 
         btnBatch.addEventListener('click', (e) => {
@@ -1799,7 +1799,7 @@
             }], {
                 adults: 1,
                 children: 0
-            }, 'Y', true, false, true)
+            }, 'Y', false, true, true)
             return
         }
 
@@ -2119,7 +2119,7 @@
     }], passengers = {
         adults: 1,
         children: 0
-    }, cabinClass = 'Y', isContQuery = false, isContBatch = false, isContSaved = false) => {
+    }, cabinClass = 'Y', isContBatch = false, isContQuery = false, isContSaved = false) => {
         let cxString
         if (route.length === 1) {
             cxString = JSON.stringify(newQueryPayload(route[0], passengers, cabinClass))
@@ -2146,8 +2146,8 @@
                 log('regularSearch parameters:', parameters)
                 const actionUrl = new URL(urlToPost)
 
-                if (isContQuery) valueSet('cont_query', true)
                 if (isContBatch) valueSet('cont_batch', true)
+                if (isContQuery) valueSet('cont_query', true)
                 if (isContSaved) valueSet('cont_saved', true)
                 valueSet('cont_ts', Date.now())
 
