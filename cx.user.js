@@ -1248,7 +1248,7 @@
             }], {
                 adults: uef.adults,
                 children: uef.children
-            }, 'Y', false, uef.to.length > 3)
+            }, 'Y', { batch: false, query: uef.to.length > 3, saved: false })
         })
 
         btnBatch.addEventListener('click', (e) => {
@@ -1800,7 +1800,7 @@
             }], {
                 adults: 1,
                 children: 0
-            }, 'Y', false, true, true)
+            }, 'Y', { batch: false, query: true, saved: true })
             return
         }
 
@@ -2120,7 +2120,7 @@
     }], passengers = {
         adults: 1,
         children: 0
-    }, cabinClass = 'Y', isContBatch = false, isContQuery = false, isContSaved = false) => {
+    }, cabinClass = 'Y', cont = { batch: false, query: false, saved: false }) => {
         let cxString
         if (route.length === 1) {
             cxString = JSON.stringify(newQueryPayload(route[0], passengers, cabinClass))
@@ -2147,7 +2147,7 @@
                 log('regularSearch parameters:', parameters)
                 const actionUrl = new URL(urlToPost)
 
-                valueSet('cont', { batch: isContBatch, query: isContQuery, saved: isContSaved, ts: Date.now() })
+                valueSet('cont', { ...cont, ts: Date.now() })
 
                 // Create a form dynamically
                 const form = document.createElement('form')
@@ -2193,7 +2193,7 @@
             }], {
                 adults: uef.adults,
                 children: uef.children
-            }, 'Y', true, true)
+            }, 'Y', { batch: true, query: true, saved: false })
             return
         }
 
