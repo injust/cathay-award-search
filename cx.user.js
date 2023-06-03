@@ -222,17 +222,18 @@
     // Search Result Filters
     const filters = { nonstop: false, first: true, business: true, premium: true, economy: true, ...valueGet('filters', {}) }
 
+    const defaultContVars = { batch: false, query: false, saved: false, ts: 0 }
+    const cont = { ...defaultContVars, ...valueGet('cont', {}) }
     // const urlParams = new URLSearchParams(window.location.search)
-    const contBatch = valueGet('cont_batch', false) // urlParams.has('cont_batch')
-    const contQuery = valueGet('cont_query', false) // urlParams.has('cont_query')
-    const contSaved = valueGet('cont_saved', false) // urlParams.has('cont_saved')
-    const contTs = valueGet('cont_ts', 0) // urlParams.has('cont_ts') ? parseInt(urlParams.get('cont_ts')) : 0
+    // const cont = {
+    //     batch: urlParams.has('cont_batch'),
+    //     query: urlParams.has('cont_query'),
+    //     saved: urlParams.has('cont_saved'),
+    //     ts: urlParams.has('cont_ts') ? parseInt(urlParams.get('cont_ts')) : 0
+    // }
 
     const resetContVars = () => {
-        valueSet('cont_batch', false)
-        valueSet('cont_query', false)
-        valueSet('cont_saved', false)
-        valueSet('cont_ts', 0)
+        valueSet('cont', defaultContVars)
     }
 
     // ============================================================
@@ -273,8 +274,8 @@
                 checkLogin()
             })
         } else if (currentUrl.includes('air/booking/availability')) {
-            if (contQuery) {
-                log('initRoot air/booking/availability with cont_query')
+            if (cont.query) {
+                log('initRoot air/booking/availability with cont.query')
 
                 waitForEl('body > header').then((el) => {
                     const boxes = document.querySelectorAll('body > div')
@@ -287,7 +288,7 @@
                     checkLogin()
                 })
             } else {
-                log('initRoot air/booking/availability without cont_query')
+                log('initRoot air/booking/availability without cont.query')
 
                 resetContVars()
                 waitForEl('#section-flights .bound-route, #section-flights-departure .bound-route').then((el) => {
@@ -1791,7 +1792,7 @@
         btnBatch.classList.add('bulkSearching')
         divTableBody.innerHTML = ''
 
-        if (!contQuery) {
+        if (!cont.query) {
             regularSearch([{
                 from: ssQuery.from,
                 to: ssQuery.to,
@@ -2146,10 +2147,7 @@
                 log('regularSearch parameters:', parameters)
                 const actionUrl = new URL(urlToPost)
 
-                if (isContBatch) valueSet('cont_batch', true)
-                if (isContQuery) valueSet('cont_query', true)
-                if (isContSaved) valueSet('cont_saved', true)
-                valueSet('cont_ts', Date.now())
+                valueSet('cont', { batch: isContBatch, query: isContQuery, saved: isContSaved, ts: Date.now() })
 
                 // Create a form dynamically
                 const form = document.createElement('form')
@@ -2187,7 +2185,7 @@
             noContinue = true
         }
 
-        if (!contQuery) {
+        if (!cont.query) {
             regularSearch([{
                 from: uef.from.substring(0, 3),
                 to: uef.to.substring(0, 3),
@@ -2526,18 +2524,18 @@
         autocomplete(inputFrom, airports)
         autocomplete(inputTo, airports)
 
-        if (contQuery) {
+        if (cont.query) {
             resetContVars()
             // If over 5 minutes since cont query, don't auto search
-            if (Date.now() - contTs > 60 * 5 * 1000 && !debug) return
+            if (Date.now() - cont.ts > 60 * 5 * 1000 && !debug) return
             btnBatch.innerHTML = lang.searching_w_cancel
             btnBatch.classList.add('bulkSearching')
             document.body.classList.add('cont_query')
             setTimeout(() => {
-                if (contSaved) {
+                if (cont.saved) {
                     savedSearch()
                 } else {
-                    bulkClick(!contBatch)
+                    bulkClick(!cont.batch)
                 }
             }, 1000)
         }
