@@ -213,11 +213,7 @@
     // ============================================================
 
     // Search Parameters
-    let uefFrom = valueGet('uef_from', 'HKG')
-    let uefTo = valueGet('uef_to', 'TYO')
-    let uefDate = valueGet('uef_date', dateAdd(14))
-    let uefAdult = valueGet('uef_adult', 1)
-    let uefChild = valueGet('uef_child', 0)
+    const uef = { from: 'HKG', to: 'TYO', date: dateAdd(14), adults: 1, children: 0, ...valueGet('uef', {}) }
 
     // Saved Queries
     const saved = valueGet('saved', {})
@@ -393,15 +389,15 @@
             <div class='labels'>
                 <a href="javascript:void(0);" class="switch"><svg height="16px" width="16px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 365.352 365.352" xml:space="preserve" stroke-width="0" transform="rotate(180)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g> <path d="M363.155,169.453l-14.143-14.143c-1.407-1.407-3.314-2.197-5.304-2.197 c-1.989,0-3.897,0.79-5.304,2.197l-45.125,45.125v-57.503c0-50.023-40.697-90.721-90.721-90.721H162.3c-4.143,0-7.5,3.358-7.5,7.5 v20c0,4.142,3.357,7.5,7.5,7.5h40.26c30.725,0,55.721,24.996,55.721,55.721v57.503l-45.125-45.125 c-1.407-1.407-3.314-2.197-5.304-2.197c-1.989,0-3.896,0.79-5.304,2.197l-14.143,14.143c-1.406,1.406-2.196,3.314-2.196,5.303 c0,1.989,0.79,3.897,2.196,5.303l82.071,82.071c1.465,1.464,3.385,2.197,5.304,2.197c1.919,0,3.839-0.732,5.304-2.197 l82.071-82.071c1.405-1.406,2.196-3.314,2.196-5.303C365.352,172.767,364.561,170.859,363.155,169.453z"></path> <path d="M203.052,278.14h-40.26c-30.725,0-55.721-24.996-55.721-55.721v-57.503l45.125,45.126 c1.407,1.407,3.314,2.197,5.304,2.197c1.989,0,3.896-0.79,5.304-2.197l14.143-14.143c1.406-1.406,2.196-3.314,2.196-5.303 c0-1.989-0.79-3.897-2.196-5.303l-82.071-82.071c-2.93-2.929-7.678-2.929-10.607,0L2.196,185.292C0.79,186.699,0,188.607,0,190.596 c0,1.989,0.79,3.897,2.196,5.303l14.143,14.143c1.407,1.407,3.314,2.197,5.304,2.197s3.897-0.79,5.304-2.197l45.125-45.126v57.503 c0,50.023,40.697,90.721,90.721,90.721h40.26c4.143,0,7.5-3.358,7.5-7.5v-20C210.552,281.498,207.194,278.14,203.052,278.14z"></path> </svg></a>
                 <label class="labels_left"><span>From</span>
-                    <input tabindex="1" type='text' id='uef_from' name='uef_from' placeholder='TPE,HKG' value='${uefFrom}'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clearFrom" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></a></label>
+                    <input tabindex="1" type='text' id='uef_from' name='uef_from' placeholder='TPE,HKG' value='${uef.from}'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clearFrom" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></a></label>
                 <label class="labels_right"><span>Adults</span>
-                    <input tabindex="4" type='number' inputmode='decimal' onClick='this.select()' id='uef_adult' name='uef_adult' placeholder='Adults' value='${uefAdult}' min='0'></label>
+                    <input tabindex="4" type='number' inputmode='decimal' onClick='this.select()' id='uef_adult' name='uef_adult' placeholder='Adults' value='${uef.adults}' min='0'></label>
                 <label class="labels_left"><span>To</span>
-                    <input tabindex="2" type='text' id='uef_to' name='uef_to' placeholder='TYO,LHR,SFO' value='${uefTo}'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clearTo" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></label>
+                    <input tabindex="2" type='text' id='uef_to' name='uef_to' placeholder='TYO,LHR,SFO' value='${uef.to}'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clearTo" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></label>
                 <label class="labels_right"><span>Children</span>
-                    <input tabindex="5" type='number' inputmode='decimal' onClick='this.select()' id='uef_child' name='uef_child' placeholder='Children' value='${uefChild}' min='0'></label>
+                    <input tabindex="5" type='number' inputmode='decimal' onClick='this.select()' id='uef_child' name='uef_child' placeholder='Children' value='${uef.children}' min='0'></label>
                 <label class="labels_left"><span>Date</span>
-                    <input tabindex="3" class='uef_date' onClick='this.setSelectionRange(6, 8)' id='uef_date' inputmode='decimal' name='uef_date' placeholder='${dateAdd(30)}' value='${uefDate}'></label>
+                    <input tabindex="3" class='uef_date' onClick='this.setSelectionRange(6, 8)' id='uef_date' inputmode='decimal' name='uef_date' placeholder='${dateAdd(30)}' value='${uef.date}'></label>
                 <button class='uef_search'>${lang.search}</button>
             </div>
         </div>
@@ -433,7 +429,7 @@
             </div>
             <div class="bulk_footer">
                 <div class="bulk_footer_container">
-                    <button class='bulk_submit'>${lang.bulk_batch} ${uefFrom} - ${uefTo} ${lang.bulk_flights}</button>
+                    <button class='bulk_submit'>${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}</button>
                     <div class="bulk_error bulk_error_hidden"><span></span></div>
                 </div>
             </div>
@@ -1237,20 +1233,21 @@
         log('addFormListeners()')
 
         btnSearch.addEventListener('click', function (e) {
-            uefFrom = valueSet('uef_from', inputFrom.value)
-            uefTo = valueSet('uef_to', inputTo.value)
-            uefDate = valueSet('uef_date', inputDate.value)
-            uefAdult = valueSet('uef_adult', parseInt(inputAdult.value))
-            uefChild = valueSet('uef_child', parseInt(inputChild.value))
+            uef.from = inputFrom.value
+            uef.to = inputTo.value
+            uef.date = inputDate.value
+            uef.adults = parseInt(inputAdult.value)
+            uef.children = parseInt(inputChild.value)
+            valueSet('uef', uef)
 
             regularSearch([{
-                from: uefFrom.substring(0, 3),
-                to: uefTo.substring(0, 3),
-                date: uefDate
+                from: uef.from.substring(0, 3),
+                to: uef.to.substring(0, 3),
+                date: uef.date
             }], {
-                adult: uefAdult,
-                child: uefChild
-            }, 'Y', (uefTo.length > 3), false)
+                adult: uef.adults,
+                child: uef.children
+            }, 'Y', (uef.to.length > 3), false)
         })
 
         btnBatch.addEventListener('click', (e) => {
@@ -1283,10 +1280,10 @@
             // setTimeout(fn, 0) lets the page reflect the updated DOM
             setTimeout(() => {
                 checkAirportCodes(this)
-                uefFrom = this.value
+                uef.from = this.value
                 if (r !== t) this.value = this.value.toUpperCase().substring(0, 3)
                 routeChanged = true
-                if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uefFrom} - ${uefTo} ${lang.bulk_flights}`
+                if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}`
             }, 0)
         })
 
@@ -1295,10 +1292,10 @@
             // setTimeout(fn, 0) lets the page reflect the updated DOM
             setTimeout(() => {
                 checkAirportCodes(this)
-                uefTo = this.value
+                uef.to = this.value
                 if (r !== t) this.value = this.value.toUpperCase().substring(0, 3)
                 routeChanged = true
-                if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uefFrom} - ${uefTo} ${lang.bulk_flights}`
+                if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}`
             }, 0)
         })
 
@@ -1331,10 +1328,10 @@
         inputDate.addEventListener('change', function (e) {
             if (isValidDate(this.value)) {
                 routeChanged = true
-                if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uefFrom} - ${uefTo} ${lang.bulk_flights}`
+                if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}`
             } else {
                 alert(lang.invalid_date)
-                this.value = uefDate
+                this.value = uef.date
             }
         })
 
@@ -1354,12 +1351,12 @@
                 // searching = false
                 e.target.innerText = lang.loading
                 regularSearch([{
-                    from: (e.target.dataset.from ? e.target.dataset.from : uefFrom.substring(0, 3)),
-                    to: (e.target.dataset.dest ? e.target.dataset.dest : uefTo.substring(0, 3)),
+                    from: (e.target.dataset.from ? e.target.dataset.from : uef.from.substring(0, 3)),
+                    to: (e.target.dataset.dest ? e.target.dataset.dest : uef.to.substring(0, 3)),
                     date: e.target.dataset.date
                 }], {
-                    adult: uefAdult,
-                    child: uefChild
+                    adult: uef.adults,
+                    child: uef.children
                 })
             } else if (e.target.dataset.save) {
                 key = e.target.dataset.date + e.target.dataset.from + e.target.dataset.dest
@@ -1425,8 +1422,8 @@
                 stopBatch()
                 e.target.innerText = lang.loading
                 regularSearch([{
-                    from: (e.target.dataset.from ? e.target.dataset.from : uefFrom),
-                    to: (e.target.dataset.dest ? e.target.dataset.dest : uefTo),
+                    from: (e.target.dataset.from ? e.target.dataset.from : uef.from),
+                    to: (e.target.dataset.dest ? e.target.dataset.dest : uef.to),
                     date: e.target.dataset.date
                 }], {
                     adult: 1,
@@ -1730,7 +1727,7 @@
     const resetSearch = () => {
         searching = false
         remainingDays = 20
-        btnBatch.innerHTML = `${lang.bulk_batch} ${uefFrom} - ${uefTo} ${lang.bulk_flights}`
+        btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}`
         btnBatch.classList.remove('bulkSearching')
         linkSearchSaved.innerText = `${lang.search_selected} »`
     }
@@ -1752,14 +1749,15 @@
 
         log('Batch Clicked. Starting Search')
 
-        uefFrom = valueSet('uef_from', inputFrom.value)
-        uefTo = valueSet('uef_to', inputTo.value)
-        uefDate = valueSet('uef_date', inputDate.value)
-        uefAdult = valueSet('uef_adult', parseInt(inputAdult.value))
-        uefChild = valueSet('uef_child', parseInt(inputChild.value))
+        uef.from = inputFrom.value
+        uef.to = inputTo.value
+        uef.date = inputDate.value
+        uef.adults = parseInt(inputAdult.value)
+        uef.children = parseInt(inputChild.value)
+        valueSet('uef', uef)
 
         if (routeChanged) {
-            bulkDate = uefDate
+            bulkDate = uef.date
             routeChanged = false
 
             divTableBody.innerHTML = ''
@@ -2191,21 +2189,21 @@
 
         if (!contQuery) {
             regularSearch([{
-                from: uefFrom.substring(0, 3),
-                to: uefTo.substring(0, 3),
-                date: uefDate
+                from: uef.from.substring(0, 3),
+                to: uef.to.substring(0, 3),
+                date: uef.date
             }], {
-                adult: uefAdult,
-                child: uefChild
+                adult: uef.adults,
+                child: uef.children
             }, 'Y', true, true)
             return
         }
 
-        bulkDate ||= uefDate
+        bulkDate ||= uef.date
 
         const routes = []
-        const rtFrom = uefFrom.split(',')
-        const rtTo = uefTo.split(',')
+        const rtFrom = uef.from.split(',')
+        const rtTo = uef.to.split(',')
         const queryCount = rtFrom.length * rtTo.length
 
         if (!noContinue && remainingDays > Math.ceil(25 / queryCount)) {
@@ -2235,7 +2233,7 @@
 
             if (routes.length) {
                 thisRoute = routes.shift()
-                searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uefAdult, uefChild, populateNextRoute)
+                searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uef.adults, uef.children, populateNextRoute)
             } else {
                 bulkDate = dateAdd(1, bulkDate)
                 if (singleDate) stopBatch()
@@ -2243,7 +2241,7 @@
             }
         }
 
-        searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uefAdult, uefChild, populateNextRoute)
+        searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uef.adults, uef.children, populateNextRoute)
     }
 
     // ============================================================
