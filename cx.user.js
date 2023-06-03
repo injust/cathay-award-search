@@ -91,14 +91,14 @@
 
     // Retrieve CX Parameters
 
-    const availabilityUrl = 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability?TAB_ID='
+    const availabilityUrl = 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability'
     // TODO: Use the membership number URL
     const loginUrl = `https://www.cathaypacific.com/content/cx/${browserLang}_${browserCountry}/sign-in.html?loginreferrer=${encodeURI(`https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`)}`
 
     let staticFilesPath = valueGet('static_files_path', '/CathayPacificAwardV3/AML_IT3.3.22/')
     let requestParams = {}
     let tabId = ''
-    let formSubmitUrl = availabilityUrl + tabId
+    let formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
 
     const initCxVars = () => {
         log('initCxVars()')
@@ -115,7 +115,7 @@
 
         tabId = requestParams.TAB_ID || tabId
 
-        formSubmitUrl = unsafeWindow.formSubmitUrl || availabilityUrl + tabId
+        formSubmitUrl = unsafeWindow.formSubmitUrl || `${availabilityUrl}?TAB_ID=${tabId}`
     }
 
     const r = Math.random()
@@ -2054,7 +2054,7 @@
                 log('Initial Request Parameters Received')
                 const data = JSON.parse(response.responseText)
                 const parameters = data.parameters
-                const urlToPost = data.urlToPost || 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability'
+                const urlToPost = data.urlToPost || availabilityUrl
                 let formData = ''
                 for (const key in parameters) {
                     formData += `${key}=${parameters[key]}&`
@@ -2091,7 +2091,7 @@
                             tabId = requestParams.TAB_ID || ''
                             log('New Tab ID:', tabId)
                             batchError()
-                            formSubmitUrl = availabilityUrl + tabId
+                            formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
                             if (cb) cb()
                         } else if (response.readyState === 4) {
                             errorBOM = responseParser(response.responseText, /errorBom = ([^;]+)/)
@@ -2143,7 +2143,7 @@
             onload: (response) => {
                 const data = JSON.parse(response.responseText)
                 const parameters = data.parameters
-                const urlToPost = data.urlToPost || 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability'
+                const urlToPost = data.urlToPost || availabilityUrl
                 log('regularSearch parameters:', parameters)
                 const actionUrl = new URL(urlToPost)
 
