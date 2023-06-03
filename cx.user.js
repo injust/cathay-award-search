@@ -1245,8 +1245,8 @@
                 to: uef.to.substring(0, 3),
                 date: uef.date
             }], {
-                adult: uef.adults,
-                child: uef.children
+                adults: uef.adults,
+                children: uef.children
             }, 'Y', (uef.to.length > 3), false)
         })
 
@@ -1355,8 +1355,8 @@
                     to: (e.target.dataset.dest ? e.target.dataset.dest : uef.to.substring(0, 3)),
                     date: e.target.dataset.date
                 }], {
-                    adult: uef.adults,
-                    child: uef.children
+                    adults: uef.adults,
+                    children: uef.children
                 })
             } else if (e.target.dataset.save) {
                 key = e.target.dataset.date + e.target.dataset.from + e.target.dataset.dest
@@ -1426,8 +1426,8 @@
                     to: (e.target.dataset.dest ? e.target.dataset.dest : uef.to),
                     date: e.target.dataset.date
                 }], {
-                    adult: 1,
-                    child: 0
+                    adults: 1,
+                    children: 0
                 })
             } else if (e.target.type === 'checkbox') {
                 divSavedQueries.querySelectorAll('.selected').forEach((el) => {
@@ -1529,8 +1529,8 @@
                 })
             })
             regularSearch(toSearch, {
-                adult: shadowRoot.querySelector('#multi_adult').value,
-                child: shadowRoot.querySelector('#multi_child').value
+                adults: shadowRoot.querySelector('#multi_adult').value,
+                children: shadowRoot.querySelector('#multi_child').value
             }, shadowRoot.querySelector('#multi_cabin').value)
         })
 
@@ -1797,8 +1797,8 @@
                 to: ssQuery.to,
                 date: ssQuery.date
             }], {
-                adult: 1,
-                child: 0
+                adults: 1,
+                children: 0
             }, 'Y', true, false, true)
             return
         }
@@ -1973,8 +1973,8 @@
         to: 'ITM',
         date: dateAdd(14)
     }, passengers = {
-        adult: 1,
-        child: 0
+        adults: 1,
+        children: 0
     }, cabinClass = 'Y') => {
         log('newQueryPayload()')
 
@@ -1988,8 +1988,8 @@
             errorUrl: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow`,
             returnUrl: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow`,
             isFlexibleDate: false,
-            numAdult: passengers.adult,
-            numChild: passengers.child,
+            numAdult: passengers.adults,
+            numChild: passengers.children,
             promotionCode: '',
             segments: [{
                 departureDate: route.date,
@@ -2020,8 +2020,8 @@
             errorUrl: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc`,
             returnUrl: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc`,
             isFlexibleDate: false,
-            numAdult: passengers.adult,
-            numChild: passengers.child,
+            numAdult: passengers.adults,
+            numChild: passengers.children,
             promotionCode: '',
             segments: legs
         }
@@ -2117,8 +2117,8 @@
         to: 'TYO',
         date: dateAdd(14)
     }], passengers = {
-        adult: 1,
-        child: 0
+        adults: 1,
+        children: 0
     }, cabinClass = 'Y', isContQuery = false, isContBatch = false, isContSaved = false) => {
         let cxString
         if (route.length === 1) {
@@ -2193,8 +2193,8 @@
                 to: uef.to.substring(0, 3),
                 date: uef.date
             }], {
-                adult: uef.adults,
-                child: uef.children
+                adults: uef.adults,
+                children: uef.children
             }, 'Y', true, true)
             return
         }
