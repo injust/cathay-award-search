@@ -216,8 +216,8 @@
     const uef = { from: 'HKG', to: 'TYO', date: dateAdd(14), adults: 1, children: 0, ...valueGet('uef', {}) }
 
     // Saved Queries
-    const saved = valueGet('saved', {})
     const savedFlights = valueGet('saved_flights', {})
+    const savedQueries = valueGet('saved_queries', {})
 
     // Search Result Filters
     const filters = { nonstop: false, first: true, business: true, premium: true, economy: true, ...valueGet('filters', {}) }
@@ -1222,8 +1222,8 @@
         divUeContainer = shadowRoot.querySelector('.unelevated_form')
         divSaved = shadowRoot.querySelector('.unelevated_faves')
         divFavesTabs = shadowRoot.querySelector('.unelevated_faves .faves_tabs')
-        divSavedQueries = shadowRoot.querySelector('.unelevated_faves .saved_queries')
         divSavedFlights = shadowRoot.querySelector('.unelevated_faves .saved_flights')
+        divSavedQueries = shadowRoot.querySelector('.unelevated_faves .saved_queries')
         divMultiBox = shadowRoot.querySelector('.multi_box')
         divTable = shadowRoot.querySelector('.bulk_table')
         divTableBody = shadowRoot.querySelector('.bulk_table tbody')
@@ -1362,14 +1362,14 @@
                 key = e.target.dataset.date + e.target.dataset.from + e.target.dataset.dest
                 if (e.target.classList.contains('bulk_saved')) {
                     e.target.classList.remove('bulk_saved')
-                    delete saved[key]
+                    delete savedQueries[key]
                     updateSavedCount()
                 } else {
                     e.target.classList.add('bulk_saved')
-                    saved[key] = true
+                    savedQueries[key] = true
                     updateSavedCount()
                 }
-                valueSet('saved', saved)
+                valueSet('saved_queries', savedQueries)
             } else if (e.target.classList.contains('flight_save')) {
                 key = e.target.parentNode.dataset.flightInfo
                 const flightAvail = e.target.parentNode.dataset.flightAvail.split('_')
@@ -1408,12 +1408,12 @@
 
         divSaved.addEventListener('click', function (e) {
             if (e.target.dataset.remove) {
-                delete saved[e.target.dataset.remove]
                 delete savedFlights[e.target.dataset.remove]
+                delete savedQueries[e.target.dataset.remove]
                 updateSavedCount()
                 updateSavedFlights()
-                valueSet('saved', saved)
                 valueSet('saved_flights', savedFlights)
+                valueSet('saved_queries', savedQueries)
             }
         })
 
@@ -1504,7 +1504,7 @@
         })
 
         linkSearchSaved.addEventListener('click', function (e) {
-            if (!Object.keys(saved).length) {
+            if (!Object.keys(savedQueries).length) {
                 alert('No Saved Queries')
                 return
             }
@@ -1775,7 +1775,7 @@
 
     const savedSearch = () => {
         const toSearch = []
-        Object.keys(saved).forEach((query) => {
+        Object.keys(savedQueries).forEach((query) => {
             toSearch.push({
                 date: query.substring(0, 8),
                 from: query.substring(8, 11),
@@ -1828,11 +1828,11 @@
 
         let savedList = ''
         const savedArr = []
-        Object.keys(saved).forEach((query) => {
+        Object.keys(savedQueries).forEach((query) => {
             const savedDate = new Date(query.substring(0, 4), query.substring(4, 6) - 1, query.substring(6, 8))
             const today = new Date()
             if (savedDate <= today) {
-                delete saved[query]
+                delete savedQueries[query]
                 return
             }
             savedArr.push({
@@ -2340,7 +2340,7 @@
 
         let flightHTML = `<div data-from="${from}" data-to="${to}">
     <span class="flight_title">${from} - ${to}
-    <a href="javascript:void(0)" class="bulk_save ${(saved[date + from + to] ? ' bulk_saved' : '')}" data-save="true" data-date="${date}" data-from="${from}" data-dest="${to}">${heartSvg}</a>
+    <a href="javascript:void(0)" class="bulk_save ${(savedQueries[date + from + to] ? ' bulk_saved' : '')}" data-save="true" data-date="${date}" data-from="${from}" data-dest="${to}">${heartSvg}</a>
     <a href="javascript:void(0)" class="bulk_go_book" data-book="true" data-date="${date}" data-from="${from}" data-dest="${to}">Book &raquo;</a>
     </span><div class="flight_list">`
 
