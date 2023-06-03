@@ -224,11 +224,7 @@
     const savedFlights = valueGet('saved_flights', {})
 
     // Search Result Filters
-    const filterNonstop = valueGet('filter_nonstop', false)
-    const filterFirst = valueGet('filter_first', true)
-    const filterBusiness = valueGet('filter_business', true)
-    const filterPremium = valueGet('filter_premium', true)
-    const filterEconomy = valueGet('filter_economy', true)
+    const filters = { nonstop: false, first: true, business: true, premium: true, economy: true, ...valueGet('filters', {}) }
 
     // const urlParams = new URLSearchParams(window.location.search)
     const contQuery = valueGet('cont_query', false) // urlParams.has('cont_query')
@@ -427,13 +423,13 @@
         <div class='bulk_box'>
             <div class="bulk_results bulk_results_hidden">
             <div class="filters">
-<label><input type="checkbox" id="filter_nonstop" ${filterNonstop ? 'checked' : ''}>${lang.nonstop}</label>
-<label><input type="checkbox" id="filter_first" ${filterFirst ? 'checked' : ''}>${lang.first}</label>
-<label><input type="checkbox" id="filter_business" ${filterBusiness ? 'checked' : ''}>${lang.business}</label>
-<label><input type="checkbox" id="filter_premium" ${filterPremium ? 'checked' : ''}>${lang.premium}</label>
-<label><input type="checkbox" id="filter_economy" ${filterEconomy ? 'checked' : ''}>${lang.economy}</label>
+<label><input type="checkbox" data-filter="nonstop" ${filters.nonstop ? 'checked' : ''}>${lang.nonstop}</label>
+<label><input type="checkbox" data-filter="first" ${filters.first ? 'checked' : ''}>${lang.first}</label>
+<label><input type="checkbox" data-filter="business" ${filters.business ? 'checked' : ''}>${lang.business}</label>
+<label><input type="checkbox" data-filter="premium" ${filters.premium ? 'checked' : ''}>${lang.premium}</label>
+<label><input type="checkbox" data-filter="economy" ${filters.economy ? 'checked' : ''}>${lang.economy}</label>
 </div>
-                <table class='bulk_table ${filterNonstop ? 'nonstop_only' : ''} ${filterFirst ? 'show_first' : ''} ${filterBusiness ? 'show_business' : ''} ${filterPremium ? 'show_premium' : ''} ${filterEconomy ? 'show_economy' : ''}'><thead><th class='bulkDate'>${lang.date}</th><th class='bulk_flights'>${lang.flights} <span class='info-x info-f'>${lang.first}</span><span class='info-x info-j'>${lang.business}</span><span class='info-x info-p'>${lang.premium}</span><span class='info-x info-y'>${lang.economy}</span></th></thead><tbody></tbody></table>
+                <table class='bulk_table ${filters.nonstop ? 'nonstop_only' : ''} ${filters.first ? 'show_first' : ''} ${filters.business ? 'show_business' : ''} ${filters.premium ? 'show_premium' : ''} ${filters.economy ? 'show_economy' : ''}'><thead><th class='bulkDate'>${lang.date}</th><th class='bulk_flights'>${lang.flights} <span class='info-x info-f'>${lang.first}</span><span class='info-x info-j'>${lang.business}</span><span class='info-x info-p'>${lang.premium}</span><span class='info-x info-y'>${lang.economy}</span></th></thead><tbody></tbody></table>
             </div>
             <div class="bulk_footer">
                 <div class="bulk_footer_container">
@@ -1481,40 +1477,30 @@
             }
         })
 
+        const filterToClassName = (filter) => {
+            switch (filter) {
+            case 'nonstop':
+                return `${filter}_only`
+            case 'first':
+            case 'business':
+            case 'premium':
+            case 'economy':
+                return `show_${filter}`
+            default:
+                throw new Error(`Unknown filter "${filter}"`)
+            }
+        }
+
         divFilters.querySelectorAll('input').forEach((item) => {
             item.addEventListener('click', (e) => {
-                valueSet(e.target.id, e.target.checked)
+                const className = filterToClassName(e.target.dataset.filter)
+                filters[e.target.dataset.filter] = e.target.checked
+                valueSet('filters', filters)
 
-                if (e.target.id === 'filter_nonstop') {
-                    if (e.target.checked) {
-                        divTable.classList.add('nonstop_only')
-                    } else {
-                        divTable.classList.remove('nonstop_only')
-                    }
-                } else if (e.target.id === 'filter_first') {
-                    if (e.target.checked) {
-                        divTable.classList.add('show_first')
-                    } else {
-                        divTable.classList.remove('show_first')
-                    }
-                } else if (e.target.id === 'filter_business') {
-                    if (e.target.checked) {
-                        divTable.classList.add('show_business')
-                    } else {
-                        divTable.classList.remove('show_business')
-                    }
-                } else if (e.target.id === 'filter_premium') {
-                    if (e.target.checked) {
-                        divTable.classList.add('show_premium')
-                    } else {
-                        divTable.classList.remove('show_premium')
-                    }
-                } else if (e.target.id === 'filter_economy') {
-                    if (e.target.checked) {
-                        divTable.classList.add('show_economy')
-                    } else {
-                        divTable.classList.remove('show_economy')
-                    }
+                if (e.target.checked) {
+                    divTable.classList.add(className)
+                } else {
+                    divTable.classList.remove(className)
                 }
             })
         })
