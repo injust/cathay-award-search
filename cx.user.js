@@ -1406,7 +1406,7 @@
             }
         })
 
-        document.addEventListener('scroll', () => {
+        document.addEventListener('scroll', (e) => {
             shadowRoot.querySelectorAll('.flight_item').forEach((el) => {
                 el.classList.remove('active')
             })
@@ -2530,7 +2530,9 @@
         shadowContainer.appendChild(searchBox)
         assignElements()
         addFormListeners()
-        window.onscroll = stickyFooter
+        window.addEventListener('scroll', (e) => {
+            stickyFooter()
+        })
         updateSavedCount()
         updateSavedFlights()
         loadAirports()
