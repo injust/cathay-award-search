@@ -1545,14 +1545,15 @@
         })
 
         linkSearchMulti.addEventListener('click', function (e) {
-            if (!shadowRoot.querySelectorAll('.saved_query.selected').length) {
+            const selectedSegments = shadowRoot.querySelectorAll('.saved_query.selected')
+            if (!selectedSegments.length) {
                 alert('No Selected Segments')
                 return
             }
 
             this.innerText = lang.loading
             const toSearch = []
-            Array.from(shadowRoot.querySelectorAll('.saved_query.selected')).sort((a, b) => a.dataset.segment - b.dataset.segment).forEach((segment) => {
+            Array.from(selectedSegments).sort((a, b) => a.dataset.segment - b.dataset.segment).forEach((segment) => {
                 toSearch.push({
                     date: segment.dataset.date,
                     from: segment.dataset.route.substring(0, 3),
