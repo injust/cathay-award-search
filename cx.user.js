@@ -1677,15 +1677,18 @@
             if (!val) return
 
             currentFocus = -1
+
             // Create a DIV element that will contain the items (values)
-            const a = document.createElement('DIV')
-            a.setAttribute('id', `${el.id}autocomplete-list`)
-            a.setAttribute('class', 'autocomplete-items')
+            const divContainer = document.createElement('div')
+            divContainer.setAttribute('id', `${el.id}autocomplete-list`)
+            divContainer.setAttribute('class', 'autocomplete-items')
+
             // Append the DIV element as a child of the autocomplete container
-            el.parentNode.appendChild(a)
+            el.parentNode.appendChild(divContainer)
             const sep = document.createElement('span')
             sep.style.display = 'none'
-            a.appendChild(sep)
+            divContainer.appendChild(sep)
+
             const favs = ['TPE', 'TSA', 'KHH', 'RMQ', 'TYO', 'HND', 'NRT', 'KIX', 'ITM', 'CTS', 'FUK', 'NGO', 'OKA', 'ICN', 'PUS', 'GMP', 'CJU', 'HKG', 'MFM', 'BKK', 'CNX', 'HKT', 'CGK', 'DPS', 'SUB', 'KUL', 'BKI', 'PEN', 'DAD', 'HAN', 'SGN', 'CEB', 'MNL', 'SIN', 'PNH', 'DEL', 'BOM', 'DXB', 'DOH', 'TLV', 'BCN', 'MAD', 'MXP', 'CDG', 'ZRH', 'MUC', 'FCO', 'FRA', 'CDG', 'AMS', 'LHR', 'LGW', 'LON', 'MAN', 'FCO', 'BOS', 'JFK', 'YYZ', 'ORD', 'IAD', 'YVR', 'SFO', 'LAX', 'SAN', 'SEA', 'JNB', 'PER', 'SYD', 'BNE', 'MEL', 'AKL', 'HEL', 'BLR', 'SHA', 'PVG', 'PEK', 'CAN', 'KTM', 'ADL', 'CPT', 'ATH', 'IST', 'SOF', 'VCE', 'BUD', 'PRG', 'VIE', 'BER', 'WAW', 'KBP', 'CPH', 'DUS', 'BRU', 'OSL', 'ARN', 'DUB', 'MIA', 'ATL', 'IAH', 'DFW', 'PHL', 'CMN', 'LAS', 'SJC', 'DEN', 'AUS', 'MSY', 'MCO', 'EWR', 'NYC', 'LIS', 'OPO', 'SPU', 'DBV', 'ZAG', 'MLE', 'LIM', 'BOG', 'CNS', 'GRU', 'SCL', 'GIG', 'EZE', 'MEX', 'CUN']
             // For each autocomplete value, check if it starts with the same letters as the text field value
             Object.values(values).forEach(({ airportCode, countryName, shortName }) => {
@@ -1695,7 +1698,7 @@
                     const se = shortName.substr(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
                     const sc = countryName.substr(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
                     // Create a DIV element for each matching element
-                    const b = document.createElement('DIV')
+                    const divMatch = document.createElement('div')
                     // Make the matching letters bold
                     let c = `<span class='sa_code'><strong>${airportCode.substr(0, sa)}</strong>${airportCode.substr(sa)}</span>`
                     c += `<span class='sc_code'><strong>${shortName.substr(0, se)}</strong>${shortName.substr(se)}`
@@ -1703,10 +1706,10 @@
                     c += '</span>'
                     // Insert a input field that will hold the current array item's value
                     c += `<input type='hidden' value='${airportCode}'>`
-                    b.dataset.airportCode = airportCode
-                    b.innerHTML = c
+                    divMatch.dataset.airportCode = airportCode
+                    divMatch.innerHTML = c
                     // Execute a function when someone clicks on the item value (DIV element)
-                    b.addEventListener('click', (e) => {
+                    divMatch.addEventListener('click', (e) => {
                         // Insert the value for the autocomplete text field
                         input.value = [input.value.replace(/([,]?[^,]*)$/, ''), e.target.dataset.airportCode].filter(Boolean).join(',')
                         input.dispatchEvent(new Event('change'))
@@ -1715,11 +1718,11 @@
                     })
 
                     if (['TPE', 'KHH', 'HKG'].includes(airportCode)) {
-                        a.prepend(b)
+                        divContainer.prepend(divMatch)
                     } else if (favs.includes(airportCode)) {
-                        a.insertBefore(b, sep)
+                        divContainer.insertBefore(divMatch, sep)
                     } else {
-                        a.appendChild(b)
+                        divContainer.appendChild(divMatch)
                     }
                 }
             })
