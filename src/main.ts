@@ -264,7 +264,7 @@
             log('initRoot redeem-flight-awards.html')
 
             resetContVars()
-            waitForEl('.redibe-v3-flightsearch form').then((el) => {
+            waitForEl('.redibe-v3-flightsearch form').then((el: HTMLElement) => {
                 el.before(shadowWrapper)
                 initSearchBox()
                 checkLogin()
@@ -273,7 +273,7 @@
             log('initRoot facade.html')
 
             resetContVars()
-            waitForEl('.ibered__search-panel').then((el) => {
+            waitForEl('.ibered__search-panel').then((el: HTMLElement) => {
                 el.before(shadowWrapper)
                 initSearchBox()
                 checkLogin()
@@ -282,8 +282,8 @@
             if (cont.query) {
                 log('initRoot air/booking/availability with cont.query')
 
-                waitForEl('body > header').then((el) => {
-                    const boxes = document.querySelectorAll('body > div')
+                waitForEl('body > header').then((el: HTMLElement) => {
+                    const boxes: NodeListOf<HTMLDivElement> = document.querySelectorAll('body > div')
                     boxes.forEach((box) => {
                         box.remove()
                     })
@@ -296,7 +296,7 @@
                 log('initRoot air/booking/availability without cont.query')
 
                 resetContVars()
-                waitForEl('#section-flights .bound-route, #section-flights-departure .bound-route').then((el) => {
+                waitForEl('#section-flights .bound-route, #section-flights-departure .bound-route').then((el: HTMLElement) => {
                     shadowWrapper.style.margin = '30px 20px 0px 20px'
                     shadowWrapper.style.padding = '0'
                     document.querySelector('#section-flights, #section-flights-departure').before(shadowWrapper)
@@ -308,7 +308,7 @@
             log('initRoot air/booking/complexAvailability')
 
             resetContVars()
-            waitForEl('.mc-trips .bound-route').then((el) => {
+            waitForEl('.mc-trips .bound-route').then((el: HTMLElement) => {
                 shadowWrapper.style.margin = '30px 20px 0px 20px'
                 shadowWrapper.style.padding = '0'
                 document.querySelector('.mc-trips').before(shadowWrapper)
@@ -1747,13 +1747,14 @@
     // Form Listeners
     // ============================================================
 
-    let btnSearch, btnBatch
-    let inputFrom, inputTo, inputDate, inputAdult, inputChild, inputMultiAdult, inputMultiChild
-    let selectMultiCabin
-    let clearFrom, clearTo
-    let linkSearchSaved, linkSearchMulti
-    let divFilters, divLoginPrompt, divFooter, divUeContainer, divHeartSave, divSaved, divFavesTabs, divSavedQueries, divSavedFlights, divMultiBox, divResults, divError, divTable, divTableBody
-    let savedCount
+    let btnSearch: HTMLButtonElement, btnBatch: HTMLButtonElement
+    let inputFrom: HTMLInputElement, inputTo: HTMLInputElement, inputDate: HTMLInputElement, inputAdult: HTMLInputElement, inputChild: HTMLInputElement, inputMultiAdult: HTMLInputElement, inputMultiChild: HTMLInputElement
+    let selectMultiCabin: HTMLSelectElement
+    let clearFrom: SVGElement, clearTo: SVGElement
+    let linkSearchSaved: HTMLAnchorElement, linkSearchMulti: HTMLAnchorElement
+    let divFilters: HTMLDivElement, divLoginPrompt: HTMLDivElement, divFooter: HTMLDivElement, divUeContainer: HTMLDivElement, divHeartSave: HTMLDivElement, divSaved: HTMLDivElement, divFavesTabs: HTMLDivElement, divSavedQueries: HTMLDivElement, divSavedFlights: HTMLDivElement, divMultiBox: HTMLDivElement, divResults: HTMLDivElement, divError: HTMLDivElement
+    let divTable: HTMLTableElement, divTableBody: HTMLTableSectionElement
+    let savedCount: HTMLSpanElement
 
     const assignElements = () => {
         log('assignElements()')
@@ -1789,6 +1790,7 @@
         divMultiBox = shadowRoot.querySelector('.multi_box')
         divResults = shadowRoot.querySelector('.bulk_results')
         divError = shadowRoot.querySelector('.bulk_error')
+
         divTable = shadowRoot.querySelector('.bulk_table')
         divTableBody = shadowRoot.querySelector('.bulk_table tbody')
 
@@ -1915,7 +1917,7 @@
                 }
                 valueSet('saved_queries', Array.from(savedQueries))
             } else if (e.target.classList.contains('flight_save')) {
-                const flightItem = e.target.parentNode
+                const flightItem = e.target.parentNode as HTMLDivElement
                 const key = flightItem.dataset.flightInfo
                 const flightAvail = flightItem.dataset.flightAvail.split('_')
                 if (flightItem.classList.contains('saved')) {
@@ -1937,7 +1939,7 @@
                 if (e.target.classList.contains('active')) {
                     e.target.classList.remove('active')
                 } else {
-                    shadowRoot.querySelectorAll('.flight_item').forEach((el) => {
+                    shadowRoot.querySelectorAll('.flight_item').forEach((el: HTMLDivElement) => {
                         el.classList.remove('active')
                     })
                     e.target.classList.add('active')
@@ -1946,7 +1948,7 @@
         })
 
         document.addEventListener('scroll', (e: Event) => {
-            shadowRoot.querySelectorAll('.flight_item').forEach((el) => {
+            shadowRoot.querySelectorAll('.flight_item').forEach((el: HTMLDivElement) => {
                 el.classList.remove('active')
             })
         })
@@ -1975,21 +1977,21 @@
                     children: 0
                 })
             } else if (e.target.type === 'checkbox') {
-                const selectedSegments = divSavedQueries.querySelectorAll('.selected')
+                const selectedSegments: NodeListOf<HTMLDivElement> = divSavedQueries.querySelectorAll('.selected')
 
                 selectedSegments.forEach((el) => {
                     delete el.dataset.new
                 })
 
-                const savedQuery = e.target.parentNode.parentNode
+                const savedQuery = e.target.parentNode.parentNode as HTMLDivElement
                 if (e.target.checked) {
                     savedQuery.dataset.new = ''
                     savedQuery.classList.add('selected')
                     divSaved.classList.add('multi_on')
                     divMultiBox.classList.remove('hidden')
                 } else {
-                    savedQuery.classList.remove('selected')
-                    savedQuery.querySelector('.leg').innerText = ''
+                    savedQuery.classList.remove('selected');
+                    (savedQuery.querySelector('.leg') as HTMLSpanElement).innerText = ''
                     delete savedQuery.dataset.segment
                     if (!selectedSegments.length) {
                         divSaved.classList.remove('multi_on')
@@ -2013,8 +2015,8 @@
                     if (a.dataset.date === b.dataset.date) return ('new' in a.dataset ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1))
                     return 0
                 }).forEach((el, index) => {
-                    el.dataset.segment = (index + 1).toString()
-                    el.querySelector('.leg').innerText = `Segment ${index + 1}`
+                    el.dataset.segment = (index + 1).toString();
+                    (el.querySelector('.leg') as HTMLSpanElement).innerText = `Segment ${index + 1}`
                 })
             }
         })
@@ -2058,7 +2060,7 @@
         })
 
         linkSearchMulti.addEventListener('click', (e: MouseEvent) => {
-            const selectedSegments = divSavedQueries.querySelectorAll('.selected')
+            const selectedSegments: NodeListOf<HTMLDivElement> = divSavedQueries.querySelectorAll('.selected')
             if (!selectedSegments.length) {
                 alert('No Selected Segments')
                 return
@@ -2130,7 +2132,7 @@
     }
 
     // Arguments: the text field element and an array of possible autocomplete values
-    const autocomplete = (input, values) => {
+    const autocomplete = (input: HTMLInputElement, values) => {
         let currentFocus
         // Execute a function when someone writes in the text field
         input.addEventListener('input', (e: Event) => {
@@ -2185,7 +2187,7 @@
         }
 
         // Close all autocomplete lists in the document, except the one passed as an argument
-        const closeAllLists = (el = null) => {
+        const closeAllLists = (el: HTMLElement = null) => {
             const x = shadowRoot.querySelectorAll('.autocomplete-items')
             for (let i = 0; i < x.length; i++) {
                 if (el !== x[i] && el !== input) {
@@ -2194,7 +2196,7 @@
             }
         }
 
-        const newAC = (el, e: Event) => {
+        const newAC = (el: HTMLInputElement, e: Event) => {
             // Close any already open lists of autocomplete values
             closeAllLists()
             const val = el.value.match(/[^,]+$/) ? el.value.match(/[^,]+$/)[0] : false
@@ -2480,7 +2482,7 @@
         savedCount.innerText = savedArr.length.toString()
     }
 
-    const checkAirportCodes = (el) => {
+    const checkAirportCodes = (el: HTMLInputElement) => {
         log('checkAirportCodes()')
 
         let airportCodes = el.value.split(',')
