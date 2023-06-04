@@ -1384,7 +1384,7 @@
 
         divTable.addEventListener('click', (e) => {
             let key
-            if (e.target.dataset.book) {
+            if ('book' in e.target.dataset) {
                 stopBatch()
                 // stopSearch = true
                 // searching = false
@@ -1397,7 +1397,7 @@
                     adults: uef.adults,
                     children: uef.children
                 })
-            } else if (e.target.dataset.save) {
+            } else if ('save' in e.target.dataset) {
                 key = `${e.target.dataset.date}${e.target.dataset.from}${e.target.dataset.dest}`
                 if (e.target.classList.contains('bulk_saved')) {
                     e.target.classList.remove('bulk_saved')
@@ -1457,7 +1457,7 @@
         })
 
         divSavedQueries.addEventListener('click', (e) => {
-            if (e.target.dataset.book) {
+            if ('book' in e.target.dataset) {
                 stopBatch()
                 e.target.innerText = lang.loading
                 regularSearch([{
@@ -1474,7 +1474,7 @@
                 })
 
                 if (e.target.checked) {
-                    e.target.parentNode.parentNode.dataset.new = true
+                    e.target.parentNode.parentNode.dataset.new = ''
                     e.target.parentNode.parentNode.classList.add('selected')
                     divSavedQueries.parentNode.classList.add('multi_on')
                     divMultiBox.classList.remove('hidden')
@@ -1503,7 +1503,7 @@
                 Array.from(segmentsArray).sort((a, b) => {
                     if (+a.dataset.date > +b.dataset.date) return 1
                     log(a.dataset.date, b.dataset.date)
-                    if (a.dataset.date === b.dataset.date) return (a.dataset.new ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1))
+                    if (a.dataset.date === b.dataset.date) return ('new' in a.dataset ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1))
                     return 0
                 }).forEach((el, index) => {
                     el.dataset.segment = (index + 1).toString()
@@ -1882,7 +1882,7 @@
             savedList += `
                 <div class="saved_query" data-date="${date}" data-route="${from}${to}">
                     <label><input type="checkbox" data-date="${date}" data-route="${date}${from}${to}"> ${dateStringToDashedDateString(date)} ${from}-${to}</label>
-                    <a href="javascript:void(0);" class="saved_book" data-book="true" data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
+                    <a href="javascript:void(0);" class="saved_book" data-book data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
                     <span class="leg"></span>
                     <a href="javascript:void(0);" class="saved_remove" data-remove="${date}${from}${to}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16">
@@ -1956,7 +1956,7 @@
                         </span>
                     </span>
                     </label>
-                    <a href="javascript:void(0);" class="saved_book" data-book="true" "data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
+                    <a href="javascript:void(0);" class="saved_book" data-book "data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
                     <span class="leg"></span>
                     <a href="javascript:void(0);" class="saved_remove" data-remove="${fullQuery}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16">
@@ -2360,7 +2360,7 @@
     const insertResults = (from, to, date, pageBom) => {
         if (!shadowRoot.querySelector(`.bulk_table tr[data-date="${date}"]`)) {
             const resultsRow = `<tr data-date='${date}'><td class='bulkDate'>
-        <a href='javascript:void(0)' data-book='true' data-date='${date}'>${dateStringToDashedDateString(date)}</a>
+        <a href='javascript:void(0)' data-book data-date='${date}'>${dateStringToDashedDateString(date)}</a>
         ${dateStringToWeekday(date)}
         </td><td class='bulk_flights'></td></tr>`
             divTableBody.insertAdjacentHTML('beforeend', resultsRow)
@@ -2371,8 +2371,8 @@
         let flightHTML = `
             <div data-from="${from}" data-to="${to}">
                 <span class="flight_title">${from} - ${to}
-                    <a href="javascript:void(0)" class="bulk_save ${(savedQueries[`${date}${from}${to}`] ? ' bulk_saved' : '')}" data-save="true" data-date="${date}" data-from="${from}" data-dest="${to}">${heartSvg}</a>
-                    <a href="javascript:void(0)" class="bulk_go_book" data-book="true" data-date="${date}" data-from="${from}" data-dest="${to}">Book &raquo;</a>
+                    <a href="javascript:void(0)" class="bulk_save ${(savedQueries[`${date}${from}${to}`] ? ' bulk_saved' : '')}" data-save data-date="${date}" data-from="${from}" data-dest="${to}">${heartSvg}</a>
+                    <a href="javascript:void(0)" class="bulk_go_book" data-book data-date="${date}" data-from="${from}" data-dest="${to}">Book &raquo;</a>
                 </span>
                 <div class="flight_list">
         `
