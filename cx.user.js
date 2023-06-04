@@ -1494,16 +1494,14 @@
                     })
                 }
 
-                let pos = 1
                 Array.from(segmentsArray).sort((a, b) => {
                     if (+a.dataset.date > +b.dataset.date) return 1
                     log(a.dataset.date, b.dataset.date)
                     if (a.dataset.date === b.dataset.date) return (a.dataset.new ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1))
                     return 0
-                }).forEach((el) => {
-                    el.dataset.segment = pos
-                    el.querySelector('.leg').innerText = `Segment ${pos}`
-                    pos++
+                }).forEach((el, index) => {
+                    el.dataset.segment = (index + 1).toString()
+                    el.querySelector('.leg').innerText = `Segment ${index + 1}`
                 })
             }
         })
