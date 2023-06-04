@@ -1410,14 +1410,15 @@
                 }
                 valueSet('saved_queries', savedQueries)
             } else if (e.target.classList.contains('flight_save')) {
-                key = e.target.parentNode.dataset.flightInfo
-                const flightAvail = e.target.parentNode.dataset.flightAvail.split('_')
-                if (e.target.parentNode.classList.contains('saved')) {
-                    e.target.parentNode.classList.remove('saved')
+                const flightItem = e.target.parentNode
+                key = flightItem.dataset.flightInfo
+                const flightAvail = flightItem.dataset.flightAvail.split('_')
+                if (flightItem.classList.contains('saved')) {
+                    flightItem.classList.remove('saved')
                     delete savedFlights[key]
                     updateSavedFlights()
                 } else {
-                    e.target.parentNode.classList.add('saved')
+                    flightItem.classList.add('saved')
                     savedFlights[key] = {
                         F: parseInt(flightAvail[0]),
                         J: parseInt(flightAvail[1]),
@@ -1473,17 +1474,18 @@
                     delete el.dataset.new
                 })
 
+                const savedQuery = e.target.parentNode.parentNode
                 if (e.target.checked) {
-                    e.target.parentNode.parentNode.dataset.new = ''
-                    e.target.parentNode.parentNode.classList.add('selected')
-                    divSavedQueries.parentNode.classList.add('multi_on')
+                    savedQuery.dataset.new = ''
+                    savedQuery.classList.add('selected')
+                    divSaved.classList.add('multi_on')
                     divMultiBox.classList.remove('hidden')
                 } else {
-                    e.target.parentNode.parentNode.classList.remove('selected')
-                    e.target.parentNode.parentNode.querySelector('.leg').innerText = ''
-                    delete e.target.parentNode.parentNode.dataset.segment
+                    savedQuery.classList.remove('selected')
+                    savedQuery.querySelector('.leg').innerText = ''
+                    delete savedQuery.dataset.segment
                     if (!divSavedQueries.querySelectorAll('.selected').length) {
-                        divSavedQueries.parentNode.classList.remove('multi_on')
+                        divSaved.classList.remove('multi_on')
                         divMultiBox.classList.add('hidden')
                     }
                 }
@@ -1573,8 +1575,8 @@
         })
 
         divFavesTabs.addEventListener('click', (e) => {
-            if (e.target.classList.contains('tab_flights')) divFavesTabs.parentNode.classList.add('flights')
-            if (e.target.classList.contains('tab_queries')) divFavesTabs.parentNode.classList.remove('flights')
+            if (e.target.classList.contains('tab_flights')) divSaved.classList.add('flights')
+            if (e.target.classList.contains('tab_queries')) divSaved.classList.remove('flights')
         })
 
         shadowRoot.querySelector('.unelevated_saved a').addEventListener('click', (e) => {
