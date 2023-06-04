@@ -1392,7 +1392,7 @@
                     children: uef.children
                 })
             } else if (e.target.dataset.save) {
-                key = e.target.dataset.date + e.target.dataset.from + e.target.dataset.dest
+                key = `${e.target.dataset.date}${e.target.dataset.from}${e.target.dataset.dest}`
                 if (e.target.classList.contains('bulk_saved')) {
                     e.target.classList.remove('bulk_saved')
                     delete savedQueries[key]
@@ -1872,7 +1872,7 @@
             const from = query.from
             const to = query.to
             savedList += `
-                <div class="saved_query" data-date="${date}" data-route="${from + to}">
+                <div class="saved_query" data-date="${date}" data-route="${from}${to}">
                     <label><input type="checkbox" data-route="${date}${from}${to}" data-date="${date}"> ${dateStringToDashedDateString(date)} ${from}-${to}</label>
                     <a href="javascript:void(0);" class="saved_book" data-book="true" data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
                     <span class="leg"></span>
@@ -1931,7 +1931,7 @@
                 Y: query.Y
             }
             savedList += `
-                <div class="saved_flight" data-date="${date}" data-route="${from + to}">
+                <div class="saved_flight" data-date="${date}" data-route="${from}${to}">
                     <label>
                     <input type="checkbox" data-route="${date}${from}${to}" data-date="${date}">
                     <span>
@@ -2369,7 +2369,7 @@
         let flightHTML = `
             <div data-from="${from}" data-to="${to}">
                 <span class="flight_title">${from} - ${to}
-                    <a href="javascript:void(0)" class="bulk_save ${(savedQueries[date + from + to] ? ' bulk_saved' : '')}" data-save="true" data-date="${date}" data-from="${from}" data-dest="${to}">${heartSvg}</a>
+                    <a href="javascript:void(0)" class="bulk_save ${(savedQueries[`${date}${from}${to}`] ? ' bulk_saved' : '')}" data-save="true" data-date="${date}" data-from="${from}" data-dest="${to}">${heartSvg}</a>
                     <a href="javascript:void(0)" class="bulk_go_book" data-book="true" data-date="${date}" data-from="${from}" data-dest="${to}">Book &raquo;</a>
                 </span>
                 <div class="flight_list">
@@ -2422,7 +2422,7 @@
                             <div class="flight_wrapper">
                                 <div class="flight_item direct ${(savedFlights[flightKey] ? ' saved' : '')}" data-flight-info="${flightKey}" data-flight-avail="${f1}_${j1}_${p1}_${y1}" data-direct="1" data-f="${(displayF ? 1 : 0)}" data-j="${(displayJ ? 1 : 0)}" data-p="${(displayP ? 1 : 0)}" data-y="${(displayY ? 1 : 0)}">
                                     <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
-                                    <span class="flight_num">${leg1Airline + leg1FlightNum}</span>
+                                    <span class="flight_num">${leg1Airline}${leg1FlightNum}</span>
                                     ${available}
                                     <span class="chevron">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -2432,7 +2432,7 @@
                                     <span class="flight_save">${heartSvg}</span>
                                 </div>
                                 <div class="flight_info">
-                                    <span class="info_flight">${leg1Airline + leg1FlightNum}</span>
+                                    <span class="info_flight">${leg1Airline}${leg1FlightNum}</span>
                                     <span class="info_dept"><span>Departs:</span> ${leg1DepTime}</span>
                                     <span class="info_arr"><span>Arrives:</span> ${leg1ArrTime}</span>
                                     <span class="info_duration"><span>Total Flight Duration:</span> ${leg1Duration}</span>
@@ -2487,9 +2487,9 @@
                             <div class="flight_wrapper">
                                 <div class="flight_item ${(savedFlights[flightKey] ? ' saved' : '')}" data-direct="0" data-flight-info="${flightKey}"  data-flight-avail="${numF}_${numJ}_${numP}_${numY}" data-f="${displayF ? 1 : 0}" data-j="${displayJ ? 1 : 0}" data-p="${displayP ? 1 : 0}" data-y="${displayY ? 1 : 0}">
                                     <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
-                                    <span class="flight_num">${leg1Airline + leg1FlightNum}
+                                    <span class="flight_num">${leg1Airline}${leg1FlightNum}
                                     <span class="stopover">${transitAirportCode}</span>
-                                    ${leg2Airline + leg2FlightNum}</span>
+                                    ${leg2Airline}${leg2FlightNum}</span>
                                     ${available}
                                     <span class="chevron">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -2499,11 +2499,11 @@
                                     <span class="flight_save">${heartSvg}</span>
                                 </div>
                                 <div class="flight_info">
-                                    <span class="info_flight">${leg1Airline + leg1FlightNum}</span>
+                                    <span class="info_flight">${leg1Airline}${leg1FlightNum}</span>
                                     <span class="info_dept"><span>Departs:</span> ${leg1DepTime}</span>
                                     <span class="info_arr"><span>Arrives:</span> ${leg1ArrTime}</span>
                                     <span class="info_transit"><span>Transit Time:</span> ${transitTime}</span>
-                                    <span class="info_flight">${leg2Airline + leg2FlightNum}</span>
+                                    <span class="info_flight">${leg2Airline}${leg2FlightNum}</span>
                                     <span class="info_dept"><span>Departs:</span> ${leg2DepTime}</span>
                                     <span class="info_arr"><span>Arrives:</span> ${leg2ArrTime}</span>
                                     <span class="info_duration"><span>Total Flight Duration:</span> ${leg1Duration}</span>
