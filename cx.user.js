@@ -1574,8 +1574,11 @@
         })
 
         divFavesTabs.addEventListener('click', (e) => {
-            if (e.target.classList.contains('tab_flights')) divSaved.classList.add('flights')
-            if (e.target.classList.contains('tab_queries')) divSaved.classList.remove('flights')
+            if (e.target.classList.contains('tab_flights')) {
+                divSaved.classList.add('flights')
+            } else if (e.target.classList.contains('tab_queries')) {
+                divSaved.classList.remove('flights')
+            }
         })
 
         shadowRoot.querySelector('.unelevated_saved a').addEventListener('click', (e) => {
