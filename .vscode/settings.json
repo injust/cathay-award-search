@@ -1,0 +1,4 @@
+{
+    "standard.engine": "ts-standard",
+    "typescript.tsdk": "node_modules/typescript/lib"
+}

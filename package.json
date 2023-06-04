@@ -1,5 +1,6 @@
 {
     "devDependencies": {
-        "standardx": "^7.0.0"
+        "ts-standard": "^12.0.2",
+        "typescript": "^5.1.3"
     }
 }
