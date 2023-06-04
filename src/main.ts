@@ -196,9 +196,9 @@
     }
 
     // Append CSS to DOM Element (Default to Shadow Root)
-    const addCss = (cssString, target = shadowRoot) => {
+    const addCss = (css: string, target: Node = shadowRoot) => {
         const styleSheet = document.createElement('style')
-        styleSheet.innerHTML = cssString
+        styleSheet.innerHTML = css
         target.appendChild(styleSheet)
     }
 
@@ -218,7 +218,7 @@
 
     // Saved Queries
     const savedFlights = valueGet('saved_flights', {})
-    const savedQueries = new Set(valueGet('saved_queries', []))
+    const savedQueries = new Set(valueGet('saved_queries', []) as string[])
 
     // Search Result Filters
     const filters = {
@@ -2373,7 +2373,7 @@
         let savedList = ''
         const savedArr = []
         savedQueries.forEach((query) => {
-            const savedDate = new Date(query.substring(0, 4), query.substring(4, 6) - 1, query.substring(6, 8))
+            const savedDate = new Date(+query.substring(0, 4), +query.substring(4, 6) - 1, +query.substring(6, 8))
             const today = new Date()
             if (savedDate <= today) {
                 savedQueries.delete(query)
@@ -2414,7 +2414,7 @@
         let savedList = ''
         const savedArr = []
         Object.keys(savedFlights).forEach((query) => {
-            const savedDate = new Date(query.substring(0, 4), query.substring(4, 6) - 1, query.substring(6, 8))
+            const savedDate = new Date(+query.substring(0, 4), +query.substring(4, 6) - 1, +query.substring(6, 8))
             const today = new Date()
             if (savedDate <= today) {
                 delete savedFlights[query]
@@ -2586,7 +2586,7 @@
     // Get New TAB_ID
     // ============================================================
 
-    const responseParser = (response, regex) => {
+    const responseParser = (response: string, regex: RegExp) => {
         try {
             return JSON.parse(response.match(regex)[1])
         } catch (e) {
