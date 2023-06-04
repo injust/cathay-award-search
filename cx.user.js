@@ -1383,7 +1383,6 @@
         })
 
         divTable.addEventListener('click', (e) => {
-            let key
             if ('book' in e.target.dataset) {
                 stopBatch()
                 // stopSearch = true
@@ -1398,7 +1397,7 @@
                     children: uef.children
                 })
             } else if ('save' in e.target.dataset) {
-                key = `${e.target.dataset.date}${e.target.dataset.from}${e.target.dataset.dest}`
+                const key = `${e.target.dataset.date}${e.target.dataset.from}${e.target.dataset.dest}`
                 if (e.target.classList.contains('bulk_saved')) {
                     e.target.classList.remove('bulk_saved')
                     delete savedQueries[key]
@@ -1411,7 +1410,7 @@
                 valueSet('saved_queries', savedQueries)
             } else if (e.target.classList.contains('flight_save')) {
                 const flightItem = e.target.parentNode
-                key = flightItem.dataset.flightInfo
+                const key = flightItem.dataset.flightInfo
                 const flightAvail = flightItem.dataset.flightAvail.split('_')
                 if (flightItem.classList.contains('saved')) {
                     flightItem.classList.remove('saved')
