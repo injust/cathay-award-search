@@ -213,7 +213,7 @@
     // ============================================================
 
     // Search Parameters
-    const uef = { from: 'HKG', to: 'TYO', date: dateAdd(14), adults: 1, children: 0, ...valueGet('uef', {}) }
+    const uef = { from: 'HKG', to: 'TYO', date: dateAdd(), adults: 1, children: 0, ...valueGet('uef', {}) }
 
     // Saved Queries
     const savedFlights = valueGet('saved_flights', {})
@@ -422,7 +422,7 @@
                 <input tabindex="5" type="number" inputmode="decimal" onClick="this.select()" id="uef_child" name="uef_child" placeholder="Children" value="${uef.children}" min="0">
                 </label>
                 <label class="labels_left"><span>Date</span>
-                <input tabindex="3" class="uef_date" onClick="this.setSelectionRange(6, 8)" id="uef_date" inputmode="decimal" name="uef_date" placeholder="${dateAdd(30)}" value="${uef.date}">
+                <input tabindex="3" class="uef_date" onClick="this.setSelectionRange(6, 8)" id="uef_date" inputmode="decimal" name="uef_date" placeholder="YYYYMMDD" value="${uef.date}">
                 </label>
                 <button class="uef_search">${lang.search}</button>
             </div>
