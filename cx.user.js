@@ -2015,7 +2015,7 @@
     const newQueryPayload = (route = {
         from: 'HND',
         to: 'ITM',
-        date: dateAdd(14)
+        date: dateAdd(1)
     }, passengers = {
         adults: 1,
         children: 0
@@ -2159,7 +2159,7 @@
     const regularSearch = (route = [{
         from: 'TPE',
         to: 'TYO',
-        date: dateAdd(14)
+        date: dateAdd(1)
     }], passengers = {
         adults: 1,
         children: 0
