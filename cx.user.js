@@ -2101,7 +2101,6 @@
                     data: formData,
                     withCredentials: 'true',
                     onreadystatechange: (response) => {
-                        let errorBOM = ''
                         let errorMessage = lang.tab_retrieve_fail
                         if (response.readyState === 4 && response.status === 200) {
                             log('Tab ID Response Received. Parsing...')
@@ -2110,7 +2109,7 @@
                             log('requestParams:', requestParams)
 
                             if (!requestParams) {
-                                errorBOM = responseParser(data, /errorBom = ([^;]+)/)
+                                const errorBOM = responseParser(data, /errorBom = ([^;]+)/)
                                 if (errorBOM?.modelObject?.step === 'Error') {
                                     errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
                                 }
@@ -2127,7 +2126,7 @@
                             formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
                             if (cb) cb()
                         } else if (response.readyState === 4) {
-                            errorBOM = responseParser(response.responseText, /errorBom = ([^;]+)/)
+                            const errorBOM = responseParser(response.responseText, /errorBom = ([^;]+)/)
                             if (errorBOM?.modelObject?.step === 'Error') {
                                 errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
                             }
