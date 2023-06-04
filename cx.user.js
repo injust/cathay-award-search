@@ -1300,8 +1300,7 @@
         [inputFrom, inputTo].forEach((item) => {
             item.addEventListener('keyup', function (e) {
                 if (r !== t) return
-                // If the ENTER or SPACE or COMMA key is pressed
-                if (e.keyCode === 13 || e.keyCode === 32 || e.keyCode === 188) {
+                if (e.keyCode === 13 || e.keyCode === 32 || e.keyCode === 188) { // If the ENTER or SPACE or COMMA key is pressed
                     // If the ENTER key is pressed
                     if (e.keyCode === 13) this.value += ','
                     this.value = this.value.toUpperCase().split(/[ ,]+/).join(',')
@@ -1629,20 +1628,13 @@
         input.addEventListener('keydown', function (e) {
             let x = shadowRoot.getElementById(`${this.id}autocomplete-list`)
             if (x) x = x.getElementsByTagName('div')
-            // If the Arrow DOWN key is pressed
-            if (e.keyCode === 40) {
-                // Increase the currentFocus variable
+            if (e.keyCode === 40) { // If the Arrow DOWN key is pressed
                 currentFocus++
-                // Make the current item more visible
-                addActive(x)
-            // If the Arrow UP key is pressed
-            } else if (e.keyCode === 38) {
-                // Decrease the currentFocus variable
+                setActive(x)
+            } else if (e.keyCode === 38) { // If the Arrow UP key is pressed
                 currentFocus--
-                // Make the current item more visible
-                addActive(x)
-            // If the ENTER key is pressed
-            } else if (e.keyCode === 13) {
+                setActive(x)
+            } else if (e.keyCode === 13) { // If the ENTER key is pressed
                 // Prevent the form from being submitted
                 e.preventDefault()
                 closeAllLists()
@@ -1652,17 +1644,15 @@
                 } else if (x) {
                     x.querySelector(':not').click()
                 }
-            // If the TAB or SPACE key is pressed
-            } else if (e.keyCode === 9 || e.keyCode === 32) {
-                // Select the first option
+            } else if (e.keyCode === 9 || e.keyCode === 32) { // If the TAB or SPACE key is pressed
                 closeAllLists()
-                // Simulate a click on the "active" item
+                // Simulate a click on the first item
                 if (x) x[0].click()
             }
         })
 
         // Classify an item as "active"
-        const addActive = (x) => {
+        const setActive = (x) => {
             if (!x) return
             // Start by removing the "active" class on all items
             removeActive(x)
