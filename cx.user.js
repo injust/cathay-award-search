@@ -367,12 +367,12 @@
 
     const searchBox = document.createElement('div')
     searchBox.innerHTML = `
-        <div class='unelevated_form'>
-            <div class='unelevated_title'><a href="https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html">Unelevated Award Search</a></div>
+        <div class="unelevated_form">
+            <div class="unelevated_title"><a href="https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html">Unelevated Award Search</a></div>
 
-            <div class='login_prompt hidden'><span class='unelevated_error'><a href="${loginUrl}">${lang.login}</a></span></div>
+            <div class="login_prompt hidden"><span class="unelevated_error"><a href="${loginUrl}">${lang.login}</a></span></div>
 
-            <div class='unelevated_faves unelevated_faves_hidden'>
+            <div class="unelevated_faves unelevated_faves_hidden">
                 <div class="faves_tabs">
                     <a href="javascript:void(0);" class="tabs tab_queries">Routes</a>
                     <a href="javascript:void(0);" class="tabs tab_flights">Flights</a>
@@ -383,58 +383,93 @@
                 <div class="saved_queries"></div>
             </div>
 
-            <div class="unelevated_saved"><a href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="heart_save" viewBox="0 0 16 16"> <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"></path></svg><span>0</span></a></div>
+            <div class="unelevated_saved">
+                <a href="javascript:void(0);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="heart_save" viewBox="0 0 16 16">
+                        <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"></path>
+                    </svg>
+                    <span>0</span>
+                </a>
+            </div>
 
-            <div class='labels'>
-                <a href="javascript:void(0);" class="switch"><svg height="16px" width="16px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 365.352 365.352" xml:space="preserve" stroke-width="0" transform="rotate(180)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g> <path d="M363.155,169.453l-14.143-14.143c-1.407-1.407-3.314-2.197-5.304-2.197 c-1.989,0-3.897,0.79-5.304,2.197l-45.125,45.125v-57.503c0-50.023-40.697-90.721-90.721-90.721H162.3c-4.143,0-7.5,3.358-7.5,7.5 v20c0,4.142,3.357,7.5,7.5,7.5h40.26c30.725,0,55.721,24.996,55.721,55.721v57.503l-45.125-45.125 c-1.407-1.407-3.314-2.197-5.304-2.197c-1.989,0-3.896,0.79-5.304,2.197l-14.143,14.143c-1.406,1.406-2.196,3.314-2.196,5.303 c0,1.989,0.79,3.897,2.196,5.303l82.071,82.071c1.465,1.464,3.385,2.197,5.304,2.197c1.919,0,3.839-0.732,5.304-2.197 l82.071-82.071c1.405-1.406,2.196-3.314,2.196-5.303C365.352,172.767,364.561,170.859,363.155,169.453z"></path> <path d="M203.052,278.14h-40.26c-30.725,0-55.721-24.996-55.721-55.721v-57.503l45.125,45.126 c1.407,1.407,3.314,2.197,5.304,2.197c1.989,0,3.896-0.79,5.304-2.197l14.143-14.143c1.406-1.406,2.196-3.314,2.196-5.303 c0-1.989-0.79-3.897-2.196-5.303l-82.071-82.071c-2.93-2.929-7.678-2.929-10.607,0L2.196,185.292C0.79,186.699,0,188.607,0,190.596 c0,1.989,0.79,3.897,2.196,5.303l14.143,14.143c1.407,1.407,3.314,2.197,5.304,2.197s3.897-0.79,5.304-2.197l45.125-45.126v57.503 c0,50.023,40.697,90.721,90.721,90.721h40.26c4.143,0,7.5-3.358,7.5-7.5v-20C210.552,281.498,207.194,278.14,203.052,278.14z"></path> </svg></a>
-                <label class="labels_left"><span>From</span>
-                    <input tabindex="1" type='text' id='uef_from' name='uef_from' placeholder='TPE,HKG' value='${uef.from}'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clearFrom" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></a></label>
+            <div class="labels">
+                <a href="javascript:void(0);" class="switch">
+                    <svg height="16px" width="16px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 365.352 365.352" xml:space="preserve" stroke-width="0" transform="rotate(180)">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <path d="M363.155,169.453l-14.143-14.143c-1.407-1.407-3.314-2.197-5.304-2.197 c-1.989,0-3.897,0.79-5.304,2.197l-45.125,45.125v-57.503c0-50.023-40.697-90.721-90.721-90.721H162.3c-4.143,0-7.5,3.358-7.5,7.5 v20c0,4.142,3.357,7.5,7.5,7.5h40.26c30.725,0,55.721,24.996,55.721,55.721v57.503l-45.125-45.125 c-1.407-1.407-3.314-2.197-5.304-2.197c-1.989,0-3.896,0.79-5.304,2.197l-14.143,14.143c-1.406,1.406-2.196,3.314-2.196,5.303 c0,1.989,0.79,3.897,2.196,5.303l82.071,82.071c1.465,1.464,3.385,2.197,5.304,2.197c1.919,0,3.839-0.732,5.304-2.197 l82.071-82.071c1.405-1.406,2.196-3.314,2.196-5.303C365.352,172.767,364.561,170.859,363.155,169.453z"></path>
+                        <path d="M203.052,278.14h-40.26c-30.725,0-55.721-24.996-55.721-55.721v-57.503l45.125,45.126 c1.407,1.407,3.314,2.197,5.304,2.197c1.989,0,3.896-0.79,5.304-2.197l14.143-14.143c1.406-1.406,2.196-3.314,2.196-5.303 c0-1.989-0.79-3.897-2.196-5.303l-82.071-82.071c-2.93-2.929-7.678-2.929-10.607,0L2.196,185.292C0.79,186.699,0,188.607,0,190.596 c0,1.989,0.79,3.897,2.196,5.303l14.143,14.143c1.407,1.407,3.314,2.197,5.304,2.197s3.897-0.79,5.304-2.197l45.125-45.126v57.503 c0,50.023,40.697,90.721,90.721,90.721h40.26c4.143,0,7.5-3.358,7.5-7.5v-20C210.552,281.498,207.194,278.14,203.052,278.14z"></path>
+                    </svg>
+                </a>
+                <label class="labels_left">
+                    <span>From</span>
+                    <input tabindex="1" type="text" id="uef_from" name="uef_from" placeholder="TPE,HKG" value="${uef.from}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clearFrom" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
+                    </svg>
+                    </a>
+                </label>
                 <label class="labels_right"><span>Adults</span>
-                    <input tabindex="4" type='number' inputmode='decimal' onClick='this.select()' id='uef_adult' name='uef_adult' placeholder='Adults' value='${uef.adults}' min='0'></label>
-                <label class="labels_left"><span>To</span>
-                    <input tabindex="2" type='text' id='uef_to' name='uef_to' placeholder='TYO,LHR,SFO' value='${uef.to}'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clearTo" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg></label>
+                <input tabindex="4" type="number" inputmode="decimal" onClick="this.select()" id="uef_adult" name="uef_adult" placeholder="Adults" value="${uef.adults}" min="0">
+                </label>
+                <label class="labels_left">
+                    <span>To</span>
+                    <input tabindex="2" type="text" id="uef_to" name="uef_to" placeholder="TYO,LHR,SFO" value="${uef.to}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="clearTo" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
+                    </svg>
+                </label>
                 <label class="labels_right"><span>Children</span>
-                    <input tabindex="5" type='number' inputmode='decimal' onClick='this.select()' id='uef_child' name='uef_child' placeholder='Children' value='${uef.children}' min='0'></label>
+                <input tabindex="5" type="number" inputmode="decimal" onClick="this.select()" id="uef_child" name="uef_child" placeholder="Children" value="${uef.children}" min="0">
+                </label>
                 <label class="labels_left"><span>Date</span>
-                    <input tabindex="3" class='uef_date' onClick='this.setSelectionRange(6, 8)' id='uef_date' inputmode='decimal' name='uef_date' placeholder='${dateAdd(30)}' value='${uef.date}'></label>
-                <button class='uef_search'>${lang.search}</button>
+                <input tabindex="3" class="uef_date" onClick="this.setSelectionRange(6, 8)" id="uef_date" inputmode="decimal" name="uef_date" placeholder="${dateAdd(30)}" value="${uef.date}">
+                </label>
+                <button class="uef_search">${lang.search}</button>
             </div>
         </div>
 
-        <div class='multi_box hidden'>
-        <select id="multi_cabin">
-    <option value="Y">${lang.economy_full}</option>
-    <option value="W">${lang.premium_full}</option>
-    <option value="C">${lang.business_full}</option>
-    <option value="F">${lang.first_full}</option>
-</select>
-                <label class="labels_right"><span>Adults</span>
-                    <input type='number' inputmode='decimal' onClick='this.select()' id='multi_adult' name='multi_adult' placeholder='Adults' value='1' min='0'></label>
-                <label class="labels_right"><span>Children</span>
-                    <input type='number' inputmode='decimal' onClick='this.select()' id='multi_child' name='multi_child' placeholder='Children' value='0' min='0'></label>
-                                    <a href="javascript:void(0)" class='multi_search'>${lang.multi_book}</a>
+        <div class="multi_box hidden">
+            <select id="multi_cabin">
+                <option value="Y">${lang.economy_full}</option>
+                <option value="W">${lang.premium_full}</option>
+                <option value="C">${lang.business_full}</option>
+                <option value="F">${lang.first_full}</option>
+            </select>
+            <label class="labels_right"><span>Adults</span>
+            <input type="number" inputmode="decimal" onClick="this.select()" id="multi_adult" name="multi_adult" placeholder="Adults" value="1" min="0">
+            </label>
+            <label class="labels_right"><span>Children</span>
+            <input type="number" inputmode="decimal" onClick="this.select()" id="multi_child" name="multi_child" placeholder="Children" value="0" min="0">
+            </label>
+            <a href="javascript:void(0)" class="multi_search">${lang.multi_book}</a>
         </div>
 
-        <div class='bulk_box'>
+        <div class="bulk_box">
             <div class="bulk_results bulk_results_hidden">
-            <div class="filters">
-<label><input type="checkbox" data-filter="nonstop" ${filters.nonstop ? 'checked' : ''}>${lang.nonstop}</label>
-<label><input type="checkbox" data-filter="first" ${filters.first ? 'checked' : ''}>${lang.first}</label>
-<label><input type="checkbox" data-filter="business" ${filters.business ? 'checked' : ''}>${lang.business}</label>
-<label><input type="checkbox" data-filter="premium" ${filters.premium ? 'checked' : ''}>${lang.premium}</label>
-<label><input type="checkbox" data-filter="economy" ${filters.economy ? 'checked' : ''}>${lang.economy}</label>
-</div>
-                <table class='bulk_table ${filters.nonstop ? 'nonstop_only' : ''} ${filters.first ? 'show_first' : ''} ${filters.business ? 'show_business' : ''} ${filters.premium ? 'show_premium' : ''} ${filters.economy ? 'show_economy' : ''}'><thead><th class='bulkDate'>${lang.date}</th><th class='bulk_flights'>${lang.flights} <span class='info-x info-f'>${lang.first}</span><span class='info-x info-j'>${lang.business}</span><span class='info-x info-p'>${lang.premium}</span><span class='info-x info-y'>${lang.economy}</span></th></thead><tbody></tbody></table>
+                <div class="filters">
+                    <label><input type="checkbox" data-filter="nonstop" ${filters.nonstop ? 'checked' : ''}>${lang.nonstop}</label>
+                    <label><input type="checkbox" data-filter="first" ${filters.first ? 'checked' : ''}>${lang.first}</label>
+                    <label><input type="checkbox" data-filter="business" ${filters.business ? 'checked' : ''}>${lang.business}</label>
+                    <label><input type="checkbox" data-filter="premium" ${filters.premium ? 'checked' : ''}>${lang.premium}</label>
+                    <label><input type="checkbox" data-filter="economy" ${filters.economy ? 'checked' : ''}>${lang.economy}</label>
+                </div>
+                <table class="bulk_table ${filters.nonstop ? 'nonstop_only' : ''} ${filters.first ? 'show_first' : ''} ${filters.business ? 'show_business' : ''} ${filters.premium ? 'show_premium' : ''} ${filters.economy ? 'show_economy' : ''}">
+                <thead>
+                    <th class="bulkDate">${lang.date}</th>
+                    <th class="bulk_flights">${lang.flights} <span class="info-x info-f">${lang.first}</span><span class="info-x info-j">${lang.business}</span><span class="info-x info-p">${lang.premium}</span><span class="info-x info-y">${lang.economy}</span></th>
+                </thead>
+                <tbody></tbody>
+                </table>
             </div>
             <div class="bulk_footer">
                 <div class="bulk_footer_container">
-                    <button class='bulk_submit'>${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}</button>
+                    <button class="bulk_submit">${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}</button>
                     <div class="bulk_error bulk_error_hidden"><span></span></div>
                 </div>
             </div>
         </div>
         <div id="encbox"></div>
-       `
+    `
 
     // ============================================================
     // Styles
@@ -1846,12 +1881,18 @@
             const date = query.date
             const from = query.from
             const to = query.to
-            savedList += `<div class="saved_query" data-date="${date}" data-route="${from + to}"><label><input type="checkbox" data-route="${date}${from}${to}" data-date="${date}"> ${dateStringToDashedDateString(date)} ${from}-${to}</label>
-            <a href="javascript:void(0);" class="saved_book" data-book="true" data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
-            <span class="leg"></span>
-            <a href="javascript:void(0);" class="saved_remove" data-remove="${date}${from}${to}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg>
-            </a></div>`
+            savedList += `
+                <div class="saved_query" data-date="${date}" data-route="${from + to}">
+                    <label><input type="checkbox" data-route="${date}${from}${to}" data-date="${date}"> ${dateStringToDashedDateString(date)} ${from}-${to}</label>
+                    <a href="javascript:void(0);" class="saved_book" data-book="true" data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
+                    <span class="leg"></span>
+                    <a href="javascript:void(0);" class="saved_remove" data-remove="${date}${from}${to}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
+                        </svg>
+                    </a>
+                </div>
+            `
         })
         divSavedQueries.innerHTML = savedList
         shadowRoot.querySelector('.unelevated_saved a span').innerText = savedArr.length
@@ -1899,29 +1940,33 @@
                 P: query.P,
                 Y: query.Y
             }
-            savedList += `<div class="saved_flight" data-date="${date}" data-route="${from + to}">
-            <label>
-                <input type="checkbox" data-route="${date}${from}${to}" data-date="${date}">
-                <span>
-                    <span class="sf_date">${dateStringToDashedDateString(date)}</span>
-                    <span class="sf_route">${from}-${stop ? `${stop}-` : ''}${to}
-                    </span><span class="sf_flights">
-                        ${leg1}${leg2 ? ` + ${leg2}` : ''}
-                        <span class="sf_avail">
-                            ${avail.F ? `<span class="av_f">F ${avail.F}</span>` : ''}
-                            ${avail.J ? `<span class="av_j">J ${avail.J}</span>` : ''}
-                            ${avail.P ? `<span class="av_p">PY ${avail.P}</span>` : ''}
-                            ${avail.Y ? `<span class="av_y">Y ${avail.Y}</span>` : ''}
+            savedList += `
+                <div class="saved_flight" data-date="${date}" data-route="${from + to}">
+                    <label>
+                    <input type="checkbox" data-route="${date}${from}${to}" data-date="${date}">
+                    <span>
+                        <span class="sf_date">${dateStringToDashedDateString(date)}</span>
+                        <span class="sf_route">${from}-${stop ? `${stop}-` : ''}${to}</span>
+                        <span class="sf_flights">
+                            ${leg1}${leg2 ? ` + ${leg2}` : ''}
+                            <span class="sf_avail">
+                                ${avail.F ? `<span class="av_f">F ${avail.F}</span>` : ''}
+                                ${avail.J ? `<span class="av_j">J ${avail.J}</span>` : ''}
+                                ${avail.P ? `<span class="av_p">PY ${avail.P}</span>` : ''}
+                                ${avail.Y ? `<span class="av_y">Y ${avail.Y}</span>` : ''}
+                            </span>
                         </span>
                     </span>
-
-                </span>
-            </label>
-            <a href="javascript:void(0);" class="saved_book" data-book="true" "data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
-            <span class="leg"></span>
-            <a href="javascript:void(0);" class="saved_remove" data-remove="${fullQuery}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path> </svg>
-            </a></div>`
+                    </label>
+                    <a href="javascript:void(0);" class="saved_book" data-book="true" "data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
+                    <span class="leg"></span>
+                    <a href="javascript:void(0);" class="saved_remove" data-remove="${fullQuery}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
+                        </svg>
+                    </a>
+                </div>
+            `
         })
         divSavedFlights.innerHTML = savedList
         shadowRoot.querySelector('.unelevated_saved a span').innerText = savedArr.length
@@ -2334,14 +2379,17 @@
 
         const heartSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="heart_save" viewBox="0 0 16 16"> <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"></path></svg>'
 
-        let flightHTML = `<div data-from="${from}" data-to="${to}">
-    <span class="flight_title">${from} - ${to}
-    <a href="javascript:void(0)" class="bulk_save ${(savedQueries[date + from + to] ? ' bulk_saved' : '')}" data-save="true" data-date="${date}" data-from="${from}" data-dest="${to}">${heartSvg}</a>
-    <a href="javascript:void(0)" class="bulk_go_book" data-book="true" data-date="${date}" data-from="${from}" data-dest="${to}">Book &raquo;</a>
-    </span><div class="flight_list">`
+        let flightHTML = `
+            <div data-from="${from}" data-to="${to}">
+                <span class="flight_title">${from} - ${to}
+                    <a href="javascript:void(0)" class="bulk_save ${(savedQueries[date + from + to] ? ' bulk_saved' : '')}" data-save="true" data-date="${date}" data-from="${from}" data-dest="${to}">${heartSvg}</a>
+                    <a href="javascript:void(0)" class="bulk_go_book" data-book="true" data-date="${date}" data-from="${from}" data-dest="${to}">Book &raquo;</a>
+                </span>
+                <div class="flight_list">
+        `
 
         if (pageBom.modelObject?.isContainingErrors) {
-            flightHTML += `<span class='bulk_response_error'><strong>Error:</strong> ${pageBom.modelObject?.messages[0]?.text}</span>`
+            flightHTML += `<span class="bulk_response_error"><strong>Error:</strong> ${pageBom.modelObject?.messages[0]?.text}</span>`
         } else {
             const flights = pageBom.modelObject?.availabilities?.upsell?.bounds[0].flights
             flights.forEach((flight) => {
@@ -2383,22 +2431,27 @@
                     }
                     flightKey = `${date}${from}${to}_${leg1Airline}${leg1FlightNum}`
                     if (available !== '') {
-                        flightHTML += '<div class="flight_wrapper">'
-                        flightHTML += `<div class='flight_item direct ${(savedFlights[flightKey] ? ' saved' : '')}' data-flight-info='${flightKey}' data-flight-avail='${f1}_${j1}_${p1}_${y1}' data-direct='1' data-f='${(displayF ? 1 : 0)}' data-j='${(displayJ ? 1 : 0)}' data-p='${(displayP ? 1 : 0)}' data-y='${(displayY ? 1 : 0)}'>
-                        <img src='https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png'>
-                        <span class="flight_num">${leg1Airline + leg1FlightNum}</span>
-                        ${available}
-                        <span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z" fill="currentColor"></path></svg></span>
-                        <span class="flight_save">${heartSvg}</span>
-                    </div>
-                    <div class="flight_info">
-                        <span class="info_flight">${leg1Airline + leg1FlightNum}</span>
-                        <span class="info_dept"><span>Departs:</span> ${leg1DepTime}</span>
-                        <span class="info_arr"><span>Arrives:</span> ${leg1ArrTime}</span>
-                        <span class="info_duration"><span>Total Flight Duration:</span> ${leg1Duration}</span>
-                    </div>
-                    `
-                        flightHTML += '</div>'
+                        flightHTML += `
+                            <div class="flight_wrapper">
+                                <div class="flight_item direct ${(savedFlights[flightKey] ? ' saved' : '')}" data-flight-info="${flightKey}" data-flight-avail="${f1}_${j1}_${p1}_${y1}" data-direct="1" data-f="${(displayF ? 1 : 0)}" data-j="${(displayJ ? 1 : 0)}" data-p="${(displayP ? 1 : 0)}" data-y="${(displayY ? 1 : 0)}">
+                                    <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
+                                    <span class="flight_num">${leg1Airline + leg1FlightNum}</span>
+                                    ${available}
+                                    <span class="chevron">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z" fill="currentColor"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="flight_save">${heartSvg}</span>
+                                </div>
+                                <div class="flight_info">
+                                    <span class="info_flight">${leg1Airline + leg1FlightNum}</span>
+                                    <span class="info_dept"><span>Departs:</span> ${leg1DepTime}</span>
+                                    <span class="info_arr"><span>Arrives:</span> ${leg1ArrTime}</span>
+                                    <span class="info_duration"><span>Total Flight Duration:</span> ${leg1Duration}</span>
+                                </div>
+                            </div>
+                        `
                     }
                     if (savedFlights[flightKey]) {
                         savedFlights[flightKey] = {
@@ -2443,28 +2496,33 @@
                     const transitAirportCode = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g.exec(flight.flightIdString)[1].replace(':', ' / ')
                     flightKey = `${date}${from}${to}_${leg1Airline}${leg1FlightNum}_${transitAirportCode}_${leg2Airline}${leg2FlightNum}`
                     if (available !== '') {
-                        flightHTML += '<div class="flight_wrapper">'
-                        flightHTML += `<div class='flight_item ${(savedFlights[flightKey] ? ' saved' : '')}' data-direct='0' data-flight-info='${flightKey}'  data-flight-avail='${numF}_${numJ}_${numP}_${numY}' data-f='${displayF ? 1 : 0}' data-j='${displayJ ? 1 : 0}' data-p='${displayP ? 1 : 0}' data-y='${displayY ? 1 : 0}'>
-                        <img src='https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png'>
-                        <span class="flight_num">${leg1Airline + leg1FlightNum}
-                        <span class='stopover'>${transitAirportCode}</span>
-                        ${leg2Airline + leg2FlightNum}</span>
-                        ${available}
-                        <span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z" fill="currentColor"></path></svg></span>
-                        <span class="flight_save">${heartSvg}</span>
-                    </div>
-                    <div class="flight_info">
-                        <span class="info_flight">${leg1Airline + leg1FlightNum}</span>
-                        <span class="info_dept"><span>Departs:</span> ${leg1DepTime}</span>
-                        <span class="info_arr"><span>Arrives:</span> ${leg1ArrTime}</span>
-                        <span class="info_transit"><span>Transit Time:</span> ${transitTime}</span>
-                        <span class="info_flight">${leg2Airline + leg2FlightNum}</span>
-                        <span class="info_dept"><span>Departs:</span> ${leg2DepTime}</span>
-                        <span class="info_arr"><span>Arrives:</span> ${leg2ArrTime}</span>
-                        <span class="info_duration"><span>Total Flight Duration:</span> ${leg1Duration}</span>
-                    </div>
-                    `
-                        flightHTML += '</div>'
+                        flightHTML += `
+                            <div class="flight_wrapper">
+                                <div class="flight_item ${(savedFlights[flightKey] ? ' saved' : '')}" data-direct="0" data-flight-info="${flightKey}"  data-flight-avail="${numF}_${numJ}_${numP}_${numY}" data-f="${displayF ? 1 : 0}" data-j="${displayJ ? 1 : 0}" data-p="${displayP ? 1 : 0}" data-y="${displayY ? 1 : 0}">
+                                    <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
+                                    <span class="flight_num">${leg1Airline + leg1FlightNum}
+                                    <span class="stopover">${transitAirportCode}</span>
+                                    ${leg2Airline + leg2FlightNum}</span>
+                                    ${available}
+                                    <span class="chevron">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z" fill="currentColor"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="flight_save">${heartSvg}</span>
+                                </div>
+                                <div class="flight_info">
+                                    <span class="info_flight">${leg1Airline + leg1FlightNum}</span>
+                                    <span class="info_dept"><span>Departs:</span> ${leg1DepTime}</span>
+                                    <span class="info_arr"><span>Arrives:</span> ${leg1ArrTime}</span>
+                                    <span class="info_transit"><span>Transit Time:</span> ${transitTime}</span>
+                                    <span class="info_flight">${leg2Airline + leg2FlightNum}</span>
+                                    <span class="info_dept"><span>Departs:</span> ${leg2DepTime}</span>
+                                    <span class="info_arr"><span>Arrives:</span> ${leg2ArrTime}</span>
+                                    <span class="info_duration"><span>Total Flight Duration:</span> ${leg1Duration}</span>
+                                </div>
+                            </div>
+                        `
                     }
                     if (savedFlights[flightKey]) {
                         savedFlights[flightKey] = {
