@@ -241,8 +241,8 @@
     // ============================================================
 
     const shadowWrapper = document.createElement('div')
-    shadowWrapper.style.margin = 0
-    shadowWrapper.style.padding = 0
+    shadowWrapper.style.margin = '0'
+    shadowWrapper.style.padding = '0'
     const shadowRoot = shadowWrapper.attachShadow({ mode: 'closed' })
     const shadowContainer = document.createElement('div')
     shadowContainer.classList.add('elevated_on')
@@ -291,7 +291,7 @@
                 resetContVars()
                 waitForEl('#section-flights .bound-route, #section-flights-departure .bound-route').then((el) => {
                     shadowWrapper.style.margin = '30px 20px 0px 20px'
-                    shadowWrapper.style.padding = 0
+                    shadowWrapper.style.padding = '0'
                     document.querySelector('#section-flights, #section-flights-departure').before(shadowWrapper)
                     initSearchBox()
                     checkLogin()
@@ -303,7 +303,7 @@
             resetContVars()
             waitForEl('.mc-trips .bound-route').then((el) => {
                 shadowWrapper.style.margin = '30px 20px 0px 20px'
-                shadowWrapper.style.padding = 0
+                shadowWrapper.style.padding = '0'
                 document.querySelector('.mc-trips').before(shadowWrapper)
                 initSearchBox()
                 checkLogin()
