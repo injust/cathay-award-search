@@ -1559,7 +1559,7 @@
 
             e.target.innerText = lang.loading
             const toSearch = []
-            Array.from(selectedSegments).sort((a, b) => a.dataset.segment - b.dataset.segment).forEach((segment) => {
+            Array.from(selectedSegments).sort((a, b) => parseInt(a.dataset.segment) - parseInt(b.dataset.segment)).forEach((segment) => {
                 toSearch.push({
                     date: segment.dataset.date,
                     from: segment.dataset.route.substring(0, 3),
