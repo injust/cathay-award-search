@@ -1499,7 +1499,7 @@
                     if (+a.dataset.date > +b.dataset.date) return 1
                     log(a.dataset.date, b.dataset.date)
                     if (a.dataset.date === b.dataset.date) return (a.dataset.new ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1))
-                    return false
+                    return 0
                 }).forEach((el) => {
                     el.dataset.segment = pos
                     el.querySelector('.leg').innerText = `Segment ${pos}`
