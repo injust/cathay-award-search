@@ -1881,7 +1881,7 @@
             const to = query.to
             savedList += `
                 <div class="saved_query" data-date="${date}" data-route="${from}${to}">
-                    <label><input type="checkbox" data-route="${date}${from}${to}" data-date="${date}"> ${dateStringToDashedDateString(date)} ${from}-${to}</label>
+                    <label><input type="checkbox" data-date="${date}" data-route="${date}${from}${to}"> ${dateStringToDashedDateString(date)} ${from}-${to}</label>
                     <a href="javascript:void(0);" class="saved_book" data-book="true" data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
                     <span class="leg"></span>
                     <a href="javascript:void(0);" class="saved_remove" data-remove="${date}${from}${to}">
@@ -1941,7 +1941,7 @@
             savedList += `
                 <div class="saved_flight" data-date="${date}" data-route="${from}${to}">
                     <label>
-                    <input type="checkbox" data-route="${date}${from}${to}" data-date="${date}">
+                    <input type="checkbox" data-date="${date}" data-route="${date}${from}${to}">
                     <span>
                         <span class="sf_date">${dateStringToDashedDateString(date)}</span>
                         <span class="sf_route">${from}-${stop ? `${stop}-` : ''}${to}</span>
