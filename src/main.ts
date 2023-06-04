@@ -2021,15 +2021,15 @@
 
         const filterToClassName = (filter) => {
             switch (filter) {
-            case 'nonstop':
-                return `${filter}_only`
-            case 'first':
-            case 'business':
-            case 'premium':
-            case 'economy':
-                return `show_${filter}`
-            default:
-                throw new Error(`Unknown filter "${filter}"`)
+                case 'nonstop':
+                    return `${filter}_only`
+                case 'first':
+                case 'business':
+                case 'premium':
+                case 'economy':
+                    return `show_${filter}`
+                default:
+                    throw new Error(`Unknown filter "${filter}"`)
             }
         }
 
