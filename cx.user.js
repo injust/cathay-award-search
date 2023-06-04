@@ -2066,13 +2066,11 @@
     // ============================================================
 
     const responseParser = (response, regex) => {
-        let result = response.match(regex)
         try {
-            result = JSON.parse(result[1])
+            return JSON.parse(response.match(regex)[1])
         } catch (e) {
-            result = false
+            return false
         }
-        return result
     }
 
     const newTabID = (cb) => {
