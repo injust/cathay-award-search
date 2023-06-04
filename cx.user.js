@@ -213,14 +213,28 @@
     // ============================================================
 
     // Search Parameters
-    const uef = { from: 'HKG', to: 'TYO', date: dateAdd(), adults: 1, children: 0, ...valueGet('uef', {}) }
+    const uef = {
+        from: 'HKG',
+        to: 'TYO',
+        date: dateAdd(),
+        adults: 1,
+        children: 0,
+        ...valueGet('uef', {})
+    }
 
     // Saved Queries
     const savedFlights = valueGet('saved_flights', {})
     const savedQueries = valueGet('saved_queries', {})
 
     // Search Result Filters
-    const filters = { nonstop: false, first: true, business: true, premium: true, economy: true, ...valueGet('filters', {}) }
+    const filters = {
+        nonstop: false,
+        first: true,
+        business: true,
+        premium: true,
+        economy: true,
+        ...valueGet('filters', {})
+    }
 
     const defaultContVars = { batch: false, query: false, saved: false, ts: 0 }
     const cont = { ...defaultContVars, ...valueGet('cont', {}) }
@@ -2235,17 +2249,11 @@
         if (r === t) {
             rtFrom.forEach((from) => {
                 rtTo.forEach((to) => {
-                    routes.push({
-                        from,
-                        to
-                    })
+                    routes.push({ from, to })
                 })
             })
         } else {
-            routes.push({
-                from: rtFrom[0],
-                to: rtTo[0]
-            })
+            routes.push({ from: rtFrom[0], to: rtTo[0] })
         }
 
         let thisRoute = routes.shift()
