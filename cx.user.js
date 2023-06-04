@@ -253,9 +253,7 @@
 
         addCss(styleCss)
 
-        const currentUrl = window.location.href
-
-        if (currentUrl.includes('redeem-flight-awards.html')) {
+        if (window.location.href.includes('redeem-flight-awards.html')) {
             log('initRoot redeem-flight-awards.html')
 
             resetContVars()
@@ -264,7 +262,7 @@
                 initSearchBox()
                 checkLogin()
             })
-        } else if (currentUrl.includes('facade.html')) {
+        } else if (window.location.href.includes('facade.html')) {
             log('initRoot facade.html')
 
             resetContVars()
@@ -273,7 +271,7 @@
                 initSearchBox()
                 checkLogin()
             })
-        } else if (currentUrl.includes('air/booking/availability')) {
+        } else if (window.location.href.includes('air/booking/availability')) {
             if (cont.query) {
                 log('initRoot air/booking/availability with cont.query')
 
@@ -299,7 +297,7 @@
                     checkLogin()
                 })
             }
-        } else if (currentUrl.includes('air/booking/complexAvailability')) {
+        } else if (window.location.href.includes('air/booking/complexAvailability')) {
             log('initRoot air/booking/complexAvailability')
 
             resetContVars()
