@@ -2359,10 +2359,15 @@
 
     const insertResults = (from, to, date, pageBom) => {
         if (!shadowRoot.querySelector(`.bulk_table tr[data-date="${date}"]`)) {
-            const resultsRow = `<tr data-date='${date}'><td class='bulkDate'>
-        <a href='javascript:void(0)' data-book data-date='${date}'>${dateStringToDashedDateString(date)}</a>
-        ${dateStringToWeekday(date)}
-        </td><td class='bulk_flights'></td></tr>`
+            const resultsRow = `
+                <tr data-date="${date}">
+                    <td class="bulkDate">
+                        <a href="javascript:void(0)" data-book data-date="${date}">${dateStringToDashedDateString(date)}</a>
+                        ${dateStringToWeekday(date)}
+                    </td>
+                    <td class="bulk_flights"></td>
+                </tr>
+            `
             divTableBody.insertAdjacentHTML('beforeend', resultsRow)
         }
 
