@@ -1311,8 +1311,8 @@
             inputTo.dispatchEvent(new Event('change'))
         });
 
-        [inputFrom, inputTo].forEach((item) => {
-            item.addEventListener('keyup', (e) => {
+        [inputFrom, inputTo].forEach((el) => {
+            el.addEventListener('keyup', (e) => {
                 if (r !== t) return
                 if (e.keyCode === 13 || e.keyCode === 32 || e.keyCode === 188) { // If the ENTER or SPACE or COMMA key is pressed
                     // If the ENTER key is pressed
@@ -1321,7 +1321,7 @@
                 }
             })
 
-            item.addEventListener('change', (e) => {
+            el.addEventListener('change', (e) => {
                 e.target.value = e.target.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
                 // setTimeout(fn, 0) lets the page reflect the updated DOM
                 setTimeout((el) => {
@@ -1340,14 +1340,14 @@
 
         let inFocus = false;
 
-        [inputFrom, inputTo].forEach((item) => {
-            item.addEventListener('focus', (e) => {
+        [inputFrom, inputTo].forEach((el) => {
+            el.addEventListener('focus', (e) => {
                 if (e.target.value.length && r === t) e.target.value += ','
             })
         });
 
-        [inputFrom, inputTo].forEach((item) => {
-            item.addEventListener('click', (e) => {
+        [inputFrom, inputTo].forEach((el) => {
+            el.addEventListener('click', (e) => {
                 if (r === t) {
                     if (!inFocus) e.target.setSelectionRange(e.target.value.length, e.target.value.length)
                     inFocus = true
@@ -1357,8 +1357,8 @@
             })
         });
 
-        [inputFrom, inputTo].forEach((item) => {
-            item.addEventListener('blur', (e) => {
+        [inputFrom, inputTo].forEach((el) => {
+            el.addEventListener('blur', (e) => {
                 e.target.value = e.target.value.replace(/,+$/, '')
                 inFocus = false
             })
@@ -1492,12 +1492,12 @@
                 const segmentsArray = divSavedQueries.querySelectorAll('.selected')
 
                 if (segmentsArray.length === 6) {
-                    divSavedQueries.querySelectorAll('input:not(:checked)').forEach((item) => {
-                        item.disabled = true
+                    divSavedQueries.querySelectorAll('input:not(:checked)').forEach((el) => {
+                        el.disabled = true
                     })
                 } else {
-                    divSavedQueries.querySelectorAll('input').forEach((item) => {
-                        item.disabled = false
+                    divSavedQueries.querySelectorAll('input').forEach((el) => {
+                        el.disabled = false
                     })
                 }
 
@@ -1527,8 +1527,8 @@
             }
         }
 
-        divFilters.querySelectorAll('input').forEach((item) => {
-            item.addEventListener('click', (e) => {
+        divFilters.querySelectorAll('input').forEach((el) => {
+            el.addEventListener('click', (e) => {
                 const className = filterToClassName(e.target.dataset.filter)
                 filters[e.target.dataset.filter] = e.target.checked
                 valueSet('filters', filters)
