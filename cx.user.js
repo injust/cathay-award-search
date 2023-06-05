@@ -1309,7 +1309,9 @@
             inputTo.value = from
             inputFrom.dispatchEvent(new Event('change'))
             inputTo.dispatchEvent(new Event('change'))
-        });
+        })
+
+        let inFocus = false;
 
         [inputFrom, inputTo].forEach((el) => {
             el.addEventListener('keyup', (e) => {
@@ -1336,17 +1338,11 @@
                     if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}`
                 }, 0, e.target)
             })
-        })
 
-        let inFocus = false;
-
-        [inputFrom, inputTo].forEach((el) => {
             el.addEventListener('focus', (e) => {
                 if (e.target.value.length && r === t) e.target.value += ','
             })
-        });
 
-        [inputFrom, inputTo].forEach((el) => {
             el.addEventListener('click', (e) => {
                 if (r === t) {
                     if (!inFocus) e.target.setSelectionRange(e.target.value.length, e.target.value.length)
@@ -1355,9 +1351,7 @@
                     e.target.select()
                 }
             })
-        });
 
-        [inputFrom, inputTo].forEach((el) => {
             el.addEventListener('blur', (e) => {
                 e.target.value = e.target.value.replace(/,+$/, '')
                 inFocus = false
