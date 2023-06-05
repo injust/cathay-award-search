@@ -1469,7 +1469,9 @@
                     children: 0
                 })
             } else if (e.target.type === 'checkbox') {
-                divSavedQueries.querySelectorAll('.selected').forEach((el) => {
+                const selectedSegments = divSavedQueries.querySelectorAll('.selected')
+
+                selectedSegments.forEach((el) => {
                     delete el.dataset.new
                 })
 
@@ -1483,15 +1485,13 @@
                     savedQuery.classList.remove('selected')
                     savedQuery.querySelector('.leg').innerText = ''
                     delete savedQuery.dataset.segment
-                    if (!divSavedQueries.querySelectorAll('.selected').length) {
+                    if (!selectedSegments.length) {
                         divSaved.classList.remove('multi_on')
                         divMultiBox.classList.add('hidden')
                     }
                 }
 
-                const segmentsArray = divSavedQueries.querySelectorAll('.selected')
-
-                if (segmentsArray.length === 6) {
+                if (selectedSegments.length === 6) {
                     divSavedQueries.querySelectorAll('input:not(:checked)').forEach((el) => {
                         el.disabled = true
                     })
@@ -1501,7 +1501,7 @@
                     })
                 }
 
-                Array.from(segmentsArray).sort((a, b) => {
+                Array.from(selectedSegments).sort((a, b) => {
                     if (+a.dataset.date > +b.dataset.date) return 1
                     log(a.dataset.date, b.dataset.date)
                     if (a.dataset.date === b.dataset.date) return ('new' in a.dataset ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1))
@@ -1552,7 +1552,7 @@
         })
 
         linkSearchMulti.addEventListener('click', (e) => {
-            const selectedSegments = shadowRoot.querySelectorAll('.saved_query.selected')
+            const selectedSegments = divSavedQueries.querySelectorAll('.selected')
             if (!selectedSegments.length) {
                 alert('No Selected Segments')
                 return
