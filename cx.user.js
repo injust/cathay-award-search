@@ -2377,8 +2377,7 @@
                     <a href="javascript:void(0)" class="bulk_save ${(savedQueries[`${date}${from}${to}`] ? ' bulk_saved' : '')}" data-save data-date="${date}" data-from="${from}" data-dest="${to}">${heartSvg}</a>
                     <a href="javascript:void(0)" class="bulk_go_book" data-book data-date="${date}" data-from="${from}" data-dest="${to}">Book &raquo;</a>
                 </span>
-                <div class="flight_list">
-        `
+                <div class="flight_list">`
 
         if (pageBom.modelObject?.isContainingErrors) {
             flightHTML += `<span class="bulk_response_error"><strong>Error:</strong> ${pageBom.modelObject?.messages[0]?.text}</span>`
