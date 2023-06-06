@@ -2374,7 +2374,7 @@
         let flightHTML = `
             <div data-from="${from}" data-to="${to}">
                 <span class="flight_title">${from} - ${to}
-                    <a href="javascript:void(0)" class="bulk_save ${(savedQueries[`${date}${from}${to}`] ? ' bulk_saved' : '')}" data-save data-date="${date}" data-from="${from}" data-dest="${to}">${heartSvg}</a>
+                    <a href="javascript:void(0)" class="bulk_save ${(savedQueries[`${date}${from}${to}`] ? 'bulk_saved' : '')}" data-save data-date="${date}" data-from="${from}" data-dest="${to}">${heartSvg}</a>
                     <a href="javascript:void(0)" class="bulk_go_book" data-book data-date="${date}" data-from="${from}" data-dest="${to}">Book &raquo;</a>
                 </span>
                 <div class="flight_list">`
@@ -2424,7 +2424,7 @@
                     if (available !== '') {
                         flightHTML += `
                             <div class="flight_wrapper">
-                                <div class="flight_item direct ${(savedFlights[flightKey] ? ' saved' : '')}" data-flight-info="${flightKey}" data-flight-avail="${f1}_${j1}_${p1}_${y1}" data-direct="1" data-f="${(displayF ? 1 : 0)}" data-j="${(displayJ ? 1 : 0)}" data-p="${(displayP ? 1 : 0)}" data-y="${(displayY ? 1 : 0)}">
+                                <div class="flight_item direct ${(savedFlights[flightKey] ? 'saved' : '')}" data-flight-info="${flightKey}" data-flight-avail="${f1}_${j1}_${p1}_${y1}" data-direct="1" data-f="${(displayF ? 1 : 0)}" data-j="${(displayJ ? 1 : 0)}" data-p="${(displayP ? 1 : 0)}" data-y="${(displayY ? 1 : 0)}">
                                     <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
                                     <span class="flight_num">${leg1Airline}${leg1FlightNum}</span>
                                     ${available}
@@ -2489,7 +2489,7 @@
                     if (available !== '') {
                         flightHTML += `
                             <div class="flight_wrapper">
-                                <div class="flight_item ${(savedFlights[flightKey] ? ' saved' : '')}" data-direct="0" data-flight-info="${flightKey}"  data-flight-avail="${numF}_${numJ}_${numP}_${numY}" data-f="${displayF ? 1 : 0}" data-j="${displayJ ? 1 : 0}" data-p="${displayP ? 1 : 0}" data-y="${displayY ? 1 : 0}">
+                                <div class="flight_item ${(savedFlights[flightKey] ? 'saved' : '')}" data-direct="0" data-flight-info="${flightKey}"  data-flight-avail="${numF}_${numJ}_${numP}_${numY}" data-f="${displayF ? 1 : 0}" data-j="${displayJ ? 1 : 0}" data-p="${displayP ? 1 : 0}" data-y="${displayY ? 1 : 0}">
                                     <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
                                     <span class="flight_num">${leg1Airline}${leg1FlightNum}
                                     <span class="stopover">${transitAirportCode}</span>
