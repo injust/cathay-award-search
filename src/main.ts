@@ -2673,7 +2673,7 @@
         adults: 1,
         children: 0
     }, cabinClass = 'Y', cont = { batch: false, query: false, saved: false }) => {
-        let cxString
+        let cxString: string
         if (routes.length === 1) {
             cxString = JSON.stringify(newQueryPayload(routes[0], passengers, cabinClass))
         } else if (routes.length) {
