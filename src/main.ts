@@ -2067,7 +2067,7 @@
             }
 
             e.target.innerText = lang.loading
-            const toSearch = []
+            const toSearch: Query[] = []
             Array.from(selectedSegments).sort((a, b) => parseInt(a.dataset.segment) - parseInt(b.dataset.segment)).forEach((segment) => {
                 toSearch.push({
                     date: segment.dataset.date,
@@ -2318,7 +2318,7 @@
     }
 
     const savedSearch = () => {
-        const toSearch = []
+        const toSearch: Query[] = []
         savedQueries.forEach((query) => {
             toSearch.push({
                 date: query.substring(0, 8),
@@ -2326,7 +2326,7 @@
                 to: query.substring(11, 14)
             })
         })
-        toSearch.sort((a, b) => a.date - b.date)
+        toSearch.sort((a, b) => parseInt(a.date) - parseInt(b.date))
 
         let ssQuery = toSearch.shift()
 
@@ -2371,7 +2371,7 @@
         log('updateSavedCount()')
 
         let savedList = ''
-        const savedArr = []
+        const savedArr: Query[] = []
         savedQueries.forEach((query) => {
             const savedDate = new Date(+query.substring(0, 4), +query.substring(4, 6) - 1, +query.substring(6, 8))
             const today = new Date()
@@ -2385,7 +2385,7 @@
                 to: query.substring(11, 14).toUpperCase()
             })
         })
-        savedArr.sort((a, b) => a.date - b.date)
+        savedArr.sort((a, b) => parseInt(a.date) - parseInt(b.date))
 
         savedArr.forEach((query) => {
             const date = query.date
@@ -2523,10 +2523,10 @@
 
     // Default Search JSON
 
-    const newQueryPayload = (route = {
+    const newQueryPayload = (route: Query = {
+        date: dateAdd(1),
         from: 'HND',
-        to: 'ITM',
-        date: dateAdd(1)
+        to: 'ITM'
     }, passengers = {
         adults: 1,
         children: 0
@@ -2665,7 +2665,7 @@
     // Regular Search
     // ============================================================
 
-    const regularSearch = (routes = [{
+    const regularSearch = (routes: Query[] = [{
         from: 'TPE',
         to: 'TYO',
         date: dateAdd(1)
@@ -2751,7 +2751,7 @@
 
         bulkDate ||= uef.date
 
-        const routes = []
+        const routes: Route[] = []
         const rtFrom = uef.from.split(',')
         const rtTo = uef.to.split(',')
         const queryCount = rtFrom.length * rtTo.length
@@ -3088,3 +3088,12 @@
 
     initRoot()
 })()
+
+interface Route {
+    from: string,
+    to: string
+}
+
+interface Query extends Route {
+    date: string
+}
