@@ -139,11 +139,11 @@
     })
 
     // Check CX Date String Validity (dateString YYYYMMDD)
-    const isValidDate = (dateString) => {
+    const isValidDate = (dateString: string) => {
         if (!/^\d{8}$/.test(dateString)) return false
-        const year = dateString.substring(0, 4)
-        const month = dateString.substring(4, 6)
-        const day = dateString.substring(6, 8)
+        const year = +dateString.substring(0, 4)
+        const month = +dateString.substring(4, 6)
+        const day = +dateString.substring(6, 8)
         if (year < 1000 || year > 3000 || month === 0 || month > 12) return false
         const monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
         if (year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0)) monthLength[1] = 29
@@ -168,10 +168,10 @@
     }
 
     // Convert CX Date String to Dashed Date String
-    const dateStringToDashedDateString = dateString => `${dateString.substring(0, 4).toString()}-${dateString.substring(4, 6).toString().padStart(2, '0')}-${dateString.substring(6, 8).toString().padStart(2, '0')}`
+    const dateStringToDashedDateString = (dateString: string) => `${dateString.substring(0, 4).toString()}-${dateString.substring(4, 6).toString().padStart(2, '0')}-${dateString.substring(6, 8).toString().padStart(2, '0')}`
 
     // Get Weekday from CX Date String
-    const dateStringToWeekday = (dateString) => {
+    const dateStringToWeekday = (dateString: string) => {
         const date = new Date(+dateString.substring(0, 4), (+dateString.substring(4, 6) - 1), +dateString.substring(6, 8))
         const weekday = {
             1: 'Mon',
