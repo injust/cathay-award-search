@@ -2318,8 +2318,8 @@
             url: formSubmitUrl,
             withCredentials: 'true',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                Accept: 'application/json, text/plain, */*'
+                Accept: 'application/json, text/plain, */*',
+                'Content-Type': 'application/x-www-form-urlencoded'
             },
             data: params,
             onreadystatechange: (response) => {
