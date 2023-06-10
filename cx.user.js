@@ -118,9 +118,6 @@
         formSubmitUrl = unsafeWindow.formSubmitUrl || `${availabilityUrl}?TAB_ID=${tabId}`
     }
 
-    const r = Math.random()
-    let t = tabId || ''
-
     // ============================================================
     // Helper Functions
     // ============================================================
@@ -1315,7 +1312,6 @@
 
         [inputFrom, inputTo].forEach((el) => {
             el.addEventListener('keyup', (e) => {
-                if (r !== t) return
                 if (e.keyCode === 13 || e.keyCode === 32 || e.keyCode === 188) { // If the ENTER or SPACE or COMMA key is pressed
                     // If the ENTER key is pressed
                     if (e.keyCode === 13) e.target.value += ','
@@ -1333,23 +1329,18 @@
                     } else {
                         uef.to = el.value
                     }
-                    if (r !== t) el.value = el.value.toUpperCase().substring(0, 3)
                     routeChanged = true
                     if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}`
                 }, 0, e.target)
             })
 
             el.addEventListener('focus', (e) => {
-                if (e.target.value.length && r === t) e.target.value += ','
+                if (e.target.value.length) e.target.value += ','
             })
 
             el.addEventListener('click', (e) => {
-                if (r === t) {
-                    if (!inFocus) e.target.setSelectionRange(e.target.value.length, e.target.value.length)
-                    inFocus = true
-                } else {
-                    e.target.select()
-                }
+                if (!inFocus) e.target.setSelectionRange(e.target.value.length, e.target.value.length)
+                inFocus = true
             })
 
             el.addEventListener('blur', (e) => {
@@ -2244,15 +2235,11 @@
             remainingDays = Math.ceil(25 / queryCount) - 1
         }
 
-        if (r === t) {
-            rtFrom.forEach((from) => {
-                rtTo.forEach((to) => {
-                    routes.push({ from, to })
-                })
+        rtFrom.forEach((from) => {
+            rtTo.forEach((to) => {
+                routes.push({ from, to })
             })
-        } else {
-            routes.push({ from: rtFrom[0], to: rtTo[0] })
-        }
+        })
 
         let thisRoute = routes.shift()
 
@@ -2546,12 +2533,6 @@
             divFooter.classList.add('bulk_sticky')
         }
     }
-
-    // ============================================================
-    // Enable Advanced Features
-    // ============================================================
-
-    t = r
 
     // ============================================================
     // Initialize
