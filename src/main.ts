@@ -2107,7 +2107,7 @@
         httpRequest({
             method: 'GET',
             url: `https://api.cathaypacific.com/redibe/airport/origin/${lang.el}/`,
-            onload: (response) => {
+            onload: (response: XMLHttpRequest) => {
                 const data = JSON.parse(response.responseText.replace('Taiwan China', 'Taiwan'))
                 if (data.airports) {
                     data.airports.forEach(({ airportCode, countryName, shortName }) => {
@@ -2507,7 +2507,7 @@
             url: 'https://api.cathaypacific.com/redibe/login/getProfile',
             headers: { 'Content-Type': 'application/json' },
             withCredentials: 'true',
-            onload: (response) => {
+            onload: (response: XMLHttpRequest) => {
                 log('getProfile')
 
                 const data = JSON.parse(response.responseText)
@@ -2603,7 +2603,7 @@
             headers: { 'Content-Type': 'application/json' },
             withCredentials: 'true',
             data: JSON.stringify(newQueryPayload()),
-            onload: (response) => {
+            onload: (response: XMLHttpRequest) => {
                 log('Initial Request Parameters Received')
                 const data = JSON.parse(response.responseText)
                 const parameters = data.parameters
@@ -2620,7 +2620,7 @@
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     data: formData,
                     withCredentials: 'true',
-                    onreadystatechange: (response) => {
+                    onreadystatechange: (response: XMLHttpRequest) => {
                         let errorMessage = lang.tab_retrieve_fail
                         if (response.readyState === XMLHttpRequest.DONE && response.status === 200) {
                             log('Tab ID Response Received. Parsing...')
@@ -2692,7 +2692,7 @@
             headers: { 'Content-Type': 'application/json' },
             withCredentials: 'true',
             data: cxString,
-            onload: (response) => {
+            onload: (response: XMLHttpRequest) => {
                 const data = JSON.parse(response.responseText)
                 const parameters = data.parameters
                 const urlToPost = data.urlToPost || availabilityUrl
@@ -2834,7 +2834,7 @@
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             data: params,
-            onreadystatechange: (response) => {
+            onreadystatechange: (response: XMLHttpRequest) => {
                 const searchAgain = () => {
                     searchAvailability(from, to, date, adult, child, cb)
                 }
