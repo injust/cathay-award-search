@@ -2180,7 +2180,7 @@
                 const form = document.createElement('form')
                 form.setAttribute('name', 'regular_search_form')
                 form.setAttribute('method', 'post')
-                form.setAttribute('action', actionUrl)
+                form.setAttribute('action', actionUrl.toString())
 
                 for (const key in parameters) {
                     const input = document.createElement('input')
