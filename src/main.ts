@@ -2594,7 +2594,7 @@
         }
     }
 
-    const newTabID = (cb) => {
+    const newTabID = (cb: () => any) => {
         log('Creating New Request Parameters...')
 
         httpRequest({
