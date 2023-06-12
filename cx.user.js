@@ -1322,7 +1322,7 @@
             el.addEventListener('change', (e) => {
                 el.value = el.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
                 // setTimeout(fn, 0) lets the page reflect the updated DOM
-                setTimeout((el) => {
+                setTimeout(() => {
                     checkAirportCodes(el)
                     if (el === inputFrom) {
                         uef.from = el.value
@@ -1331,7 +1331,7 @@
                     }
                     routeChanged = true
                     if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}`
-                }, 0, el)
+                }, 0)
             })
 
             el.addEventListener('focus', (e) => {
