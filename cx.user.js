@@ -1478,8 +1478,8 @@
                 }
 
                 if (selectedSegments.length === 6) {
-                    divSavedQueries.querySelectorAll('input:not(:checked)').forEach((el) => {
-                        el.disabled = true
+                    divSavedQueries.querySelectorAll('input').forEach((el) => {
+                        if (!el.checked) el.disabled = true
                     })
                 } else {
                     divSavedQueries.querySelectorAll('input').forEach((el) => {
