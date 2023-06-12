@@ -120,7 +120,7 @@
     // ============================================================
 
     // Wait for Element to Load
-    const waitForEl = selector => new Promise((resolve) => {
+    const waitForEl = (selector: string) => new Promise((resolve) => {
         if (document.querySelector(selector)) {
             resolve(document.querySelector(selector))
             return
@@ -155,7 +155,7 @@
     }
 
     // Add to Date and Return CX Date String
-    const dateAdd = (days = 0, date = null) => {
+    const dateAdd = (days = 0, date: string = null) => {
         let newDate = new Date()
         if (date) {
             const year = +date.substring(0, 4)
@@ -2130,7 +2130,7 @@
     // UI Logic
     // ============================================================
 
-    const batchError = (label = false) => {
+    const batchError = (label: string = null) => {
         if (label) {
             shadowRoot.querySelector('.bulk_error span').innerHTML = label
             divError.classList.remove('bulk_error_hidden')
@@ -2141,7 +2141,7 @@
 
     // Arguments: the text field element and an array of possible autocomplete values
     const autocomplete = (input: HTMLInputElement, values) => {
-        let currentFocus
+        let currentFocus: number
         // Execute a function when someone writes in the text field
         input.addEventListener('input', (e: Event) => {
             newAC(input, e)
@@ -2498,7 +2498,7 @@
         log('checkAirportCodes()')
 
         let airportCodes = el.value.split(',')
-        const errorAirportCodes = []
+        const errorAirportCodes: string[] = []
         airportCodes = airportCodes.filter((airportCode) => {
             if (airports[airportCode]) return true
             if (airportCode) errorAirportCodes.push(airportCode)
