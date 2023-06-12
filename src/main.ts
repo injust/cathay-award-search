@@ -2879,7 +2879,7 @@
     // Insert Search Results
     // ============================================================
 
-    const insertResults = (from, to, date, pageBom) => {
+    const insertResults = (from: string, to: string, date: string, pageBom) => {
         if (!divTableBody.querySelector(`tr[data-date="${date}"]`)) {
             const resultsRow = `
                 <tr data-date="${date}">
