@@ -1891,33 +1891,35 @@
         })
 
         divTable.addEventListener('click', (e: MouseEvent) => {
-            if ('book' in e.target.dataset) {
+            const el = e.target as HTMLElement
+
+            if ('book' in el.dataset) {
                 stopBatch()
                 // stopSearch = true
                 // searching = false
-                e.target.innerText = lang.loading
+                el.innerText = lang.loading
                 regularSearch([{
-                    from: (e.target.dataset.from ? e.target.dataset.from : uef.from.substring(0, 3)),
-                    to: (e.target.dataset.dest ? e.target.dataset.dest : uef.to.substring(0, 3)),
-                    date: e.target.dataset.date
+                    from: (el.dataset.from ? el.dataset.from : uef.from.substring(0, 3)),
+                    to: (el.dataset.dest ? el.dataset.dest : uef.to.substring(0, 3)),
+                    date: el.dataset.date
                 }], {
                     adults: uef.adults,
                     children: uef.children
                 })
-            } else if ('save' in e.target.dataset) {
-                const key = `${e.target.dataset.date}${e.target.dataset.from}${e.target.dataset.dest}`
-                if (e.target.classList.contains('bulk_saved')) {
-                    e.target.classList.remove('bulk_saved')
+            } else if ('save' in el.dataset) {
+                const key = `${el.dataset.date}${el.dataset.from}${el.dataset.dest}`
+                if (el.classList.contains('bulk_saved')) {
+                    el.classList.remove('bulk_saved')
                     savedQueries.delete(key)
                     updateSavedCount()
                 } else {
-                    e.target.classList.add('bulk_saved')
+                    el.classList.add('bulk_saved')
                     savedQueries.add(key)
                     updateSavedCount()
                 }
                 valueSet('saved_queries', Array.from(savedQueries))
-            } else if (e.target.classList.contains('flight_save')) {
-                const flightItem = e.target.parentNode as HTMLDivElement
+            } else if (el.classList.contains('flight_save')) {
+                const flightItem = el.parentNode as HTMLDivElement
                 const key = flightItem.dataset.flightInfo
                 const flightAvail = flightItem.dataset.flightAvail.split('_')
                 if (flightItem.classList.contains('saved')) {
@@ -1935,14 +1937,14 @@
                     updateSavedFlights()
                 }
                 valueSet('saved_flights', savedFlights)
-            } else if (e.target.classList.contains('flight_item')) {
-                if (e.target.classList.contains('active')) {
-                    e.target.classList.remove('active')
+            } else if (el.classList.contains('flight_item')) {
+                if (el.classList.contains('active')) {
+                    el.classList.remove('active')
                 } else {
                     shadowRoot.querySelectorAll('.flight_item').forEach((el: HTMLDivElement) => {
                         el.classList.remove('active')
                     })
-                    e.target.classList.add('active')
+                    el.classList.add('active')
                 }
             }
         })
@@ -1954,9 +1956,11 @@
         })
 
         divSaved.addEventListener('click', (e: MouseEvent) => {
-            if (e.target.dataset.remove) {
-                delete savedFlights[e.target.dataset.remove]
-                savedQueries.delete(e.target.dataset.remove)
+            const el = e.target as HTMLElement
+
+            if (el.dataset.remove) {
+                delete savedFlights[el.dataset.remove]
+                savedQueries.delete(el.dataset.remove)
                 updateSavedCount()
                 updateSavedFlights()
                 valueSet('saved_flights', savedFlights)
@@ -1965,26 +1969,28 @@
         })
 
         divSavedQueries.addEventListener('click', (e: MouseEvent) => {
-            if ('book' in e.target.dataset) {
+            const el = e.target as HTMLElement
+
+            if ('book' in el.dataset) {
                 stopBatch()
-                e.target.innerText = lang.loading
+                el.innerText = lang.loading
                 regularSearch([{
-                    from: (e.target.dataset.from ? e.target.dataset.from : uef.from),
-                    to: (e.target.dataset.dest ? e.target.dataset.dest : uef.to),
-                    date: e.target.dataset.date
+                    from: (el.dataset.from ? el.dataset.from : uef.from),
+                    to: (el.dataset.dest ? el.dataset.dest : uef.to),
+                    date: el.dataset.date
                 }], {
                     adults: 1,
                     children: 0
                 })
-            } else if (e.target.type === 'checkbox') {
+            } else if (el.type === 'checkbox') {
                 const selectedSegments: NodeListOf<HTMLDivElement> = divSavedQueries.querySelectorAll('.selected')
 
                 selectedSegments.forEach((el) => {
                     delete el.dataset.new
                 })
 
-                const savedQuery = e.target.parentNode.parentNode as HTMLDivElement
-                if (e.target.checked) {
+                const savedQuery = el.parentNode.parentNode as HTMLDivElement
+                if (el.checked) {
                     savedQuery.dataset.new = ''
                     savedQuery.classList.add('selected')
                     divSaved.classList.add('multi_on')
@@ -2037,11 +2043,11 @@
 
         Array.from(divFilters.getElementsByTagName('input')).forEach((el) => {
             el.addEventListener('click', (e: MouseEvent) => {
-                const className = filterToClassName(e.target.dataset.filter)
-                filters[e.target.dataset.filter] = e.target.checked
+                const className = filterToClassName(el.dataset.filter)
+                filters[el.dataset.filter] = el.checked
                 valueSet('filters', filters)
 
-                if (e.target.checked) {
+                if (el.checked) {
                     divTable.classList.add(className)
                 } else {
                     divTable.classList.remove(className)
@@ -2236,8 +2242,10 @@
                     divMatch.innerHTML = c
                     // Execute a function when someone clicks on the item value (DIV element)
                     divMatch.addEventListener('click', (e: MouseEvent) => {
+                        const el = e.target as HTMLElement
+
                         // Insert the value for the autocomplete text field
-                        input.value = [input.value.replace(/([,]?[^,]*)$/, ''), e.target.dataset.airportCode].filter(Boolean).join(',')
+                        input.value = [input.value.replace(/([,]?[^,]*)$/, ''), el.dataset.airportCode].filter(Boolean).join(',')
                         input.dispatchEvent(new Event('change'))
                         // Close the list of autocomplete values (or any other open lists of autocomplete values)
                         closeAllLists()
