@@ -2264,7 +2264,7 @@
         // Execute a function when someone clicks in the document
         document.addEventListener('click', (e: MouseEvent) => {
             if (e.target === input) return
-            closeAllLists(e.target)
+            closeAllLists(e.target as HTMLElement)
         })
     }
 
