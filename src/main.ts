@@ -2027,7 +2027,7 @@
             }
         })
 
-        const filterToClassName = (filter) => {
+        const filterToClassName = (filter: string): string => {
             switch (filter) {
                 case 'nonstop':
                     return `${filter}_only`
