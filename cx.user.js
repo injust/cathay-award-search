@@ -102,6 +102,7 @@
 
     const initCxVars = () => {
         log('initCxVars()')
+
         if (typeof unsafeWindow.staticFilesPath !== 'undefined' && staticFilesPath !== unsafeWindow.staticFilesPath) {
             // log('typeof unsafeWindow.staticFilesPath:', typeof unsafeWindow.staticFilesPath)
             staticFilesPath = valueSet('static_files_path', unsafeWindow.staticFilesPath)
@@ -1986,6 +1987,7 @@
             withCredentials: 'true',
             onload: (response) => {
                 log('getProfile')
+
                 const data = JSON.parse(response.responseText)
                 if (data.membershipNumber) return
                 divLoginPrompt.classList.remove('hidden')
@@ -2072,6 +2074,7 @@
 
     const newTabID = (cb) => {
         log('Creating New Request Parameters...')
+
         httpRequest({
             method: 'POST',
             url: 'https://api.cathaypacific.com/redibe/standardAward/create',
