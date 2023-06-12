@@ -1314,13 +1314,13 @@
             el.addEventListener('keyup', (e) => {
                 if (e.keyCode === 13 || e.keyCode === 32 || e.keyCode === 188) { // If the ENTER or SPACE or COMMA key is pressed
                     // If the ENTER key is pressed
-                    if (e.keyCode === 13) e.target.value += ','
-                    e.target.value = e.target.value.toUpperCase().split(/[ ,]+/).join(',')
+                    if (e.keyCode === 13) el.value += ','
+                    el.value = el.value.toUpperCase().split(/[ ,]+/).join(',')
                 }
             })
 
             el.addEventListener('change', (e) => {
-                e.target.value = e.target.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
+                el.value = el.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
                 // setTimeout(fn, 0) lets the page reflect the updated DOM
                 setTimeout((el) => {
                     checkAirportCodes(el)
@@ -1331,20 +1331,20 @@
                     }
                     routeChanged = true
                     if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}`
-                }, 0, e.target)
+                }, 0, el)
             })
 
             el.addEventListener('focus', (e) => {
-                if (e.target.value.length) e.target.value += ','
+                if (el.value.length) el.value += ','
             })
 
             el.addEventListener('click', (e) => {
-                if (!inFocus) e.target.setSelectionRange(e.target.value.length, e.target.value.length)
+                if (!inFocus) el.setSelectionRange(el.value.length, el.value.length)
                 inFocus = true
             })
 
             el.addEventListener('blur', (e) => {
-                e.target.value = e.target.value.replace(/,+$/, '')
+                el.value = el.value.replace(/,+$/, '')
                 inFocus = false
             })
         })
