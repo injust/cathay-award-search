@@ -2175,20 +2175,20 @@
         })
 
         // Classify an item as "active"
-        const setActive = (x) => {
-            if (!x) return
+        const setActive = (divMatches: HTMLCollectionOf<HTMLDivElement>) => {
+            if (!divMatches) return
             // Start by removing the "active" class on all items
-            removeActive(x)
-            if (currentFocus >= x.length) currentFocus = 0
-            if (currentFocus < 0) currentFocus = x.length - 1
+            removeActive(divMatches)
+            if (currentFocus >= divMatches.length) currentFocus = 0
+            if (currentFocus < 0) currentFocus = divMatches.length - 1
             // Add class "autocomplete-active"
-            x[currentFocus].classList.add('autocomplete-active')
+            divMatches[currentFocus].classList.add('autocomplete-active')
         }
 
         // Remove the "active" class from all autocomplete items
-        const removeActive = (x) => {
-            for (let i = 0; i < x.length; i++) {
-                x[i].classList.remove('autocomplete-active')
+        const removeActive = (divMatches: HTMLCollectionOf<HTMLDivElement>) => {
+            for (let i = 0; i < divMatches.length; i++) {
+                divMatches[i].classList.remove('autocomplete-active')
             }
         }
 
