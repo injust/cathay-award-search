@@ -1873,12 +1873,12 @@
         })
 
         inputDate.addEventListener('change', (e: Event) => {
-            if (isValidDate(e.target.value)) {
+            if (isValidDate(inputDate.value)) {
                 routeChanged = true
                 if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}`
             } else {
                 alert(lang.invalid_date)
-                e.target.value = uef.date
+                inputDate.value = uef.date
             }
         })
 
@@ -2061,7 +2061,7 @@
                 return
             }
 
-            e.target.innerText = lang.loading
+            linkSearchSaved.innerText = lang.loading
             savedSearch()
         })
 
@@ -2072,7 +2072,7 @@
                 return
             }
 
-            e.target.innerText = lang.loading
+            linkSearchMulti.innerText = lang.loading
             const toSearch: Query[] = []
             Array.from(selectedSegments).sort((a, b) => parseInt(a.dataset.segment) - parseInt(b.dataset.segment)).forEach((segment) => {
                 toSearch.push({
@@ -2088,9 +2088,11 @@
         })
 
         divFavesTabs.addEventListener('click', (e: MouseEvent) => {
-            if (e.target.classList.contains('tab_flights')) {
+            const el = e.target as HTMLElement
+
+            if (el.classList.contains('tab_flights')) {
                 divSaved.classList.add('flights')
-            } else if (e.target.classList.contains('tab_queries')) {
+            } else if (el.classList.contains('tab_queries')) {
                 divSaved.classList.remove('flights')
             }
         })
@@ -2142,14 +2144,14 @@
         let currentFocus
         // Execute a function when someone writes in the text field
         input.addEventListener('input', (e: Event) => {
-            newAC(e.target, e)
+            newAC(input, e)
         })
         // input.addEventListener('click', (e: MouseEvent) => {
-        //     newAC(e.target, e)
+        //     newAC(input, e)
         // })
         // Execute a function presses a key on the keyboard
         input.addEventListener('keydown', (e: KeyboardEvent) => {
-            const divContainer = shadowRoot.getElementById(`${e.target.id}-autocomplete-list`) as HTMLDivElement
+            const divContainer = shadowRoot.getElementById(`${input.id}-autocomplete-list`) as HTMLDivElement
             if (!divContainer) return
 
             const divMatches = divContainer.getElementsByTagName('div')
