@@ -1620,7 +1620,7 @@
         // })
         // Execute a function presses a key on the keyboard
         input.addEventListener('keydown', (e) => {
-            let x = shadowRoot.getElementById(`${e.target.id}autocomplete-list`)
+            let x = shadowRoot.getElementById(`${e.target.id}-autocomplete-list`)
             if (x) x = x.getElementsByTagName('div')
             if (e.keyCode === 40) { // If the Arrow DOWN key is pressed
                 currentFocus++
@@ -1683,7 +1683,7 @@
 
             // Create a DIV element that will contain the items (values)
             const divContainer = document.createElement('div')
-            divContainer.setAttribute('id', `${el.id}autocomplete-list`)
+            divContainer.setAttribute('id', `${el.id}-autocomplete-list`)
             divContainer.setAttribute('class', 'autocomplete-items')
 
             // Append the DIV element as a child of the autocomplete container
