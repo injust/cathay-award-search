@@ -2149,28 +2149,30 @@
         // })
         // Execute a function presses a key on the keyboard
         input.addEventListener('keydown', (e: KeyboardEvent) => {
-            let x = shadowRoot.getElementById(`${e.target.id}-autocomplete-list`)
-            if (x) x = x.getElementsByTagName('div')
+            const divContainer = shadowRoot.getElementById(`${e.target.id}-autocomplete-list`) as HTMLDivElement
+            if (!divContainer) return
+
+            const divMatches = divContainer.getElementsByTagName('div')
             if (e.keyCode === 40) { // If the Arrow DOWN key is pressed
                 currentFocus++
-                setActive(x)
+                setActive(divMatches)
             } else if (e.keyCode === 38) { // If the Arrow UP key is pressed
                 currentFocus--
-                setActive(x)
+                setActive(divMatches)
             } else if (e.keyCode === 13) { // If the ENTER key is pressed
                 // Prevent the form from being submitted
                 e.preventDefault()
                 closeAllLists()
                 if (currentFocus > -1) {
                     // Simulate a click on the "active" item
-                    if (x) x[currentFocus].click()
-                } else if (x) {
-                    x.querySelector(':not').click()
+                    if (divMatches) divMatches[currentFocus].click()
+                } else if (divMatches) {
+                    (divContainer.querySelector(':not') as HTMLDivElement).click()
                 }
             } else if (e.keyCode === 9 || e.keyCode === 32) { // If the TAB or SPACE key is pressed
                 closeAllLists()
                 // Simulate a click on the first item
-                if (x) x[0].click()
+                if (divMatches) divMatches[0].click()
             }
         })
 
