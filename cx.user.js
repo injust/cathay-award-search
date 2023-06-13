@@ -1478,11 +1478,11 @@
                 }
 
                 if (selectedSegments.length === 6) {
-                    divSavedQueries.querySelectorAll('input').forEach((el) => {
+                    Array.from(divSavedQueries.getElementsByTagName('input')).forEach((el) => {
                         if (!el.checked) el.disabled = true
                     })
                 } else {
-                    divSavedQueries.querySelectorAll('input').forEach((el) => {
+                    Array.from(divSavedQueries.getElementsByTagName('input')).forEach((el) => {
                         el.disabled = false
                     })
                 }
@@ -1513,7 +1513,7 @@
             }
         }
 
-        divFilters.querySelectorAll('input').forEach((el) => {
+        Array.from(divFilters.getElementsByTagName('input')).forEach((el) => {
             el.addEventListener('click', (e) => {
                 const className = filterToClassName(e.target.dataset.filter)
                 filters[e.target.dataset.filter] = e.target.checked
