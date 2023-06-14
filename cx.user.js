@@ -35,11 +35,11 @@
     // ============================================================
 
     // Get and Set Stored Values
-    const valueGet = (valueName, defaultValue) => GM_getValue(valueName, defaultValue)
+    const valueGet = (key, defaultValue) => GM_getValue(key, defaultValue)
 
-    const valueSet = (valueName, setValue) => {
-        GM_setValue(valueName, setValue)
-        return setValue
+    const valueSet = (key, value) => {
+        GM_setValue(key, value)
+        return value
     }
 
     // XMLHttpRequest and GM.xmlHttpRequest
