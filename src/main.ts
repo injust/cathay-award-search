@@ -2539,7 +2539,7 @@
         date: dateAdd(1),
         from: 'HND',
         to: 'ITM'
-    }, passengers = {
+    }, passengers: Passengers = {
         adults: 1,
         children: 0
     }, cabinClass = 'Y') => {
@@ -2566,7 +2566,7 @@
         }
     }
 
-    const newMultiPayload = (routes, passengers, cabinClass = 'Y') => {
+    const newMultiPayload = (routes: Query[], passengers: Passengers, cabinClass = 'Y') => {
         log('newMultiPayload()')
 
         const segments = []
@@ -2681,7 +2681,7 @@
         from: 'TPE',
         to: 'TYO',
         date: dateAdd(1)
-    }], passengers = {
+    }], passengers: Passengers = {
         adults: 1,
         children: 0
     }, cabinClass = 'Y', cont = { batch: false, query: false, saved: false }) => {
@@ -3100,6 +3100,11 @@
 
     initRoot()
 })()
+
+interface Passengers {
+    adults: number,
+    children: number
+}
 
 interface Route {
     from: string,
