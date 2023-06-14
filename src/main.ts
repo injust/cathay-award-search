@@ -17,6 +17,8 @@
 
 /* eslint-env browser */
 /* global GM_getValue, GM_setValue, unsafeWindow */
+declare function GM_getValue<T extends json>(key: string, defaultValue?: T): T
+declare function GM_setValue<T extends json>(key: string, value: T): T
 
 (() => {
     'use strict'
@@ -32,9 +34,9 @@
     // ============================================================
 
     // Get and Set Stored Values
-    const valueGet = (key, defaultValue) => GM_getValue(key, defaultValue)
+    const valueGet = <T extends json>(key: string, defaultValue?: T): T => GM_getValue(key, defaultValue)
 
-    const valueSet = (key, value) => {
+    const valueSet = <T extends json>(key: string, value: T): T => {
         GM_setValue(key, value)
         return value
     }
@@ -91,7 +93,7 @@
     // TODO: Use the membership number URL
     const loginUrl = `https://www.cathaypacific.com/content/cx/${browserLang}_${browserCountry}/sign-in.html?loginreferrer=${encodeURI(`https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`)}`
 
-    let staticFilesPath = valueGet('static_files_path', '/CathayPacificAwardV3/AML_IT3.3.22/')
+    let staticFilesPath = valueGet<string>('static_files_path', '/CathayPacificAwardV3/AML_IT3.3.22/')
     let requestParams = {}
     let tabId = ''
     let formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
@@ -218,7 +220,7 @@
 
     // Saved Queries
     const savedFlights = valueGet('saved_flights', {})
-    const savedQueries = new Set(valueGet('saved_queries', []) as string[])
+    const savedQueries = new Set(valueGet<string[]>('saved_queries', []))
 
     // Search Result Filters
     const filters = {
@@ -3100,6 +3102,14 @@
 
     initRoot()
 })()
+
+type json =
+    | string
+    | number
+    | boolean
+    | null
+    | json[]
+    | { [key: string]: json }
 
 interface Passengers {
     adults: number,
