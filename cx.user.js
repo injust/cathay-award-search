@@ -2143,7 +2143,7 @@
     // Regular Search
     // ============================================================
 
-    const regularSearch = (route = [{
+    const regularSearch = (routes = [{
         from: 'TPE',
         to: 'TYO',
         date: dateAdd(1)
@@ -2152,10 +2152,10 @@
         children: 0
     }, cabinClass = 'Y', cont = { batch: false, query: false, saved: false }) => {
         let cxString
-        if (route.length === 1) {
-            cxString = JSON.stringify(newQueryPayload(route[0], passengers, cabinClass))
-        } else if (route.length) {
-            cxString = JSON.stringify(newMultiPayload(route, passengers, cabinClass))
+        if (routes.length === 1) {
+            cxString = JSON.stringify(newQueryPayload(routes[0], passengers, cabinClass))
+        } else if (routes.length) {
+            cxString = JSON.stringify(newMultiPayload(routes, passengers, cabinClass))
         } else {
             return
         }
