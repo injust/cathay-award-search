@@ -15,8 +15,6 @@
 // @downloadURL         https://github.com/injust/cathay-award-search/raw/main/cx.user.js
 // ==/UserScript==
 
-/* eslint-env browser */
-/* global GM_getValue, GM_setValue, unsafeWindow */
 declare function GM_getValue<T extends json>(key: string, defaultValue?: T): T
 declare function GM_setValue<T extends json>(key: string, value: T): T
 
