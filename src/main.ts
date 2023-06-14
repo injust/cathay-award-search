@@ -2544,7 +2544,7 @@ declare function GM_setValue<T extends json>(key: string, value: T): T
     }, passengers: Passengers = {
         adults: 1,
         children: 0
-    }, cabinClass = 'Y') => {
+    }, cabinClass: CabinClass = 'Y') => {
         log('newQueryPayload()')
 
         return {
@@ -2568,7 +2568,7 @@ declare function GM_setValue<T extends json>(key: string, value: T): T
         }
     }
 
-    const newMultiPayload = (routes: Query[], passengers: Passengers, cabinClass = 'Y') => {
+    const newMultiPayload = (routes: Query[], passengers: Passengers, cabinClass: CabinClass = 'Y') => {
         log('newMultiPayload()')
 
         const segments = []
@@ -2686,7 +2686,7 @@ declare function GM_setValue<T extends json>(key: string, value: T): T
     }], passengers: Passengers = {
         adults: 1,
         children: 0
-    }, cabinClass = 'Y', cont = { batch: false, query: false, saved: false }) => {
+    }, cabinClass: CabinClass = 'Y', cont = { batch: false, query: false, saved: false }) => {
         let cxString: string
         if (routes.length === 1) {
             cxString = JSON.stringify(newQueryPayload(routes[0], passengers, cabinClass))
@@ -3110,6 +3110,8 @@ type json =
     | null
     | json[]
     | { [key: string]: json }
+
+type CabinClass = 'Y' | 'W' | 'C' | 'F'
 
 interface Passengers {
     adults: number,
