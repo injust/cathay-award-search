@@ -1665,7 +1665,7 @@
         }
 
         // Close all autocomplete lists in the document, except the one passed as an argument
-        const closeAllLists = (el) => {
+        const closeAllLists = (el = null) => {
             const x = shadowRoot.querySelectorAll('.autocomplete-items')
             for (let i = 0; i < x.length; i++) {
                 if (el !== x[i] && el !== input) {
