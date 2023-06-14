@@ -2346,7 +2346,7 @@
     // ============================================================
 
     const insertResults = (from, to, date, pageBom) => {
-        if (!shadowRoot.querySelector(`.bulk_table tr[data-date="${date}"]`)) {
+        if (!divTableBody.querySelector(`tr[data-date="${date}"]`)) {
             const resultsRow = `
                 <tr data-date="${date}">
                     <td class="bulkDate">
@@ -2519,7 +2519,7 @@
         }
         flightHTML += '</div></div>'
 
-        shadowRoot.querySelector(`.bulk_table tr[data-date="${date}"] .bulk_flights`).insertAdjacentHTML('beforeend', flightHTML)
+        divTableBody.querySelector(`tr[data-date="${date}"] .bulk_flights`).insertAdjacentHTML('beforeend', flightHTML)
         stickyFooter()
     }
 
