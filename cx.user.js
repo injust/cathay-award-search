@@ -154,7 +154,7 @@
         if (day <= 0 || day > monthLength[month - 1]) return false
         const today = new Date()
         const date = new Date(year, month - 1, day)
-        if ((date - today) / 24 / 60 / 60 / 1000 >= 366 || (date - today) / 24 / 60 / 60 / 1000 < -1) return false
+        if ((date.getTime() - today.getTime()) / 24 / 60 / 60 / 1000 >= 366 || (date.getTime() - today.getTime()) / 24 / 60 / 60 / 1000 < -1) return false
         return true
     }
 
