@@ -257,7 +257,6 @@
     shadowWrapper.style.padding = '0'
     const shadowRoot = shadowWrapper.attachShadow({ mode: 'closed' })
     const shadowContainer = document.createElement('div')
-    shadowContainer.classList.add('elevated_on')
     shadowRoot.appendChild(shadowContainer)
 
     const initRoot = () => {
