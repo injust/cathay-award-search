@@ -207,7 +207,7 @@ declare function GM_setValue<T extends json>(key: string, value: T): T
     // ============================================================
 
     // Search Parameters
-    const uef = {
+    const uef: { from: string, to: string, date: string, adults: number, children: number } = {
         from: 'HKG',
         to: 'TYO',
         date: dateAdd(),
