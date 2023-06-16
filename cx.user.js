@@ -1567,7 +1567,7 @@
             }
         })
 
-        shadowRoot.querySelector('.unelevated_saved a').addEventListener('click', (e) => {
+        shadowRoot.querySelector('.unelevated_saved').addEventListener('click', (e) => {
             // alert(JSON.stringify(saved))
             divSaved.classList.toggle('unelevated_faves_hidden')
         })
