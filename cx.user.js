@@ -1266,6 +1266,7 @@
         divLoginPrompt = shadowRoot.querySelector('.login_prompt')
         divFooter = shadowRoot.querySelector('.bulk_footer')
         divUeContainer = shadowRoot.querySelector('.unelevated_form')
+        divHeartSave = shadowRoot.querySelector('.unelevated_saved')
         divSaved = shadowRoot.querySelector('.unelevated_faves')
         divFavesTabs = shadowRoot.querySelector('.unelevated_faves .faves_tabs')
         divSavedFlights = shadowRoot.querySelector('.unelevated_faves .saved_flights')
@@ -1567,7 +1568,7 @@
             }
         })
 
-        shadowRoot.querySelector('.unelevated_saved').addEventListener('click', (e) => {
+        divHeartSave.addEventListener('click', (e) => {
             // alert(JSON.stringify(saved))
             divSaved.classList.toggle('unelevated_faves_hidden')
         })
@@ -1883,7 +1884,7 @@
             `
         })
         divSavedQueries.innerHTML = savedList
-        shadowRoot.querySelector('.unelevated_saved a span').innerText = savedArr.length
+        divHeartSave.querySelector('a span').innerText = savedArr.length
     }
 
     const updateSavedFlights = () => {
@@ -1957,7 +1958,7 @@
             `
         })
         divSavedFlights.innerHTML = savedList
-        shadowRoot.querySelector('.unelevated_saved a span').innerText = savedArr.length
+        divHeartSave.querySelector('a span').innerText = savedArr.length
     }
 
     const checkAirportCodes = (el) => {
