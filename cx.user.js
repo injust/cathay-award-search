@@ -1239,10 +1239,12 @@
     // ============================================================
 
     let btnSearch, btnBatch
-    let inputFrom, inputTo, inputDate, inputAdult, inputChild
+    let inputFrom, inputTo, inputDate, inputAdult, inputChild, inputMultiAdult, inputMultiChild
+    let selectMultiCabin
     let clearFrom, clearTo
     let linkSearchSaved, linkSearchMulti
-    let divFilters, divLoginPrompt, divFooter, divUeContainer, divSaved, divFavesTabs, divSavedQueries, divSavedFlights, divMultiBox, divTable, divTableBody
+    let divFilters, divLoginPrompt, divFooter, divUeContainer, divHeartSave, divSaved, divFavesTabs, divSavedQueries, divSavedFlights, divMultiBox, divResults, divError, divTable, divTableBody
+    let savedCount
 
     const assignElements = () => {
         log('assignElements()')
@@ -1255,6 +1257,10 @@
         inputDate = shadowRoot.querySelector('#uef_date')
         inputAdult = shadowRoot.querySelector('#uef_adult')
         inputChild = shadowRoot.querySelector('#uef_child')
+        inputMultiAdult = shadowRoot.querySelector('#multi_adult')
+        inputMultiChild = shadowRoot.querySelector('#multi_child')
+
+        selectMultiCabin = shadowRoot.querySelector('#multi_cabin')
 
         clearFrom = shadowRoot.querySelector('.clearFrom')
         clearTo = shadowRoot.querySelector('.clearTo')
@@ -1272,8 +1278,12 @@
         divSavedFlights = shadowRoot.querySelector('.unelevated_faves .saved_flights')
         divSavedQueries = shadowRoot.querySelector('.unelevated_faves .saved_queries')
         divMultiBox = shadowRoot.querySelector('.multi_box')
+        divResults = shadowRoot.querySelector('.bulk_results')
+        divError = shadowRoot.querySelector('.bulk_error')
         divTable = shadowRoot.querySelector('.bulk_table')
         divTableBody = shadowRoot.querySelector('.bulk_table tbody')
+
+        savedCount = shadowRoot.querySelector('.unelevated_saved a span')
     }
 
     const addFormListeners = () => {
@@ -1555,9 +1565,9 @@
                 })
             })
             regularSearch(toSearch, {
-                adults: shadowRoot.querySelector('#multi_adult').value,
-                children: shadowRoot.querySelector('#multi_child').value
-            }, shadowRoot.querySelector('#multi_cabin').value)
+                adults: parseInt(inputMultiAdult.value),
+                children: parseInt(inputMultiChild.value)
+            }, selectMultiCabin.value)
         })
 
         divFavesTabs.addEventListener('click', (e) => {
@@ -1604,9 +1614,9 @@
     const batchError = (label = false) => {
         if (label) {
             shadowRoot.querySelector('.bulk_error span').innerHTML = label
-            shadowRoot.querySelector('.bulk_error').classList.remove('bulk_error_hidden')
+            divError.classList.remove('bulk_error_hidden')
         } else {
-            shadowRoot.querySelector('.bulk_error').classList.add('bulk_error_hidden')
+            divError.classList.add('bulk_error_hidden')
         }
     }
 
@@ -1790,7 +1800,7 @@
             })
         }
 
-        shadowRoot.querySelector('.bulk_results').classList.remove('bulk_results_hidden')
+        divResults.classList.remove('bulk_results_hidden')
         btnBatch.innerHTML = lang.searching_w_cancel
         btnBatch.classList.add('bulkSearching')
         bulkSearch(singleDate)
@@ -1809,7 +1819,7 @@
 
         let ssQuery = toSearch.shift()
 
-        shadowRoot.querySelector('.bulk_results').classList.remove('bulk_results_hidden')
+        divResults.classList.remove('bulk_results_hidden')
         btnBatch.innerHTML = lang.searching_w_cancel
         btnBatch.classList.add('bulkSearching')
         divTableBody.innerHTML = ''
@@ -1884,7 +1894,7 @@
             `
         })
         divSavedQueries.innerHTML = savedList
-        divHeartSave.querySelector('a span').innerText = savedArr.length
+        savedCount.innerText = savedArr.length.toString()
     }
 
     const updateSavedFlights = () => {
@@ -1958,7 +1968,7 @@
             `
         })
         divSavedFlights.innerHTML = savedList
-        divHeartSave.querySelector('a span').innerText = savedArr.length
+        savedCount.innerText = savedArr.length.toString()
     }
 
     const checkAirportCodes = (el) => {
