@@ -222,7 +222,7 @@
 
     // Saved Queries
     const savedFlights = valueGet('saved_flights', {})
-    const savedQueries = valueGet('saved_queries', {})
+    const savedQueries = new Set(valueGet('saved_queries', []))
 
     // Search Result Filters
     const filters = {
@@ -1397,14 +1397,14 @@
                 const key = `${e.target.dataset.date}${e.target.dataset.from}${e.target.dataset.dest}`
                 if (e.target.classList.contains('bulk_saved')) {
                     e.target.classList.remove('bulk_saved')
-                    delete savedQueries[key]
+                    savedQueries.delete(key)
                     updateSavedCount()
                 } else {
                     e.target.classList.add('bulk_saved')
-                    savedQueries[key] = true
+                    savedQueries.add(key)
                     updateSavedCount()
                 }
-                valueSet('saved_queries', savedQueries)
+                valueSet('saved_queries', Array.from(savedQueries))
             } else if (e.target.classList.contains('flight_save')) {
                 const flightItem = e.target.parentNode
                 const key = flightItem.dataset.flightInfo
@@ -1445,11 +1445,11 @@
         divSaved.addEventListener('click', (e) => {
             if (e.target.dataset.remove) {
                 delete savedFlights[e.target.dataset.remove]
-                delete savedQueries[e.target.dataset.remove]
+                savedQueries.delete(e.target.dataset.remove)
                 updateSavedCount()
                 updateSavedFlights()
                 valueSet('saved_flights', savedFlights)
-                valueSet('saved_queries', savedQueries)
+                valueSet('saved_queries', Array.from(savedQueries))
             }
         })
 
@@ -1539,7 +1539,7 @@
         })
 
         linkSearchSaved.addEventListener('click', (e) => {
-            if (!Object.keys(savedQueries).length) {
+            if (!savedQueries.size) {
                 alert('No Saved Queries')
                 return
             }
@@ -1808,7 +1808,7 @@
 
     const savedSearch = () => {
         const toSearch = []
-        Object.keys(savedQueries).forEach((query) => {
+        savedQueries.forEach((query) => {
             toSearch.push({
                 date: query.substring(0, 8),
                 from: query.substring(8, 11),
@@ -1861,11 +1861,11 @@
 
         let savedList = ''
         const savedArr = []
-        Object.keys(savedQueries).forEach((query) => {
+        savedQueries.forEach((query) => {
             const savedDate = new Date(query.substring(0, 4), query.substring(4, 6) - 1, query.substring(6, 8))
             const today = new Date()
             if (savedDate <= today) {
-                delete savedQueries[query]
+                savedQueries.delete(query)
                 return
             }
             savedArr.push({
@@ -2375,7 +2375,7 @@
         let flightHTML = `
             <div data-from="${from}" data-to="${to}">
                 <span class="flight_title">${from} - ${to}
-                    <a href="javascript:void(0)" class="bulk_save ${savedQueries[`${date}${from}${to}`] ? 'bulk_saved' : ''}" data-save data-date="${date}" data-from="${from}" data-dest="${to}">${heartSvg}</a>
+                    <a href="javascript:void(0)" class="bulk_save ${savedQueries.has(`${date}${from}${to}`) ? 'bulk_saved' : ''}" data-save data-date="${date}" data-from="${from}" data-dest="${to}">${heartSvg}</a>
                     <a href="javascript:void(0)" class="bulk_go_book" data-book data-date="${date}" data-from="${from}" data-dest="${to}">Book &raquo;</a>
                 </span>
                 <div class="flight_list">`
