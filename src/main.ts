@@ -217,7 +217,7 @@ declare function GM_setValue<T extends json>(key: string, value: T): T
     }
 
     // Saved Queries
-    const savedFlights = valueGet('saved_flights', {})
+    const savedFlights = valueGet<SavedFlights>('saved_flights', {})
     const savedQueries = new Set(valueGet<string[]>('saved_queries', []))
 
     // Search Result Filters
@@ -2084,7 +2084,7 @@ declare function GM_setValue<T extends json>(key: string, value: T): T
             regularSearch(toSearch, {
                 adults: parseInt(inputMultiAdult.value),
                 children: parseInt(inputMultiChild.value)
-            }, selectMultiCabin.value)
+            }, selectMultiCabin.value as CabinClass)
         })
 
         divFavesTabs.addEventListener('click', (e: MouseEvent) => {
@@ -2922,7 +2922,7 @@ declare function GM_setValue<T extends json>(key: string, value: T): T
                 const leg1DepTime = getFlightTime(flight.segments[0].flightIdentifier.originDate)
                 const leg1ArrTime = getFlightTime(flight.segments[0].destinationDate)
                 const leg1Duration = getFlightTime(flight.duration, true)
-                let flightKey
+                let flightKey: string
                 if (flight.segments.length === 1) {
                     if (f1 >= 1) {
                         available += ` <span class='bulk_cabin bulk_f'>F <b>${f1}</b></span>`
@@ -3123,4 +3123,8 @@ interface Route {
 
 interface Query extends Route {
     date: string
+}
+
+interface SavedFlights {
+    [key: string]: { 'F': number, 'J': number, 'P': number, 'Y': number }
 }
