@@ -2111,7 +2111,7 @@
                     withCredentials: 'true',
                     onreadystatechange: (response) => {
                         let errorMessage = lang.tab_retrieve_fail
-                        if (response.readyState === 4 && response.status === 200) {
+                        if (response.readyState === XMLHttpRequest.DONE && response.status === 200) {
                             log('Tab ID Response Received. Parsing...')
                             const data = response.responseText
                             requestParams = responseParser(data, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
@@ -2134,7 +2134,7 @@
                             batchError()
                             formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
                             if (cb) cb()
-                        } else if (response.readyState === 4) {
+                        } else if (response.readyState === XMLHttpRequest.DONE) {
                             const errorBOM = responseParser(response.responseText, /errorBom = ([^;]+)/)
                             if (errorBOM?.modelObject?.step === 'Error') {
                                 errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
@@ -2327,7 +2327,7 @@
                 const searchAgain = () => {
                     searchAvailability(from, to, date, adult, child, cb)
                 }
-                if (response.readyState === 4 && response.status === 200) {
+                if (response.readyState === XMLHttpRequest.DONE && response.status === 200) {
                     batchError()
                     let data
                     try {
@@ -2341,10 +2341,10 @@
                     }
                     const pageBom = JSON.parse(data.pageBom)
                     cb(pageBom)
-                } else if (response.readyState === 4 && response.status === 404) {
+                } else if (response.readyState === XMLHttpRequest.DONE && response.status === 404) {
                     batchError(lang.key_exhausted)
                     newTabID(searchAgain)
-                } else if (response.readyState === 4 && response.status >= 300) {
+                } else if (response.readyState === XMLHttpRequest.DONE && response.status >= 300) {
                     batchError(lang.getting_key)
                     newTabID(searchAgain)
                 }
