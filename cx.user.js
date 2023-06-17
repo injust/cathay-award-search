@@ -2020,9 +2020,9 @@
     const newMultiPayload = (routes, passengers, cabinClass = 'Y') => {
         log('newMultiPayload()')
 
-        const legs = []
+        const segments = []
         routes.forEach((segment) => {
-            legs.push({
+            segments.push({
                 departureDate: segment.date,
                 origin: segment.from,
                 destination: segment.to
@@ -2041,7 +2041,7 @@
             numAdult: passengers.adults,
             numChild: passengers.children,
             promotionCode: '',
-            segments: legs
+            segments: segments
         }
     }
 
