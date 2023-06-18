@@ -1832,9 +1832,8 @@
 
         [inputFrom, inputTo].forEach((el) => {
             el.addEventListener('keyup', (e: KeyboardEvent) => {
-                if (e.keyCode === 13 || e.keyCode === 32 || e.keyCode === 188) { // If the ENTER or SPACE or COMMA key is pressed
-                    // If the ENTER key is pressed
-                    if (e.keyCode === 13) el.value += ','
+                if (['Enter', ' ', ','].includes(e.key)) {
+                    if (e.key === 'Enter') el.value += ','
                     el.value = el.value.toUpperCase().split(/[ ,]+/).join(',')
                 }
             })
@@ -2152,13 +2151,13 @@
             if (!divContainer) return
 
             const divMatches = divContainer.getElementsByTagName('div')
-            if (e.keyCode === 40) { // If the Arrow DOWN key is pressed
+            if (e.key === 'ArrowDown') {
                 currentFocus++
                 setActive(divMatches)
-            } else if (e.keyCode === 38) { // If the Arrow UP key is pressed
+            } else if (e.key === 'ArrowUp') {
                 currentFocus--
                 setActive(divMatches)
-            } else if (e.keyCode === 13) { // If the ENTER key is pressed
+            } else if (e.key === 'Enter') {
                 // Prevent the form from being submitted
                 e.preventDefault()
                 closeAllLists()
@@ -2168,7 +2167,7 @@
                 } else if (divMatches) {
                     (divContainer.querySelector(':not') as HTMLDivElement).click()
                 }
-            } else if (e.keyCode === 9 || e.keyCode === 32) { // If the TAB or SPACE key is pressed
+            } else if (['Tab', ' '].includes(e.key)) {
                 closeAllLists()
                 // Simulate a click on the first item
                 if (divMatches) divMatches[0].click()
