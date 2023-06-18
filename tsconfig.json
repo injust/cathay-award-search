@@ -1,8 +1,10 @@
 {
     "compilerOptions": {
         "outDir": "dist",
+        "strict": false,
         "target": "ES2017"
     },
+    "extends": "@tsconfig/recommended/tsconfig.json",
     "include": [
         "src/**/*"
     ]
