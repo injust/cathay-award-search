@@ -620,20 +620,14 @@
             font-weight: bold;
         }
 
-        .unelevated_faves .saved_queries {
-            display: block;
-        }
-
-        .unelevated_faves .saved_flights {
-            display: none;
-        }
-
-        .unelevated_faves.flights .saved_queries {
-            display: none;
-        }
-
+        .unelevated_faves .saved_queries,
         .unelevated_faves.flights .saved_flights {
             display: block;
+        }
+
+        .unelevated_faves .saved_flights,
+        .unelevated_faves.flights .saved_queries {
+            display: none;
         }
 
         .faves_tabs {
@@ -665,11 +659,13 @@
         }
 
         .unelevated_faves .saved_queries,
-        .unelevated_faves .saved_query {
+        .unelevated_faves .saved_query,
+        .unelevated_faves .saved_flights {
             list-style: none;
         }
 
-        .unelevated_faves .saved_queries {
+        .unelevated_faves .saved_queries,
+        .unelevated_faves .saved_flights {
             margin: 0 10px;
             padding: 0px;
             border-top: 2px solid #367778;
@@ -681,7 +677,8 @@
             overflow: scroll;
         }
 
-        .saved_queries:empty:after {
+        .saved_queries:empty:after,
+        .saved_flights:empty:after {
             display: flex;
             content: "${lang.no_saved}";
             text-align: center;
@@ -708,46 +705,19 @@
             display: inline-block;
         }
 
-        .unelevated_faves .saved_query input {
+        .unelevated_faves .saved_query input,
+        .unelevated_faves .saved_flights .saved_flight input {
             vertical-align: -2px;
             margin-right: 5px;
         }
 
-        .unelevated_faves .saved_query:nth-child(odd) {
+        .unelevated_faves .saved_query:nth-child(odd),
+        .unelevated_faves .saved_flights .saved_flight:nth-child(odd) {
             background: #f1efe6;
         }
 
 
 
-
-        .unelevated_faves .saved_flights {
-            list-style: none;
-        }
-
-        .unelevated_faves .saved_flights {
-            margin: 0 10px;
-            padding: 0px;
-            border-top: 2px solid #367778;
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            top: 32px;
-            overflow: scroll;
-        }
-
-        .saved_flights:empty:after {
-            display: flex;
-            content: "${lang.no_saved}";
-            text-align: center;
-            font-size: 14px;
-            align-items: center;
-            justify-content: center;
-            height: 95%;
-            opacity: 40%;
-            line-height: 25px;
-            margin: 0 25px;
-        }
 
         .unelevated_faves .saved_flights .saved_flight {
             position: relative;
@@ -761,15 +731,6 @@
             margin: 0 0 5px 0;
             min-width: 150px;
             display: inline-block;
-        }
-
-        .unelevated_faves .saved_flights .saved_flight input {
-            vertical-align: -2px;
-            margin-right: 5px;
-        }
-
-        .unelevated_faves .saved_flights .saved_flight:nth-child(odd) {
-            background: #f1efe6;
         }
 
         .unelevated_faves .saved_flights .saved_flight label>span {
