@@ -20,7 +20,7 @@
 /* eslint-env browser */
 /* global GM, GM_getValue, GM_setValue, unsafeWindow */
 
-(function () {
+(() => {
     'use strict'
 
     // ============================================================
