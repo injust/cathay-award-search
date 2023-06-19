@@ -117,15 +117,15 @@
     // ============================================================
 
     // Wait for Element to Load
-    const waitForEl = (selector: string) => new Promise((resolve) => {
-        if (document.querySelector(selector)) {
-            resolve(document.querySelector(selector))
+    const waitForEl = <E extends Element>(selectors: string): Promise<E | null> => new Promise((resolve) => {
+        if (document.querySelector<E>(selectors)) {
+            resolve(document.querySelector<E>(selectors))
             return
         }
 
         const observer = new MutationObserver((mutations) => {
-            if (document.querySelector(selector)) {
-                resolve(document.querySelector(selector))
+            if (document.querySelector<E>(selectors)) {
+                resolve(document.querySelector<E>(selectors))
                 observer.disconnect()
             }
         })
@@ -261,7 +261,7 @@
             log('initRoot redeem-flight-awards.html')
 
             resetContVars()
-            waitForEl('.redibe-v3-flightsearch form').then((el: HTMLElement) => {
+            waitForEl<HTMLFormElement>('.redibe-v3-flightsearch form').then((el) => {
                 el.before(shadowWrapper)
                 initSearchBox()
                 checkLogin()
@@ -279,7 +279,7 @@
             if (cont.query) {
                 log('initRoot air/booking/availability with cont.query')
 
-                waitForEl('body > header').then((el: HTMLElement) => {
+                waitForEl<HTMLElement>('body > header').then((el) => {
                     const boxes = document.querySelectorAll<HTMLDivElement>('body > div')
                     boxes.forEach((box) => {
                         box.remove()
@@ -293,7 +293,7 @@
                 log('initRoot air/booking/availability without cont.query')
 
                 resetContVars()
-                waitForEl('#section-flights .bound-route, #section-flights-departure .bound-route').then((el: HTMLElement) => {
+                waitForEl<HTMLDivElement>('#section-flights .bound-route, #section-flights-departure .bound-route').then((el) => {
                     shadowWrapper.style.margin = '30px 20px 0px 20px'
                     shadowWrapper.style.padding = '0'
                     document.querySelector('#section-flights, #section-flights-departure').before(shadowWrapper)
