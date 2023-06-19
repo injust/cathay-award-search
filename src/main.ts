@@ -1797,7 +1797,7 @@
     const addFormListeners = () => {
         log('addFormListeners()')
 
-        btnSearch.addEventListener('click', (e: MouseEvent) => {
+        btnSearch.addEventListener('click', (e) => {
             uef.from = inputFrom.value
             uef.to = inputTo.value
             uef.date = inputDate.value
@@ -1815,11 +1815,11 @@
             }, 'Y', { batch: false, query: uef.to.length > 3, saved: false })
         })
 
-        btnBatch.addEventListener('click', (e: MouseEvent) => {
+        btnBatch.addEventListener('click', (e) => {
             bulkClick()
         })
 
-        shadowRoot.querySelector('.switch').addEventListener('click', (e: MouseEvent) => {
+        shadowRoot.querySelector('.switch').addEventListener('click', (e) => {
             const from = inputFrom.value
             const to = inputTo.value
             inputFrom.value = to
@@ -1831,14 +1831,14 @@
         let inFocus = false;
 
         [inputFrom, inputTo].forEach((el) => {
-            el.addEventListener('keyup', (e: KeyboardEvent) => {
+            el.addEventListener('keyup', (e) => {
                 if (['Enter', ' ', ','].includes(e.key)) {
                     if (e.key === 'Enter') el.value += ','
                     el.value = el.value.toUpperCase().split(/[ ,]+/).join(',')
                 }
             })
 
-            el.addEventListener('change', (e: Event) => {
+            el.addEventListener('change', (e) => {
                 el.value = el.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
                 // setTimeout(fn, 0) lets the page reflect the updated DOM
                 setTimeout(() => {
@@ -1853,22 +1853,22 @@
                 }, 0)
             })
 
-            el.addEventListener('focus', (e: FocusEvent) => {
+            el.addEventListener('focus', (e) => {
                 if (el.value.length) el.value += ','
             })
 
-            el.addEventListener('click', (e: MouseEvent) => {
+            el.addEventListener('click', (e) => {
                 if (!inFocus) el.setSelectionRange(el.value.length, el.value.length)
                 inFocus = true
             })
 
-            el.addEventListener('blur', (e: FocusEvent) => {
+            el.addEventListener('blur', (e) => {
                 el.value = el.value.replace(/,+$/, '')
                 inFocus = false
             })
         })
 
-        inputDate.addEventListener('change', (e: Event) => {
+        inputDate.addEventListener('change', (e) => {
             if (isValidDate(inputDate.value)) {
                 routeChanged = true
                 if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}`
@@ -1878,15 +1878,15 @@
             }
         })
 
-        clearFrom.addEventListener('click', (e: MouseEvent) => {
+        clearFrom.addEventListener('click', (e) => {
             inputFrom.value = ''
         })
 
-        clearTo.addEventListener('click', (e: MouseEvent) => {
+        clearTo.addEventListener('click', (e) => {
             inputTo.value = ''
         })
 
-        divTable.addEventListener('click', (e: MouseEvent) => {
+        divTable.addEventListener('click', (e) => {
             const el = e.target as HTMLElement
 
             if ('book' in el.dataset) {
@@ -1945,13 +1945,13 @@
             }
         })
 
-        document.addEventListener('scroll', (e: Event) => {
+        document.addEventListener('scroll', (e) => {
             shadowRoot.querySelectorAll('.flight_item').forEach((el: HTMLDivElement) => {
                 el.classList.remove('active')
             })
         })
 
-        divSaved.addEventListener('click', (e: MouseEvent) => {
+        divSaved.addEventListener('click', (e) => {
             const el = e.target as HTMLElement
 
             if (el.dataset.remove) {
@@ -1964,7 +1964,7 @@
             }
         })
 
-        divSavedQueries.addEventListener('click', (e: MouseEvent) => {
+        divSavedQueries.addEventListener('click', (e) => {
             const el = e.target as HTMLElement
 
             if ('book' in el.dataset) {
@@ -2038,7 +2038,7 @@
         }
 
         Array.from(divFilters.getElementsByTagName('input')).forEach((el) => {
-            el.addEventListener('click', (e: MouseEvent) => {
+            el.addEventListener('click', (e) => {
                 const className = filterToClassName(el.dataset.filter)
                 filters[el.dataset.filter] = el.checked
                 valueSet('filters', filters)
@@ -2051,7 +2051,7 @@
             })
         })
 
-        linkSearchSaved.addEventListener('click', (e: MouseEvent) => {
+        linkSearchSaved.addEventListener('click', (e) => {
             if (!savedQueries.size) {
                 alert('No Saved Queries')
                 return
@@ -2061,7 +2061,7 @@
             savedSearch()
         })
 
-        linkSearchMulti.addEventListener('click', (e: MouseEvent) => {
+        linkSearchMulti.addEventListener('click', (e) => {
             const selectedSegments: NodeListOf<HTMLDivElement> = divSavedQueries.querySelectorAll('.selected')
             if (!selectedSegments.length) {
                 alert('No Selected Segments')
@@ -2083,7 +2083,7 @@
             }, selectMultiCabin.value as CabinClass)
         })
 
-        divFavesTabs.addEventListener('click', (e: MouseEvent) => {
+        divFavesTabs.addEventListener('click', (e) => {
             const el = e.target as HTMLElement
 
             if (el.classList.contains('tab_flights')) {
@@ -2093,7 +2093,7 @@
             }
         })
 
-        divHeartSave.addEventListener('click', (e: MouseEvent) => {
+        divHeartSave.addEventListener('click', (e) => {
             // alert(JSON.stringify(saved))
             divSaved.classList.toggle('unelevated_faves_hidden')
         })
@@ -2139,14 +2139,14 @@
     const autocomplete = (input: HTMLInputElement, values) => {
         let currentFocus: number
         // Execute a function when someone writes in the text field
-        input.addEventListener('input', (e: Event) => {
+        input.addEventListener('input', (e) => {
             newAC(input, e)
         })
-        // input.addEventListener('click', (e: MouseEvent) => {
+        // input.addEventListener('click', (e) => {
         //     newAC(input, e)
         // })
         // Execute a function presses a key on the keyboard
-        input.addEventListener('keydown', (e: KeyboardEvent) => {
+        input.addEventListener('keydown', (e) => {
             const divContainer = shadowRoot.getElementById(`${input.id}-autocomplete-list`) as HTMLDivElement
             if (!divContainer) return
 
@@ -2241,7 +2241,7 @@
                     divMatch.dataset.airportCode = airportCode
                     divMatch.innerHTML = c
                     // Execute a function when someone clicks on the item value (DIV element)
-                    divMatch.addEventListener('click', (e: MouseEvent) => {
+                    divMatch.addEventListener('click', (e) => {
                         const el = e.target as HTMLElement
 
                         // Insert the value for the autocomplete text field
@@ -2262,7 +2262,7 @@
             })
         }
         // Execute a function when someone clicks in the document
-        document.addEventListener('click', (e: MouseEvent) => {
+        document.addEventListener('click', (e) => {
             if (e.target === input) return
             closeAllLists(e.target as HTMLElement)
         })
@@ -3072,7 +3072,7 @@
         shadowContainer.appendChild(searchBox)
         assignElements()
         addFormListeners()
-        window.addEventListener('scroll', (e: Event) => {
+        window.addEventListener('scroll', (e) => {
             stickyFooter()
         })
         updateSavedCount()
