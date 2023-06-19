@@ -280,7 +280,7 @@
                 log('initRoot air/booking/availability with cont.query')
 
                 waitForEl('body > header').then((el: HTMLElement) => {
-                    const boxes: NodeListOf<HTMLDivElement> = document.querySelectorAll('body > div')
+                    const boxes = document.querySelectorAll<HTMLDivElement>('body > div')
                     boxes.forEach((box) => {
                         box.remove()
                     })
@@ -1937,7 +1937,7 @@
                 if (el.classList.contains('active')) {
                     el.classList.remove('active')
                 } else {
-                    shadowRoot.querySelectorAll('.flight_item').forEach((el: HTMLDivElement) => {
+                    shadowRoot.querySelectorAll<HTMLDivElement>('.flight_item').forEach((el) => {
                         el.classList.remove('active')
                     })
                     el.classList.add('active')
@@ -1946,7 +1946,7 @@
         })
 
         document.addEventListener('scroll', (e) => {
-            shadowRoot.querySelectorAll('.flight_item').forEach((el: HTMLDivElement) => {
+            shadowRoot.querySelectorAll<HTMLDivElement>('.flight_item').forEach((el) => {
                 el.classList.remove('active')
             })
         })
@@ -1979,7 +1979,7 @@
                     children: 0
                 })
             } else if (el.type === 'checkbox') {
-                const selectedSegments: NodeListOf<HTMLDivElement> = divSavedQueries.querySelectorAll('.selected')
+                const selectedSegments = divSavedQueries.querySelectorAll<HTMLDivElement>('.selected')
 
                 selectedSegments.forEach((el) => {
                     delete el.dataset.new
@@ -1993,7 +1993,7 @@
                     divMultiBox.classList.remove('hidden')
                 } else {
                     savedQuery.classList.remove('selected');
-                    (savedQuery.querySelector('.leg') as HTMLSpanElement).innerText = ''
+                    savedQuery.querySelector<HTMLSpanElement>('.leg').innerText = ''
                     delete savedQuery.dataset.segment
                     if (!selectedSegments.length) {
                         divSaved.classList.remove('multi_on')
@@ -2018,7 +2018,7 @@
                     return 0
                 }).forEach((el, index) => {
                     el.dataset.segment = (index + 1).toString();
-                    (el.querySelector('.leg') as HTMLSpanElement).innerText = `Segment ${index + 1}`
+                    el.querySelector<HTMLSpanElement>('.leg').innerText = `Segment ${index + 1}`
                 })
             }
         })
@@ -2062,7 +2062,7 @@
         })
 
         linkSearchMulti.addEventListener('click', (e) => {
-            const selectedSegments: NodeListOf<HTMLDivElement> = divSavedQueries.querySelectorAll('.selected')
+            const selectedSegments = divSavedQueries.querySelectorAll<HTMLDivElement>('.selected')
             if (!selectedSegments.length) {
                 alert('No Selected Segments')
                 return
@@ -2165,7 +2165,7 @@
                     // Simulate a click on the "active" item
                     if (divMatches) divMatches[currentFocus].click()
                 } else if (divMatches) {
-                    (divContainer.querySelector(':not') as HTMLDivElement).click()
+                    divContainer.querySelector<HTMLDivElement>(':not').click()
                 }
             } else if (['Tab', ' '].includes(e.key)) {
                 closeAllLists()
