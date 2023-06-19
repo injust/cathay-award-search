@@ -361,11 +361,10 @@
         invalid_date: 'Invalid Date',
         saved_queries: 'Saved Flight Queries',
         max_segments: 'Max 6 Sectors Accepted',
-        multi_book: 'Book Multi-City Award',
+        book_multi: 'Book Multi-City Award',
         query: 'Search',
         delete: 'Remove',
         search_selected: 'Search All Saved',
-        book_multi: 'Book Multi-City Award',
         no_saved: 'You do not have any saved queries. Click on ♥ in batch results to save.',
         loading: 'Searching...',
         human: "Cathay's website needs you to prove you're a human:",
@@ -389,7 +388,6 @@
                     <a href="javascript:void(0);" class="tabs tab_flights">Flights</a>
                 </div>
                 <a href="javascript:void(0);" class="search_selected">${lang.search_selected} &raquo;</a>
-                <a href="javascript:void(0);" class="search_multi_city">${lang.book_multi} &raquo;</a>
                 <div class="saved_flights"></div>
                 <div class="saved_queries"></div>
             </div>
@@ -452,7 +450,7 @@
             <label class="labels_right"><span>Children</span>
             <input type="number" inputmode="decimal" onClick="this.select()" id="multi_child" name="multi_child" placeholder="Children" value="0" min="0">
             </label>
-            <a href="javascript:void(0)" class="multi_search">${lang.multi_book}</a>
+            <a href="javascript:void(0)" class="multi_search">${lang.book_multi}</a>
         </div>
 
         <div class="bulk_box">
@@ -1106,16 +1104,6 @@
             font-weight: bold !important;
             display:none;
         }
-        a.search_multi_city {
-            position: absolute;
-            right: 15px;
-            top: 6px;
-            height: 20px;
-            line-height: 20px !important;
-            font-size: 12px !important;
-            font-weight: bold !important;
-            display:none;
-        }
         .saved_book {
             margin-left:10px;
             line-height:20px !important;
@@ -1132,16 +1120,6 @@
         }
         .flights .saved_remove {
             line-height: 36px !important;
-        }
-        .multi_on .search_multi_city {
-            position: absolute;
-            right: 15px;
-            top: 6px;
-            height: 20px;
-            line-height: 20px !important;
-            font-size: 12px !important;
-            font-weight: bold !important;
-            display:block;
         }
         .multi_on .saved_book,
         .multi_on .saved_remove,
