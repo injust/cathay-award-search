@@ -152,7 +152,7 @@
     }
 
     // Add to Date and Return CX Date String
-    const dateAdd = (days = 0, date: string = null) => {
+    const dateAdd = (days = 0, date?: string) => {
         let newDate = new Date()
         if (date) {
             const year = +date.substring(0, 4)
@@ -2147,7 +2147,7 @@
     // UI Logic
     // ============================================================
 
-    const batchError = (label: string = null) => {
+    const batchError = (label?: string) => {
         if (label) {
             shadowRoot.querySelector('.bulk_error span').innerHTML = label
             divError.classList.remove('bulk_error_hidden')
@@ -2214,7 +2214,7 @@
         }
 
         // Close all autocomplete lists in the document, except the one passed as an argument
-        const closeAllLists = (el: HTMLElement = null) => {
+        const closeAllLists = (el?: HTMLElement) => {
             const x = shadowRoot.querySelectorAll('.autocomplete-items')
             for (let i = 0; i < x.length; i++) {
                 if (el !== x[i] && el !== input) {
