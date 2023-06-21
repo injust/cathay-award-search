@@ -43,9 +43,7 @@
 
     // XMLHttpRequest and GM.xmlHttpRequest
     const httpRequest = (request, native = false) => {
-        if (!native) {
-            GM.xmlHttpRequest(request)
-        } else {
+        if (native) {
             if (!request.method || !request.url) return
 
             const xhr = new XMLHttpRequest()
@@ -75,6 +73,8 @@
             } else {
                 xhr.send()
             }
+        } else {
+            GM.xmlHttpRequest(request)
         }
     }
 
