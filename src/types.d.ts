@@ -1,3 +1,9 @@
+declare const unsafeWindow: typeof window & {
+    formSubmitUrl?: string,
+    requestParams?: string | object,
+    staticFilesPath?: string
+}
+
 declare function GM_getValue<T extends json>(key: string, defaultValue?: T): T
 declare function GM_setValue<T extends json>(key: string, value: T): T
 
