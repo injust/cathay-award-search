@@ -1887,7 +1887,8 @@
         })
 
         divTable.addEventListener('click', (e) => {
-            const el = e.target as HTMLElement
+            if ((e.target as HTMLElement).tagName !== 'A') return
+            const el = e.target as HTMLAnchorElement
 
             if ('book' in el.dataset) {
                 stopBatch()
@@ -1914,7 +1915,30 @@
                     updateSavedCount()
                 }
                 valueSet('saved_queries', Array.from(savedQueries))
-            } else if (el.classList.contains('flight_save')) {
+            }
+        })
+
+        divTable.addEventListener('click', (e) => {
+            if ((e.target as HTMLElement).tagName !== 'DIV') return
+            const el = e.target as HTMLDivElement
+
+            if (el.classList.contains('flight_item')) {
+                if (el.classList.contains('active')) {
+                    el.classList.remove('active')
+                } else {
+                    shadowRoot.querySelectorAll<HTMLDivElement>('.flight_item').forEach((el) => {
+                        el.classList.remove('active')
+                    })
+                    el.classList.add('active')
+                }
+            }
+        })
+
+        divTable.addEventListener('click', (e) => {
+            if ((e.target as HTMLElement).tagName !== 'SPAN') return
+            const el = e.target as HTMLSpanElement
+
+            if (el.classList.contains('flight_save')) {
                 const flightItem = el.parentNode as HTMLDivElement
                 const key = flightItem.dataset.flightInfo
                 const flightAvail = flightItem.dataset.flightAvail.split('_')
@@ -1933,15 +1957,6 @@
                     updateSavedFlights()
                 }
                 valueSet('saved_flights', savedFlights)
-            } else if (el.classList.contains('flight_item')) {
-                if (el.classList.contains('active')) {
-                    el.classList.remove('active')
-                } else {
-                    shadowRoot.querySelectorAll<HTMLDivElement>('.flight_item').forEach((el) => {
-                        el.classList.remove('active')
-                    })
-                    el.classList.add('active')
-                }
             }
         })
 
@@ -1965,7 +1980,8 @@
         })
 
         divSavedQueries.addEventListener('click', (e) => {
-            const el = e.target as HTMLElement
+            if ((e.target as HTMLElement).tagName !== 'A') return
+            const el = e.target as HTMLAnchorElement
 
             if ('book' in el.dataset) {
                 stopBatch()
@@ -1978,49 +1994,54 @@
                     adults: 1,
                     children: 0
                 })
-            } else if (el.type === 'checkbox') {
-                const selectedSegments = divSavedQueries.querySelectorAll<HTMLDivElement>('.selected')
+            }
+        })
 
-                selectedSegments.forEach((el) => {
-                    delete el.dataset.new
+        divSavedQueries.addEventListener('click', (e) => {
+            if ((e.target as HTMLElement).tagName !== 'INPUT') return
+            const el = e.target as HTMLInputElement
+
+            const selectedSegments = divSavedQueries.querySelectorAll<HTMLDivElement>('.selected')
+
+            selectedSegments.forEach((el) => {
+                delete el.dataset.new
+            })
+
+            const savedQuery = el.parentNode.parentNode as HTMLDivElement
+            if (el.checked) {
+                savedQuery.dataset.new = ''
+                savedQuery.classList.add('selected')
+                divSaved.classList.add('multi_on')
+                divMultiBox.classList.remove('hidden')
+            } else {
+                savedQuery.classList.remove('selected');
+                savedQuery.querySelector<HTMLSpanElement>('.leg').innerText = ''
+                delete savedQuery.dataset.segment
+                if (!selectedSegments.length) {
+                    divSaved.classList.remove('multi_on')
+                    divMultiBox.classList.add('hidden')
+                }
+            }
+
+            if (selectedSegments.length === 6) {
+                Array.from(divSavedQueries.getElementsByTagName('input')).forEach((el) => {
+                    if (!el.checked) el.disabled = true
                 })
-
-                const savedQuery = el.parentNode.parentNode as HTMLDivElement
-                if (el.checked) {
-                    savedQuery.dataset.new = ''
-                    savedQuery.classList.add('selected')
-                    divSaved.classList.add('multi_on')
-                    divMultiBox.classList.remove('hidden')
-                } else {
-                    savedQuery.classList.remove('selected');
-                    savedQuery.querySelector<HTMLSpanElement>('.leg').innerText = ''
-                    delete savedQuery.dataset.segment
-                    if (!selectedSegments.length) {
-                        divSaved.classList.remove('multi_on')
-                        divMultiBox.classList.add('hidden')
-                    }
-                }
-
-                if (selectedSegments.length === 6) {
-                    Array.from(divSavedQueries.getElementsByTagName('input')).forEach((el) => {
-                        if (!el.checked) el.disabled = true
-                    })
-                } else {
-                    Array.from(divSavedQueries.getElementsByTagName('input')).forEach((el) => {
-                        el.disabled = false
-                    })
-                }
-
-                Array.from(selectedSegments).sort((a, b) => {
-                    if (+a.dataset.date > +b.dataset.date) return 1
-                    log(a.dataset.date, b.dataset.date)
-                    if (a.dataset.date === b.dataset.date) return ('new' in a.dataset ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1))
-                    return 0
-                }).forEach((el, index) => {
-                    el.dataset.segment = (index + 1).toString();
-                    el.querySelector<HTMLSpanElement>('.leg').innerText = `Segment ${index + 1}`
+            } else {
+                Array.from(divSavedQueries.getElementsByTagName('input')).forEach((el) => {
+                    el.disabled = false
                 })
             }
+
+            Array.from(selectedSegments).sort((a, b) => {
+                if (+a.dataset.date > +b.dataset.date) return 1
+                log(a.dataset.date, b.dataset.date)
+                if (a.dataset.date === b.dataset.date) return ('new' in a.dataset ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1))
+                return 0
+            }).forEach((el, index) => {
+                el.dataset.segment = (index + 1).toString();
+                el.querySelector<HTMLSpanElement>('.leg').innerText = `Segment ${index + 1}`
+            })
         })
 
         const filterToClassName = (filter: string): string => {
