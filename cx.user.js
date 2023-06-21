@@ -50,7 +50,7 @@
             if (!request.method || !request.url) return
 
             const http = new XMLHttpRequest()
-            http.withCredentials = true
+            if (request.withCredentials) http.withCredentials = true
             http.open(request.method, request.url, true)
 
             if (request.headers) {
