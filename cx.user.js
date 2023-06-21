@@ -57,14 +57,14 @@
         }
 
         if (request.onreadystatechange) {
-            xhr.onreadystatechange = function () {
-                request.onreadystatechange(this)
+            xhr.onreadystatechange = () => {
+                request.onreadystatechange(xhr)
             }
         }
 
         if (request.onload) {
-            xhr.onload = function () {
-                request.onload(this)
+            xhr.onload = () => {
+                request.onload(xhr)
             }
         }
 
