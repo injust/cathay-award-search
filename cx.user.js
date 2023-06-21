@@ -2368,10 +2368,6 @@
                 const j1 = +flight.segments[0].cabins?.B?.status || 0
                 const p1 = +flight.segments[0].cabins?.N?.status || 0
                 const y1 = (+flight.segments[0].cabins?.E?.status || 0) + (+flight.segments[0].cabins?.R?.status || 0)
-                let displayF = false
-                let displayJ = false
-                let displayP = false
-                let displayY = false
                 let numF = 0
                 let numJ = 0
                 let numP = 0
@@ -2385,25 +2381,25 @@
                 if (flight.segments.length === 1) {
                     if (f1 >= 1) {
                         available += ` <span class='bulk_cabin bulk_f'>F <b>${f1}</b></span>`
-                        displayF = true
+                        numF = f1
                     }
                     if (j1 >= 1) {
                         available += ` <span class='bulk_cabin bulk_j'>J <b>${j1}</b></span>`
-                        displayJ = true
+                        numJ = j1
                     }
                     if (p1 >= 1) {
                         available += ` <span class='bulk_cabin bulk_p'>PY <b>${p1}</b></span>`
-                        displayP = true
+                        numP = p1
                     }
                     if (y1 >= 1) {
                         available += ` <span class='bulk_cabin bulk_y'>Y <b>${y1}</b></span>`
-                        displayY = true
+                        numY = y1
                     }
                     flightKey = `${date}${from}${to}_${leg1Airline}${leg1FlightNum}`
                     if (available !== '') {
                         flightHTML += `
                             <div class="flight_wrapper">
-                                <div class="flight_item direct ${savedFlights[flightKey] ? 'saved' : ''}" data-flight-info="${flightKey}" data-flight-avail="${f1}_${j1}_${p1}_${y1}" data-direct="1" data-f="${displayF ? 1 : 0}" data-j="${displayJ ? 1 : 0}" data-p="${displayP ? 1 : 0}" data-y="${displayY ? 1 : 0}">
+                                <div class="flight_item direct ${savedFlights[flightKey] ? 'saved' : ''}" data-flight-info="${flightKey}" data-flight-avail="${f1}_${j1}_${p1}_${y1}" data-direct="1" data-f="${numF ? 1 : 0}" data-j="${numJ ? 1 : 0}" data-p="${numP ? 1 : 0}" data-y="${numY ? 1 : 0}">
                                     <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
                                     <span class="flight_num">${leg1Airline}${leg1FlightNum}</span>
                                     ${available}
@@ -2439,22 +2435,18 @@
                     const y2 = (+flight.segments[1].cabins?.E?.status || 0) + (+flight.segments[1].cabins?.R?.status || 0)
 
                     if (f1 >= 1 && f2 >= 1) {
-                        displayF = true
                         numF = Math.min(f1, f2)
                         available += ` <span class='bulk_cabin bulk_f'>F <b>${numF}</b></span>`
                     }
                     if (j1 >= 1 && j2 >= 1) {
-                        displayJ = true
                         numJ = Math.min(j1, j2)
                         available += ` <span class='bulk_cabin bulk_j'>J <b>${numJ}</b></span>`
                     }
                     if (p1 >= 1 && p2 >= 1) {
-                        displayP = true
                         numP = Math.min(p1, p2)
                         available += ` <span class='bulk_cabin bulk_p'>PY <b>${numP}</b></span>`
                     }
                     if (y1 >= 1 && y2 >= 1) {
-                        displayY = true
                         numY = Math.min(y1, y2)
                         available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
                     }
@@ -2468,7 +2460,7 @@
                     if (available !== '') {
                         flightHTML += `
                             <div class="flight_wrapper">
-                                <div class="flight_item ${savedFlights[flightKey] ? 'saved' : ''}" data-direct="0" data-flight-info="${flightKey}"  data-flight-avail="${numF}_${numJ}_${numP}_${numY}" data-f="${displayF ? 1 : 0}" data-j="${displayJ ? 1 : 0}" data-p="${displayP ? 1 : 0}" data-y="${displayY ? 1 : 0}">
+                                <div class="flight_item ${savedFlights[flightKey] ? 'saved' : ''}" data-direct="0" data-flight-info="${flightKey}"  data-flight-avail="${numF}_${numJ}_${numP}_${numY}" data-f="${numF ? 1 : 0}" data-j="${numJ ? 1 : 0}" data-p="${numP ? 1 : 0}" data-y="${numY ? 1 : 0}">
                                     <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
                                     <span class="flight_num">${leg1Airline}${leg1FlightNum}
                                     <span class="stopover">${transitAirportCode}</span>
