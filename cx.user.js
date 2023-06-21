@@ -103,9 +103,9 @@
     const initCxVars = () => {
         log('initCxVars()')
 
-        if (typeof unsafeWindow.staticFilesPath !== 'undefined' && staticFilesPath !== unsafeWindow.staticFilesPath) {
+        if (typeof unsafeWindow.staticFilesPath !== 'undefined') {
             // log('typeof unsafeWindow.staticFilesPath:', typeof unsafeWindow.staticFilesPath)
-            staticFilesPath = valueSet('static_files_path', unsafeWindow.staticFilesPath)
+            if (staticFilesPath !== unsafeWindow.staticFilesPath) staticFilesPath = valueSet('static_files_path', unsafeWindow.staticFilesPath)
         }
 
         if (typeof unsafeWindow.requestParams === 'string') {
