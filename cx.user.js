@@ -3,7 +3,6 @@
 // @namespace           https://github.com/injust
 // @version             3.3.0+injust
 // @description         Un-elevate your Cathay award search
-// @grant               GM.xmlHttpRequest
 // @grant               GM_getValue
 // @grant               GM_setValue
 // @grant               unsafeWindow
@@ -13,12 +12,11 @@
 // @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/redeem-flight-awards.html
 // @match               https://book.cathaypacific.com/*
 // @sandbox             DOM
-// @connect             cathaypacific.com
 // @downloadURL         https://github.com/injust/cathay-award-search/raw/main/cx.user.js
 // ==/UserScript==
 
 /* eslint-env browser */
-/* global GM, GM_getValue, GM_setValue, unsafeWindow */
+/* global GM_getValue, GM_setValue, unsafeWindow */
 
 (() => {
     'use strict'
@@ -41,40 +39,39 @@
         return value
     }
 
-    // XMLHttpRequest and GM.xmlHttpRequest
-    const httpRequest = (request, native = false) => {
-        if (native) {
-            if (!request.method || !request.url) return
+    // ============================================================
+    // XMLHttpRequest
+    // ============================================================
 
-            const xhr = new XMLHttpRequest()
-            if (request.withCredentials) xhr.withCredentials = true
-            xhr.open(request.method, request.url, true)
+    const httpRequest = (request) => {
+        if (!request.method || !request.url) return
 
-            if (request.headers) {
-                for (const [key, value] of Object.entries(request.headers)) {
-                    xhr.setRequestHeader(key, value)
-                }
+        const xhr = new XMLHttpRequest()
+        if (request.withCredentials) xhr.withCredentials = true
+        xhr.open(request.method, request.url, true)
+
+        if (request.headers) {
+            for (const [key, value] of Object.entries(request.headers)) {
+                xhr.setRequestHeader(key, value)
             }
+        }
 
-            if (request.onreadystatechange) {
-                xhr.onreadystatechange = function () {
-                    request.onreadystatechange(this)
-                }
+        if (request.onreadystatechange) {
+            xhr.onreadystatechange = function () {
+                request.onreadystatechange(this)
             }
+        }
 
-            if (request.onload) {
-                xhr.onload = function () {
-                    request.onload(this)
-                }
+        if (request.onload) {
+            xhr.onload = function () {
+                request.onload(this)
             }
+        }
 
-            if (request.data) {
-                xhr.send(request.data)
-            } else {
-                xhr.send()
-            }
+        if (request.data) {
+            xhr.send(request.data)
         } else {
-            GM.xmlHttpRequest(request)
+            xhr.send()
         }
     }
 
@@ -2122,7 +2119,7 @@
                             batchError(`<strong>Error:</strong> ${errorMessage} ( <a href='${loginUrl}'>Login</a> ) `)
                         }
                     }
-                }, true)
+                })
             }
         })
     }
@@ -2326,7 +2323,7 @@
                     newTabID(searchAgain)
                 }
             }
-        }, true)
+        })
     }
 
     // ============================================================
