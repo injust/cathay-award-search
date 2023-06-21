@@ -49,32 +49,32 @@
         } else {
             if (!request.method || !request.url) return
 
-            const http = new XMLHttpRequest()
-            if (request.withCredentials) http.withCredentials = true
-            http.open(request.method, request.url, true)
+            const xhr = new XMLHttpRequest()
+            if (request.withCredentials) xhr.withCredentials = true
+            xhr.open(request.method, request.url, true)
 
             if (request.headers) {
                 for (const [key, value] of Object.entries(request.headers)) {
-                    http.setRequestHeader(key, value)
+                    xhr.setRequestHeader(key, value)
                 }
             }
 
             if (request.onreadystatechange) {
-                http.onreadystatechange = function () {
+                xhr.onreadystatechange = function () {
                     request.onreadystatechange(this)
                 }
             }
 
             if (request.onload) {
-                http.onload = function () {
+                xhr.onload = function () {
                     request.onload(this)
                 }
             }
 
             if (request.data) {
-                http.send(request.data)
+                xhr.send(request.data)
             } else {
-                http.send()
+                xhr.send()
             }
         }
     }
