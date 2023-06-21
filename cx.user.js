@@ -24,10 +24,9 @@
     'use strict'
 
     // ============================================================
-    // Debugging
+    // Logging
     // ============================================================
 
-    const debug = false
     const log = console.debug
 
     // ============================================================
@@ -44,7 +43,7 @@
 
     // XMLHttpRequest and GM.xmlHttpRequest
     const httpRequest = (request, native = false) => {
-        if (!native && !debug) {
+        if (!native) {
             GM.xmlHttpRequest(request)
         } else {
             if (!request.method || !request.url) return
@@ -2539,7 +2538,7 @@
         if (cont.query) {
             resetContVars()
             // If over 5 minutes since cont query, don't auto search
-            if (Date.now() - cont.ts > 60 * 5 * 1000 && !debug) return
+            if (Date.now() - cont.ts > 60 * 5 * 1000) return
             btnBatch.innerHTML = lang.searching_w_cancel
             btnBatch.classList.add('bulkSearching')
             document.body.classList.add('cont_query')
