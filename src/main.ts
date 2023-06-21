@@ -40,9 +40,15 @@
     // XMLHttpRequest
     // ============================================================
 
-    const httpRequest = (request) => {
-        if (!request.method || !request.url) return
-
+    const httpRequest = (request: {
+        method: string,
+        url: string | URL,
+        withCredentials?: boolean,
+        headers?: { [key: string]: string },
+        data?: Document | XMLHttpRequestBodyInit,
+        onreadystatechange?: (request: XMLHttpRequest) => void,
+        onload?: (request: XMLHttpRequest) => void
+    }) => {
         const xhr = new XMLHttpRequest()
         if (request.withCredentials) xhr.withCredentials = true
         xhr.open(request.method, request.url, true)
@@ -2535,7 +2541,7 @@
             method: 'GET',
             url: 'https://api.cathaypacific.com/redibe/login/getProfile',
             headers: { 'Content-Type': 'application/json' },
-            withCredentials: 'true',
+            withCredentials: true,
             onload: (response: XMLHttpRequest) => {
                 log('getProfile')
 
@@ -2630,7 +2636,7 @@
             method: 'POST',
             url: 'https://api.cathaypacific.com/redibe/standardAward/create',
             headers: { 'Content-Type': 'application/json' },
-            withCredentials: 'true',
+            withCredentials: true,
             data: JSON.stringify(newQueryPayload()),
             onload: (response: XMLHttpRequest) => {
                 log('Initial Request Parameters Received')
@@ -2648,7 +2654,7 @@
                     url: urlToPost,
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     data: formData,
-                    withCredentials: 'true',
+                    withCredentials: true,
                     onreadystatechange: (response: XMLHttpRequest) => {
                         if (response.readyState !== XMLHttpRequest.DONE) return
                         let errorMessage = lang.tab_retrieve_fail
@@ -2721,7 +2727,7 @@
             method: 'POST',
             url: 'https://api.cathaypacific.com/redibe/standardAward/create',
             headers: { 'Content-Type': 'application/json' },
-            withCredentials: 'true',
+            withCredentials: true,
             data: cxString,
             onload: (response: XMLHttpRequest) => {
                 const data = JSON.parse(response.responseText)
@@ -2859,7 +2865,7 @@
         httpRequest({
             method: 'POST',
             url: formSubmitUrl,
-            withCredentials: 'true',
+            withCredentials: true,
             headers: {
                 Accept: 'application/json, text/plain, */*',
                 'Content-Type': 'application/x-www-form-urlencoded'
