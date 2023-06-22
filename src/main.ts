@@ -2130,7 +2130,7 @@
     // Data Retrievers
     // ============================================================
 
-    const airports = {}
+    const airports: Airports = {}
 
     const loadAirports = () => {
         log('loadAirports()')
@@ -2141,7 +2141,7 @@
             onload: (response: XMLHttpRequest) => {
                 const data = JSON.parse(response.responseText.replace('Taiwan China', 'Taiwan'))
                 if (data.airports) {
-                    data.airports.forEach(({ airportCode, countryName, shortName }) => {
+                    data.airports.forEach(({ airportCode, countryName, shortName }: Airport) => {
                         airports[airportCode] = { airportCode, countryName, shortName }
                     })
                 }
@@ -2163,7 +2163,7 @@
     }
 
     // Arguments: the text field element and an array of possible autocomplete values
-    const autocomplete = (input: HTMLInputElement, values) => {
+    const autocomplete = (input: HTMLInputElement, values: Airports) => {
         let currentFocus: number
         // Execute a function when someone writes in the text field
         input.addEventListener('input', (e) => {
