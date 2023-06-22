@@ -15,7 +15,7 @@
 // @downloadURL         https://github.com/injust/cathay-award-search/raw/main/cx.user.js
 // ==/UserScript==
 
-(() => {
+(async () => {
     'use strict'
 
     // ============================================================
@@ -258,7 +258,7 @@
     const shadowContainer = document.createElement('div')
     shadowRoot.appendChild(shadowContainer)
 
-    const initRoot = () => {
+    const initRoot = async () => {
         log('initRoot()')
 
         addCss(styleCss)
@@ -267,57 +267,52 @@
             log('initRoot redeem-flight-awards.html')
 
             resetContVars()
-            waitForEl<HTMLFormElement>('.redibe-v3-flightsearch form').then((el) => {
-                el.before(shadowWrapper)
-                initSearchBox()
-                checkLogin()
-            })
+            const el = await waitForEl<HTMLFormElement>('.redibe-v3-flightsearch form')
+            el.before(shadowWrapper)
+            initSearchBox()
+            checkLogin()
         } else if (window.location.href.includes('facade.html')) {
             log('initRoot facade.html')
 
             resetContVars()
-            waitForEl('.ibered__search-panel').then((el: HTMLElement) => {
-                el.before(shadowWrapper)
-                initSearchBox()
-                checkLogin()
-            })
+            const el = await waitForEl('.ibered__search-panel') as HTMLElement
+            el.before(shadowWrapper)
+            initSearchBox()
+            checkLogin()
         } else if (window.location.href.includes('air/booking/availability')) {
             if (cont.query) {
                 log('initRoot air/booking/availability with cont.query')
 
-                waitForEl<HTMLElement>('body > header').then((el) => {
-                    const boxes = document.querySelectorAll<HTMLDivElement>('body > div')
-                    boxes.forEach((box) => {
-                        box.remove()
-                    })
-                    document.body.append(shadowWrapper)
-                    shadowContainer.classList.add('results_container')
-                    initSearchBox()
-                    checkLogin()
+                await waitForEl<HTMLElement>('body > header')
+                const boxes = document.querySelectorAll<HTMLDivElement>('body > div')
+                boxes.forEach((box) => {
+                    box.remove()
                 })
+                document.body.append(shadowWrapper)
+                shadowContainer.classList.add('results_container')
+                initSearchBox()
+                checkLogin()
             } else {
                 log('initRoot air/booking/availability without cont.query')
 
                 resetContVars()
-                waitForEl<HTMLDivElement>('#section-flights .bound-route, #section-flights-departure .bound-route').then((el) => {
-                    shadowWrapper.style.margin = '30px 20px 0px 20px'
-                    shadowWrapper.style.padding = '0'
-                    document.querySelector('#section-flights, #section-flights-departure').before(shadowWrapper)
-                    initSearchBox()
-                    checkLogin()
-                })
+                await waitForEl<HTMLDivElement>('#section-flights .bound-route, #section-flights-departure .bound-route')
+                shadowWrapper.style.margin = '30px 20px 0px 20px'
+                shadowWrapper.style.padding = '0'
+                document.querySelector('#section-flights, #section-flights-departure').before(shadowWrapper)
+                initSearchBox()
+                checkLogin()
             }
         } else if (window.location.href.includes('air/booking/complexAvailability')) {
             log('initRoot air/booking/complexAvailability')
 
             resetContVars()
-            waitForEl('.mc-trips .bound-route').then((el: HTMLElement) => {
-                shadowWrapper.style.margin = '30px 20px 0px 20px'
-                shadowWrapper.style.padding = '0'
-                document.querySelector('.mc-trips').before(shadowWrapper)
-                initSearchBox()
-                checkLogin()
-            })
+            await waitForEl('.mc-trips .bound-route')
+            shadowWrapper.style.margin = '30px 20px 0px 20px'
+            shadowWrapper.style.padding = '0'
+            document.querySelector('.mc-trips').before(shadowWrapper)
+            initSearchBox()
+            checkLogin()
         }
     }
 
@@ -3125,5 +3120,5 @@
         }
     }
 
-    initRoot()
+    await initRoot()
 })()
