@@ -1,4 +1,4 @@
-import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
+import { GM } from 'vite-plugin-monkey/dist/client'
 
 (async () => {
     'use strict'
@@ -14,10 +14,10 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
     // ============================================================
 
     // Get and Set Stored Values
-    const valueGet: <T extends json>(key: string, defaultValue?: T) => T = GM_getValue
+    const valueGet: <T extends json>(key: string, defaultValue?: T) => Promise<T> = GM.getValue
 
-    const valueSet = <T extends json>(key: string, value: T): T => {
-        GM_setValue(key, value)
+    const valueSet = async <T extends json>(key: string, value: T): Promise<T> => {
+        await GM.setValue(key, value)
         return value
     }
 
@@ -78,17 +78,17 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
     // TODO: Use the membership number URL
     const loginUrl = `https://www.cathaypacific.com/content/cx/${browserLang}_${browserCountry}/sign-in.html?loginreferrer=${encodeURI(`https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`)}`
 
-    let staticFilesPath = valueGet<string>('static_files_path', '/CathayPacificAwardV3/AML_IT3.3.22/')
+    let staticFilesPath = await valueGet<string>('static_files_path', '/CathayPacificAwardV3/AML_IT3.3.22/')
     let requestParams: RequestParams = {}
     let tabId = ''
     let formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
 
-    const initCxVars = () => {
+    const initCxVars = async () => {
         log('initCxVars()')
 
         if (typeof unsafeWindow.staticFilesPath !== 'undefined') {
             // log('typeof unsafeWindow.staticFilesPath:', typeof unsafeWindow.staticFilesPath)
-            if (staticFilesPath !== unsafeWindow.staticFilesPath) staticFilesPath = valueSet('static_files_path', unsafeWindow.staticFilesPath)
+            if (staticFilesPath !== unsafeWindow.staticFilesPath) staticFilesPath = await valueSet('static_files_path', unsafeWindow.staticFilesPath)
         }
 
         if (typeof unsafeWindow.requestParams === 'string') {
@@ -200,12 +200,12 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
         date: dateAdd(),
         adults: 1,
         children: 0,
-        ...valueGet('uef', {})
+        ...await valueGet('uef', {})
     }
 
     // Saved Queries
-    const savedFlights = valueGet<SavedFlights>('saved_flights', {})
-    const savedQueries = new Set(valueGet<string[]>('saved_queries', []))
+    const savedFlights = await valueGet<SavedFlights>('saved_flights', {})
+    const savedQueries = new Set(await valueGet<string[]>('saved_queries', []))
 
     // Search Result Filters
     const filters = {
@@ -214,11 +214,11 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
         business: true,
         premium: true,
         economy: true,
-        ...valueGet('filters', {})
+        ...await valueGet('filters', {})
     }
 
     const defaultContVars = { batch: false, query: false, saved: false, ts: 0 }
-    const cont = { ...defaultContVars, ...valueGet('cont', {}) }
+    const cont = { ...defaultContVars, ...await valueGet('cont', {}) }
     // const urlParams = new URLSearchParams(window.location.search)
     // const cont = {
     //     batch: urlParams.has('cont_batch'),
@@ -227,8 +227,8 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
     //     ts: urlParams.has('cont_ts') ? parseInt(urlParams.get('cont_ts')) : 0
     // }
 
-    const resetContVars = () => {
-        valueSet('cont', defaultContVars)
+    const resetContVars = async () => {
+        await valueSet('cont', defaultContVars)
     }
 
     // ============================================================
@@ -248,18 +248,18 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
         if (window.location.href.includes('redeem-flight-awards.html')) {
             log('initRoot redeem-flight-awards.html')
 
-            resetContVars()
+            await resetContVars()
             const el = await waitForEl<HTMLFormElement>('.redibe-v3-flightsearch form')
             el.before(shadowWrapper)
-            initSearchBox()
+            await initSearchBox()
             checkLogin()
         } else if (window.location.href.includes('facade.html')) {
             log('initRoot facade.html')
 
-            resetContVars()
+            await resetContVars()
             const el = await waitForEl('.ibered__search-panel') as HTMLElement
             el.before(shadowWrapper)
-            initSearchBox()
+            await initSearchBox()
             checkLogin()
         } else if (window.location.href.includes('air/booking/availability')) {
             if (cont.query) {
@@ -272,28 +272,28 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
                 })
                 document.body.append(shadowWrapper)
                 shadowContainer.classList.add('results_container')
-                initSearchBox()
+                await initSearchBox()
                 checkLogin()
             } else {
                 log('initRoot air/booking/availability without cont.query')
 
-                resetContVars()
+                await resetContVars()
                 await waitForEl<HTMLDivElement>('#section-flights .bound-route, #section-flights-departure .bound-route')
                 shadowWrapper.style.margin = '30px 20px 0px 20px'
                 shadowWrapper.style.padding = '0'
                 document.querySelector('#section-flights, #section-flights-departure').before(shadowWrapper)
-                initSearchBox()
+                await initSearchBox()
                 checkLogin()
             }
         } else if (window.location.href.includes('air/booking/complexAvailability')) {
             log('initRoot air/booking/complexAvailability')
 
-            resetContVars()
+            await resetContVars()
             await waitForEl('.mc-trips .bound-route')
             shadowWrapper.style.margin = '30px 20px 0px 20px'
             shadowWrapper.style.padding = '0'
             document.querySelector('.mc-trips').before(shadowWrapper)
-            initSearchBox()
+            await initSearchBox()
             checkLogin()
         }
     }
@@ -1780,13 +1780,13 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
     const addFormListeners = () => {
         log('addFormListeners()')
 
-        btnSearch.addEventListener('click', (e) => {
+        btnSearch.addEventListener('click', async (e) => {
             uef.from = inputFrom.value
             uef.to = inputTo.value
             uef.date = inputDate.value
             uef.adults = parseInt(inputAdult.value)
             uef.children = parseInt(inputChild.value)
-            valueSet('uef', uef)
+            await valueSet('uef', uef)
 
             regularSearch([{
                 from: uef.from.substring(0, 3),
@@ -1798,8 +1798,8 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
             }, 'Y', { batch: false, query: uef.to.length > 3, saved: false })
         })
 
-        btnBatch.addEventListener('click', (e) => {
-            bulkClick()
+        btnBatch.addEventListener('click', async (e) => {
+            await bulkClick()
         })
 
         shadowRoot.querySelector('.switch').addEventListener('click', (e) => {
@@ -1869,7 +1869,7 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
             inputTo.value = ''
         })
 
-        divTable.addEventListener('click', (e) => {
+        divTable.addEventListener('click', async (e) => {
             if ((e.target as HTMLElement).tagName !== 'A') return
             const el = e.target as HTMLAnchorElement
 
@@ -1897,7 +1897,7 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
                     savedQueries.add(key)
                     updateSavedCount()
                 }
-                valueSet('saved_queries', Array.from(savedQueries))
+                await valueSet('saved_queries', Array.from(savedQueries))
             }
         })
 
@@ -1917,7 +1917,7 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
             }
         })
 
-        divTable.addEventListener('click', (e) => {
+        divTable.addEventListener('click', async (e) => {
             if ((e.target as HTMLElement).tagName !== 'SPAN') return
             const el = e.target as HTMLSpanElement
 
@@ -1939,7 +1939,7 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
                     }
                     updateSavedFlights()
                 }
-                valueSet('saved_flights', savedFlights)
+                await valueSet('saved_flights', savedFlights)
             }
         })
 
@@ -1949,7 +1949,7 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
             })
         })
 
-        divSaved.addEventListener('click', (e) => {
+        divSaved.addEventListener('click', async (e) => {
             const el = e.target as HTMLElement
 
             if (el.dataset.remove) {
@@ -1957,8 +1957,8 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
                 savedQueries.delete(el.dataset.remove)
                 updateSavedCount()
                 updateSavedFlights()
-                valueSet('saved_flights', savedFlights)
-                valueSet('saved_queries', Array.from(savedQueries))
+                await valueSet('saved_flights', savedFlights)
+                await valueSet('saved_queries', Array.from(savedQueries))
             }
         })
 
@@ -2042,10 +2042,10 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
         }
 
         Array.from(divFilters.getElementsByTagName('input')).forEach((el) => {
-            el.addEventListener('click', (e) => {
+            el.addEventListener('click', async (e) => {
                 const className = filterToClassName(el.dataset.filter)
                 filters[el.dataset.filter] = el.checked
-                valueSet('filters', filters)
+                await valueSet('filters', filters)
 
                 if (el.checked) {
                     divTable.classList.add(className)
@@ -2295,7 +2295,7 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
         batchError()
     }
 
-    const bulkClick = (singleDate = false) => {
+    const bulkClick = async (singleDate = false) => {
         if (searching) {
             stopBatch()
             return
@@ -2308,7 +2308,7 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
         uef.date = inputDate.value
         uef.adults = parseInt(inputAdult.value)
         uef.children = parseInt(inputChild.value)
-        valueSet('uef', uef)
+        await valueSet('uef', uef)
 
         if (routeChanged) {
             bulkDate = uef.date
@@ -2699,14 +2699,14 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
             data: cxString,
             method: 'POST',
             withCredentials: true,
-            onload: (response: XMLHttpRequest) => {
+            onload: async (response: XMLHttpRequest) => {
                 const data = JSON.parse(response.responseText)
                 const parameters = data.parameters
                 const urlToPost = data.urlToPost || availabilityUrl
                 log('regularSearch parameters:', parameters)
                 const actionUrl = new URL(urlToPost)
 
-                valueSet('cont', { ...cont, ts: Date.now() })
+                await valueSet('cont', { ...cont, ts: Date.now() })
 
                 // Create a form dynamically
                 const form = document.createElement('form')
@@ -3063,8 +3063,8 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
     // Initialize
     // ============================================================
 
-    const initSearchBox = () => {
-        initCxVars()
+    const initSearchBox = async () => {
+        await initCxVars()
         shadowContainer.appendChild(searchBox)
         assignElements()
         addFormListeners()
@@ -3078,17 +3078,17 @@ import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
         autocomplete(inputTo, airports)
 
         if (cont.query) {
-            resetContVars()
+            await resetContVars()
             // If over 5 minutes since cont query, don't auto search
             if (Date.now() - cont.ts > 60 * 5 * 1000) return
             btnBatch.innerHTML = lang.searching_w_cancel
             btnBatch.classList.add('bulkSearching')
             document.body.classList.add('cont_query')
-            setTimeout(() => {
+            setTimeout(async () => {
                 if (cont.saved) {
                     savedSearch()
                 } else {
-                    bulkClick(!cont.batch)
+                    await bulkClick(!cont.batch)
                 }
             }, 1000)
         }
