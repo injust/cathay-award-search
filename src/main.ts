@@ -2747,7 +2747,7 @@
                     form.appendChild(input)
                 }
 
-                document.getElementsByTagName('body')[0].appendChild(form)
+                document.body.appendChild(form)
                 // document.forms.regular_search_form.submit()
                 form.submit()
             }
