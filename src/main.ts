@@ -79,9 +79,9 @@ import { GM } from 'vite-plugin-monkey/dist/client'
     const loginUrl = `https://www.cathaypacific.com/content/cx/${browserLang}_${browserCountry}/sign-in.html?loginreferrer=${encodeURI(`https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`)}`
 
     let staticFilesPath = await valueGet<string>('static_files_path', '/CathayPacificAwardV3/AML_IT3.3.22/')
-    let requestParams: RequestParams = {}
-    let tabId = ''
-    let formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
+    let requestParams: RequestParams
+    let tabId: string
+    let formSubmitUrl: string
 
     const initCxVars = async () => {
         log('initCxVars()')
@@ -95,9 +95,11 @@ import { GM } from 'vite-plugin-monkey/dist/client'
             requestParams = JSON.parse(unsafeWindow.requestParams)
         } else if (typeof unsafeWindow.requestParams === 'object') {
             requestParams = unsafeWindow.requestParams
+        } else {
+            requestParams = {}
         }
 
-        tabId = requestParams.TAB_ID || tabId
+        tabId = requestParams.TAB_ID || ''
 
         formSubmitUrl = unsafeWindow.formSubmitUrl || `${availabilityUrl}?TAB_ID=${tabId}`
     }
