@@ -2874,7 +2874,7 @@
 
                 if (response.status === 200) {
                     batchError()
-                    let data
+                    let data: { pageBom: string }
                     try {
                         data = JSON.parse(response.responseText)
                     } catch {
