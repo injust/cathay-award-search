@@ -4,9 +4,6 @@ declare const unsafeWindow: typeof window & {
     staticFilesPath?: string
 }
 
-declare function GM_getValue<T extends json>(key: string, defaultValue?: T): T
-declare function GM_setValue<T extends json>(key: string, value: T): T
-
 type json =
     | string
     | number
