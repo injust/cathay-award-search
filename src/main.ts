@@ -1,19 +1,4 @@
-// ==UserScript==
-// @name                Cathay Award Search Fixer
-// @namespace           https://github.com/injust
-// @version             3.3.0+injust
-// @description         Un-elevate your Cathay award search
-// @grant               GM_getValue
-// @grant               GM_setValue
-// @grant               unsafeWindow
-// @author              injust
-// @homepageURL         https://github.com/injust/cathay-award-search
-// @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/facade.html
-// @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/redeem-flight-awards.html
-// @match               https://book.cathaypacific.com/*
-// @sandbox             DOM
-// @downloadURL         https://github.com/injust/cathay-award-search/raw/main/cx.user.js
-// ==/UserScript==
+import { GM_getValue, GM_setValue } from 'vite-plugin-monkey/dist/client'
 
 (async () => {
     'use strict'
@@ -29,7 +14,7 @@
     // ============================================================
 
     // Get and Set Stored Values
-    const valueGet = <T extends json>(key: string, defaultValue?: T): T => GM_getValue(key, defaultValue)
+    const valueGet: <T extends json>(key: string, defaultValue?: T) => T = GM_getValue
 
     const valueSet = <T extends json>(key: string, value: T): T => {
         GM_setValue(key, value)
@@ -259,8 +244,6 @@
 
     const initRoot = async () => {
         log('initRoot()')
-
-        addCss(styleCss)
 
         if (window.location.href.includes('redeem-flight-awards.html')) {
             log('initRoot redeem-flight-awards.html')
@@ -677,7 +660,7 @@
         .saved_queries:empty:after,
         .saved_flights:empty:after {
             display: flex;
-            content: "${lang.no_saved}";
+            content: "You do not have any saved queries. Click on ♥ in batch results to save.";
             text-align: center;
             font-size: 14px;
             align-items: center;
@@ -1104,7 +1087,7 @@
         .bulk_table td.bulk_flights .flight_list:empty:after {
             display: block;
             height: 24px;
-            content: "${lang.no_availability}";
+            content: "No Redemption Availability";
             margin-bottom: 5px;
             margin-top: -3px;
             margin-left: 10px;
@@ -1722,22 +1705,22 @@
 
     addCss(`
         .captcha_wrapper {
-                position: fixed;
-                top: 150px;
-                left: 50%;
-                width: 300px;
-                height: 200px;
-                background: white;
-                z-index: 20;
-                padding: 10px;
-                margin-left: -150px;
-                box-shadow: 0px 0px 5px;
-                border-radius: 5px;
-            }
-            .human_check {
-                margin: 10px 20px 20px 20px;
-                text-align: center;
-            }
+            position: fixed;
+            top: 150px;
+            left: 50%;
+            width: 300px;
+            height: 200px;
+            background: white;
+            z-index: 20;
+            padding: 10px;
+            margin-left: -150px;
+            box-shadow: 0px 0px 5px;
+            border-radius: 5px;
+        }
+        .human_check {
+            margin: 10px 20px 20px 20px;
+            text-align: center;
+        }
     `, document.body)
 
     // ============================================================
