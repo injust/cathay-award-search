@@ -76,9 +76,9 @@ await (async () => {
       requestParams = {}
     }
 
-    tabId = requestParams.TAB_ID || ''
+    tabId = requestParams.TAB_ID ?? ''
 
-    formSubmitUrl = unsafeWindow.formSubmitUrl || `${availabilityUrl}?TAB_ID=${tabId}`
+    formSubmitUrl = unsafeWindow.formSubmitUrl ?? `${availabilityUrl}?TAB_ID=${tabId}`
   }
 
   // ============================================================
@@ -123,7 +123,7 @@ await (async () => {
   // Add to Date and Return CX Date String
   const dateAdd = (days = 0, date?: string): string => {
     let newDate = new Date()
-    if (date) {
+    if (date != null) {
       const year = +date.substring(0, 4)
       const month = +date.substring(4, 6)
       const day = +date.substring(6, 8)
@@ -1858,8 +1858,9 @@ await (async () => {
         // searching = false
         el.innerText = lang.loading
         await regularSearch([{
-          from: (el.dataset.from ? el.dataset.from : uef.from.substring(0, 3)),
-          to: (el.dataset.dest ? el.dataset.dest : uef.to.substring(0, 3)),
+          // TODO: Why does this need a fallback value?
+          from: el.dataset.from ?? uef.from.substring(0, 3),
+          to: el.dataset.dest ?? uef.to.substring(0, 3),
           date: el.dataset.date
         }], {
           adults: uef.adults,
@@ -1931,7 +1932,7 @@ await (async () => {
     divSaved.addEventListener('click', async (e) => {
       const el = e.target as HTMLElement
 
-      if (el.dataset.remove) {
+      if (el.dataset.remove != null) {
         delete savedFlights[el.dataset.remove]
         savedQueries.delete(el.dataset.remove)
         updateSavedCount()
@@ -1949,8 +1950,9 @@ await (async () => {
         stopBatch()
         el.innerText = lang.loading
         await regularSearch([{
-          from: (el.dataset.from ? el.dataset.from : uef.from),
-          to: (el.dataset.dest ? el.dataset.dest : uef.to),
+          // TODO: Why does this need a fallback value?
+          from: el.dataset.from ?? uef.from,
+          to: el.dataset.dest ?? uef.to,
           date: el.dataset.date
         }], {
           adults: 1,
@@ -2106,11 +2108,11 @@ await (async () => {
   // ============================================================
 
   const batchError = (label?: string): void => {
-    if (label) {
+    if (label == null) {
+      divError.classList.add('bulk_error_hidden')
+    } else {
       shadowRoot.querySelector('.bulk_error span').innerHTML = label
       divError.classList.remove('bulk_error_hidden')
-    } else {
-      divError.classList.add('bulk_error_hidden')
     }
   }
 
@@ -2127,7 +2129,7 @@ await (async () => {
     // Execute a function presses a key on the keyboard
     input.addEventListener('keydown', (e) => {
       const divContainer = shadowRoot.getElementById(`${input.id}-autocomplete-list`) as HTMLDivElement
-      if (!divContainer) return
+      if (divContainer == null) return
 
       const divMatches = divContainer.getElementsByTagName('div')
       if (e.key === 'ArrowDown') {
@@ -2412,9 +2414,9 @@ await (async () => {
         date: query.substring(0, 8),
         from: query.substring(8, 11).toUpperCase(),
         to: query.substring(11, 14).toUpperCase(),
-        leg1: query.split('_')[1] || '',
-        stop: query.split('_')[2] || '',
-        leg2: query.split('_')[3] || '',
+        leg1: query.split('_')[1] ?? '',
+        stop: query.split('_')[2] ?? '',
+        leg2: query.split('_')[3] ?? '',
         F: savedFlights[query].F,
         J: savedFlights[query].J,
         P: savedFlights[query].P,
@@ -2475,7 +2477,7 @@ await (async () => {
     let airportCodes = el.value.split(',')
     const errorAirportCodes: string[] = []
     airportCodes = airportCodes.filter((airportCode) => {
-      if (airports[airportCode]) return true
+      if (airports[airportCode] != null) return true
       if (airportCode) errorAirportCodes.push(airportCode)
       return false
     })
@@ -2589,7 +2591,7 @@ await (async () => {
     log('Initial Request Parameters Received')
     const data = await resp.json()
     const parameters = data.parameters
-    const urlToPost = data.urlToPost || availabilityUrl
+    const urlToPost = data.urlToPost ?? availabilityUrl
     let formData = ''
     for (const key in parameters) {
       formData += `${key}=${parameters[key]}&`
@@ -2613,7 +2615,7 @@ await (async () => {
       if (Object.keys(requestParams).length === 0) {
         const errorBOM = responseParser(text, /errorBom = ([^;]+)/)
         if (errorBOM?.modelObject?.step === 'Error') {
-          errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
+          errorMessage = errorBOM.modelObject?.messages[0]?.subText ?? errorMessage
         }
 
         log('Tab ID Could not be parsed')
@@ -2622,7 +2624,7 @@ await (async () => {
         return
       }
 
-      tabId = requestParams.TAB_ID || ''
+      tabId = requestParams.TAB_ID ?? ''
       log('New Tab ID:', tabId)
       batchError()
       formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
@@ -2630,7 +2632,7 @@ await (async () => {
     } else {
       const errorBOM = responseParser(text, /errorBom = ([^;]+)/)
       if (errorBOM?.modelObject?.step === 'Error') {
-        errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
+        errorMessage = errorBOM.modelObject?.messages[0]?.subText ?? errorMessage
       }
 
       log('Failed to receive Tab ID')
@@ -2673,7 +2675,7 @@ await (async () => {
 
     const data = await resp.json()
     const parameters = data.parameters
-    const urlToPost = data.urlToPost || availabilityUrl
+    const urlToPost = data.urlToPost ?? availabilityUrl
     log('regularSearch parameters:', parameters)
     const actionUrl = new URL(urlToPost)
 
@@ -2872,6 +2874,7 @@ await (async () => {
       const flights = pageBom.modelObject?.availabilities?.upsell?.bounds[0].flights
       flights.forEach((flight) => {
         let available = ''
+        // TODO: Maybe use ?? operator instead of ||, but need to account for NaN
         const f1 = +flight.segments[0].cabins?.F?.status || 0
         const j1 = +flight.segments[0].cabins?.B?.status || 0
         const p1 = +flight.segments[0].cabins?.N?.status || 0
@@ -2937,6 +2940,7 @@ await (async () => {
             updateSavedFlights()
           }
         } else {
+          // TODO: Maybe use ?? operator instead of ||, but need to account for NaN
           const f2 = +flight.segments[1].cabins?.F?.status || 0
           const j2 = +flight.segments[1].cabins?.B?.status || 0
           const p2 = +flight.segments[1].cabins?.N?.status || 0
