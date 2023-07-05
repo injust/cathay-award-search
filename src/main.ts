@@ -203,7 +203,7 @@ await (async () => {
   //   batch: urlParams.has('cont_batch'),
   //   query: urlParams.has('cont_query'),
   //   saved: urlParams.has('cont_saved'),
-  //   ts: urlParams.has('cont_ts') ? parseInt(urlParams.get('cont_ts')) : 0
+  //   ts: urlParams.has('cont_ts') ? +urlParams.get('cont_ts') : 0
   // }
 
   const resetContVars = async (): Promise<void> => {
@@ -1764,8 +1764,8 @@ await (async () => {
         uef.from = inputFrom.value
         uef.to = inputTo.value
         uef.date = inputDate.value
-        uef.adults = parseInt(inputAdult.value)
-        uef.children = parseInt(inputChild.value)
+        uef.adults = +inputAdult.value
+        uef.children = +inputChild.value
         await valueSet('uef', uef)
 
         await regularSearch([{
@@ -1919,10 +1919,10 @@ await (async () => {
           } else {
             flightItem.classList.add('saved')
             savedFlights[key] = {
-              F: parseInt(flightAvail[0]),
-              J: parseInt(flightAvail[1]),
-              P: parseInt(flightAvail[2]),
-              Y: parseInt(flightAvail[3])
+              F: +flightAvail[0],
+              J: +flightAvail[1],
+              P: +flightAvail[2],
+              Y: +flightAvail[3]
             }
             updateSavedFlights()
           }
@@ -2072,7 +2072,7 @@ await (async () => {
 
         linkSearchMulti.innerText = lang.loading
         const toSearch: Query[] = []
-        Array.from(selectedSegments).sort((a, b) => parseInt(a.dataset.segment) - parseInt(b.dataset.segment)).forEach((segment) => {
+        Array.from(selectedSegments).sort((a, b) => +a.dataset.segment - +b.dataset.segment).forEach((segment) => {
           toSearch.push({
             date: segment.dataset.date,
             from: segment.dataset.route.substring(0, 3),
@@ -2080,8 +2080,8 @@ await (async () => {
           })
         })
         await regularSearch(toSearch, {
-          adults: parseInt(inputMultiAdult.value),
-          children: parseInt(inputMultiChild.value)
+          adults: +inputMultiAdult.value,
+          children: +inputMultiChild.value
         }, selectMultiCabin.value as CabinClass)
       })()
     })
@@ -2303,8 +2303,8 @@ await (async () => {
     uef.from = inputFrom.value
     uef.to = inputTo.value
     uef.date = inputDate.value
-    uef.adults = parseInt(inputAdult.value)
-    uef.children = parseInt(inputChild.value)
+    uef.adults = +inputAdult.value
+    uef.children = +inputChild.value
     await valueSet('uef', uef)
 
     if (routeChanged) {
@@ -2333,7 +2333,7 @@ await (async () => {
         to: query.substring(11, 14)
       })
     })
-    toSearch.sort((a, b) => parseInt(a.date) - parseInt(b.date))
+    toSearch.sort((a, b) => +a.date - +b.date)
 
     let ssQuery = toSearch.shift()
 
@@ -2392,7 +2392,7 @@ await (async () => {
         to: query.substring(11, 14).toUpperCase()
       })
     })
-    savedArr.sort((a, b) => parseInt(a.date) - parseInt(b.date))
+    savedArr.sort((a, b) => +a.date - +b.date)
 
     savedArr.forEach((query) => {
       const date = query.date
@@ -2441,7 +2441,7 @@ await (async () => {
         Y: savedFlights[query].Y
       })
     })
-    savedArr.sort((a, b) => parseInt(a.date) - parseInt(b.date))
+    savedArr.sort((a, b) => +a.date - +b.date)
 
     savedArr.forEach((query) => {
       const fullQuery = query.fullQuery
