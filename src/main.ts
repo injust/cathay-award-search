@@ -1759,26 +1759,30 @@ await (async () => {
   const addFormListeners = (): void => {
     log('addFormListeners()')
 
-    btnSearch.addEventListener('click', async (e) => {
-      uef.from = inputFrom.value
-      uef.to = inputTo.value
-      uef.date = inputDate.value
-      uef.adults = parseInt(inputAdult.value)
-      uef.children = parseInt(inputChild.value)
-      await valueSet('uef', uef)
+    btnSearch.addEventListener('click', (e) => {
+      (async () => {
+        uef.from = inputFrom.value
+        uef.to = inputTo.value
+        uef.date = inputDate.value
+        uef.adults = parseInt(inputAdult.value)
+        uef.children = parseInt(inputChild.value)
+        await valueSet('uef', uef)
 
-      await regularSearch([{
-        from: uef.from.substring(0, 3),
-        to: uef.to.substring(0, 3),
-        date: uef.date
-      }], {
-        adults: uef.adults,
-        children: uef.children
-      }, 'Y', { batch: false, query: uef.to.length > 3, saved: false })
+        await regularSearch([{
+          from: uef.from.substring(0, 3),
+          to: uef.to.substring(0, 3),
+          date: uef.date
+        }], {
+          adults: uef.adults,
+          children: uef.children
+        }, 'Y', { batch: false, query: uef.to.length > 3, saved: false })
+      })().catch(log)
     })
 
-    btnBatch.addEventListener('click', async (e) => {
-      await bulkClick()
+    btnBatch.addEventListener('click', (e) => {
+      (async () => {
+        await bulkClick()
+      })().catch(log)
     })
 
     shadowRoot.querySelector('.switch').addEventListener('click', (e) => {
@@ -1848,37 +1852,39 @@ await (async () => {
       inputTo.value = ''
     })
 
-    divTable.addEventListener('click', async (e) => {
-      if ((e.target as HTMLElement).tagName !== 'A') return
-      const el = e.target as HTMLAnchorElement
+    divTable.addEventListener('click', (e) => {
+      (async () => {
+        if ((e.target as HTMLElement).tagName !== 'A') return
+        const el = e.target as HTMLAnchorElement
 
-      if ('book' in el.dataset) {
-        stopBatch()
-        // stopSearch = true
-        // searching = false
-        el.innerText = lang.loading
-        await regularSearch([{
-          // TODO: Why does this need a fallback value?
-          from: el.dataset.from ?? uef.from.substring(0, 3),
-          to: el.dataset.dest ?? uef.to.substring(0, 3),
-          date: el.dataset.date
-        }], {
-          adults: uef.adults,
-          children: uef.children
-        })
-      } else if ('save' in el.dataset) {
-        const key = `${el.dataset.date}${el.dataset.from}${el.dataset.dest}`
-        if (el.classList.contains('bulk_saved')) {
-          el.classList.remove('bulk_saved')
-          savedQueries.delete(key)
-          updateSavedCount()
-        } else {
-          el.classList.add('bulk_saved')
-          savedQueries.add(key)
-          updateSavedCount()
+        if ('book' in el.dataset) {
+          stopBatch()
+          // stopSearch = true
+          // searching = false
+          el.innerText = lang.loading
+          await regularSearch([{
+            // TODO: Why does this need a fallback value?
+            from: el.dataset.from ?? uef.from.substring(0, 3),
+            to: el.dataset.dest ?? uef.to.substring(0, 3),
+            date: el.dataset.date
+          }], {
+            adults: uef.adults,
+            children: uef.children
+          })
+        } else if ('save' in el.dataset) {
+          const key = `${el.dataset.date}${el.dataset.from}${el.dataset.dest}`
+          if (el.classList.contains('bulk_saved')) {
+            el.classList.remove('bulk_saved')
+            savedQueries.delete(key)
+            updateSavedCount()
+          } else {
+            el.classList.add('bulk_saved')
+            savedQueries.add(key)
+            updateSavedCount()
+          }
+          await valueSet('saved_queries', Array.from(savedQueries))
         }
-        await valueSet('saved_queries', Array.from(savedQueries))
-      }
+      })().catch(log)
     })
 
     divTable.addEventListener('click', (e) => {
@@ -1897,30 +1903,32 @@ await (async () => {
       }
     })
 
-    divTable.addEventListener('click', async (e) => {
-      if ((e.target as HTMLElement).tagName !== 'SPAN') return
-      const el = e.target as HTMLSpanElement
+    divTable.addEventListener('click', (e) => {
+      (async () => {
+        if ((e.target as HTMLElement).tagName !== 'SPAN') return
+        const el = e.target as HTMLSpanElement
 
-      if (el.classList.contains('flight_save')) {
-        const flightItem = el.parentNode as HTMLDivElement
-        const key = flightItem.dataset.flightInfo
-        const flightAvail = flightItem.dataset.flightAvail.split('_')
-        if (flightItem.classList.contains('saved')) {
-          flightItem.classList.remove('saved')
-          delete savedFlights[key]
-          updateSavedFlights()
-        } else {
-          flightItem.classList.add('saved')
-          savedFlights[key] = {
-            F: parseInt(flightAvail[0]),
-            J: parseInt(flightAvail[1]),
-            P: parseInt(flightAvail[2]),
-            Y: parseInt(flightAvail[3])
+        if (el.classList.contains('flight_save')) {
+          const flightItem = el.parentNode as HTMLDivElement
+          const key = flightItem.dataset.flightInfo
+          const flightAvail = flightItem.dataset.flightAvail.split('_')
+          if (flightItem.classList.contains('saved')) {
+            flightItem.classList.remove('saved')
+            delete savedFlights[key]
+            updateSavedFlights()
+          } else {
+            flightItem.classList.add('saved')
+            savedFlights[key] = {
+              F: parseInt(flightAvail[0]),
+              J: parseInt(flightAvail[1]),
+              P: parseInt(flightAvail[2]),
+              Y: parseInt(flightAvail[3])
+            }
+            updateSavedFlights()
           }
-          updateSavedFlights()
+          await valueSet('saved_flights', savedFlights)
         }
-        await valueSet('saved_flights', savedFlights)
-      }
+      })().catch(log)
     })
 
     document.addEventListener('scroll', (e) => {
@@ -1929,36 +1937,40 @@ await (async () => {
       })
     })
 
-    divSaved.addEventListener('click', async (e) => {
-      const el = e.target as HTMLElement
+    divSaved.addEventListener('click', (e) => {
+      (async () => {
+        const el = e.target as HTMLElement
 
-      if (el.dataset.remove != null) {
-        delete savedFlights[el.dataset.remove]
-        savedQueries.delete(el.dataset.remove)
-        updateSavedCount()
-        updateSavedFlights()
-        await valueSet('saved_flights', savedFlights)
-        await valueSet('saved_queries', Array.from(savedQueries))
-      }
+        if (el.dataset.remove != null) {
+          delete savedFlights[el.dataset.remove]
+          savedQueries.delete(el.dataset.remove)
+          updateSavedCount()
+          updateSavedFlights()
+          await valueSet('saved_flights', savedFlights)
+          await valueSet('saved_queries', Array.from(savedQueries))
+        }
+      })().catch(log)
     })
 
-    divSavedQueries.addEventListener('click', async (e) => {
-      if ((e.target as HTMLElement).tagName !== 'A') return
-      const el = e.target as HTMLAnchorElement
+    divSavedQueries.addEventListener('click', (e) => {
+      (async () => {
+        if ((e.target as HTMLElement).tagName !== 'A') return
+        const el = e.target as HTMLAnchorElement
 
-      if ('book' in el.dataset) {
-        stopBatch()
-        el.innerText = lang.loading
-        await regularSearch([{
-          // TODO: Why does this need a fallback value?
-          from: el.dataset.from ?? uef.from,
-          to: el.dataset.dest ?? uef.to,
-          date: el.dataset.date
-        }], {
-          adults: 1,
-          children: 0
-        })
-      }
+        if ('book' in el.dataset) {
+          stopBatch()
+          el.innerText = lang.loading
+          await regularSearch([{
+            // TODO: Why does this need a fallback value?
+            from: el.dataset.from ?? uef.from,
+            to: el.dataset.dest ?? uef.to,
+            date: el.dataset.date
+          }], {
+            adults: 1,
+            children: 0
+          })
+        }
+      })().catch(log)
     })
 
     divSavedQueries.addEventListener('click', (e) => {
@@ -2023,49 +2035,55 @@ await (async () => {
     }
 
     Array.from(divFilters.getElementsByTagName('input')).forEach((el) => {
-      el.addEventListener('click', async (e) => {
-        const className = filterToClassName(el.dataset.filter)
-        filters[el.dataset.filter] = el.checked
-        await valueSet('filters', filters)
+      el.addEventListener('click', (e) => {
+        (async () => {
+          const className = filterToClassName(el.dataset.filter)
+          filters[el.dataset.filter] = el.checked
+          await valueSet('filters', filters)
 
-        if (el.checked) {
-          divTable.classList.add(className)
-        } else {
-          divTable.classList.remove(className)
+          if (el.checked) {
+            divTable.classList.add(className)
+          } else {
+            divTable.classList.remove(className)
+          }
+        })().catch(log)
+      })
+    })
+
+    linkSearchSaved.addEventListener('click', (e) => {
+      (async () => {
+        if (!savedQueries.size) {
+          alert('No Saved Queries')
+          return
         }
-      })
+
+        linkSearchSaved.innerText = lang.loading
+        await savedSearch()
+      })().catch(log)
     })
 
-    linkSearchSaved.addEventListener('click', async (e) => {
-      if (!savedQueries.size) {
-        alert('No Saved Queries')
-        return
-      }
+    linkSearchMulti.addEventListener('click', (e) => {
+      (async () => {
+        const selectedSegments = divSavedQueries.querySelectorAll<HTMLDivElement>('.selected')
+        if (!selectedSegments.length) {
+          alert('No Selected Segments')
+          return
+        }
 
-      linkSearchSaved.innerText = lang.loading
-      await savedSearch()
-    })
-
-    linkSearchMulti.addEventListener('click', async (e) => {
-      const selectedSegments = divSavedQueries.querySelectorAll<HTMLDivElement>('.selected')
-      if (!selectedSegments.length) {
-        alert('No Selected Segments')
-        return
-      }
-
-      linkSearchMulti.innerText = lang.loading
-      const toSearch: Query[] = []
-      Array.from(selectedSegments).sort((a, b) => parseInt(a.dataset.segment) - parseInt(b.dataset.segment)).forEach((segment) => {
-        toSearch.push({
-          date: segment.dataset.date,
-          from: segment.dataset.route.substring(0, 3),
-          to: segment.dataset.route.substring(3, 6)
+        linkSearchMulti.innerText = lang.loading
+        const toSearch: Query[] = []
+        Array.from(selectedSegments).sort((a, b) => parseInt(a.dataset.segment) - parseInt(b.dataset.segment)).forEach((segment) => {
+          toSearch.push({
+            date: segment.dataset.date,
+            from: segment.dataset.route.substring(0, 3),
+            to: segment.dataset.route.substring(3, 6)
+          })
         })
-      })
-      await regularSearch(toSearch, {
-        adults: parseInt(inputMultiAdult.value),
-        children: parseInt(inputMultiChild.value)
-      }, selectMultiCabin.value as CabinClass)
+        await regularSearch(toSearch, {
+          adults: parseInt(inputMultiAdult.value),
+          children: parseInt(inputMultiChild.value)
+        }, selectMultiCabin.value as CabinClass)
+      })().catch(log)
     })
 
     divFavesTabs.addEventListener('click', (e) => {
