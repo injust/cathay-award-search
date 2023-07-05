@@ -2354,8 +2354,8 @@ await (async () => {
       return
     }
 
-    const populateNextQuery = async (flights): Promise<void> => {
-      insertResults(ssQuery.from, ssQuery.to, ssQuery.date, flights)
+    const populateNextQuery = async (pageBom): Promise<void> => {
+      insertResults(ssQuery.from, ssQuery.to, ssQuery.date, pageBom)
 
       if (toSearch.length > 0) {
         ssQuery = toSearch.shift()
@@ -2631,9 +2631,9 @@ await (async () => {
       log('requestParams:', requestParams)
 
       if (Object.keys(requestParams).length === 0) {
-        const errorBOM = responseParser(text, /errorBom = ([^;]+)/)
-        if (errorBOM?.modelObject?.step === 'Error') {
-          errorMessage = errorBOM.modelObject?.messages[0]?.subText ?? errorMessage
+        const errorBom = responseParser(text, /errorBom = ([^;]+)/)
+        if (errorBom?.modelObject?.step === 'Error') {
+          errorMessage = errorBom.modelObject?.messages[0]?.subText ?? errorMessage
         }
 
         log('Tab ID Could not be parsed')
@@ -2648,9 +2648,9 @@ await (async () => {
       formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
       if (cb != null) await cb()
     } else {
-      const errorBOM = responseParser(text, /errorBom = ([^;]+)/)
-      if (errorBOM?.modelObject?.step === 'Error') {
-        errorMessage = errorBOM.modelObject?.messages[0]?.subText ?? errorMessage
+      const errorBom = responseParser(text, /errorBom = ([^;]+)/)
+      if (errorBom?.modelObject?.step === 'Error') {
+        errorMessage = errorBom.modelObject?.messages[0]?.subText ?? errorMessage
       }
 
       log('Failed to receive Tab ID')
@@ -2764,8 +2764,8 @@ await (async () => {
 
     let thisRoute = routes.shift()
 
-    const populateNextRoute = async (flights): Promise<void> => {
-      insertResults(thisRoute.from, thisRoute.to, bulkDate, flights)
+    const populateNextRoute = async (pageBom): Promise<void> => {
+      insertResults(thisRoute.from, thisRoute.to, bulkDate, pageBom)
 
       if (routes.length > 0) {
         thisRoute = routes.shift()
