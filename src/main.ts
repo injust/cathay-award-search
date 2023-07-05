@@ -2764,7 +2764,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
     // Search Availability
     // ============================================================
 
-    const searchAvailability = async (from, to, date, adult, child, cb) => {
+    const searchAvailability = async (from: string, to: string, date: string, adult: number, child: number, cb) => {
         if (stopSearch) {
             stopSearch = false
             searching = false
