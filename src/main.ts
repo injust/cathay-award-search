@@ -25,41 +25,18 @@ import { GM } from 'vite-plugin-monkey/dist/client'
     // XMLHttpRequest
     // ============================================================
 
-    const httpRequest = (url: string | URL, request?: {
+    const httpRequest = async (url: string | URL, request?: {
         headers?: HeadersInit,
-        data?: XMLHttpRequestBodyInit,
-        method?: string,
-        withCredentials?: boolean,
-        onreadystatechange?: (request: XMLHttpRequest) => void,
-        onload?: (request: XMLHttpRequest) => void
-    }) => {
-        const xhr = new XMLHttpRequest()
-        if (request?.withCredentials) xhr.withCredentials = true
-        xhr.open(request?.method ?? 'GET', url, true)
-
-        if (request?.headers) {
-            for (const [key, value] of Object.entries(request.headers)) {
-                xhr.setRequestHeader(key, value)
-            }
-        }
-
-        if (request?.onreadystatechange) {
-            xhr.onreadystatechange = () => {
-                request.onreadystatechange(xhr)
-            }
-        }
-
-        if (request?.onload) {
-            xhr.onload = () => {
-                request.onload(xhr)
-            }
-        }
-
-        if (request?.data) {
-            xhr.send(request.data)
-        } else {
-            xhr.send()
-        }
+        data?: BodyInit,
+        method: string,
+        withCredentials?: boolean
+    }): Promise<Response> => {
+        return fetch(url, {
+            headers: request?.headers,
+            body: request?.data,
+            method: request?.method ?? 'GET',
+            credentials: request?.withCredentials ? 'include' : 'omit'
+        })
     }
 
     // ============================================================
@@ -254,7 +231,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
             const el = await waitForEl<HTMLFormElement>('.redibe-v3-flightsearch form')
             el.before(shadowWrapper)
             await initSearchBox()
-            checkLogin()
+            await checkLogin()
         } else if (window.location.href.includes('facade.html')) {
             log('initRoot facade.html')
 
@@ -262,7 +239,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
             const el = await waitForEl('.ibered__search-panel') as HTMLElement
             el.before(shadowWrapper)
             await initSearchBox()
-            checkLogin()
+            await checkLogin()
         } else if (window.location.href.includes('air/booking/availability')) {
             if (cont.query) {
                 log('initRoot air/booking/availability with cont.query')
@@ -275,7 +252,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
                 document.body.append(shadowWrapper)
                 shadowContainer.classList.add('results_container')
                 await initSearchBox()
-                checkLogin()
+                await checkLogin()
             } else {
                 log('initRoot air/booking/availability without cont.query')
 
@@ -285,7 +262,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
                 shadowWrapper.style.padding = '0'
                 document.querySelector('#section-flights, #section-flights-departure').before(shadowWrapper)
                 await initSearchBox()
-                checkLogin()
+                await checkLogin()
             }
         } else if (window.location.href.includes('air/booking/complexAvailability')) {
             log('initRoot air/booking/complexAvailability')
@@ -296,7 +273,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
             shadowWrapper.style.padding = '0'
             document.querySelector('.mc-trips').before(shadowWrapper)
             await initSearchBox()
-            checkLogin()
+            await checkLogin()
         }
     }
 
@@ -1790,7 +1767,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
             uef.children = parseInt(inputChild.value)
             await valueSet('uef', uef)
 
-            regularSearch([{
+            await regularSearch([{
                 from: uef.from.substring(0, 3),
                 to: uef.to.substring(0, 3),
                 date: uef.date
@@ -1880,7 +1857,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
                 // stopSearch = true
                 // searching = false
                 el.innerText = lang.loading
-                regularSearch([{
+                await regularSearch([{
                     from: (el.dataset.from ? el.dataset.from : uef.from.substring(0, 3)),
                     to: (el.dataset.dest ? el.dataset.dest : uef.to.substring(0, 3)),
                     date: el.dataset.date
@@ -1964,14 +1941,14 @@ import { GM } from 'vite-plugin-monkey/dist/client'
             }
         })
 
-        divSavedQueries.addEventListener('click', (e) => {
+        divSavedQueries.addEventListener('click', async (e) => {
             if ((e.target as HTMLElement).tagName !== 'A') return
             const el = e.target as HTMLAnchorElement
 
             if ('book' in el.dataset) {
                 stopBatch()
                 el.innerText = lang.loading
-                regularSearch([{
+                await regularSearch([{
                     from: (el.dataset.from ? el.dataset.from : uef.from),
                     to: (el.dataset.dest ? el.dataset.dest : uef.to),
                     date: el.dataset.date
@@ -2067,7 +2044,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
             savedSearch()
         })
 
-        linkSearchMulti.addEventListener('click', (e) => {
+        linkSearchMulti.addEventListener('click', async (e) => {
             const selectedSegments = divSavedQueries.querySelectorAll<HTMLDivElement>('.selected')
             if (!selectedSegments.length) {
                 alert('No Selected Segments')
@@ -2083,7 +2060,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
                     to: segment.dataset.route.substring(3, 6)
                 })
             })
-            regularSearch(toSearch, {
+            await regularSearch(toSearch, {
                 adults: parseInt(inputMultiAdult.value),
                 children: parseInt(inputMultiChild.value)
             }, selectMultiCabin.value as CabinClass)
@@ -2111,19 +2088,17 @@ import { GM } from 'vite-plugin-monkey/dist/client'
 
     const airports: Airports = {}
 
-    const loadAirports = () => {
+    const loadAirports = async () => {
         log('loadAirports()')
 
-        httpRequest(`https://api.cathaypacific.com/redibe/airport/origin/${lang.el}/`, {
-            onload: (response: XMLHttpRequest) => {
-                const data = JSON.parse(response.responseText.replace('Taiwan China', 'Taiwan'))
-                if (data.airports) {
-                    data.airports.forEach(({ airportCode, countryName, shortName }: Airport) => {
-                        airports[airportCode] = { airportCode, countryName, shortName }
-                    })
-                }
-            }
-        })
+        const resp = await httpRequest(`https://api.cathaypacific.com/redibe/airport/origin/${lang.el}/`)
+
+        const data = JSON.parse((await resp.text()).replace('Taiwan China', 'Taiwan'))
+        if (data.airports) {
+            data.airports.forEach(({ airportCode, countryName, shortName }: Airport) => {
+                airports[airportCode] = { airportCode, countryName, shortName }
+            })
+        }
     }
 
     // ============================================================
@@ -2326,10 +2301,10 @@ import { GM } from 'vite-plugin-monkey/dist/client'
         divResults.classList.remove('bulk_results_hidden')
         btnBatch.innerHTML = lang.searching_w_cancel
         btnBatch.classList.add('bulkSearching')
-        bulkSearch(singleDate)
+        await bulkSearch(singleDate)
     }
 
-    const savedSearch = () => {
+    const savedSearch = async () => {
         const toSearch: Query[] = []
         savedQueries.forEach((query) => {
             toSearch.push({
@@ -2348,7 +2323,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
         divTableBody.innerHTML = ''
 
         if (!cont.query) {
-            regularSearch([{
+            await regularSearch([{
                 from: ssQuery.from,
                 to: ssQuery.to,
                 date: ssQuery.date
@@ -2359,12 +2334,12 @@ import { GM } from 'vite-plugin-monkey/dist/client'
             return
         }
 
-        const populateNextQuery = (flights) => {
+        const populateNextQuery = async (flights) => {
             insertResults(ssQuery.from, ssQuery.to, ssQuery.date, flights)
 
             if (toSearch.length) {
                 ssQuery = toSearch.shift()
-                searchAvailability(ssQuery.from, ssQuery.to, ssQuery.date, 1, 0, populateNextQuery)
+                await searchAvailability(ssQuery.from, ssQuery.to, ssQuery.date, 1, 0, populateNextQuery)
             } else {
                 stopBatch()
                 stopSearch = false // Override stopBatch()
@@ -2376,7 +2351,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
         routeChanged = true // To clear the saved search results
         // TODO: Make sure the button changes back to a normal bulk search button
 
-        searchAvailability(ssQuery.from, ssQuery.to, ssQuery.date, 1, 0, populateNextQuery)
+        await searchAvailability(ssQuery.from, ssQuery.to, ssQuery.date, 1, 0, populateNextQuery)
     }
 
     const updateSavedCount = () => {
@@ -2511,20 +2486,17 @@ import { GM } from 'vite-plugin-monkey/dist/client'
         }
     }
 
-    const checkLogin = () => {
+    const checkLogin = async () => {
         log('checkLogin()')
 
-        httpRequest('https://api.cathaypacific.com/redibe/login/getProfile', {
+        const resp = await httpRequest('https://api.cathaypacific.com/redibe/login/getProfile', {
             headers: { 'Content-Type': 'application/json' },
-            withCredentials: true,
-            onload: (response: XMLHttpRequest) => {
-                log('getProfile')
-
-                const data = JSON.parse(response.responseText)
-                if (data.membershipNumber) return
-                divLoginPrompt.classList.remove('hidden')
-            }
+            withCredentials: true
         })
+
+        log('getProfile')
+        const data = await resp.json()
+        if (!data.membershipNumber) divLoginPrompt.classList.remove('hidden')
     }
 
     // ============================================================
@@ -2604,78 +2576,74 @@ import { GM } from 'vite-plugin-monkey/dist/client'
         }
     }
 
-    const newTabID = (cb?: () => void) => {
+    const newTabID = async (cb?: () => Promise<void>) => {
         log('Creating New Request Parameters...')
 
-        httpRequest('https://api.cathaypacific.com/redibe/standardAward/create', {
+        let resp = await httpRequest('https://api.cathaypacific.com/redibe/standardAward/create', {
             headers: { 'Content-Type': 'application/json' },
             data: JSON.stringify(newQueryPayload()),
             method: 'POST',
-            withCredentials: true,
-            onload: (response: XMLHttpRequest) => {
-                log('Initial Request Parameters Received')
-                const data = JSON.parse(response.responseText)
-                const parameters = data.parameters
-                const urlToPost = data.urlToPost || availabilityUrl
-                let formData = ''
-                for (const key in parameters) {
-                    formData += `${key}=${parameters[key]}&`
+            withCredentials: true
+        })
+
+        log('Initial Request Parameters Received')
+        const data = await resp.json()
+        const parameters = data.parameters
+        const urlToPost = data.urlToPost || availabilityUrl
+        let formData = ''
+        for (const key in parameters) {
+            formData += `${key}=${parameters[key]}&`
+        }
+
+        log('Requesting New Tab ID...')
+        resp = await httpRequest(urlToPost, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: formData,
+            method: 'POST',
+            withCredentials: true
+        })
+        const text = await resp.text()
+        let errorMessage = lang.tab_retrieve_fail
+
+        if (resp.status === 200) {
+            log('Tab ID Response Received. Parsing...')
+            requestParams = responseParser(text, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
+            log('requestParams:', requestParams)
+
+            if (!requestParams) {
+                const errorBOM = responseParser(text, /errorBom = ([^;]+)/)
+                if (errorBOM?.modelObject?.step === 'Error') {
+                    errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
                 }
 
-                log('Requesting New Tab ID...')
-                httpRequest(urlToPost, {
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    data: formData,
-                    method: 'POST',
-                    withCredentials: true,
-                    onreadystatechange: (response: XMLHttpRequest) => {
-                        if (response.readyState !== XMLHttpRequest.DONE) return
-                        let errorMessage = lang.tab_retrieve_fail
-
-                        if (response.status === 200) {
-                            log('Tab ID Response Received. Parsing...')
-                            const data = response.responseText
-                            requestParams = responseParser(data, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
-                            log('requestParams:', requestParams)
-
-                            if (!requestParams) {
-                                const errorBOM = responseParser(data, /errorBom = ([^;]+)/)
-                                if (errorBOM?.modelObject?.step === 'Error') {
-                                    errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
-                                }
-
-                                log('Tab ID Could not be parsed')
-                                batchError(`<strong>Error:</strong> ${errorMessage} (<a href='${loginUrl}'>Login</a>) `)
-                                resetSearch()
-                                return
-                            }
-
-                            tabId = requestParams.TAB_ID || ''
-                            log('New Tab ID:', tabId)
-                            batchError()
-                            formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
-                            if (cb) cb()
-                        } else {
-                            const errorBOM = responseParser(response.responseText, /errorBom = ([^;]+)/)
-                            if (errorBOM?.modelObject?.step === 'Error') {
-                                errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
-                            }
-
-                            log('Failed to receive Tab ID')
-                            resetSearch()
-                            batchError(`<strong>Error:</strong> ${errorMessage} ( <a href='${loginUrl}'>Login</a> ) `)
-                        }
-                    }
-                })
+                log('Tab ID Could not be parsed')
+                batchError(`<strong>Error:</strong> ${errorMessage} (<a href='${loginUrl}'>Login</a>) `)
+                resetSearch()
+                return
             }
-        })
+
+            tabId = requestParams.TAB_ID || ''
+            log('New Tab ID:', tabId)
+            batchError()
+            formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
+            if (cb) await cb()
+        } else {
+            const errorBOM = responseParser(text, /errorBom = ([^;]+)/)
+            if (errorBOM?.modelObject?.step === 'Error') {
+                errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
+            }
+
+            log('Failed to receive Tab ID')
+            resetSearch()
+            batchError(`<strong>Error:</strong> ${errorMessage} ( <a href='${loginUrl}'>Login</a> ) `)
+        }
     }
 
     // ============================================================
     // Regular Search
     // ============================================================
 
-    const regularSearch = (routes: Query[] = [{
+    const regularSearch = async (routes: Query[] = [{
         from: 'TPE',
         to: 'TYO',
         date: dateAdd(1)
@@ -2696,39 +2664,38 @@ import { GM } from 'vite-plugin-monkey/dist/client'
         log('cxString:', cxString)
         btnSearch.innerHTML = lang.searching
         btnSearch.classList.add('searching')
-        httpRequest('https://api.cathaypacific.com/redibe/standardAward/create', {
+        const resp = await httpRequest('https://api.cathaypacific.com/redibe/standardAward/create', {
             headers: { 'Content-Type': 'application/json' },
             data: cxString,
             method: 'POST',
-            withCredentials: true,
-            onload: async (response: XMLHttpRequest) => {
-                const data = JSON.parse(response.responseText)
-                const parameters = data.parameters
-                const urlToPost = data.urlToPost || availabilityUrl
-                log('regularSearch parameters:', parameters)
-                const actionUrl = new URL(urlToPost)
-
-                await valueSet('cont', { ...cont, ts: Date.now() })
-
-                // Create a form dynamically
-                const form = document.createElement('form')
-                form.setAttribute('name', 'regular_search_form')
-                form.setAttribute('method', 'post')
-                form.setAttribute('action', actionUrl.toString())
-
-                for (const key in parameters) {
-                    const input = document.createElement('input')
-                    input.setAttribute('type', 'hidden')
-                    input.setAttribute('name', key)
-                    input.setAttribute('value', parameters[key])
-                    form.appendChild(input)
-                }
-
-                document.body.appendChild(form)
-                // document.forms.regular_search_form.submit()
-                form.submit()
-            }
+            withCredentials: true
         })
+
+        const data = await resp.json()
+        const parameters = data.parameters
+        const urlToPost = data.urlToPost || availabilityUrl
+        log('regularSearch parameters:', parameters)
+        const actionUrl = new URL(urlToPost)
+
+        await valueSet('cont', { ...cont, ts: Date.now() })
+
+        // Create a form dynamically
+        const form = document.createElement('form')
+        form.setAttribute('name', 'regular_search_form')
+        form.setAttribute('method', 'post')
+        form.setAttribute('action', actionUrl.toString())
+
+        for (const key in parameters) {
+            const input = document.createElement('input')
+            input.setAttribute('type', 'hidden')
+            input.setAttribute('name', key)
+            input.setAttribute('value', parameters[key])
+            form.appendChild(input)
+        }
+
+        document.body.appendChild(form)
+        // document.forms.regular_search_form.submit()
+        form.submit()
     }
 
     // ============================================================
@@ -2737,7 +2704,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
 
     let bulkDate = ''
 
-    const bulkSearch = (singleDate = false) => {
+    const bulkSearch = async (singleDate = false) => {
         log('bulkSearch start, remainingDays:', remainingDays)
 
         let noContinue = false
@@ -2747,7 +2714,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
         }
 
         if (!cont.query) {
-            regularSearch([{
+            await regularSearch([{
                 from: uef.from.substring(0, 3),
                 to: uef.to.substring(0, 3),
                 date: uef.date
@@ -2777,27 +2744,27 @@ import { GM } from 'vite-plugin-monkey/dist/client'
 
         let thisRoute = routes.shift()
 
-        const populateNextRoute = (flights) => {
+        const populateNextRoute = async (flights) => {
             insertResults(thisRoute.from, thisRoute.to, bulkDate, flights)
 
             if (routes.length) {
                 thisRoute = routes.shift()
-                searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uef.adults, uef.children, populateNextRoute)
+                await searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uef.adults, uef.children, populateNextRoute)
             } else {
                 bulkDate = dateAdd(1, bulkDate)
                 if (singleDate) stopBatch()
-                bulkSearch()
+                await bulkSearch()
             }
         }
 
-        searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uef.adults, uef.children, populateNextRoute)
+        await searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uef.adults, uef.children, populateNextRoute)
     }
 
     // ============================================================
     // Search Availability
     // ============================================================
 
-    const searchAvailability = (from, to, date, adult, child, cb) => {
+    const searchAvailability = async (from, to, date, adult, child, cb) => {
         if (stopSearch) {
             stopSearch = false
             searching = false
@@ -2809,7 +2776,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
         // If destination is not valid, abort
         if (!/^[A-Z]{3}$/.test(to)) {
             // eslint-disable-next-line node/no-callback-literal
-            cb({
+            await cb({
                 modelObject: {
                     isContainingErrors: true,
                     messages: [{ text: lang.invalid_code }]
@@ -2834,43 +2801,41 @@ import { GM } from 'vite-plugin-monkey/dist/client'
 
         const params = Object.entries(requests).map(([key, value]) => `${key}=${value}`).join('&')
 
-        httpRequest(formSubmitUrl, {
+        const resp = await httpRequest(formSubmitUrl, {
             headers: {
                 Accept: 'application/json, text/plain, */*',
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             data: params,
             method: 'POST',
-            withCredentials: true,
-            onreadystatechange: (response: XMLHttpRequest) => {
-                if (response.readyState !== XMLHttpRequest.DONE) return
-                const searchAgain = () => {
-                    searchAvailability(from, to, date, adult, child, cb)
-                }
-
-                if (response.status === 200) {
-                    batchError()
-                    let data: { pageBom: string }
-                    try {
-                        data = JSON.parse(response.responseText)
-                    } catch {
-                        // const res = response.responseText
-                        // const incapsula_script = res.match(/<script src='(\/_Incapsula_[^]+.js)'><\/script>/)
-                        // if (incapsula_script) batchError('Cathay bot block triggered.')
-                        batchError('Response not valid JSON')
-                        return
-                    }
-                    const pageBom = JSON.parse(data.pageBom)
-                    cb(pageBom)
-                } else if (response.status === 404) {
-                    batchError(lang.key_exhausted)
-                    newTabID(searchAgain)
-                } else if (response.status >= 300) {
-                    batchError(lang.getting_key)
-                    newTabID(searchAgain)
-                }
-            }
+            withCredentials: true
         })
+
+        const searchAgain = async () => {
+            await searchAvailability(from, to, date, adult, child, cb)
+        }
+
+        if (resp.status === 200) {
+            batchError()
+            let data: { pageBom: string }
+            try {
+                data = await resp.json()
+            } catch {
+                // const res = response.responseText
+                // const incapsula_script = res.match(/<script src='(\/_Incapsula_[^]+.js)'><\/script>/)
+                // if (incapsula_script) batchError('Cathay bot block triggered.')
+                batchError('Response not valid JSON')
+                return
+            }
+            const pageBom = JSON.parse(data.pageBom)
+            await cb(pageBom)
+        } else if (resp.status === 404) {
+            batchError(lang.key_exhausted)
+            await newTabID(searchAgain)
+        } else if (resp.status >= 300) {
+            batchError(lang.getting_key)
+            await newTabID(searchAgain)
+        }
     }
 
     // ============================================================
@@ -3075,7 +3040,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
         })
         updateSavedCount()
         updateSavedFlights()
-        loadAirports()
+        await loadAirports()
         autocomplete(inputFrom, airports)
         autocomplete(inputTo, airports)
 
@@ -3088,7 +3053,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
             document.body.classList.add('cont_query')
             setTimeout(async () => {
                 if (cont.saved) {
-                    savedSearch()
+                    await savedSearch()
                 } else {
                     await bulkClick(!cont.batch)
                 }
