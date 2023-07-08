@@ -171,6 +171,12 @@ await (async () => {
     target.appendChild(styleSheet)
   }
 
+  const queryToSegment = (query: Query): Segment => ({
+    departureDate: query.date,
+    origin: query.from,
+    destination: query.to
+  })
+
   // ============================================================
   // Get Stored Values
   // ============================================================
@@ -1290,25 +1296,13 @@ await (async () => {
       numAdult: passengers.adults,
       numChild: passengers.children,
       promotionCode: '',
-      segments: [{
-        departureDate: route.date,
-        origin: route.from,
-        destination: route.to
-      }]
+      segments: [queryToSegment(route)]
     }
   }
 
   const newMultiPayload = (routes: Query[], passengers: Passengers, cabinClass: CabinClass = 'Y'): QueryPayload => {
     log('newMultiPayload()')
 
-    const segments = []
-    routes.forEach((segment) => {
-      segments.push({
-        departureDate: segment.date,
-        origin: segment.from,
-        destination: segment.to
-      })
-    })
     return {
       awardType: 'Standard',
       brand: 'CX',
@@ -1322,7 +1316,7 @@ await (async () => {
       numAdult: passengers.adults,
       numChild: passengers.children,
       promotionCode: '',
-      segments
+      segments: routes.map(queryToSegment)
     }
   }
 

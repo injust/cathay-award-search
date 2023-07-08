@@ -85,6 +85,12 @@ interface Flight extends Query, FlightAvailability {
   leg2: string
 }
 
+interface Segment {
+  departureDate: string
+  origin: string
+  destination: string
+}
+
 interface SavedFlights {
   [key: string]: FlightAvailability
 }
