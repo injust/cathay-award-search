@@ -1273,7 +1273,7 @@ await (async () => {
   }, passengers: Passengers = {
     adults: 1,
     children: 0
-  }, cabinClass: CabinClass = 'Y') => {
+  }, cabinClass: CabinClass = 'Y'): QueryPayload => {
     log('newQueryPayload()')
 
     return {
@@ -1297,7 +1297,7 @@ await (async () => {
     }
   }
 
-  const newMultiPayload = (routes: Query[], passengers: Passengers, cabinClass: CabinClass = 'Y') => {
+  const newMultiPayload = (routes: Query[], passengers: Passengers, cabinClass: CabinClass = 'Y'): QueryPayload => {
     log('newMultiPayload()')
 
     const segments = []
