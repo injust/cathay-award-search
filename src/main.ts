@@ -185,7 +185,7 @@ await (async () => {
   }
 
   // Saved Queries
-  const savedFlights = await valueGet<SavedFlights>('saved_flights', {})
+  const savedFlights = new Map(Object.entries(await valueGet<SavedFlights>('saved_flights', {})))
   const savedQueries = new Set(await valueGet<string[]>('saved_queries', []))
 
   // Search Result Filters
@@ -652,23 +652,22 @@ await (async () => {
 
         if (el.classList.contains('flight_save')) {
           const flightItem = el.parentNode as HTMLDivElement
-          const key = flightItem.dataset.flightInfo
           const flightAvail = flightItem.dataset.flightAvail.split('_')
+          const flightKey = flightItem.dataset.flightInfo
+
           if (flightItem.classList.contains('saved')) {
             flightItem.classList.remove('saved')
-            delete savedFlights[key]
+            savedFlights.delete(flightKey)
             updateSavedFlights()
           } else {
             flightItem.classList.add('saved')
-            savedFlights[key] = {
-              F: +flightAvail[0],
-              J: +flightAvail[1],
-              P: +flightAvail[2],
-              Y: +flightAvail[3]
-            }
+            savedFlights.set(flightKey, {
+              F: +flightAvail[0], J: +flightAvail[1], P: +flightAvail[2], Y: +flightAvail[3]
+            })
             updateSavedFlights()
           }
-          await valueSet('saved_flights', savedFlights)
+
+          await valueSet('saved_flights', Object.fromEntries(savedFlights))
         }
       })().catch(log)
     })
@@ -684,11 +683,11 @@ await (async () => {
         const el = e.target as HTMLElement
 
         if (el.dataset.remove != null) {
-          delete savedFlights[el.dataset.remove]
+          savedFlights.delete(el.dataset.remove)
           savedQueries.delete(el.dataset.remove)
           updateSavedCount()
           updateSavedFlights()
-          await valueSet('saved_flights', savedFlights)
+          await valueSet('saved_flights', Object.fromEntries(savedFlights))
           await valueSet('saved_queries', Array.from(savedQueries))
         }
       })().catch(log)
@@ -1166,7 +1165,7 @@ await (async () => {
       const savedDate = new Date(+query.substring(0, 4), +query.substring(4, 6) - 1, +query.substring(6, 8))
       const today = new Date()
       if (savedDate <= today) {
-        delete savedFlights[query]
+        savedFlights.delete(query)
         return
       }
       savedArr.push({
@@ -1177,10 +1176,10 @@ await (async () => {
         leg1: query.split('_')[1] ?? '',
         stop: query.split('_')[2] ?? '',
         leg2: query.split('_')[3] ?? '',
-        F: savedFlights[query].F,
-        J: savedFlights[query].J,
-        P: savedFlights[query].P,
-        Y: savedFlights[query].Y
+        F: savedFlights.get(query).F,
+        J: savedFlights.get(query).J,
+        P: savedFlights.get(query).P,
+        Y: savedFlights.get(query).Y
       })
     })
     savedArr.sort((a, b) => +a.date - +b.date)
@@ -1670,7 +1669,7 @@ await (async () => {
           if (available !== '') {
             flightHTML += `
               <div class="flight_wrapper">
-                <div class="flight_item direct ${savedFlights[flightKey] ? 'saved' : ''}" data-flight-info="${flightKey}" data-flight-avail="${f1}_${j1}_${p1}_${y1}" ${numF > 0 ? 'data-f' : ''} ${numJ > 0 ? 'data-j' : ''} ${numP > 0 ? 'data-p' : ''} ${numY > 0 ? 'data-y' : ''}>
+                <div class="flight_item direct ${savedFlights.has(flightKey) ? 'saved' : ''}" data-flight-info="${flightKey}" data-flight-avail="${f1}_${j1}_${p1}_${y1}" ${numF > 0 ? 'data-f' : ''} ${numJ > 0 ? 'data-j' : ''} ${numP > 0 ? 'data-p' : ''} ${numY > 0 ? 'data-y' : ''}>
                   <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
                   <span class="flight_num">${leg1Airline}${leg1FlightNum}</span>
                   ${available}
@@ -1690,13 +1689,8 @@ await (async () => {
               </div>
             `
           }
-          if (savedFlights[flightKey]) {
-            savedFlights[flightKey] = {
-              F: f1,
-              J: j1,
-              P: p1,
-              Y: y1
-            }
+          if (savedFlights.has(flightKey)) {
+            savedFlights.set(flightKey, { F: f1, J: j1, P: p1, Y: y1 })
             updateSavedFlights()
           }
         } else {
@@ -1732,7 +1726,7 @@ await (async () => {
           if (available !== '') {
             flightHTML += `
               <div class="flight_wrapper">
-                <div class="flight_item ${savedFlights[flightKey] ? 'saved' : ''}" data-flight-info="${flightKey}"  data-flight-avail="${numF}_${numJ}_${numP}_${numY}" ${numF > 0 ? 'data-f' : ''} ${numJ > 0 ? 'data-j' : ''} ${numP > 0 ? 'data-p' : ''} ${numY > 0 ? 'data-y' : ''}>
+                <div class="flight_item ${savedFlights.has(flightKey) ? 'saved' : ''}" data-flight-info="${flightKey}"  data-flight-avail="${numF}_${numJ}_${numP}_${numY}" ${numF > 0 ? 'data-f' : ''} ${numJ > 0 ? 'data-j' : ''} ${numP > 0 ? 'data-p' : ''} ${numY > 0 ? 'data-y' : ''}>
                   <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
                   <span class="flight_num">${leg1Airline}${leg1FlightNum}
                   <span class="stopover">${transitAirportCode}</span>
@@ -1758,13 +1752,8 @@ await (async () => {
               </div>
             `
           }
-          if (savedFlights[flightKey]) {
-            savedFlights[flightKey] = {
-              F: numF,
-              J: numJ,
-              P: numP,
-              Y: numY
-            }
+          if (savedFlights.has(flightKey)) {
+            savedFlights.set(flightKey, { F: numF, J: numJ, P: numP, Y: numY })
             updateSavedFlights()
           }
         }
