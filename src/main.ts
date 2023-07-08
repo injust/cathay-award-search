@@ -291,8 +291,6 @@ await (async () => {
   // ============================================================
 
   const lang = {
-    ec: browserCountry,
-    el: browserLang,
     search: 'Search',
     searching: `<img src='https://book.cathaypacific.com${staticFilesPath}common/skin/img/icons/cx/icon-loading.gif'> Searching...`,
     searching_w_cancel: `<img src='https://book.cathaypacific.com${staticFilesPath}common/skin/img/icons/cx/icon-loading.gif'> Searching... (Click to Stop)`,
@@ -342,7 +340,7 @@ await (async () => {
   const searchBox = document.createElement('div')
   searchBox.innerHTML = `
     <div class="unelevated_form">
-      <div class="unelevated_title"><a href="https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html">Unelevated Award Search</a></div>
+      <div class="unelevated_title"><a href="https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html">Unelevated Award Search</a></div>
 
       <div class="login_prompt hidden"><span class="unelevated_error"><a href="${loginUrl.toString()}">${lang.login}</a></span></div>
 
@@ -859,7 +857,7 @@ await (async () => {
   const loadAirports = async (): Promise<void> => {
     log('loadAirports()')
 
-    const resp = await httpRequest(`https://api.cathaypacific.com/redibe/airport/origin/${lang.el}/`)
+    const resp = await httpRequest(`https://api.cathaypacific.com/redibe/airport/origin/${browserLang}/`)
 
     const data = JSON.parse((await resp.text()).replace('Taiwan China', 'Taiwan'))
     if (data.airports) {
@@ -1287,11 +1285,11 @@ await (async () => {
       awardType: 'Standard',
       brand: 'CX',
       cabinClass,
-      entryCountry: lang.ec,
-      entryLanguage: lang.el,
-      entryPoint: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html`,
-      errorUrl: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow`,
-      returnUrl: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow`,
+      entryCountry: browserCountry,
+      entryLanguage: browserLang,
+      entryPoint: `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`,
+      errorUrl: `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow`,
+      returnUrl: `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow`,
       isFlexibleDate: false,
       numAdult: passengers.adults,
       numChild: passengers.children,
@@ -1307,11 +1305,11 @@ await (async () => {
       awardType: 'Standard',
       brand: 'CX',
       cabinClass,
-      entryCountry: lang.ec,
-      entryLanguage: lang.el,
-      entryPoint: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html`,
-      errorUrl: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc`,
-      returnUrl: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc`,
+      entryCountry: browserCountry,
+      entryLanguage: browserLang,
+      entryPoint: `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`,
+      errorUrl: `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc`,
+      returnUrl: `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc`,
       isFlexibleDate: false,
       numAdult: passengers.adults,
       numChild: passengers.children,
