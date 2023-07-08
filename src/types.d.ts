@@ -27,6 +27,26 @@ interface Passengers {
   children: number
 }
 
+interface QueryPayload {
+  awardType: string
+  brand: string
+  cabinClass: CabinClass
+  entryCountry: string
+  entryLanguage: string
+  entryPoint: string
+  errorUrl: string
+  returnUrl: string
+  isFlexibleDate: boolean
+  numAdult: number
+  numChild: number
+  promotionCode: string
+  segments: Array<{
+    departureDate: string
+    origin: string
+    destination: string
+  }>
+}
+
 interface RequestParams {
   SERVICE_ID?: string
   TAB_ID?: string
