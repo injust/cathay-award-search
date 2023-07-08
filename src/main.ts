@@ -156,7 +156,7 @@ await (async () => {
     const date = new Date(timestamp)
     if (timeonly) {
       const hours = (date.getUTCDate() - 1) * 24 + date.getUTCHours()
-      return `${(hours ? `${hours.toString()}hr ` : '') + date.getUTCMinutes().toString()}mins`
+      return `${(hours > 0 ? `${hours.toString()}hr ` : '') + date.getUTCMinutes().toString()}mins`
     }
     return `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1).toString().padStart(2, '0')}-${date.getUTCDate().toString().padStart(2, '0')} ${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')}`
   }
@@ -1820,7 +1820,7 @@ await (async () => {
       })
 
       el.addEventListener('focus', (e) => {
-        if (el.value.length) el.value += ','
+        if (el.value.length > 0) el.value += ','
       })
 
       el.addEventListener('click', (e) => {
@@ -1993,7 +1993,7 @@ await (async () => {
         savedQuery.classList.remove('selected')
         savedQuery.querySelector<HTMLSpanElement>('.leg').innerText = ''
         delete savedQuery.dataset.segment
-        if (!selectedSegments.length) {
+        if (selectedSegments.length === 0) {
           divSaved.classList.remove('multi_on')
           divMultiBox.classList.add('hidden')
         }
@@ -2052,7 +2052,7 @@ await (async () => {
 
     linkSearchSaved.addEventListener('click', (e) => {
       (async () => {
-        if (!savedQueries.size) {
+        if (savedQueries.size === 0) {
           alert('No Saved Queries')
           return
         }
@@ -2065,7 +2065,7 @@ await (async () => {
     linkSearchMulti.addEventListener('click', (e) => {
       (async () => {
         const selectedSegments = divSavedQueries.querySelectorAll<HTMLDivElement>('.selected')
-        if (!selectedSegments.length) {
+        if (selectedSegments.length === 0) {
           alert('No Selected Segments')
           return
         }
@@ -2162,20 +2162,20 @@ await (async () => {
         closeAllLists()
         if (currentFocus > -1) {
           // Simulate a click on the "active" item
-          if (divMatches) divMatches[currentFocus].click()
-        } else if (divMatches) {
+          if (divMatches.length > 0) divMatches[currentFocus].click()
+        } else if (divMatches.length > 0) {
           divContainer.querySelector<HTMLDivElement>(':not').click()
         }
       } else if (['Tab', ' '].includes(e.key)) {
         closeAllLists()
         // Simulate a click on the first item
-        if (divMatches) divMatches[0].click()
+        if (divMatches.length > 0) divMatches[0].click()
       }
     })
 
     // Classify an item as "active"
     const setActive = (divMatches: HTMLCollectionOf<HTMLDivElement>): void => {
-      if (!divMatches) return
+      if (divMatches.length === 0) return
       // Start by removing the "active" class on all items
       removeActive(divMatches)
       if (currentFocus >= divMatches.length) currentFocus = 0
@@ -2463,14 +2463,14 @@ await (async () => {
           <input type="checkbox" data-date="${date}" data-route="${date}${from}${to}">
           <span>
             <span class="sf_date">${dateStringToDashedDateString(date)}</span>
-            <span class="sf_route">${from}-${stop ? `${stop}-` : ''}${to}</span>
+            <span class="sf_route">${from}-${stop !== '' ? `${stop}-` : ''}${to}</span>
             <span class="sf_flights">
-              ${leg1}${leg2 ? ` + ${leg2}` : ''}
+              ${leg1}${leg2 !== '' ? ` + ${leg2}` : ''}
               <span class="sf_avail">
-                ${avail.F ? `<span class="av_f">F ${avail.F}</span>` : ''}
-                ${avail.J ? `<span class="av_j">J ${avail.J}</span>` : ''}
-                ${avail.P ? `<span class="av_p">PY ${avail.P}</span>` : ''}
-                ${avail.Y ? `<span class="av_y">Y ${avail.Y}</span>` : ''}
+                ${avail.F > 0 ? `<span class="av_f">F ${avail.F}</span>` : ''}
+                ${avail.J > 0 ? `<span class="av_j">J ${avail.J}</span>` : ''}
+                ${avail.P > 0 ? `<span class="av_p">PY ${avail.P}</span>` : ''}
+                ${avail.Y > 0 ? `<span class="av_y">Y ${avail.Y}</span>` : ''}
               </span>
             </span>
           </span>
@@ -2496,7 +2496,7 @@ await (async () => {
     const errorAirportCodes: string[] = []
     airportCodes = airportCodes.filter((airportCode) => {
       if (airports[airportCode] != null) return true
-      if (airportCode) errorAirportCodes.push(airportCode)
+      if (airportCode !== '') errorAirportCodes.push(airportCode)
       return false
     })
 
@@ -2928,7 +2928,7 @@ await (async () => {
           if (available !== '') {
             flightHTML += `
               <div class="flight_wrapper">
-                <div class="flight_item direct ${savedFlights[flightKey] ? 'saved' : ''}" data-flight-info="${flightKey}" data-flight-avail="${f1}_${j1}_${p1}_${y1}" data-direct="1" data-f="${numF ? 1 : 0}" data-j="${numJ ? 1 : 0}" data-p="${numP ? 1 : 0}" data-y="${numY ? 1 : 0}">
+                <div class="flight_item direct ${savedFlights[flightKey] ? 'saved' : ''}" data-flight-info="${flightKey}" data-flight-avail="${f1}_${j1}_${p1}_${y1}" data-direct="1" data-f="${numF > 0 ? 1 : 0}" data-j="${numJ > 0 ? 1 : 0}" data-p="${numP > 0 ? 1 : 0}" data-y="${numY > 0 ? 1 : 0}">
                   <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
                   <span class="flight_num">${leg1Airline}${leg1FlightNum}</span>
                   ${available}
@@ -2990,7 +2990,7 @@ await (async () => {
           if (available !== '') {
             flightHTML += `
               <div class="flight_wrapper">
-                <div class="flight_item ${savedFlights[flightKey] ? 'saved' : ''}" data-direct="0" data-flight-info="${flightKey}"  data-flight-avail="${numF}_${numJ}_${numP}_${numY}" data-f="${numF ? 1 : 0}" data-j="${numJ ? 1 : 0}" data-p="${numP ? 1 : 0}" data-y="${numY ? 1 : 0}">
+                <div class="flight_item ${savedFlights[flightKey] ? 'saved' : ''}" data-direct="0" data-flight-info="${flightKey}"  data-flight-avail="${numF}_${numJ}_${numP}_${numY}" data-f="${numF > 0 ? 1 : 0}" data-j="${numJ > 0 ? 1 : 0}" data-p="${numP > 0 ? 1 : 0}" data-y="${numY > 0 ? 1 : 0}">
                   <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
                   <span class="flight_num">${leg1Airline}${leg1FlightNum}
                   <span class="stopover">${transitAirportCode}</span>
