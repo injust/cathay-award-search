@@ -217,8 +217,9 @@ import { GM } from 'vite-plugin-monkey/dist/client'
     const shadowWrapper = document.createElement('div')
     shadowWrapper.style.margin = '0'
     shadowWrapper.style.padding = '0'
-    const shadowRoot = shadowWrapper.appendChild(document.createElement('div'))
-    const shadowContainer = shadowRoot.appendChild(document.createElement('div'))
+    const shadowRoot = shadowWrapper.attachShadow({ mode: 'closed' })
+    const shadowContainer = document.createElement('div')
+    shadowRoot.appendChild(shadowContainer)
 
     const initRoot = async () => {
         log('initRoot()')
@@ -2125,7 +2126,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
         // })
         // Execute a function presses a key on the keyboard
         input.addEventListener('keydown', (e) => {
-            const divContainer = document.getElementById(`${input.id}-autocomplete-list`) as HTMLDivElement
+            const divContainer = shadowRoot.getElementById(`${input.id}-autocomplete-list`) as HTMLDivElement
             if (!divContainer) return
 
             const divMatches = divContainer.getElementsByTagName('div')
