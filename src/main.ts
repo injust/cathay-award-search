@@ -55,7 +55,8 @@ await (async () => {
 
   const availabilityUrl = 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability'
   // TODO: Use the membership number URL
-  const loginUrl = `https://www.cathaypacific.com/content/cx/${browserLang}_${browserCountry}/sign-in.html?loginreferrer=${encodeURI(`https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`)}`
+  const loginUrl = new URL(`https://www.cathaypacific.com/content/cx/${browserLang}_${browserCountry}/sign-in.html`)
+  loginUrl.searchParams.set('loginreferrer', `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`)
 
   let staticFilesPath = await valueGet<string>('static_files_path', '/CathayPacificAwardV3/AML_IT3.3.22/')
   let requestParams: RequestParams
@@ -337,7 +338,7 @@ await (async () => {
     <div class="unelevated_form">
       <div class="unelevated_title"><a href="https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html">Unelevated Award Search</a></div>
 
-      <div class="login_prompt hidden"><span class="unelevated_error"><a href="${loginUrl}">${lang.login}</a></span></div>
+      <div class="login_prompt hidden"><span class="unelevated_error"><a href="${loginUrl.toString()}">${lang.login}</a></span></div>
 
       <div class="unelevated_faves unelevated_faves_hidden">
         <div class="faves_tabs">
@@ -1350,14 +1351,13 @@ await (async () => {
     log('Initial Request Parameters Received')
     const data = await resp.json()
     const parameters = data.parameters
-    const urlToPost = data.urlToPost ?? availabilityUrl
     let formData = ''
     for (const key in parameters) {
       formData += `${key}=${parameters[key]}&`
     }
 
     log('Requesting New Tab ID...')
-    resp = await httpRequest(urlToPost, {
+    resp = await httpRequest(data.urlToPost ?? availabilityUrl, {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       data: formData,
       method: 'POST',
@@ -1378,7 +1378,7 @@ await (async () => {
         }
 
         log('Tab ID Could not be parsed')
-        batchError(`<strong>Error:</strong> ${errorMessage} (<a href='${loginUrl}'>Login</a>) `)
+        batchError(`<strong>Error:</strong> ${errorMessage} (<a href='${loginUrl.toString()}'>Login</a>) `)
         resetSearch()
         return
       }
@@ -1396,7 +1396,7 @@ await (async () => {
 
       log('Failed to receive Tab ID')
       resetSearch()
-      batchError(`<strong>Error:</strong> ${errorMessage} ( <a href='${loginUrl}'>Login</a> ) `)
+      batchError(`<strong>Error:</strong> ${errorMessage} ( <a href='${loginUrl.toString()}'>Login</a> ) `)
     }
   }
 
@@ -1434,9 +1434,7 @@ await (async () => {
 
     const data = await resp.json()
     const parameters = data.parameters
-    const urlToPost = data.urlToPost ?? availabilityUrl
     log('regularSearch parameters:', parameters)
-    const actionUrl = new URL(urlToPost)
 
     await valueSet('cont', { ...cont, ts: Date.now() })
 
@@ -1444,7 +1442,7 @@ await (async () => {
     const form = document.createElement('form')
     form.setAttribute('name', 'regular_search_form')
     form.setAttribute('method', 'post')
-    form.setAttribute('action', actionUrl.toString())
+    form.setAttribute('action', data.urlToPost ?? availabilityUrl)
 
     for (const key in parameters) {
       const input = document.createElement('input')
