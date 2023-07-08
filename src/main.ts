@@ -1670,7 +1670,7 @@ await (async () => {
           if (available !== '') {
             flightHTML += `
               <div class="flight_wrapper">
-                <div class="flight_item direct ${savedFlights[flightKey] ? 'saved' : ''}" data-flight-info="${flightKey}" data-flight-avail="${f1}_${j1}_${p1}_${y1}" data-direct="1" data-f="${numF > 0 ? 1 : 0}" data-j="${numJ > 0 ? 1 : 0}" data-p="${numP > 0 ? 1 : 0}" data-y="${numY > 0 ? 1 : 0}">
+                <div class="flight_item direct ${savedFlights[flightKey] ? 'saved' : ''}" data-flight-info="${flightKey}" data-flight-avail="${f1}_${j1}_${p1}_${y1}" ${numF > 0 ? 'data-f' : ''} ${numJ > 0 ? 'data-j' : ''} ${numP > 0 ? 'data-p' : ''} ${numY > 0 ? 'data-y' : ''}>
                   <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
                   <span class="flight_num">${leg1Airline}${leg1FlightNum}</span>
                   ${available}
@@ -1732,7 +1732,7 @@ await (async () => {
           if (available !== '') {
             flightHTML += `
               <div class="flight_wrapper">
-                <div class="flight_item ${savedFlights[flightKey] ? 'saved' : ''}" data-direct="0" data-flight-info="${flightKey}"  data-flight-avail="${numF}_${numJ}_${numP}_${numY}" data-f="${numF > 0 ? 1 : 0}" data-j="${numJ > 0 ? 1 : 0}" data-p="${numP > 0 ? 1 : 0}" data-y="${numY > 0 ? 1 : 0}">
+                <div class="flight_item ${savedFlights[flightKey] ? 'saved' : ''}" data-flight-info="${flightKey}"  data-flight-avail="${numF}_${numJ}_${numP}_${numY}" ${numF > 0 ? 'data-f' : ''} ${numJ > 0 ? 'data-j' : ''} ${numP > 0 ? 'data-p' : ''} ${numY > 0 ? 'data-y' : ''}>
                   <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
                   <span class="flight_num">${leg1Airline}${leg1FlightNum}
                   <span class="stopover">${transitAirportCode}</span>

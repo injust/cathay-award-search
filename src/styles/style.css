@@ -796,16 +796,16 @@ span.info_duration {
     max-width: 20px;
 }
 
-.show_first .flight_item[data-f="1"],
-.show_business .flight_item[data-j="1"],
-.show_premium .flight_item[data-p="1"],
-.show_economy .flight_item[data-y="1"] {
+.show_first .flight_item[data-f],
+.show_business .flight_item[data-j],
+.show_premium .flight_item[data-p],
+.show_economy .flight_item[data-y] {
     max-width: 280px;
     padding: 6px 6px;
     margin-right: 6px;
 }
 
-.nonstop_only .flight_item[data-direct="0"] {
+.nonstop_only .flight_item:not(.direct) {
     max-width: 0px;
     padding: 6px 0px;
     margin-right: 0px;
