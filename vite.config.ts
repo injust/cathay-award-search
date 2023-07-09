@@ -22,7 +22,8 @@ export default defineConfig({
                     'https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/redeem-flight-awards.html',
                     'https://book.cathaypacific.com/*'
                 ],
-                sandbox: 'DOM'
+                sandbox: 'DOM',
+                noframes: true
             },
         }),
     ],
