@@ -22,6 +22,7 @@ export default defineConfig({
                     'https://book.cathaypacific.com/*',
                 ],
                 sandbox: 'JavaScript',
+                noframes: true,
             },
         }),
     ],
