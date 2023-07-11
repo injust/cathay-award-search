@@ -1161,7 +1161,7 @@ await (async () => {
 
     let savedList = ''
     const savedArr: Flight[] = []
-    Object.keys(savedFlights).forEach((query) => {
+    savedFlights.forEach((availability, query) => {
       const savedDate = new Date(+query.substring(0, 4), +query.substring(4, 6) - 1, +query.substring(6, 8))
       const today = new Date()
       if (savedDate <= today) {
@@ -1176,10 +1176,10 @@ await (async () => {
         leg1: query.split('_')[1] ?? '',
         stop: query.split('_')[2] ?? '',
         leg2: query.split('_')[3] ?? '',
-        F: savedFlights.get(query).F,
-        J: savedFlights.get(query).J,
-        P: savedFlights.get(query).P,
-        Y: savedFlights.get(query).Y
+        F: availability.F,
+        J: availability.J,
+        P: availability.P,
+        Y: availability.Y
       })
     })
     savedArr.sort((a, b) => +a.date - +b.date)
