@@ -949,8 +949,9 @@ await (async () => {
     const newAC = (el: HTMLInputElement, e: Event): void => {
       // Close any already open lists of autocomplete values
       closeAllLists()
-      const val = (el.value.match(/[^,]+$/) != null) ? el.value.match(/[^,]+$/)[0] : false
-      if (!val) return
+
+      if (!/[^,]+$/.test(el.value)) return
+      const val = el.value.match(/[^,]+$/)[0]
 
       currentFocus = -1
 
