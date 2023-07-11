@@ -50,17 +50,21 @@ interface Query extends Route {
   date: string
 }
 
-interface Flight extends Query {
-  fullQuery: string
-  leg1: string
-  stop: string
-  leg2: string
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+type FlightAvailability = {
   F: number
   J: number
   P: number
   Y: number
 }
 
+interface Flight extends Query, FlightAvailability {
+  fullQuery: string
+  leg1: string
+  stop: string
+  leg2: string
+}
+
 interface SavedFlights {
-  [key: string]: { 'F': number, 'J': number, 'P': number, 'Y': number }
+  [key: string]: FlightAvailability
 }
