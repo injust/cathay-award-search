@@ -623,12 +623,12 @@ await (async () => {
           if (el.classList.contains('bulk_saved')) {
             el.classList.remove('bulk_saved')
             savedQueries.delete(key)
-            updateSavedCount()
           } else {
             el.classList.add('bulk_saved')
             savedQueries.add(key)
-            updateSavedCount()
           }
+
+          updateSavedCount()
           await valueSet('saved_queries', Array.from(savedQueries))
         }
       })()
@@ -663,15 +663,14 @@ await (async () => {
           if (flightItem.classList.contains('saved')) {
             flightItem.classList.remove('saved')
             savedFlights.delete(flightKey)
-            updateSavedFlights()
           } else {
             flightItem.classList.add('saved')
             savedFlights.set(flightKey, {
               F: +flightAvail[0], J: +flightAvail[1], P: +flightAvail[2], Y: +flightAvail[3]
             })
-            updateSavedFlights()
           }
 
+          updateSavedFlights()
           await valueSet('saved_flights', Object.fromEntries(savedFlights))
         }
       })()
