@@ -687,12 +687,13 @@ await (async () => {
         const el = e.target as HTMLElement
 
         if (el.dataset.remove != null) {
-          savedFlights.delete(el.dataset.remove)
           savedQueries.delete(el.dataset.remove)
           updateSavedCount()
+          await valueSet('saved_queries', Array.from(savedQueries))
+
+          savedFlights.delete(el.dataset.remove)
           updateSavedFlights()
           await valueSet('saved_flights', Object.fromEntries(savedFlights))
-          await valueSet('saved_queries', Array.from(savedQueries))
         }
       })()
     })
