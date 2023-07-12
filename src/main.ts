@@ -40,38 +40,37 @@
     // XMLHttpRequest
     // ============================================================
 
-    const httpRequest = (request: {
-        method: string,
-        url: string | URL,
+    const httpRequest = (url: string | URL, request?: {
+        headers?: HeadersInit,
+        data?: XMLHttpRequestBodyInit,
+        method?: string,
         withCredentials?: boolean,
-        headers?: { [key: string]: string },
-        data?: Document | XMLHttpRequestBodyInit,
         onreadystatechange?: (request: XMLHttpRequest) => void,
         onload?: (request: XMLHttpRequest) => void
     }) => {
         const xhr = new XMLHttpRequest()
-        if (request.withCredentials) xhr.withCredentials = true
-        xhr.open(request.method, request.url, true)
+        if (request?.withCredentials) xhr.withCredentials = true
+        xhr.open(request?.method ?? 'GET', url, true)
 
-        if (request.headers) {
+        if (request?.headers) {
             for (const [key, value] of Object.entries(request.headers)) {
                 xhr.setRequestHeader(key, value)
             }
         }
 
-        if (request.onreadystatechange) {
+        if (request?.onreadystatechange) {
             xhr.onreadystatechange = () => {
                 request.onreadystatechange(xhr)
             }
         }
 
-        if (request.onload) {
+        if (request?.onload) {
             xhr.onload = () => {
                 request.onload(xhr)
             }
         }
 
-        if (request.data) {
+        if (request?.data) {
             xhr.send(request.data)
         } else {
             xhr.send()
@@ -2130,9 +2129,7 @@
     const loadAirports = () => {
         log('loadAirports()')
 
-        httpRequest({
-            method: 'GET',
-            url: `https://api.cathaypacific.com/redibe/airport/origin/${lang.el}/`,
+        httpRequest(`https://api.cathaypacific.com/redibe/airport/origin/${lang.el}/`, {
             onload: (response: XMLHttpRequest) => {
                 const data = JSON.parse(response.responseText.replace('Taiwan China', 'Taiwan'))
                 if (data.airports) {
@@ -2532,9 +2529,7 @@
     const checkLogin = () => {
         log('checkLogin()')
 
-        httpRequest({
-            method: 'GET',
-            url: 'https://api.cathaypacific.com/redibe/login/getProfile',
+        httpRequest('https://api.cathaypacific.com/redibe/login/getProfile', {
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true,
             onload: (response: XMLHttpRequest) => {
@@ -2627,12 +2622,11 @@
     const newTabID = (cb?: () => void) => {
         log('Creating New Request Parameters...')
 
-        httpRequest({
-            method: 'POST',
-            url: 'https://api.cathaypacific.com/redibe/standardAward/create',
+        httpRequest('https://api.cathaypacific.com/redibe/standardAward/create', {
             headers: { 'Content-Type': 'application/json' },
-            withCredentials: true,
             data: JSON.stringify(newQueryPayload()),
+            method: 'POST',
+            withCredentials: true,
             onload: (response: XMLHttpRequest) => {
                 log('Initial Request Parameters Received')
                 const data = JSON.parse(response.responseText)
@@ -2644,11 +2638,10 @@
                 }
 
                 log('Requesting New Tab ID...')
-                httpRequest({
-                    method: 'POST',
-                    url: urlToPost,
+                httpRequest(urlToPost, {
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     data: formData,
+                    method: 'POST',
                     withCredentials: true,
                     onreadystatechange: (response: XMLHttpRequest) => {
                         if (response.readyState !== XMLHttpRequest.DONE) return
@@ -2718,12 +2711,11 @@
         log('cxString:', cxString)
         btnSearch.innerHTML = lang.searching
         btnSearch.classList.add('searching')
-        httpRequest({
-            method: 'POST',
-            url: 'https://api.cathaypacific.com/redibe/standardAward/create',
+        httpRequest('https://api.cathaypacific.com/redibe/standardAward/create', {
             headers: { 'Content-Type': 'application/json' },
-            withCredentials: true,
             data: cxString,
+            method: 'POST',
+            withCredentials: true,
             onload: (response: XMLHttpRequest) => {
                 const data = JSON.parse(response.responseText)
                 const parameters = data.parameters
@@ -2857,15 +2849,14 @@
 
         const params = Object.entries(requests).map(([key, value]) => `${key}=${value}`).join('&')
 
-        httpRequest({
-            method: 'POST',
-            url: formSubmitUrl,
-            withCredentials: true,
+        httpRequest(formSubmitUrl, {
             headers: {
                 Accept: 'application/json, text/plain, */*',
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             data: params,
+            method: 'POST',
+            withCredentials: true,
             onreadystatechange: (response: XMLHttpRequest) => {
                 if (response.readyState !== XMLHttpRequest.DONE) return
                 const searchAgain = () => {
