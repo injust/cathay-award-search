@@ -1212,7 +1212,7 @@ await (async () => {
     })
 
     log('Initial Request Parameters Received')
-    const data = await resp.json()
+    const data: QueryResponse = await resp.json()
     const parameters = data.parameters
     let formData = ''
     for (const key in parameters) {
@@ -1295,7 +1295,7 @@ await (async () => {
       withCredentials: true
     })
 
-    const data = await resp.json()
+    const data: QueryResponse = await resp.json()
     const parameters = data.parameters
     log('regularSearch parameters:', parameters)
 
