@@ -849,16 +849,16 @@ await (async () => {
       // For each autocomplete value, check if it starts with the same letters as the text field value
       Object.values(values).forEach(({ airportCode, countryName, shortName }) => {
         if (airportCode.length > 3) return
-        if (val.toUpperCase() === airportCode.substr(0, val.length).toUpperCase() || val.toUpperCase() === countryName.substr(0, val.length).toUpperCase() || val.toUpperCase() === shortName.substr(0, val.length).toUpperCase()) {
-          const sa = airportCode.substr(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
-          const se = shortName.substr(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
-          const sc = countryName.substr(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
+        if (val.toUpperCase() === airportCode.substring(0, val.length).toUpperCase() || val.toUpperCase() === countryName.substring(0, val.length).toUpperCase() || val.toUpperCase() === shortName.substring(0, val.length).toUpperCase()) {
+          const sa = airportCode.substring(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
+          const se = shortName.substring(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
+          const sc = countryName.substring(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
           // Create a DIV element for each matching element
           const divMatch = document.createElement('div')
           // Make the matching letters bold
-          let c = `<span class='sa_code'><strong>${airportCode.substr(0, sa)}</strong>${airportCode.substr(sa)}</span>`
-          c += `<span class='sc_code'><strong>${shortName.substr(0, se)}</strong>${shortName.substr(se)}`
-          c += ` - <strong>${countryName.substr(0, sc)}</strong>${countryName.substr(sc)}</span>`
+          let c = `<span class='sa_code'><strong>${airportCode.substring(0, sa)}</strong>${airportCode.substring(sa)}</span>`
+          c += `<span class='sc_code'><strong>${shortName.substring(0, se)}</strong>${shortName.substring(se)}`
+          c += ` - <strong>${countryName.substring(0, sc)}</strong>${countryName.substring(sc)}</span>`
           c += '</span>'
           // Insert a input field that will hold the current array item's value
           c += `<input type='hidden' value='${airportCode}'>`
