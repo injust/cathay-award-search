@@ -27,6 +27,43 @@ interface Passengers {
   children: number
 }
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+type PageBom = {
+  modelObject: {
+    messages?: Array<{
+      text?: string
+      subText?: string
+    }>
+    step: string
+    availabilities?: {
+      upsell: {
+        bounds: Array<{
+          flights: Array<{
+            duration: number
+            segments: Array<{
+              destinationDate: number
+              flightIdentifier: {
+                marketingAirline: string
+                flightNumber: string
+                originDate: number
+              }
+              cabins: {
+                F?: { status: string }
+                B?: { status: string }
+                N?: { status: string }
+                E?: { status: string }
+                R?: { status: string }
+              }
+            }>
+            flightIdString: string
+          }>
+        }>
+      }
+    }
+    isContainingErrors: boolean
+  }
+}
+
 interface QueryPayload {
   awardType: string
   brand: string
@@ -47,7 +84,8 @@ interface QueryPayload {
   }>
 }
 
-interface RequestParams {
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+type RequestParams = {
   SERVICE_ID?: string
   TAB_ID?: string
   DIRECT_LOGIN?: string
