@@ -1213,10 +1213,9 @@ await (async () => {
 
     log('Initial Request Parameters Received')
     const data: QueryResponse = await resp.json()
-    const parameters = data.parameters
     let formData = ''
-    for (const key in parameters) {
-      formData += `${key}=${parameters[key]}&`
+    for (const key in data.parameters) {
+      formData += `${key}=${data.parameters[key]}&`
     }
 
     log('Requesting New Tab ID...')
@@ -1296,8 +1295,7 @@ await (async () => {
     })
 
     const data: QueryResponse = await resp.json()
-    const parameters = data.parameters
-    log('regularSearch parameters:', parameters)
+    log('regularSearch parameters:', data.parameters)
 
     await valueSet('cont', { ...cont, ts: Date.now() })
 
@@ -1307,11 +1305,11 @@ await (async () => {
     form.setAttribute('method', 'post')
     form.setAttribute('action', data.urlToPost ?? availabilityUrl)
 
-    for (const key in parameters) {
+    for (const key in data.parameters) {
       const input = document.createElement('input')
       input.setAttribute('type', 'hidden')
       input.setAttribute('name', key)
-      input.setAttribute('value', parameters[key])
+      input.setAttribute('value', data.parameters[key])
       form.appendChild(input)
     }
 
