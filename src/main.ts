@@ -737,9 +737,9 @@ await (async () => {
 
     const resp = await httpRequest(`https://api.cathaypacific.com/redibe/airport/origin/${browserLang}_${browserCountry}/`)
 
-    const data = JSON.parse((await resp.text()).replace('Taiwan China', 'Taiwan'))
-    if (data.airports) {
-      data.airports.forEach(({ airportCode, countryName, shortName }: Airport) => {
+    const data: AirportResponse = JSON.parse((await resp.text()).replace('Taiwan China', 'Taiwan'))
+    if (data.airports !== null) {
+      data.airports.forEach(({ airportCode, countryName, shortName }) => {
         airports[airportCode] = { airportCode, countryName, shortName }
       })
     }
