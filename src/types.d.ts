@@ -12,15 +12,21 @@ type json =
   | json[]
   | { [key: string]: json }
 
-interface Airports { [key: string]: Airport }
-
-type CabinClass = 'Y' | 'W' | 'C' | 'F'
-
 interface Airport {
   airportCode: string
   countryName: string
   shortName: string
 }
+
+interface Airports {
+  [key: string]: Airport
+}
+
+interface AirportResponse {
+  airports: Airport[] | null
+}
+
+type CabinClass = 'Y' | 'W' | 'C' | 'F'
 
 interface Passengers {
   adults: number
