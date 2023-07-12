@@ -30,7 +30,7 @@ await (async () => {
   const initCxVars = async (): Promise<void> => {
     log('initCxVars()')
 
-    if (typeof unsafeWindow.staticFilesPath !== 'undefined') {
+    if (unsafeWindow.staticFilesPath != null) {
       // log('typeof unsafeWindow.staticFilesPath:', typeof unsafeWindow.staticFilesPath)
       if (staticFilesPath !== unsafeWindow.staticFilesPath) staticFilesPath = await valueSet('static_files_path', unsafeWindow.staticFilesPath)
     }
