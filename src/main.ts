@@ -1416,7 +1416,7 @@ await (async () => {
 
     // cxString = JSON.stringify(newQueryPayload(uef_from, uef_to, uef_date, uef_adult, uef_child))
     log('cxString:', cxString)
-    btnSearch.innerHTML = lang.searching
+    btnSearch.innerHTML = lang.searching_cont
     btnSearch.classList.add('searching')
     const resp = await httpRequest('https://api.cathaypacific.com/redibe/standardAward/create', {
       headers: { 'Content-Type': 'application/json' },
