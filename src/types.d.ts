@@ -88,6 +88,11 @@ interface QueryPayload {
   }>
 }
 
+interface QueryResponse {
+  parameters?: { [key: string]: string }
+  urlToPost?: string
+}
+
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 type RequestParams = {
   SERVICE_ID?: string
