@@ -1275,22 +1275,22 @@ await (async () => {
     adults: 1,
     children: 0
   }, cabinClass: CabinClass = 'Y', cont = { batch: false, query: false, saved: false }): Promise<void> => {
-    let cxString: string
+    let cxString: QueryPayload
     if (routes.length === 1) {
-      cxString = JSON.stringify(newQueryPayload(routes[0], passengers, cabinClass))
+      cxString = newQueryPayload(routes[0], passengers, cabinClass)
     } else if (routes.length > 0) {
-      cxString = JSON.stringify(newMultiPayload(routes, passengers, cabinClass))
+      cxString = newMultiPayload(routes, passengers, cabinClass)
     } else {
       return
     }
 
-    // cxString = JSON.stringify(newQueryPayload(uef_from, uef_to, uef_date, uef_adult, uef_child))
+    // cxString = newQueryPayload(uef_from, uef_to, uef_date, uef_adult, uef_child)
     log('cxString:', cxString)
     btnSearch.innerHTML = lang.searching_cont
     btnSearch.classList.add('searching')
     const resp = await httpRequest('https://api.cathaypacific.com/redibe/standardAward/create', {
       headers: { 'Content-Type': 'application/json' },
-      data: cxString,
+      data: JSON.stringify(cxString),
       method: 'POST',
       withCredentials: true
     })
