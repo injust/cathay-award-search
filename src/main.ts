@@ -1,6 +1,6 @@
 import { GM } from 'vite-plugin-monkey/dist/client'
 
-(async () => {
+await (async () => {
   'use strict'
 
   // ============================================================
@@ -26,12 +26,12 @@ import { GM } from 'vite-plugin-monkey/dist/client'
   // ============================================================
 
   const httpRequest = async (url: string | URL, request?: {
-    headers?: HeadersInit,
-    data?: BodyInit,
-    method?: string,
+    headers?: HeadersInit
+    data?: BodyInit
+    method?: string
     withCredentials?: boolean
   }): Promise<Response> => {
-    return fetch(url, {
+    return await fetch(url, {
       headers: request?.headers,
       body: request?.data,
       method: request?.method ?? 'GET',
@@ -60,7 +60,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
   let tabId: string
   let formSubmitUrl: string
 
-  const initCxVars = async () => {
+  const initCxVars = async (): Promise<void> => {
     log('initCxVars()')
 
     if (typeof unsafeWindow.staticFilesPath !== 'undefined') {
@@ -86,14 +86,14 @@ import { GM } from 'vite-plugin-monkey/dist/client'
   // ============================================================
 
   // Wait for Element to Load
-  const waitForEl = <E extends Element>(selectors: string): Promise<E | null> => new Promise((resolve) => {
-    if (document.querySelector<E>(selectors)) {
+  const waitForEl = async <E extends Element>(selectors: string): Promise<E | null> => await new Promise((resolve) => {
+    if (document.querySelector<E>(selectors) != null) {
       resolve(document.querySelector<E>(selectors))
       return
     }
 
     const observer = new MutationObserver((mutations) => {
-      if (document.querySelector<E>(selectors)) {
+      if (document.querySelector<E>(selectors) != null) {
         resolve(document.querySelector<E>(selectors))
         observer.disconnect()
       }
@@ -105,7 +105,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
   })
 
   // Check CX Date String Validity (dateString YYYYMMDD)
-  const isValidDate = (dateString: string) => {
+  const isValidDate = (dateString: string): boolean => {
     if (!/^\d{8}$/.test(dateString)) return false
     const year = +dateString.substring(0, 4)
     const month = +dateString.substring(4, 6)
@@ -121,7 +121,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
   }
 
   // Add to Date and Return CX Date String
-  const dateAdd = (days = 0, date?: string) => {
+  const dateAdd = (days = 0, date?: string): string => {
     let newDate = new Date()
     if (date) {
       const year = +date.substring(0, 4)
@@ -134,25 +134,25 @@ import { GM } from 'vite-plugin-monkey/dist/client'
   }
 
   // Convert CX Date String to Dashed Date String
-  const dateStringToDashedDateString = (dateString: string) => `${dateString.substring(0, 4).toString()}-${dateString.substring(4, 6).toString().padStart(2, '0')}-${dateString.substring(6, 8).toString().padStart(2, '0')}`
+  const dateStringToDashedDateString = (dateString: string): string => `${dateString.substring(0, 4).toString()}-${dateString.substring(4, 6).toString().padStart(2, '0')}-${dateString.substring(6, 8).toString().padStart(2, '0')}`
 
   // Get Weekday from CX Date String
-  const dateStringToWeekday = (dateString: string) => {
+  const dateStringToWeekday = (dateString: string): string => {
     const date = new Date(+dateString.substring(0, 4), (+dateString.substring(4, 6) - 1), +dateString.substring(6, 8))
     const weekday = {
+      0: 'Sun',
       1: 'Mon',
       2: 'Tue',
       3: 'Wed',
       4: 'Thu',
       5: 'Fri',
-      6: 'Sat',
-      0: 'Sun'
+      6: 'Sat'
     }
     return weekday[date.getDay()]
   }
 
   // Get Time
-  const getFlightTime = (timestamp, timeonly = false) => {
+  const getFlightTime = (timestamp, timeonly = false): string => {
     const date = new Date(timestamp)
     if (timeonly) {
       const hours = (date.getUTCDate() - 1) * 24 + date.getUTCHours()
@@ -162,7 +162,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
   }
 
   // Append CSS to DOM Element (Default to Shadow Root)
-  const addCss = (css: string, target: Node = shadowRoot) => {
+  const addCss = (css: string, target: Node = shadowRoot): void => {
     const styleSheet = document.createElement('style')
     styleSheet.innerHTML = css
     target.appendChild(styleSheet)
@@ -206,7 +206,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
   //   ts: urlParams.has('cont_ts') ? parseInt(urlParams.get('cont_ts')) : 0
   // }
 
-  const resetContVars = async () => {
+  const resetContVars = async (): Promise<void> => {
     await valueSet('cont', defaultContVars)
   }
 
@@ -221,7 +221,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
   const shadowContainer = document.createElement('div')
   shadowRoot.appendChild(shadowContainer)
 
-  const initRoot = async () => {
+  const initRoot = async (): Promise<void> => {
     log('initRoot()')
 
     if (window.location.href.includes('redeem-flight-awards.html')) {
@@ -236,7 +236,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
       log('initRoot facade.html')
 
       await resetContVars()
-      const el = await waitForEl('.ibered__search-panel') as HTMLElement
+      const el = await waitForEl('.ibered__search-panel')
       el.before(shadowWrapper)
       await initSearchBox()
       await checkLogin()
@@ -1715,7 +1715,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
   let divTable: HTMLTableElement, divTableBody: HTMLTableSectionElement
   let savedCount: HTMLSpanElement
 
-  const assignElements = () => {
+  const assignElements = (): void => {
     log('assignElements()')
 
     btnSearch = shadowRoot.querySelector('.uef_search') // Search Button
@@ -1756,7 +1756,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
     savedCount = shadowRoot.querySelector('.unelevated_saved a span')
   }
 
-  const addFormListeners = () => {
+  const addFormListeners = (): void => {
     log('addFormListeners()')
 
     btnSearch.addEventListener('click', async (e) => {
@@ -1976,7 +1976,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
         divSaved.classList.add('multi_on')
         divMultiBox.classList.remove('hidden')
       } else {
-        savedQuery.classList.remove('selected');
+        savedQuery.classList.remove('selected')
         savedQuery.querySelector<HTMLSpanElement>('.leg').innerText = ''
         delete savedQuery.dataset.segment
         if (!selectedSegments.length) {
@@ -2001,7 +2001,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
         if (a.dataset.date === b.dataset.date) return ('new' in a.dataset ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1))
         return 0
       }).forEach((el, index) => {
-        el.dataset.segment = (index + 1).toString();
+        el.dataset.segment = (index + 1).toString()
         el.querySelector<HTMLSpanElement>('.leg').innerText = `Segment ${index + 1}`
       })
     })
@@ -2034,14 +2034,14 @@ import { GM } from 'vite-plugin-monkey/dist/client'
       })
     })
 
-    linkSearchSaved.addEventListener('click', (e) => {
+    linkSearchSaved.addEventListener('click', async (e) => {
       if (!savedQueries.size) {
         alert('No Saved Queries')
         return
       }
 
       linkSearchSaved.innerText = lang.loading
-      savedSearch()
+      await savedSearch()
     })
 
     linkSearchMulti.addEventListener('click', async (e) => {
@@ -2088,7 +2088,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
 
   const airports: Airports = {}
 
-  const loadAirports = async () => {
+  const loadAirports = async (): Promise<void> => {
     log('loadAirports()')
 
     const resp = await httpRequest(`https://api.cathaypacific.com/redibe/airport/origin/${lang.el}/`)
@@ -2105,7 +2105,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
   // UI Logic
   // ============================================================
 
-  const batchError = (label?: string) => {
+  const batchError = (label?: string): void => {
     if (label) {
       shadowRoot.querySelector('.bulk_error span').innerHTML = label
       divError.classList.remove('bulk_error_hidden')
@@ -2115,7 +2115,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
   }
 
   // Arguments: the text field element and an array of possible autocomplete values
-  const autocomplete = (input: HTMLInputElement, values: Airports) => {
+  const autocomplete = (input: HTMLInputElement, values: Airports): void => {
     let currentFocus: number
     // Execute a function when someone writes in the text field
     input.addEventListener('input', (e) => {
@@ -2154,7 +2154,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
     })
 
     // Classify an item as "active"
-    const setActive = (divMatches: HTMLCollectionOf<HTMLDivElement>) => {
+    const setActive = (divMatches: HTMLCollectionOf<HTMLDivElement>): void => {
       if (!divMatches) return
       // Start by removing the "active" class on all items
       removeActive(divMatches)
@@ -2165,14 +2165,14 @@ import { GM } from 'vite-plugin-monkey/dist/client'
     }
 
     // Remove the "active" class from all autocomplete items
-    const removeActive = (divMatches: HTMLCollectionOf<HTMLDivElement>) => {
+    const removeActive = (divMatches: HTMLCollectionOf<HTMLDivElement>): void => {
       for (let i = 0; i < divMatches.length; i++) {
         divMatches[i].classList.remove('autocomplete-active')
       }
     }
 
     // Close all autocomplete lists in the document, except the one passed as an argument
-    const closeAllLists = (el?: HTMLElement) => {
+    const closeAllLists = (el?: HTMLElement): void => {
       const x = shadowRoot.querySelectorAll('.autocomplete-items')
       for (let i = 0; i < x.length; i++) {
         if (el !== x[i] && el !== input) {
@@ -2181,10 +2181,10 @@ import { GM } from 'vite-plugin-monkey/dist/client'
       }
     }
 
-    const newAC = (el: HTMLInputElement, e: Event) => {
+    const newAC = (el: HTMLInputElement, e: Event): void => {
       // Close any already open lists of autocomplete values
       closeAllLists()
-      const val = el.value.match(/[^,]+$/) ? el.value.match(/[^,]+$/)[0] : false
+      const val = (el.value.match(/[^,]+$/) != null) ? el.value.match(/[^,]+$/)[0] : false
       if (!val) return
 
       currentFocus = -1
@@ -2255,7 +2255,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
   let stopSearch = false
   let remainingDays = 20
 
-  const resetSearch = () => {
+  const resetSearch = (): void => {
     searching = false
     remainingDays = 20
     btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}`
@@ -2263,7 +2263,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
     linkSearchSaved.innerText = `${lang.search_selected} »`
   }
 
-  const stopBatch = () => {
+  const stopBatch = (): void => {
     log('Batch Clicked. Stopping Search')
 
     stopSearch = true
@@ -2272,7 +2272,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
     batchError()
   }
 
-  const bulkClick = async (singleDate = false) => {
+  const bulkClick = async (singleDate = false): Promise<void> => {
     if (searching) {
       stopBatch()
       return
@@ -2304,7 +2304,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
     await bulkSearch(singleDate)
   }
 
-  const savedSearch = async () => {
+  const savedSearch = async (): Promise<void> => {
     const toSearch: Query[] = []
     savedQueries.forEach((query) => {
       toSearch.push({
@@ -2334,10 +2334,10 @@ import { GM } from 'vite-plugin-monkey/dist/client'
       return
     }
 
-    const populateNextQuery = async (flights) => {
+    const populateNextQuery = async (flights): Promise<void> => {
       insertResults(ssQuery.from, ssQuery.to, ssQuery.date, flights)
 
-      if (toSearch.length) {
+      if (toSearch.length > 0) {
         ssQuery = toSearch.shift()
         await searchAvailability(ssQuery.from, ssQuery.to, ssQuery.date, 1, 0, populateNextQuery)
       } else {
@@ -2354,7 +2354,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
     await searchAvailability(ssQuery.from, ssQuery.to, ssQuery.date, 1, 0, populateNextQuery)
   }
 
-  const updateSavedCount = () => {
+  const updateSavedCount = (): void => {
     log('updateSavedCount()')
 
     let savedList = ''
@@ -2395,11 +2395,11 @@ import { GM } from 'vite-plugin-monkey/dist/client'
     savedCount.innerText = savedArr.length.toString()
   }
 
-  const updateSavedFlights = () => {
+  const updateSavedFlights = (): void => {
     log('updateSavedFlights()')
 
     let savedList = ''
-    const savedArr = []
+    const savedArr: Flight[] = []
     Object.keys(savedFlights).forEach((query) => {
       const savedDate = new Date(+query.substring(0, 4), +query.substring(4, 6) - 1, +query.substring(6, 8))
       const today = new Date()
@@ -2421,7 +2421,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
         Y: savedFlights[query].Y
       })
     })
-    savedArr.sort((a, b) => a.date - b.date)
+    savedArr.sort((a, b) => parseInt(a.date) - parseInt(b.date))
 
     savedArr.forEach((query) => {
       const fullQuery = query.fullQuery
@@ -2469,7 +2469,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
     savedCount.innerText = savedArr.length.toString()
   }
 
-  const checkAirportCodes = (el: HTMLInputElement) => {
+  const checkAirportCodes = (el: HTMLInputElement): void => {
     log('checkAirportCodes()')
 
     let airportCodes = el.value.split(',')
@@ -2480,13 +2480,13 @@ import { GM } from 'vite-plugin-monkey/dist/client'
       return false
     })
 
-    if (errorAirportCodes.length) {
+    if (errorAirportCodes.length > 0) {
       el.value = airportCodes.join(',')
       alert(`Removing ${lang.invalid_airport}${errorAirportCodes.length > 1 ? 's' : ''}: ${errorAirportCodes.join(',')}`)
     }
   }
 
-  const checkLogin = async () => {
+  const checkLogin = async (): Promise<void> => {
     log('checkLogin()')
 
     const resp = await httpRequest('https://api.cathaypacific.com/redibe/login/getProfile', {
@@ -2518,7 +2518,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
     return {
       awardType: 'Standard',
       brand: 'CX',
-      cabinClass: cabinClass,
+      cabinClass,
       entryCountry: lang.ec,
       entryLanguage: lang.el,
       entryPoint: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html`,
@@ -2550,7 +2550,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
     return {
       awardType: 'Standard',
       brand: 'CX',
-      cabinClass: cabinClass,
+      cabinClass,
       entryCountry: lang.ec,
       entryLanguage: lang.el,
       entryPoint: `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html`,
@@ -2560,7 +2560,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
       numAdult: passengers.adults,
       numChild: passengers.children,
       promotionCode: '',
-      segments: segments
+      segments
     }
   }
 
@@ -2576,7 +2576,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
     }
   }
 
-  const newTabID = async (cb?: () => Promise<void>) => {
+  const newTabID = async (cb?: () => Promise<void>): Promise<void> => {
     log('Creating New Request Parameters...')
 
     let resp = await httpRequest('https://api.cathaypacific.com/redibe/standardAward/create', {
@@ -2610,7 +2610,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
       requestParams = responseParser(text, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
       log('requestParams:', requestParams)
 
-      if (!requestParams) {
+      if (Object.keys(requestParams).length === 0) {
         const errorBOM = responseParser(text, /errorBom = ([^;]+)/)
         if (errorBOM?.modelObject?.step === 'Error') {
           errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage
@@ -2626,7 +2626,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
       log('New Tab ID:', tabId)
       batchError()
       formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
-      if (cb) await cb()
+      if (cb != null) await cb()
     } else {
       const errorBOM = responseParser(text, /errorBom = ([^;]+)/)
       if (errorBOM?.modelObject?.step === 'Error') {
@@ -2650,11 +2650,11 @@ import { GM } from 'vite-plugin-monkey/dist/client'
   }], passengers: Passengers = {
     adults: 1,
     children: 0
-  }, cabinClass: CabinClass = 'Y', cont = { batch: false, query: false, saved: false }) => {
+  }, cabinClass: CabinClass = 'Y', cont = { batch: false, query: false, saved: false }): Promise<void> => {
     let cxString: string
     if (routes.length === 1) {
       cxString = JSON.stringify(newQueryPayload(routes[0], passengers, cabinClass))
-    } else if (routes.length) {
+    } else if (routes.length > 0) {
       cxString = JSON.stringify(newMultiPayload(routes, passengers, cabinClass))
     } else {
       return
@@ -2704,7 +2704,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
 
   let bulkDate = ''
 
-  const bulkSearch = async (singleDate = false) => {
+  const bulkSearch = async (singleDate = false): Promise<void> => {
     log('bulkSearch start, remainingDays:', remainingDays)
 
     let noContinue = false
@@ -2744,10 +2744,10 @@ import { GM } from 'vite-plugin-monkey/dist/client'
 
     let thisRoute = routes.shift()
 
-    const populateNextRoute = async (flights) => {
+    const populateNextRoute = async (flights): Promise<void> => {
       insertResults(thisRoute.from, thisRoute.to, bulkDate, flights)
 
-      if (routes.length) {
+      if (routes.length > 0) {
         thisRoute = routes.shift()
         await searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uef.adults, uef.children, populateNextRoute)
       } else {
@@ -2764,7 +2764,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
   // Search Availability
   // ============================================================
 
-  const searchAvailability = async (from: string, to: string, date: string, adult: number, child: number, cb) => {
+  const searchAvailability = async (from: string, to: string, date: string, adult: number, child: number, cb): Promise<void> => {
     if (stopSearch) {
       stopSearch = false
       searching = false
@@ -2775,7 +2775,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
 
     // If destination is not valid, abort
     if (!/^[A-Z]{3}$/.test(to)) {
-      // eslint-disable-next-line node/no-callback-literal
+      // eslint-disable-next-line n/no-callback-literal
       await cb({
         modelObject: {
           isContainingErrors: true,
@@ -2811,7 +2811,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
       withCredentials: true
     })
 
-    const searchAgain = async () => {
+    const searchAgain = async (): Promise<void> => {
       await searchAvailability(from, to, date, adult, child, cb)
     }
 
@@ -2842,8 +2842,8 @@ import { GM } from 'vite-plugin-monkey/dist/client'
   // Insert Search Results
   // ============================================================
 
-  const insertResults = (from: string, to: string, date: string, pageBom) => {
-    if (!divTableBody.querySelector(`tr[data-date="${date}"]`)) {
+  const insertResults = (from: string, to: string, date: string, pageBom): void => {
+    if (divTableBody.querySelector(`tr[data-date="${date}"]`) == null) {
       const resultsRow = `
         <tr data-date="${date}">
           <td class="bulkDate">
@@ -3016,7 +3016,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
   // Sticky Footer
   // ============================================================
 
-  const stickyFooter = () => {
+  const stickyFooter = (): void => {
     const footerOffset = divFooter.getBoundingClientRect()
     const ueformOffset = divUeContainer.getBoundingClientRect()
     if (footerOffset.top < window.innerHeight - 55 || ueformOffset.top + divUeContainer.clientHeight > window.innerHeight - 72) {
@@ -3030,7 +3030,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
   // Initialize
   // ============================================================
 
-  const initSearchBox = async () => {
+  const initSearchBox = async (): Promise<void> => {
     await initCxVars()
     shadowContainer.appendChild(searchBox)
     assignElements()
