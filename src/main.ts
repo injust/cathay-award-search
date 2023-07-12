@@ -735,7 +735,7 @@ await (async () => {
   const loadAirports = async (): Promise<void> => {
     log('loadAirports()')
 
-    const resp = await httpRequest(`https://api.cathaypacific.com/redibe/airport/origin/${browserLang}/`)
+    const resp = await httpRequest(`https://api.cathaypacific.com/redibe/airport/origin/${browserLang}_${browserCountry}/`)
 
     const data = JSON.parse((await resp.text()).replace('Taiwan China', 'Taiwan'))
     if (data.airports) {
