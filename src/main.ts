@@ -979,7 +979,7 @@ await (async () => {
       return
     }
 
-    const populateNextQuery = async (pageBom): Promise<void> => {
+    const populateNextQuery = async (pageBom: PageBom): Promise<void> => {
       insertResults(ssQuery.from, ssQuery.to, ssQuery.date, pageBom)
 
       if (toSearch.length > 0) {
@@ -1231,11 +1231,11 @@ await (async () => {
 
     if (resp.status === 200) {
       log('Tab ID Response Received. Parsing...')
-      requestParams = responseParser(text, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
+      requestParams = responseParser<RequestParams>(text, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
       log('requestParams:', requestParams)
 
       if (Object.keys(requestParams).length === 0) {
-        const errorBom = responseParser(text, /errorBom = ([^;]+)/)
+        const errorBom = responseParser<PageBom>(text, /errorBom = ([^;]+)/)
         if (errorBom?.modelObject?.step === 'Error') {
           errorMessage = errorBom.modelObject?.messages[0]?.subText ?? errorMessage
         }
@@ -1252,7 +1252,7 @@ await (async () => {
       formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
       if (cb != null) await cb()
     } else {
-      const errorBom = responseParser(text, /errorBom = ([^;]+)/)
+      const errorBom = responseParser<PageBom>(text, /errorBom = ([^;]+)/)
       if (errorBom?.modelObject?.step === 'Error') {
         errorMessage = errorBom.modelObject?.messages[0]?.subText ?? errorMessage
       }
@@ -1366,7 +1366,7 @@ await (async () => {
 
     let thisRoute = routes.shift()
 
-    const populateNextRoute = async (pageBom): Promise<void> => {
+    const populateNextRoute = async (pageBom: PageBom): Promise<void> => {
       insertResults(thisRoute.from, thisRoute.to, bulkDate, pageBom)
 
       if (routes.length > 0) {
@@ -1386,7 +1386,7 @@ await (async () => {
   // Search Availability
   // ============================================================
 
-  const searchAvailability = async (from: string, to: string, date: string, adult: number, child: number, cb): Promise<void> => {
+  const searchAvailability = async (from: string, to: string, date: string, adult: number, child: number, cb: (pageBom: PageBom) => Promise<void>): Promise<void> => {
     if (stopSearch) {
       stopSearch = false
       searching = false
@@ -1400,8 +1400,9 @@ await (async () => {
       // eslint-disable-next-line n/no-callback-literal
       await cb({
         modelObject: {
-          isContainingErrors: true,
-          messages: [{ text: lang.invalid_code }]
+          messages: [{ text: lang.invalid_code }],
+          step: 'Error',
+          isContainingErrors: true
         }
       })
       return
@@ -1449,7 +1450,7 @@ await (async () => {
         batchError('Response not valid JSON')
         return
       }
-      const pageBom = JSON.parse(data.pageBom)
+      const pageBom: PageBom = JSON.parse(data.pageBom)
       await cb(pageBom)
     } else if (resp.status === 404) {
       batchError(lang.key_exhausted)
@@ -1464,7 +1465,7 @@ await (async () => {
   // Insert Search Results
   // ============================================================
 
-  const insertResults = (from: string, to: string, date: string, pageBom): void => {
+  const insertResults = (from: string, to: string, date: string, pageBom: PageBom): void => {
     if (divTableBody.querySelector(`tr[data-date="${date}"]`) == null) {
       const resultsRow = `
         <tr data-date="${date}">

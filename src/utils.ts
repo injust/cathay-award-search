@@ -107,7 +107,7 @@ export const dateStringToWeekday = (dateString: string): string => {
 }
 
 // Get Time
-export const getFlightTime = (timestamp, timeonly = false): string => {
+export const getFlightTime = (timestamp: number, timeonly = false): string => {
   const date = new Date(timestamp)
   if (timeonly) {
     const hours = (date.getUTCDate() - 1) * 24 + date.getUTCHours()
@@ -122,10 +122,10 @@ export const queryToSegment = (query: Query): Segment => ({
   destination: query.to
 })
 
-export const responseParser = (response: string, regex: RegExp) => {
+export const responseParser = <T extends json>(response: string, regex: RegExp): T => {
   try {
     return JSON.parse(response.match(regex)[1])
   } catch (e) {
-    return false
+    return null
   }
 }
