@@ -1140,8 +1140,8 @@ await (async () => {
     })
 
     log('getProfile')
-    const data = await resp.json()
-    if (!data.membershipNumber) divLoginPrompt.classList.remove('hidden')
+    const data: Profile = await resp.json()
+    if (data.membershipNumber === null) divLoginPrompt.classList.remove('hidden')
   }
 
   // ============================================================

@@ -64,6 +64,10 @@ type PageBom = {
   }
 }
 
+interface Profile {
+  membershipNumber: string | null
+}
+
 interface QueryPayload {
   awardType: string
   brand: string
