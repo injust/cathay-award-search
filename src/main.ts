@@ -1511,19 +1511,19 @@ await (async () => {
           let flightKey: string
 
           if (flight.segments.length === 1) {
-            if (f1 >= 1) {
+            if (f1 > 0) {
               numF = f1
               available += ` <span class='bulk_cabin bulk_f'>F <b>${numF}</b></span>`
             }
-            if (j1 >= 1) {
+            if (j1 > 0) {
               numJ = j1
               available += ` <span class='bulk_cabin bulk_j'>J <b>${numJ}</b></span>`
             }
-            if (p1 >= 1) {
+            if (p1 > 0) {
               numP = p1
               available += ` <span class='bulk_cabin bulk_p'>PY <b>${numP}</b></span>`
             }
-            if (y1 >= 1) {
+            if (y1 > 0) {
               numY = y1
               available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
             }
@@ -1560,19 +1560,19 @@ await (async () => {
             const p2 = +flight.segments[1].cabins?.N?.status || 0
             const y2 = (+flight.segments[1].cabins?.E?.status || 0) + (+flight.segments[1].cabins?.R?.status || 0)
 
-            if (f1 >= 1 && f2 >= 1) {
+            if (f1 > 0 && f2 > 0) {
               numF = Math.min(f1, f2)
               available += ` <span class='bulk_cabin bulk_f'>F <b>${numF}</b></span>`
             }
-            if (j1 >= 1 && j2 >= 1) {
+            if (j1 > 0 && j2 > 0) {
               numJ = Math.min(j1, j2)
               available += ` <span class='bulk_cabin bulk_j'>J <b>${numJ}</b></span>`
             }
-            if (p1 >= 1 && p2 >= 1) {
+            if (p1 > 0 && p2 > 0) {
               numP = Math.min(p1, p2)
               available += ` <span class='bulk_cabin bulk_p'>PY <b>${numP}</b></span>`
             }
-            if (y1 >= 1 && y2 >= 1) {
+            if (y1 > 0 && y2 > 0) {
               numY = Math.min(y1, y2)
               available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
             }
