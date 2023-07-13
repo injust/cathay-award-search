@@ -94,16 +94,8 @@ export const dateStringToDashedDateString = (dateString: string): string => `${d
 // Get Weekday from CX Date String
 export const dateStringToWeekday = (dateString: string): string => {
   const date = new Date(+dateString.substring(0, 4), (+dateString.substring(4, 6) - 1), +dateString.substring(6, 8))
-  const weekday = {
-    0: 'Sun',
-    1: 'Mon',
-    2: 'Tue',
-    3: 'Wed',
-    4: 'Thu',
-    5: 'Fri',
-    6: 'Sat'
-  }
-  return weekday[date.getDay()]
+  const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  return weekdays[date.getDay()]
 }
 
 // Get Time
