@@ -1511,26 +1511,26 @@ await (async () => {
           let flightKey: string
           if (flight.segments.length === 1) {
             if (f1 >= 1) {
-              available += ` <span class='bulk_cabin bulk_f'>F <b>${f1}</b></span>`
               numF = f1
+              available += ` <span class='bulk_cabin bulk_f'>F <b>${numF}</b></span>`
             }
             if (j1 >= 1) {
-              available += ` <span class='bulk_cabin bulk_j'>J <b>${j1}</b></span>`
               numJ = j1
+              available += ` <span class='bulk_cabin bulk_j'>J <b>${numJ}</b></span>`
             }
             if (p1 >= 1) {
-              available += ` <span class='bulk_cabin bulk_p'>PY <b>${p1}</b></span>`
               numP = p1
+              available += ` <span class='bulk_cabin bulk_p'>PY <b>${numP}</b></span>`
             }
             if (y1 >= 1) {
-              available += ` <span class='bulk_cabin bulk_y'>Y <b>${y1}</b></span>`
               numY = y1
+              available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
             }
             flightKey = `${date}${from}${to}_${leg1Airline}${leg1FlightNum}`
             if (available !== '') {
               flightHTML += `
               <div class="flight_wrapper">
-                <div class="flight_item direct ${savedFlights.has(flightKey) ? 'saved' : ''}" data-flight-info="${flightKey}" data-flight-avail="${f1}_${j1}_${p1}_${y1}" ${numF > 0 ? 'data-f' : ''} ${numJ > 0 ? 'data-j' : ''} ${numP > 0 ? 'data-p' : ''} ${numY > 0 ? 'data-y' : ''}>
+                <div class="flight_item direct ${savedFlights.has(flightKey) ? 'saved' : ''}" data-flight-info="${flightKey}" data-flight-avail="${numF}_${numJ}_${numP}_${numY}" ${numF > 0 ? 'data-f' : ''} ${numJ > 0 ? 'data-j' : ''} ${numP > 0 ? 'data-p' : ''} ${numY > 0 ? 'data-y' : ''}>
                   <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
                   <span class="flight_num">${leg1Airline}${leg1FlightNum}</span>
                   ${available}
@@ -1551,7 +1551,7 @@ await (async () => {
             `
             }
             if (savedFlights.has(flightKey)) {
-              savedFlights.set(flightKey, { F: f1, J: j1, P: p1, Y: y1 })
+              savedFlights.set(flightKey, { F: numF, J: numJ, P: numP, Y: numY })
               updateSavedFlights()
               await valueSet('saved_flights', Object.fromEntries(savedFlights))
             }
