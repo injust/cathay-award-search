@@ -802,8 +802,13 @@ await (async () => {
       if (divMatches.length === 0) return
       // Start by removing the "active" class on all items
       removeActive(divMatches)
-      if (currentFocus >= divMatches.length) currentFocus = 0
-      if (currentFocus < 0) currentFocus = divMatches.length - 1
+
+      if (currentFocus >= divMatches.length) {
+        currentFocus = 0
+      } else if (currentFocus < 0) {
+        currentFocus = divMatches.length - 1
+      }
+
       // Add class "autocomplete-active"
       divMatches[currentFocus].classList.add('autocomplete-active')
     }
