@@ -1593,7 +1593,7 @@ await (async () => {
             if (available !== '') {
               flightHTML += `
               <div class="flight_wrapper">
-                <div class="flight_item ${savedFlights.has(flightKey) ? 'saved' : ''}" data-flight-info="${flightKey}"  data-flight-avail="${numF}_${numJ}_${numP}_${numY}" ${numF > 0 ? 'data-f' : ''} ${numJ > 0 ? 'data-j' : ''} ${numP > 0 ? 'data-p' : ''} ${numY > 0 ? 'data-y' : ''}>
+                <div class="flight_item ${savedFlights.has(flightKey) ? 'saved' : ''}" data-flight-info="${flightKey}" data-flight-avail="${numF}_${numJ}_${numP}_${numY}" ${numF > 0 ? 'data-f' : ''} ${numJ > 0 ? 'data-j' : ''} ${numP > 0 ? 'data-p' : ''} ${numY > 0 ? 'data-y' : ''}>
                   <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
                   <span class="flight_num">${leg1Airline}${leg1FlightNum}
                   <span class="stopover">${transitAirportCode}</span>
