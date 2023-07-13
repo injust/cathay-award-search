@@ -37,6 +37,15 @@ export interface AvailabilityResponse {
 
 export type CabinClass = 'Y' | 'W' | 'C' | 'F'
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+export type Filters = {
+  nonstop: boolean
+  first: boolean
+  business: boolean
+  premium: boolean
+  economy: boolean
+}
+
 export interface Passengers {
   adults: number
   children: number
