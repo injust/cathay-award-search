@@ -1509,6 +1509,7 @@ await (async () => {
           const leg1ArrTime = getFlightTime(flight.segments[0].destinationDate)
           const leg1Duration = getFlightTime(flight.duration, true)
           let flightKey: string
+
           if (flight.segments.length === 1) {
             if (f1 >= 1) {
               numF = f1
@@ -1526,7 +1527,9 @@ await (async () => {
               numY = y1
               available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
             }
+
             flightKey = `${date}${from}${to}_${leg1Airline}${leg1FlightNum}`
+
             if (available !== '') {
               flightHTML += `
               <div class="flight_wrapper">
@@ -1573,6 +1576,7 @@ await (async () => {
               numY = Math.min(y1, y2)
               available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
             }
+
             const leg2Airline = flight.segments[1].flightIdentifier.marketingAirline
             const leg2FlightNum = flight.segments[1].flightIdentifier.flightNumber
             const leg2DepTime = getFlightTime(flight.segments[1].flightIdentifier.originDate)
@@ -1580,6 +1584,7 @@ await (async () => {
             const transitTime = getFlightTime(flight.segments[1].flightIdentifier.originDate - flight.segments[0].destinationDate, true)
             const transitAirportCode = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g.exec(flight.flightIdString)[1].replace(':', ' / ')
             flightKey = `${date}${from}${to}_${leg1Airline}${leg1FlightNum}_${transitAirportCode}_${leg2Airline}${leg2FlightNum}`
+
             if (available !== '') {
               flightHTML += `
               <div class="flight_wrapper">
