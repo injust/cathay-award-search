@@ -1,7 +1,7 @@
 import { chevronSvg, heartSvg, swapSvg, xSvg } from './images/svg'
 import { lang } from './localization'
 import styleCss from './styles/style.css?inline'
-import { AirportResponse, Airports, AvailabilityResponse, CabinClass, Filters, PageBom, Passengers, Profile, Query, QueryPayload, RequestParams, Route, SavedFlights } from './types'
+import { AirportResponse, Airports, AvailabilityResponse, CabinClass, Filters, PageBom, Passengers, Profile, Query, QueryPayload, RequestParams, Route, SavedFlights, Uef } from './types'
 import { formatFlightDuration, formatFlightTime, httpRequest, isValidCxDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, valueGet, valueSet, waitForEl } from './utils'
 import dayjs from 'dayjs'
 import dayjsPluginUTC from 'dayjs-plugin-utc'
@@ -66,7 +66,7 @@ await (async () => {
   // ============================================================
 
   // Search Parameters
-  const uef: { from: string, to: string, date: string, adults: number, children: number } = {
+  const uef: Uef = {
     from: '',
     to: '',
     date: '',

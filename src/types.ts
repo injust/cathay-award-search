@@ -46,7 +46,8 @@ export type Filters = {
   economy: boolean
 }
 
-export interface Passengers {
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+export type Passengers = {
   adults: number
   children: number
 }
@@ -125,12 +126,13 @@ export type RequestParams = {
   ENCT?: string
 }
 
-export interface Route {
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+export type Route = {
   from: string
   to: string
 }
 
-export interface Query extends Route {
+export type Query = Route & {
   date: Dayjs
 }
 
@@ -151,4 +153,8 @@ export interface Flight extends Query, FlightAvailability {
 
 export interface SavedFlights {
   [key: string]: FlightAvailability
+}
+
+export type Uef = Route & Passengers & {
+  date: string
 }
