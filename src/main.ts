@@ -1550,11 +1550,6 @@ await (async () => {
               </div>
             `
             }
-            if (savedFlights.has(flightKey)) {
-              savedFlights.set(flightKey, { F: numF, J: numJ, P: numP, Y: numY })
-              updateSavedFlights()
-              await valueSet('saved_flights', Object.fromEntries(savedFlights))
-            }
           } else {
             // TODO: Maybe use ?? operator instead of ||, but need to account for NaN
             const f2 = +flight.segments[1].cabins?.F?.status || 0
@@ -1614,11 +1609,12 @@ await (async () => {
               </div>
             `
             }
-            if (savedFlights.has(flightKey)) {
-              savedFlights.set(flightKey, { F: numF, J: numJ, P: numP, Y: numY })
-              updateSavedFlights()
-              await valueSet('saved_flights', Object.fromEntries(savedFlights))
-            }
+          }
+
+          if (savedFlights.has(flightKey)) {
+            savedFlights.set(flightKey, { F: numF, J: numJ, P: numP, Y: numY })
+            updateSavedFlights()
+            await valueSet('saved_flights', Object.fromEntries(savedFlights))
           }
         })()
       })
