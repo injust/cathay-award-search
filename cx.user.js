@@ -2,7 +2,7 @@
 // @name                Cathay Award Search Fixer 2022
 // @name:zh-TW          國泰獎勵機票搜尋引擎修復神器 2022
 // @namespace           jayliutw
-// @version             3.3.0
+// @version             3.3.1
 // @description         Un-Elevate Your Cathay Award Search 2022.
 // @author              jayliutw
 // @connect             greasyfork.org
@@ -2508,6 +2508,8 @@ function insertResults(from, to, date, pageBom){
             var leg1_dep_time = getFlightTime(flight.segments[0].flightIdentifier.originDate);
             var leg1_arr_time = getFlightTime(flight.segments[0].destinationDate);
             var leg1_duration = getFlightTime(flight.duration,true);
+            var leg1_origin = flight.segments[0].originLocation;
+            var leg1_dest = flight.segments[0].destinationLocation;
             var flightkey;
             if(flight.segments.length == 1) {
                 if (f1 >= 1) { available = available + ` <span class='bulk_cabin bulk_f'>F <b>${f1}</b></span>`; d_f = true; }
@@ -2525,7 +2527,7 @@ function insertResults(from, to, date, pageBom){
                         <span class="flight_save">${heart_svg}</span>
                     </div>
                     <div class="flight_info">
-                        <span class="info_flight">${leg1_airline+leg1_flight_no}</span>
+                        <span class="info_flight">${leg1_airline+leg1_flight_no} (${leg1_origin.slice(-3)} ✈ ${leg1_dest.slice(-3)})</span>
                         <span class="info_dept"><span>Departs:</span> ${leg1_dep_time}</span>
                         <span class="info_arr"><span>Arrives:</span> ${leg1_arr_time}</span>
                         <span class="info_duration"><span>Total Flight Duration:</span> ${leg1_duration}</span>
@@ -2549,6 +2551,8 @@ function insertResults(from, to, date, pageBom){
                 var leg2_flight_no = flight.segments[1].flightIdentifier.flightNumber;
                 var leg2_dep_time = getFlightTime(flight.segments[1].flightIdentifier.originDate);
                 var leg2_arr_time = getFlightTime(flight.segments[1].destinationDate);
+                var leg2_origin = flight.segments[1].originLocation;
+                var leg2_dest = flight.segments[1].destinationLocation;
                 var transit_time = getFlightTime(flight.segments[1].flightIdentifier.originDate - flight.segments[0].destinationDate,true);
                 var stopcity = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g.exec(flight.flightIdString)[1].replace(":"," / ");
                 flightkey = date+from+to+"_"+leg1_airline+leg1_flight_no+"_"+stopcity+"_"+leg2_airline+leg2_flight_no;
@@ -2564,11 +2568,11 @@ function insertResults(from, to, date, pageBom){
                         <span class="flight_save">${heart_svg}</span>
                     </div>
                     <div class="flight_info">
-                        <span class="info_flight">${leg1_airline+leg1_flight_no}</span>
+                        <span class="info_flight">${leg1_airline+leg1_flight_no} (${leg1_origin.slice(-3)} ✈ ${leg1_dest.slice(-3)})</span>
                         <span class="info_dept"><span>Departs:</span> ${leg1_dep_time}</span>
                         <span class="info_arr"><span>Arrives:</span> ${leg1_arr_time}</span>
                         <span class="info_transit"><span>Transit Time:</span> ${transit_time}</span>
-                        <span class="info_flight">${leg2_airline+leg2_flight_no}</span>
+                        <span class="info_flight">${leg2_airline+leg2_flight_no} (${leg2_origin.slice(-3)} ✈ ${leg2_dest.slice(-3)})</span>
                         <span class="info_dept"><span>Departs:</span> ${leg2_dep_time}</span>
                         <span class="info_arr"><span>Arrives:</span> ${leg2_arr_time}</span>
                         <span class="info_duration"><span>Total Flight Duration:</span> ${leg1_duration}</span>
