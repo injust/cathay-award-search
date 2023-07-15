@@ -62,38 +62,31 @@ export const waitForEl = async <E extends Element>(selectors: string): Promise<E
 // Check CX Date String Validity (dateString YYYYMMDD)
 export const isValidDate = (dateString: string): boolean => {
   if (!/^\d{8}$/.test(dateString)) return false
-  const year = +dateString.substring(0, 4)
-  const month = +dateString.substring(4, 6)
-  const day = +dateString.substring(6, 8)
+  const date = dateStringToDate(dateString)
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
   if (year < 1000 || year > 3000 || month === 0 || month > 12) return false
   const monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
   if (year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0)) monthLength[1] = 29
   if (day <= 0 || day > monthLength[month - 1]) return false
   const today = new Date()
-  const date = new Date(year, month - 1, day)
   if ((date.getTime() - today.getTime()) / 24 / 60 / 60 / 1000 >= 366 || (date.getTime() - today.getTime()) / 24 / 60 / 60 / 1000 < -1) return false
   return true
 }
 
 // Add to Date and Return CX Date String
-export const dateAdd = (days = 0, date?: string): string => {
-  let newDate = new Date()
-  if (date != null) {
-    const year = +date.substring(0, 4)
-    const month = +date.substring(4, 6)
-    const day = +date.substring(6, 8)
-    newDate = new Date(year, month - 1, day)
-  }
+export const dateAdd = (days = 0, dateString?: string): string => {
+  const newDate = dateString == null ? new Date() : dateStringToDate(dateString)
   newDate.setDate(newDate.getDate() + days)
-  return `${newDate.getFullYear()}${(newDate.getMonth() + 1).toString().padStart(2, '0')}${newDate.getDate().toString().padStart(2, '0')}`
+  return dateToDateString(newDate)
 }
 
 // Convert CX Date String to Dashed Date String
 export const dateStringToDashedDateString = (dateString: string): string => `${dateString.substring(0, 4).toString()}-${dateString.substring(4, 6).toString().padStart(2, '0')}-${dateString.substring(6, 8).toString().padStart(2, '0')}`
 
 // Get Weekday from CX Date String
-export const dateStringToWeekday = (dateString: string): string => {
-  const date = new Date(+dateString.substring(0, 4), (+dateString.substring(4, 6) - 1), +dateString.substring(6, 8))
+export const dateToWeekday = (date: Date): string => {
   const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   return weekdays[date.getDay()]
 }
@@ -109,6 +102,10 @@ export const getFlightDuration = (timestamp: number): string => {
   const hours = (date.getUTCDate() - 1) * 24 + date.getUTCHours()
   return `${(hours > 0 ? `${hours.toString()}hr ` : '') + date.getUTCMinutes().toString()}min`
 }
+
+export const dateStringToDate = (dateString: string): Date => new Date(+dateString.substring(0, 4), +dateString.substring(4, 6) - 1, +dateString.substring(6, 8))
+
+export const dateToDateString = (date: Date): string => `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`
 
 export const queryStringToQuery = (query: string): Query => ({
   date: query.substring(0, 8),

@@ -134,7 +134,7 @@ type FlightAvailability = {
 }
 
 interface Flight extends Query, FlightAvailability {
-  fullQuery: string
+  flightKey: string
   leg1: string
   stop: string
   leg2: string
