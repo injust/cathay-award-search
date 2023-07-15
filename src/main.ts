@@ -971,13 +971,13 @@ await (async () => {
       const today = new Date()
       if (savedDate <= today) {
         savedQueries.delete(query)
-        return
+      } else {
+        savedArr.push({
+          date: query.substring(0, 8),
+          from: query.substring(8, 11).toUpperCase(),
+          to: query.substring(11, 14).toUpperCase()
+        })
       }
-      savedArr.push({
-        date: query.substring(0, 8),
-        from: query.substring(8, 11).toUpperCase(),
-        to: query.substring(11, 14).toUpperCase()
-      })
     })
     savedArr.sort((a, b) => +a.date - +b.date)
 
