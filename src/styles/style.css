@@ -1168,7 +1168,7 @@ span.unelevated_error a {
     font-weight: 400;
 }
 
-.bulk_error_hidden span {
+.bulk_error.hidden span {
     height: 0;
     margin-top: 0;
     overflow: hidden;

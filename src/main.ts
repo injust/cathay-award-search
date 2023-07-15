@@ -263,7 +263,7 @@ await (async () => {
       <div class="bulk_footer">
         <div class="bulk_footer_container">
           <button class="bulk_submit">${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}</button>
-          <div class="bulk_error bulk_error_hidden"><span></span></div>
+          <div class="bulk_error hidden"><span></span></div>
         </div>
       </div>
     </div>
@@ -708,10 +708,10 @@ await (async () => {
 
   const batchError = (label?: string): void => {
     if (label == null) {
-      divError.classList.add('bulk_error_hidden')
+      divError.classList.add('hidden')
     } else {
       shadowRoot.querySelector('.bulk_error span').innerHTML = label
-      divError.classList.remove('bulk_error_hidden')
+      divError.classList.remove('hidden')
     }
   }
 
