@@ -173,7 +173,7 @@ await (async () => {
 
       <div class="login_prompt hidden"><span class="unelevated_error"><a href="${loginUrl.toString()}">${lang.login}</a></span></div>
 
-      <div class="unelevated_faves unelevated_faves_hidden">
+      <div class="unelevated_faves hidden">
         <div class="faves_tabs">
           <a href="javascript:void(0);" class="tabs tab_queries">Routes</a>
           <a href="javascript:void(0);" class="tabs tab_flights">Flights</a>
@@ -679,7 +679,7 @@ await (async () => {
 
     divHeartSave.addEventListener('click', (e) => {
       // alert(JSON.stringify(saved))
-      divSaved.classList.toggle('unelevated_faves_hidden')
+      divSaved.classList.toggle('hidden')
     })
   }
 
