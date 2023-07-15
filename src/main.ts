@@ -974,8 +974,8 @@ await (async () => {
       } else {
         savedArr.push({
           date: query.substring(0, 8),
-          from: query.substring(8, 11).toUpperCase(),
-          to: query.substring(11, 14).toUpperCase()
+          from: query.substring(8, 11),
+          to: query.substring(11, 14)
         })
       }
     })
@@ -1017,8 +1017,8 @@ await (async () => {
       savedArr.push({
         fullQuery: query,
         date: query.substring(0, 8),
-        from: query.substring(8, 11).toUpperCase(),
-        to: query.substring(11, 14).toUpperCase(),
+        from: query.substring(8, 11),
+        to: query.substring(11, 14),
         leg1: query.split('_')[1] ?? '',
         stop: query.split('_')[2] ?? '',
         leg2: query.split('_')[3] ?? '',
