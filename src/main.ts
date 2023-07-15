@@ -1,7 +1,7 @@
 import { lang } from './localization'
 import captchaCss from './styles/captcha.css?inline'
 import styleCss from './styles/style.css?inline'
-import { dateAdd, dateStringToDashedDateString, dateStringToWeekday, getFlightTime, httpRequest, isValidDate, log, queryToSegment, responseParser, valueGet, valueSet, waitForEl } from './utils'
+import { dateAdd, dateStringToDashedDateString, dateStringToWeekday, getFlightTime, httpRequest, isValidDate, log, queryStringToQuery, queryToSegment, responseParser, valueGet, valueSet, waitForEl } from './utils'
 
 await (async () => {
   'use strict'
@@ -914,11 +914,7 @@ await (async () => {
   const savedSearch = async (): Promise<void> => {
     const toSearch: Query[] = []
     savedQueries.forEach((query) => {
-      toSearch.push({
-        date: query.substring(0, 8),
-        from: query.substring(8, 11),
-        to: query.substring(11, 14)
-      })
+      toSearch.push(queryStringToQuery(query))
     })
     toSearch.sort((a, b) => +a.date - +b.date)
 
@@ -972,11 +968,7 @@ await (async () => {
       if (savedDate <= today) {
         savedQueries.delete(query)
       } else {
-        savedArr.push({
-          date: query.substring(0, 8),
-          from: query.substring(8, 11),
-          to: query.substring(11, 14)
-        })
+        savedArr.push(queryStringToQuery(query))
       }
     })
     savedArr.sort((a, b) => +a.date - +b.date)
@@ -1016,9 +1008,7 @@ await (async () => {
       }
       savedArr.push({
         fullQuery: query,
-        date: query.substring(0, 8),
-        from: query.substring(8, 11),
-        to: query.substring(11, 14),
+        ...queryStringToQuery(query),
         leg1: query.split('_')[1] ?? '',
         stop: query.split('_')[2] ?? '',
         leg2: query.split('_')[3] ?? '',

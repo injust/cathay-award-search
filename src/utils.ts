@@ -108,6 +108,12 @@ export const getFlightTime = (timestamp: number, timeonly = false): string => {
   return `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1).toString().padStart(2, '0')}-${date.getUTCDate().toString().padStart(2, '0')} ${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')}`
 }
 
+export const queryStringToQuery = (query: string): Query => ({
+  date: query.substring(0, 8),
+  from: query.substring(8, 11),
+  to: query.substring(11, 14)
+})
+
 export const queryToSegment = (query: Query): Segment => ({
   departureDate: query.date,
   origin: query.from,
