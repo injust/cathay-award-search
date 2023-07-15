@@ -22,14 +22,16 @@ await (async () => {
   const loginUrl = new URL(`https://www.cathaypacific.com/content/cx/${browserLang}_${browserCountry}/sign-in.html`)
   loginUrl.searchParams.set('loginreferrer', `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`)
 
-  let staticFilesPath = await valueGet<string>('static_files_path', '/CathayPacificAwardV3/AML_IT3.3.24/')
+  let staticFilesPath: string
   let requestParams: RequestParams
   let tabId: string
   let formSubmitUrl: string
+  let loadingIconHtml: string
 
   const initCxVars = async (): Promise<void> => {
     log('initCxVars()')
 
+    staticFilesPath = await valueGet<string>('static_files_path', '/CathayPacificAwardV3/AML_IT3.3.24/')
     if (unsafeWindow.staticFilesPath != null) {
       // log('typeof unsafeWindow.staticFilesPath:', typeof unsafeWindow.staticFilesPath)
       if (staticFilesPath !== unsafeWindow.staticFilesPath) staticFilesPath = await valueSet('static_files_path', unsafeWindow.staticFilesPath)
@@ -46,6 +48,8 @@ await (async () => {
     tabId = requestParams.TAB_ID ?? ''
 
     formSubmitUrl = unsafeWindow.formSubmitUrl ?? `${availabilityUrl}?TAB_ID=${tabId}`
+
+    loadingIconHtml = `<img src='https://book.cathaypacific.com${staticFilesPath}common/skin/img/icons/cx/icon-loading.gif'>`
   }
 
   // ============================================================
@@ -163,9 +167,9 @@ await (async () => {
 
   const lang = {
     search: 'Search',
-    searching: `<img src='https://book.cathaypacific.com${staticFilesPath}common/skin/img/icons/cx/icon-loading.gif'> Searching...`,
-    searching_w_cancel: `<img src='https://book.cathaypacific.com${staticFilesPath}common/skin/img/icons/cx/icon-loading.gif'> Searching... (Click to Stop)`,
-    searching_cont: `<img src='https://book.cathaypacific.com${staticFilesPath}common/skin/img/icons/cx/icon-loading.gif'> Please wait... (Page will refresh)`,
+    searching: 'Searching...',
+    searching_w_cancel: 'Searching... (Click to Stop)',
+    searching_cont: 'Please wait... (Page will refresh)',
     next_batch: 'Load More...',
     search_all_cabins: 'Search Availability in All Cabins',
     flights: 'Available Flights',
@@ -948,7 +952,7 @@ await (async () => {
     }
 
     divResults.classList.remove('bulk_results_hidden')
-    btnBatch.innerHTML = lang.searching_w_cancel
+    btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
     btnBatch.classList.add('bulkSearching')
     await bulkSearch(singleDate)
   }
@@ -967,7 +971,7 @@ await (async () => {
     let ssQuery = toSearch.shift()
 
     divResults.classList.remove('bulk_results_hidden')
-    btnBatch.innerHTML = lang.searching_w_cancel
+    btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
     btnBatch.classList.add('bulkSearching')
     divTableBody.innerHTML = ''
 
@@ -1289,7 +1293,7 @@ await (async () => {
 
     // cxString = newQueryPayload(uef_from, uef_to, uef_date, uef_adult, uef_child)
     log('cxString:', cxString)
-    btnSearch.innerHTML = lang.searching_cont
+    btnSearch.innerHTML = `${loadingIconHtml} ${lang.searching_cont}`
     btnSearch.classList.add('searching')
     const resp = await httpRequest('https://api.cathaypacific.com/redibe/standardAward/create', {
       headers: { 'Content-Type': 'application/json' },
@@ -1674,7 +1678,7 @@ await (async () => {
       await resetContVars()
       // If over 5 minutes since cont query, don't auto search
       if (Date.now() - cont.ts > 60 * 5 * 1000) return
-      btnBatch.innerHTML = lang.searching_w_cancel
+      btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
       btnBatch.classList.add('bulkSearching')
       document.body.classList.add('cont_query')
       setTimeout(async () => {
