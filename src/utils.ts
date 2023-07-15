@@ -99,13 +99,15 @@ export const dateStringToWeekday = (dateString: string): string => {
 }
 
 // Get Time
-export const getFlightTime = (timestamp: number, timeonly = false): string => {
+export const getFlightTime = (timestamp: number): string => {
   const date = new Date(timestamp)
-  if (timeonly) {
-    const hours = (date.getUTCDate() - 1) * 24 + date.getUTCHours()
-    return `${(hours > 0 ? `${hours.toString()}hr ` : '') + date.getUTCMinutes().toString()}mins`
-  }
   return `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1).toString().padStart(2, '0')}-${date.getUTCDate().toString().padStart(2, '0')} ${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')}`
+}
+
+export const getFlightDuration = (timestamp: number): string => {
+  const date = new Date(timestamp)
+  const hours = (date.getUTCDate() - 1) * 24 + date.getUTCHours()
+  return `${(hours > 0 ? `${hours.toString()}hr ` : '') + date.getUTCMinutes().toString()}mins`
 }
 
 export const queryStringToQuery = (query: string): Query => ({
