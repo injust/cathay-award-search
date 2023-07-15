@@ -1,3 +1,4 @@
+import { lang } from './localization'
 import captchaCss from './styles/captcha.css?inline'
 import styleCss from './styles/style.css?inline'
 import { dateAdd, dateStringToDashedDateString, dateStringToWeekday, getFlightTime, httpRequest, isValidDate, log, queryToSegment, responseParser, valueGet, valueSet, waitForEl } from './utils'
@@ -159,53 +160,6 @@ await (async () => {
       await initSearchBox()
       await checkLogin()
     }
-  }
-
-  // ============================================================
-  // Localization
-  // ============================================================
-
-  const lang = {
-    search: 'Search',
-    searching: 'Searching...',
-    searching_w_cancel: 'Searching... (Click to Stop)',
-    searching_cont: 'Please wait... (Page will refresh)',
-    next_batch: 'Load More...',
-    search_all_cabins: 'Search Availability in All Cabins',
-    flights: 'Available Flights',
-    nonstop: 'Non-Stop',
-    first: 'First',
-    business: 'Bus',
-    premium: 'Prem',
-    economy: 'Econ',
-    first_full: 'First Class',
-    business_full: 'Business Class',
-    premium_full: 'Premium Economy',
-    economy_full: 'Economy Class',
-    date: 'Date',
-    no_availability: 'No Redemption Availability',
-    expired: 'Search Next 20 (Requires Refresh)',
-    super: 'SuperCharged Award Search',
-    error: 'Unknown Error... Try Again',
-    bulk_batch: 'Batch Search',
-    bulk_flights: 'Flights',
-    login: 'Reminder: Login before searching.',
-    tab_retrieve_fail: 'Failed to retrieve key. Try logging out and in again.',
-    key_exhausted: 'Key request quota exhausted, attempting to get new key...',
-    getting_key: 'Attempting to retrieve API key...',
-    invalid_airport: 'Invalid Airport',
-    invalid_code: 'Invalid Destination Code',
-    invalid_date: 'Invalid Date',
-    saved_queries: 'Saved Flight Queries',
-    max_segments: 'Max 6 Sectors Accepted',
-    book_multi: 'Book Multi-City Award',
-    query: 'Search',
-    delete: 'Remove',
-    search_selected: 'Search All Saved',
-    no_saved: 'You do not have any saved queries. Click on ♥ in batch results to save.',
-    loading: 'Searching...',
-    human: "Cathay's website needs you to prove you're a human:",
-    bot_check: 'Please Complete Cathay Bot Check'
   }
 
   // ============================================================
