@@ -1,7 +1,7 @@
 import { lang } from './localization'
 import captchaCss from './styles/captcha.css?inline'
 import styleCss from './styles/style.css?inline'
-import { dateAdd, dateStringToDashedDateString, dateStringToWeekday, getFlightDuration, getFlightTime, httpRequest, isValidDate, log, queryStringToQuery, queryToSegment, responseParser, valueGet, valueSet, waitForEl } from './utils'
+import { dateAdd, dateStringToDashedDateString, dateStringToDate, dateToWeekday, getFlightDuration, getFlightTime, httpRequest, isValidDate, log, queryStringToQuery, queryToSegment, responseParser, valueGet, valueSet, waitForEl } from './utils'
 
 await (async () => {
   'use strict'
@@ -293,7 +293,7 @@ await (async () => {
   let selectMultiCabin: HTMLSelectElement
   let clearFrom: SVGElement, clearTo: SVGElement
   let linkSearchSaved: HTMLAnchorElement, linkSearchMulti: HTMLAnchorElement
-  let divFilters: HTMLDivElement, divLoginPrompt: HTMLDivElement, divFooter: HTMLDivElement, divUeContainer: HTMLDivElement, divHeartSave: HTMLDivElement, divSaved: HTMLDivElement, divFavesTabs: HTMLDivElement, divSavedQueries: HTMLDivElement, divSavedFlights: HTMLDivElement, divMultiBox: HTMLDivElement, divResults: HTMLDivElement, divError: HTMLDivElement
+  let divFilters: HTMLDivElement, divLoginPrompt: HTMLDivElement, divFooter: HTMLDivElement, divUeContainer: HTMLDivElement, divHeartSave: HTMLDivElement, divSaved: HTMLDivElement, divFavesTabs: HTMLDivElement, divSavedFlights: HTMLDivElement, divSavedQueries: HTMLDivElement, divMultiBox: HTMLDivElement, divResults: HTMLDivElement, divError: HTMLDivElement
   let divTable: HTMLTableElement, divTableBody: HTMLTableSectionElement
   let savedCount: HTMLSpanElement
 
@@ -454,13 +454,13 @@ await (async () => {
             children: uef.children
           })
         } else if ('save' in el.dataset) {
-          const key = `${el.dataset.date}${el.dataset.from}${el.dataset.dest}`
+          const queryString = `${el.dataset.date}${el.dataset.from}${el.dataset.dest}`
           if (el.classList.contains('bulk_saved')) {
             el.classList.remove('bulk_saved')
-            savedQueries.delete(key)
+            savedQueries.delete(queryString)
           } else {
             el.classList.add('bulk_saved')
-            savedQueries.add(key)
+            savedQueries.add(queryString)
           }
 
           updateSavedCount()
@@ -521,14 +521,16 @@ await (async () => {
       (async () => {
         const el = e.target as HTMLElement
 
-        if (el.dataset.remove != null) {
-          savedQueries.delete(el.dataset.remove)
-          updateSavedCount()
-          await valueSet('saved_queries', Array.from(savedQueries))
-
-          savedFlights.delete(el.dataset.remove)
+        if (el.dataset.flightKey != null) {
+          savedFlights.delete(el.dataset.flightKey)
           updateSavedFlights()
           await valueSet('saved_flights', Object.fromEntries(savedFlights))
+        }
+
+        if (el.dataset.queryString != null) {
+          savedQueries.delete(el.dataset.queryString)
+          updateSavedCount()
+          await valueSet('saved_queries', Array.from(savedQueries))
         }
       })().catch(log)
     })
@@ -962,13 +964,14 @@ await (async () => {
 
     let savedList = ''
     const savedArr: Query[] = []
-    savedQueries.forEach((query) => {
-      const savedDate = new Date(+query.substring(0, 4), +query.substring(4, 6) - 1, +query.substring(6, 8))
+    savedQueries.forEach((queryString) => {
+      const query = queryStringToQuery(queryString)
+      const savedDate = dateStringToDate(query.date)
       const today = new Date()
       if (savedDate <= today) {
-        savedQueries.delete(query)
+        savedQueries.delete(queryString)
       } else {
-        savedArr.push(queryStringToQuery(query))
+        savedArr.push(query)
       }
     })
     savedArr.sort((a, b) => +a.date - +b.date)
@@ -982,7 +985,7 @@ await (async () => {
           <label><input type="checkbox" data-date="${date}" data-route="${date}${from}${to}"> ${dateStringToDashedDateString(date)} ${from}-${to}</label>
           <a href="javascript:void(0);" class="saved_book" data-book data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
           <span class="leg"></span>
-          <a href="javascript:void(0);" class="saved_remove" data-remove="${date}${from}${to}">
+          <a href="javascript:void(0);" class="saved_remove" data-query-string="${date}${from}${to}">
             <svg width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16">
               <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
             </svg>
@@ -999,19 +1002,20 @@ await (async () => {
 
     let savedList = ''
     const savedArr: Flight[] = []
-    savedFlights.forEach((availability, query) => {
-      const savedDate = new Date(+query.substring(0, 4), +query.substring(4, 6) - 1, +query.substring(6, 8))
+    savedFlights.forEach((availability, flightKey) => {
+      const query = queryStringToQuery(flightKey) // TODO: Should make something to parse `flightKey`
+      const savedDate = dateStringToDate(query.date)
       const today = new Date()
       if (savedDate <= today) {
-        savedFlights.delete(query)
+        savedFlights.delete(flightKey)
         return
       }
       savedArr.push({
-        fullQuery: query,
-        ...queryStringToQuery(query),
-        leg1: query.split('_')[1] ?? '',
-        stop: query.split('_')[2] ?? '',
-        leg2: query.split('_')[3] ?? '',
+        flightKey,
+        ...query,
+        leg1: flightKey.split('_')[1] ?? '',
+        stop: flightKey.split('_')[2] ?? '',
+        leg2: flightKey.split('_')[3] ?? '',
         F: availability.F,
         J: availability.J,
         P: availability.P,
@@ -1021,7 +1025,7 @@ await (async () => {
     savedArr.sort((a, b) => +a.date - +b.date)
 
     savedArr.forEach((query) => {
-      const fullQuery = query.fullQuery
+      const flightKey = query.flightKey
       const date = query.date
       const from = query.from
       const to = query.to
@@ -1054,7 +1058,7 @@ await (async () => {
           </label>
           <a href="javascript:void(0);" class="saved_book" data-book "data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
           <span class="leg"></span>
-          <a href="javascript:void(0);" class="saved_remove" data-remove="${fullQuery}">
+          <a href="javascript:void(0);" class="saved_remove" data-flight-key="${flightKey}">
             <svg width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16">
               <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
             </svg>
@@ -1421,7 +1425,7 @@ await (async () => {
         <tr data-date="${date}">
           <td class="bulkDate">
             <a href="javascript:void(0)" data-book data-date="${date}">${dateStringToDashedDateString(date)}</a>
-            ${dateStringToWeekday(date)}
+            ${dateToWeekday(dateStringToDate(date))}
           </td>
           <td class="bulk_flights"></td>
         </tr>
