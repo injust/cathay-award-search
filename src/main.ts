@@ -1,7 +1,7 @@
 import { lang } from './localization'
 import captchaCss from './styles/captcha.css?inline'
 import styleCss from './styles/style.css?inline'
-import { dateAdd, dateStringToDashedDateString, dateStringToWeekday, getFlightTime, httpRequest, isValidDate, log, queryStringToQuery, queryToSegment, responseParser, valueGet, valueSet, waitForEl } from './utils'
+import { dateAdd, dateStringToDashedDateString, dateStringToWeekday, getFlightDuration, getFlightTime, httpRequest, isValidDate, log, queryStringToQuery, queryToSegment, responseParser, valueGet, valueSet, waitForEl } from './utils'
 
 await (async () => {
   'use strict'
@@ -1459,7 +1459,7 @@ await (async () => {
           const leg1FlightNum = flight.segments[0].flightIdentifier.flightNumber
           const leg1DepTime = getFlightTime(flight.segments[0].flightIdentifier.originDate)
           const leg1ArrTime = getFlightTime(flight.segments[0].destinationDate)
-          const leg1Duration = getFlightTime(flight.duration, true)
+          const leg1Duration = getFlightDuration(flight.duration)
           const leg1Origin = flight.segments[0].originLocation
           const leg1Dest = flight.segments[0].destinationLocation
           let flightKey: string
@@ -1537,7 +1537,7 @@ await (async () => {
             const leg2ArrTime = getFlightTime(flight.segments[1].destinationDate)
             const leg2Origin = flight.segments[1].originLocation
             const leg2Dest = flight.segments[1].destinationLocation
-            const transitTime = getFlightTime(flight.segments[1].flightIdentifier.originDate - flight.segments[0].destinationDate, true)
+            const transitTime = getFlightDuration(flight.segments[1].flightIdentifier.originDate - flight.segments[0].destinationDate)
             const transitAirportCode = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g.exec(flight.flightIdString)[1].replace(':', ' / ')
             flightKey = `${date}${from}${to}_${leg1Airline}${leg1FlightNum}_${transitAirportCode}_${leg2Airline}${leg2FlightNum}`
 
