@@ -1056,7 +1056,7 @@ await (async () => {
             </span>
           </span>
           </label>
-          <a href="javascript:void(0);" class="saved_book" data-book "data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
+          <a href="javascript:void(0);" class="saved_book" data-book data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
           <span class="leg"></span>
           <a href="javascript:void(0);" class="saved_remove" data-flight-key="${flightKey}">
             <svg width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16">
