@@ -244,7 +244,7 @@ await (async () => {
     </div>
 
     <div class="bulk_box">
-      <div class="bulk_results bulk_results_hidden">
+      <div class="bulk_results hidden">
         <div class="filters">
           <label><input type="checkbox" data-filter="nonstop" ${filters.nonstop ? 'checked' : ''}>${lang.nonstop}</label>
           <label><input type="checkbox" data-filter="first" ${filters.first ? 'checked' : ''}>${lang.first}</label>
@@ -905,7 +905,7 @@ await (async () => {
       })
     }
 
-    divResults.classList.remove('bulk_results_hidden')
+    divResults.classList.remove('hidden')
     btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
     btnBatch.classList.add('bulkSearching')
     await bulkSearch(singleDate)
@@ -924,7 +924,7 @@ await (async () => {
 
     let ssQuery = toSearch.shift()
 
-    divResults.classList.remove('bulk_results_hidden')
+    divResults.classList.remove('hidden')
     btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
     btnBatch.classList.add('bulkSearching')
     divTableBody.innerHTML = ''

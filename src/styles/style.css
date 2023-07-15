@@ -541,7 +541,7 @@ a.uef_toggle:after {
     margin: 10px;
 }
 
-.bulk_results_hidden {
+.bulk_results.hidden {
     height: 0;
     min-height: 0;
     margin: 0;
