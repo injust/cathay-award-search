@@ -535,11 +535,6 @@ a.uef_toggle:after {
     position: relative;
 }
 
-.bulk_box_hidden {
-    position: relative;
-    margin-top: -80px;
-}
-
 .bulk_results {
     transition: all 0.5s ease-out;
     min-height: 30px;
