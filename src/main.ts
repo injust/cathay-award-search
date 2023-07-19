@@ -1213,7 +1213,7 @@ await (async () => {
 
       log('Failed to receive Tab ID')
       resetSearch()
-      batchError(`<strong>Error:</strong> ${errorMessage} ( <a href='${loginUrl.toString()}'>Login</a> ) `)
+      batchError(`<strong>Error:</strong> ${errorMessage} (<a href='${loginUrl.toString()}'>Login</a>) `)
     }
   }
 
