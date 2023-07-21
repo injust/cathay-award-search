@@ -15,7 +15,6 @@ export default defineConfig({
                 author: 'injust',
                 description: 'Un-elevate your Cathay award search',
                 homepageURL: 'https://github.com/injust/cathay-award-search',
-                downloadURL: 'https://github.com/injust/cathay-award-search/raw/main/cx.user.js',
                 match: [
                     'https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/facade.html',
                     'https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/redeem-flight-awards.html',
