@@ -119,6 +119,12 @@ export const queryToSegment = (query: Query): Segment => ({
   destination: query.to
 })
 
+export const parseCabinStatus = (status?: string): number => {
+  if (status == null) return 0
+  const num = +status
+  return isNaN(num) ? 0 : num
+}
+
 export const parseResponse = <T extends json>(response: string, regex: RegExp): T => {
   try {
     return JSON.parse(response.match(regex)[1])
