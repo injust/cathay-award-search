@@ -679,7 +679,6 @@ await (async () => {
     })
 
     divHeartSave.addEventListener('click', (e) => {
-      // alert(JSON.stringify(saved))
       divSaved.classList.toggle('hidden')
     })
   }
