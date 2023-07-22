@@ -1,7 +1,7 @@
 import { lang } from './localization'
 import captchaCss from './styles/captcha.css?inline'
 import styleCss from './styles/style.css?inline'
-import { dateAdd, dateStringToDashedDateString, dateStringToDate, dateToWeekday, getFlightDuration, getFlightTime, httpRequest, isValidDate, log, parseResponse, queryStringToQuery, queryToSegment, valueGet, valueSet, waitForEl } from './utils'
+import { dateAdd, dateStringToDashedDateString, dateStringToDate, dateToWeekday, getFlightDuration, getFlightTime, httpRequest, isValidDate, log, parseCabinStatus, parseResponse, queryStringToQuery, queryToSegment, valueGet, valueSet, waitForEl } from './utils'
 
 await (async () => {
   'use strict'
@@ -1448,11 +1448,10 @@ await (async () => {
       flights.forEach((flight) => {
         (async () => {
           let available = ''
-          // TODO: Maybe use ?? operator instead of ||, but need to account for NaN
-          const f1 = +flight.segments[0].cabins?.F?.status || 0
-          const j1 = +flight.segments[0].cabins?.B?.status || 0
-          const p1 = +flight.segments[0].cabins?.N?.status || 0
-          const y1 = (+flight.segments[0].cabins?.E?.status || 0) + (+flight.segments[0].cabins?.R?.status || 0)
+          const f1 = parseCabinStatus(flight.segments[0].cabins?.F?.status)
+          const j1 = parseCabinStatus(flight.segments[0].cabins?.B?.status)
+          const p1 = parseCabinStatus(flight.segments[0].cabins?.N?.status)
+          const y1 = parseCabinStatus(flight.segments[0].cabins?.E?.status) + parseCabinStatus(flight.segments[0].cabins?.R?.status)
           let numF = 0
           let numJ = 0
           let numP = 0
@@ -1510,11 +1509,10 @@ await (async () => {
             `
             }
           } else {
-            // TODO: Maybe use ?? operator instead of ||, but need to account for NaN
-            const f2 = +flight.segments[1].cabins?.F?.status || 0
-            const j2 = +flight.segments[1].cabins?.B?.status || 0
-            const p2 = +flight.segments[1].cabins?.N?.status || 0
-            const y2 = (+flight.segments[1].cabins?.E?.status || 0) + (+flight.segments[1].cabins?.R?.status || 0)
+            const f2 = parseCabinStatus(flight.segments[1].cabins?.F?.status)
+            const j2 = parseCabinStatus(flight.segments[1].cabins?.B?.status)
+            const p2 = parseCabinStatus(flight.segments[1].cabins?.N?.status)
+            const y2 = parseCabinStatus(flight.segments[1].cabins?.E?.status) + parseCabinStatus(flight.segments[1].cabins?.R?.status)
 
             if (f1 > 0 && f2 > 0) {
               numF = Math.min(f1, f2)
