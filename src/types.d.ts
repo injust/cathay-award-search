@@ -77,23 +77,18 @@ interface Profile {
 }
 
 interface QueryPayload {
-  awardType: string
-  brand: string
-  cabinClass: CabinClass
-  entryCountry: string
-  entryLanguage: string
-  entryPoint: string
-  errorUrl: string
-  returnUrl: string
-  isFlexibleDate: boolean
-  numAdult: number
-  numChild: number
-  promotionCode: string
-  segments: Array<{
-    departureDate: string
-    origin: string
-    destination: string
-  }>
+  ACTION: string
+  ENTRYPOINT: string
+  ENTRYLANGUAGE: string
+  ENTRYCOUNTRY: string
+  RETURNURL: string
+  ERRORURL: string
+  CABINCLASS: string
+  BRAND: string
+  ADULT: number
+  CHILD: number
+  FLEXIBLEDATE: boolean
+  LOGINURL: string
 }
 
 interface QueryResponse {
@@ -138,12 +133,6 @@ interface Flight extends Query, FlightAvailability {
   leg1: string
   stop: string
   leg2: string
-}
-
-interface Segment {
-  departureDate: string
-  origin: string
-  destination: string
 }
 
 interface SavedFlights {

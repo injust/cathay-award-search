@@ -113,12 +113,6 @@ export const queryStringToQuery = (query: string): Query => ({
   to: query.substring(11, 14)
 })
 
-export const queryToSegment = (query: Query): Segment => ({
-  departureDate: query.date,
-  origin: query.from,
-  destination: query.to
-})
-
 export const parseCabinStatus = (status?: string): number => {
   if (status == null) return 0
   const num = +status
