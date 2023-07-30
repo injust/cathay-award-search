@@ -452,8 +452,8 @@ a.switch svg path {
     font-size: 16px;
 }
 
-svg.clearFrom,
-svg.clearTo {
+svg.clear_from,
+svg.clear_to {
     position: absolute;
     right: 20px;
     top: 15px;
