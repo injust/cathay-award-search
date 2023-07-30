@@ -920,11 +920,7 @@ await (async () => {
     divTableBody.innerHTML = ''
 
     if (!cont.query) {
-      await regularSearch([{
-        from: ssQuery.from,
-        to: ssQuery.to,
-        date: ssQuery.date
-      }], {
+      await regularSearch([ssQuery], {
         adults: 1,
         children: 0
       }, 'Y', { batch: false, query: true, saved: true })
