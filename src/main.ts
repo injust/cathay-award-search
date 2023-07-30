@@ -930,8 +930,7 @@ await (async () => {
     const populateNextQuery = async (pageBom: PageBom): Promise<void> => {
       await insertResults(ssQuery, pageBom)
 
-      if (toSearch.length > 0) {
-        ssQuery = toSearch.shift()
+      if ((ssQuery = toSearch.shift()) != null) {
         await searchAvailability(ssQuery, 1, 0, populateNextQuery)
       } else {
         stopBatch()
@@ -1284,8 +1283,7 @@ await (async () => {
     const populateNextRoute = async (pageBom: PageBom): Promise<void> => {
       await insertResults({ ...thisRoute, date: bulkDate }, pageBom)
 
-      if (routes.length > 0) {
-        thisRoute = routes.shift()
+      if ((thisRoute = routes.shift()) != null) {
         await searchAvailability({ ...thisRoute, date: bulkDate }, uef.adults, uef.children, populateNextRoute)
       } else {
         bulkDate = dateAdd(1, bulkDate)
