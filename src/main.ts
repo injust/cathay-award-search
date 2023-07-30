@@ -1104,7 +1104,7 @@ await (async () => {
 
   // Default Search JSON
 
-  const newQueryPayload = (route: Query = {
+  const newQueryPayload = (query: Query = {
     date: dateAdd(1),
     from: 'HND',
     to: 'ITM'
@@ -1127,11 +1127,11 @@ await (async () => {
       numAdult: passengers.adults,
       numChild: passengers.children,
       promotionCode: '',
-      segments: [queryToSegment(route)]
+      segments: [queryToSegment(query)]
     }
   }
 
-  const newMultiPayload = (routes: Query[], passengers: Passengers, cabinClass: CabinClass = 'Y'): QueryPayload => {
+  const newMultiPayload = (queries: Query[], passengers: Passengers, cabinClass: CabinClass = 'Y'): QueryPayload => {
     log('newMultiPayload()')
 
     return {
@@ -1147,7 +1147,7 @@ await (async () => {
       numAdult: passengers.adults,
       numChild: passengers.children,
       promotionCode: '',
-      segments: routes.map(queryToSegment)
+      segments: queries.map(queryToSegment)
     }
   }
 
@@ -1220,7 +1220,7 @@ await (async () => {
   // Regular Search
   // ============================================================
 
-  const regularSearch = async (routes: Query[] = [{
+  const regularSearch = async (queries: Query[] = [{
     from: 'TPE',
     to: 'TYO',
     date: dateAdd(1)
@@ -1229,10 +1229,10 @@ await (async () => {
     children: 0
   }, cabinClass: CabinClass = 'Y', cont = { batch: false, query: false, saved: false }): Promise<void> => {
     let cxString: QueryPayload
-    if (routes.length === 1) {
-      cxString = newQueryPayload(routes[0], passengers, cabinClass)
-    } else if (routes.length > 0) {
-      cxString = newMultiPayload(routes, passengers, cabinClass)
+    if (queries.length === 1) {
+      cxString = newQueryPayload(queries[0], passengers, cabinClass)
+    } else if (queries.length > 0) {
+      cxString = newMultiPayload(queries, passengers, cabinClass)
     } else {
       return
     }
