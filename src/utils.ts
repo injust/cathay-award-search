@@ -119,7 +119,7 @@ export const queryToSegment = (query: Query): Segment => ({
   destination: query.to
 })
 
-export const responseParser = <T extends json>(response: string, regex: RegExp): T => {
+export const parseResponse = <T extends json>(response: string, regex: RegExp): T => {
   try {
     return JSON.parse(response.match(regex)[1])
   } catch (e) {
