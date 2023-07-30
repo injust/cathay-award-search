@@ -1187,6 +1187,30 @@ await (async () => {
 
     await valueSet('cont', { ...cont, ts: Date.now() })
 
+    const url = new URL('https://api.cathaypacific.com/redibe/IBEFacade')
+    for (const [key, value] of Object.entries(newQueryPayload())) {
+      url.searchParams.append(key, value)
+    }
+
+    log('Simulating IBEFacade form submission')
+    try {
+      const resp = await httpRequest(url, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        withCredentials: true
+      })
+
+      if (resp.status === 200) {
+        const container = document.createElement('div')
+        container.innerHTML = await resp.text()
+        const form = container.getElementsByTagName('form')[0]
+
+        log('Submitting SubmissionDetails form')
+        document.body.appendChild(form)
+        form.submit()
+        return
+      }
+    } catch { }
+
     const form = document.createElement('form')
     form.setAttribute('action', 'https://api.cathaypacific.com/redibe/IBEFacade')
     for (const [key, value] of Object.entries(cxString)) {
@@ -1197,6 +1221,7 @@ await (async () => {
       form.appendChild(input)
     }
 
+    log('Fallback: Submitting IBEFacade form')
     document.body.appendChild(form)
     form.submit()
   }
