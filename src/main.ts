@@ -131,9 +131,7 @@ await (async () => {
 
         await waitForEl<HTMLElement>('body > header')
         const boxes = document.querySelectorAll<HTMLDivElement>('body > div')
-        boxes.forEach((box) => {
-          box.remove()
-        })
+        for (const box of boxes) box.remove()
         document.body.append(shadowWrapper)
         shadowContainer.classList.add('results_container')
         await initSearchBox()
@@ -375,9 +373,9 @@ await (async () => {
       inputTo.dispatchEvent(new Event('change'))
     })
 
-    let inFocus = false;
+    let inFocus = false
 
-    [inputFrom, inputTo].forEach((el) => {
+    for (const el of [inputFrom, inputTo]) {
       el.addEventListener('keyup', (e) => {
         if (['Enter', ' ', ','].includes(e.key)) {
           if (e.key === 'Enter') el.value += ','
@@ -413,7 +411,7 @@ await (async () => {
         el.value = el.value.replace(/,+$/, '')
         inFocus = false
       })
-    })
+    }
 
     inputDate.addEventListener('change', (e) => {
       if (isValidDate(inputDate.value)) {
@@ -476,9 +474,9 @@ await (async () => {
         if (el.classList.contains('active')) {
           el.classList.remove('active')
         } else {
-          shadowRoot.querySelectorAll<HTMLDivElement>('.flight_item').forEach((el) => {
+          for (const el of shadowRoot.querySelectorAll<HTMLDivElement>('.flight_item')) {
             el.classList.remove('active')
-          })
+          }
           el.classList.add('active')
         }
       }
@@ -511,9 +509,9 @@ await (async () => {
     })
 
     document.addEventListener('scroll', (e) => {
-      shadowRoot.querySelectorAll<HTMLDivElement>('.flight_item').forEach((el) => {
+      for (const el of shadowRoot.querySelectorAll<HTMLDivElement>('.flight_item')) {
         el.classList.remove('active')
-      })
+      }
     })
 
     divSaved.addEventListener('click', (e) => {
@@ -561,9 +559,9 @@ await (async () => {
 
       const selectedSegments = divSavedQueries.querySelectorAll<HTMLDivElement>('.selected')
 
-      selectedSegments.forEach((el) => {
+      for (const el of selectedSegments) {
         delete el.dataset.new
-      })
+      }
 
       const savedQuery = el.parentNode.parentNode as HTMLDivElement
       if (el.checked) {
@@ -582,13 +580,13 @@ await (async () => {
       }
 
       if (selectedSegments.length === 6) {
-        Array.from(divSavedQueries.getElementsByTagName('input')).forEach((el) => {
+        for (const el of divSavedQueries.getElementsByTagName('input')) {
           if (!el.checked) el.disabled = true
-        })
+        }
       } else {
-        Array.from(divSavedQueries.getElementsByTagName('input')).forEach((el) => {
+        for (const el of divSavedQueries.getElementsByTagName('input')) {
           el.disabled = false
-        })
+        }
       }
 
       Array.from(selectedSegments).sort((a, b) => {
@@ -619,7 +617,7 @@ await (async () => {
       }
     }
 
-    Array.from(divFilters.getElementsByTagName('input')).forEach((el) => {
+    for (const el of divFilters.getElementsByTagName('input')) {
       el.addEventListener('click', (e) => {
         (async () => {
           const className = filterToClassName(el.dataset.filter)
@@ -633,7 +631,7 @@ await (async () => {
           }
         })().catch(log)
       })
-    })
+    }
 
     linkSearchSaved.addEventListener('click', (e) => {
       (async () => {
@@ -656,14 +654,11 @@ await (async () => {
         }
 
         linkSearchMulti.innerText = lang.loading
-        const toSearch: Query[] = []
-        Array.from(selectedSegments).sort((a, b) => +a.dataset.segment - +b.dataset.segment).forEach((segment) => {
-          toSearch.push({
-            date: segment.dataset.date,
-            from: segment.dataset.route.substring(0, 3),
-            to: segment.dataset.route.substring(3, 6)
-          })
-        })
+        const toSearch = Array.from(selectedSegments).sort((a, b) => +a.dataset.segment - +b.dataset.segment).map(segment => ({
+          date: segment.dataset.date,
+          from: segment.dataset.route.substring(0, 3),
+          to: segment.dataset.route.substring(3, 6)
+        }))
         await regularSearch(toSearch, {
           adults: +inputMultiAdult.value,
           children: +inputMultiChild.value
@@ -699,9 +694,9 @@ await (async () => {
 
     const data: AirportResponse = JSON.parse((await resp.text()).replace('Taiwan China', 'Taiwan'))
     if (data.airports !== null) {
-      data.airports.forEach(({ airportCode, countryName, shortName }) => {
+      for (const { airportCode, countryName, shortName } of data.airports) {
         airports[airportCode] = { airportCode, countryName, shortName }
-      })
+      }
     }
   }
 
@@ -719,7 +714,7 @@ await (async () => {
   }
 
   // Arguments: the text field element and an array of possible autocomplete values
-  const autocomplete = (input: HTMLInputElement, values: Airports): void => {
+  const autocomplete = (input: HTMLInputElement, airports: Airports): void => {
     let currentFocus: number
     // Execute a function when someone writes in the text field
     input.addEventListener('input', (e) => {
@@ -812,7 +807,7 @@ await (async () => {
 
       const favs = ['TPE', 'TSA', 'KHH', 'RMQ', 'TYO', 'HND', 'NRT', 'KIX', 'ITM', 'CTS', 'FUK', 'NGO', 'OKA', 'ICN', 'PUS', 'GMP', 'CJU', 'HKG', 'MFM', 'BKK', 'CNX', 'HKT', 'CGK', 'DPS', 'SUB', 'KUL', 'BKI', 'PEN', 'DAD', 'HAN', 'SGN', 'CEB', 'MNL', 'SIN', 'PNH', 'DEL', 'BOM', 'DXB', 'DOH', 'TLV', 'BCN', 'MAD', 'MXP', 'CDG', 'ZRH', 'MUC', 'FCO', 'FRA', 'CDG', 'AMS', 'LHR', 'LGW', 'LON', 'MAN', 'FCO', 'BOS', 'JFK', 'YYZ', 'ORD', 'IAD', 'YVR', 'SFO', 'LAX', 'SAN', 'SEA', 'JNB', 'PER', 'SYD', 'BNE', 'MEL', 'AKL', 'HEL', 'BLR', 'SHA', 'PVG', 'PEK', 'CAN', 'KTM', 'ADL', 'CPT', 'ATH', 'IST', 'SOF', 'VCE', 'BUD', 'PRG', 'VIE', 'BER', 'WAW', 'KBP', 'CPH', 'DUS', 'BRU', 'OSL', 'ARN', 'DUB', 'MIA', 'ATL', 'IAH', 'DFW', 'PHL', 'CMN', 'LAS', 'SJC', 'DEN', 'AUS', 'MSY', 'MCO', 'EWR', 'NYC', 'LIS', 'OPO', 'SPU', 'DBV', 'ZAG', 'MLE', 'LIM', 'BOG', 'CNS', 'GRU', 'SCL', 'GIG', 'EZE', 'MEX', 'CUN']
       // For each autocomplete value, check if it starts with the same letters as the text field value
-      Object.values(values).forEach(({ airportCode, countryName, shortName }) => {
+      for (const { airportCode, countryName, shortName } of Object.values(airports)) {
         if (airportCode.length > 3) return
         if (val.toUpperCase() === airportCode.substring(0, val.length).toUpperCase() || val.toUpperCase() === countryName.substring(0, val.length).toUpperCase() || val.toUpperCase() === shortName.substring(0, val.length).toUpperCase()) {
           const sa = airportCode.substring(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
@@ -848,7 +843,7 @@ await (async () => {
             divContainer.appendChild(divMatch)
           }
         }
-      })
+      }
     }
     // Execute a function when someone clicks in the document
     document.addEventListener('click', (e) => {
@@ -915,11 +910,7 @@ await (async () => {
   }
 
   const savedSearch = async (): Promise<void> => {
-    const toSearch: Query[] = []
-    savedQueries.forEach((query) => {
-      toSearch.push(queryStringToQuery(query))
-    })
-    toSearch.sort((a, b) => +a.date - +b.date)
+    const toSearch = Array.from(savedQueries, queryStringToQuery).sort((a, b) => +a.date - +b.date)
 
     let ssQuery = toSearch.shift()
 
@@ -964,20 +955,15 @@ await (async () => {
     log('updateSavedCount()')
 
     let savedList = ''
-    const savedArr: Query[] = []
-    savedQueries.forEach((queryString) => {
+    for (const queryString of savedQueries) {
       const query = queryStringToQuery(queryString)
       const savedDate = dateStringToDate(query.date)
       const today = new Date()
-      if (savedDate <= today) {
-        savedQueries.delete(queryString)
-      } else {
-        savedArr.push(query)
-      }
-    })
-    savedArr.sort((a, b) => +a.date - +b.date)
+      if (savedDate <= today) savedQueries.delete(queryString)
+    }
+    const savedArr = Array.from(savedQueries, queryStringToQuery).sort((a, b) => +a.date - +b.date)
 
-    savedArr.forEach((query) => {
+    for (const query of savedArr) {
       const date = query.date
       const from = query.from
       const to = query.to
@@ -993,7 +979,7 @@ await (async () => {
           </a>
         </div>
       `
-    })
+    }
     divSavedQueries.innerHTML = savedList
     savedCount.innerText = savedArr.length.toString()
   }
@@ -1002,43 +988,23 @@ await (async () => {
     log('updateSavedFlights()')
 
     let savedList = ''
-    const savedArr: Flight[] = []
-    savedFlights.forEach((availability, flightKey) => {
+    for (const flightKey of savedFlights.keys()) {
       const query = queryStringToQuery(flightKey) // TODO: Should make something to parse `flightKey`
       const savedDate = dateStringToDate(query.date)
       const today = new Date()
-      if (savedDate <= today) {
-        savedFlights.delete(flightKey)
-        return
-      }
-      savedArr.push({
-        flightKey,
-        ...query,
-        leg1: flightKey.split('_')[1] ?? '',
-        stop: flightKey.split('_')[2] ?? '',
-        leg2: flightKey.split('_')[3] ?? '',
-        F: availability.F,
-        J: availability.J,
-        P: availability.P,
-        Y: availability.Y
-      })
-    })
-    savedArr.sort((a, b) => +a.date - +b.date)
+      if (savedDate <= today) savedFlights.delete(flightKey)
+    }
+    const savedArr = Array.from(savedFlights, ([flightKey, avail]) => ({
+      flightKey,
+      query: queryStringToQuery(flightKey), // TODO: Should make something to parse `flightKey`
+      leg1: flightKey.split('_')[1] ?? '',
+      stop: flightKey.split('_')[2] ?? '',
+      leg2: flightKey.split('_')[3] ?? '',
+      avail
+    })).sort((a, b) => +a.query.date - +b.query.date)
 
-    savedArr.forEach((query) => {
-      const flightKey = query.flightKey
-      const date = query.date
-      const from = query.from
-      const to = query.to
-      const leg1 = query.leg1
-      const stop = query.stop
-      const leg2 = query.leg2
-      const avail = {
-        F: query.F,
-        J: query.J,
-        P: query.P,
-        Y: query.Y
-      }
+    for (const { flightKey, query, leg1, stop, leg2, avail } of savedArr) {
+      const { from, to, date } = query
       savedList += `
         <div class="saved_flight" data-date="${date}" data-route="${from}${to}">
           <label>
@@ -1066,7 +1032,7 @@ await (async () => {
           </a>
         </div>
       `
-    })
+    }
     divSavedFlights.innerHTML = savedList
     savedCount.innerText = savedArr.length.toString()
   }
@@ -1313,11 +1279,11 @@ await (async () => {
       remainingDays = Math.ceil(25 / queryCount) - 1
     }
 
-    rtFrom.forEach((from) => {
-      rtTo.forEach((to) => {
+    for (const from of rtFrom) {
+      for (const to of rtTo) {
         routes.push({ from, to })
-      })
-    })
+      }
+    }
 
     let thisRoute = routes.shift()
 
