@@ -1100,35 +1100,40 @@ await (async () => {
   // ============================================================
 
   const newTabID = async (cb?: () => Promise<void>): Promise<void> => {
-    log('Creating New Request Parameters...')
-
-    let resp = await httpRequest('https://api.cathaypacific.com/redibe/standardAward/create', {
-      headers: { 'Content-Type': 'application/json' },
-      data: JSON.stringify(newQueryPayload()),
-      method: 'POST',
-      withCredentials: true
-    })
-
-    log('Initial Request Parameters Received')
-    const data: QueryResponse = await resp.json()
-    let formData = ''
-    for (const key in data.parameters) {
-      formData += `${key}=${data.parameters[key]}&`
+    const url = new URL('https://api.cathaypacific.com/redibe/IBEFacade')
+    for (const [key, value] of Object.entries(newQueryPayload())) {
+      url.searchParams.append(key, value)
     }
 
-    log('Requesting New Tab ID...')
-    resp = await httpRequest(data.urlToPost ?? availabilityUrl, {
+    log('Simulating IBEFacade form submission')
+    const resp = await httpRequest(url, {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      data: formData,
-      method: 'POST',
       withCredentials: true
     })
-    const text = await resp.text()
+    const text1 = await resp.text()
     let errorMessage = lang.tab_retrieve_fail
 
     if (resp.status === 200) {
-      log('Tab ID Response Received. Parsing...')
-      requestParams = parseResponse<RequestParams>(text, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
+      const container = document.createElement('div')
+      container.innerHTML = text1
+      const form = container.getElementsByTagName('form')[0]
+
+      let formData = ''
+      for (const [key, value] of new FormData(form).entries()) {
+        formData += `${key}=${value as string}&`
+      }
+
+      log('Requesting new Tab ID')
+      const resp = await httpRequest(availabilityUrl, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        data: formData,
+        method: 'POST',
+        withCredentials: true
+      })
+      const text2 = await resp.text()
+
+      log('Parsing Tab ID response')
+      requestParams = parseResponse(text2, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
       log('requestParams:', requestParams)
 
       if (requestParams != null && Object.keys(requestParams).length > 0) {
@@ -1138,17 +1143,17 @@ await (async () => {
         formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
         if (cb != null) await cb()
       } else {
-        const errorBom = parseResponse<PageBom>(text, /errorBom = ([^;]+)/)
+        const errorBom = parseResponse<PageBom>(text2, /errorBom = ([^;]+)/)
         if (errorBom?.modelObject?.step === 'Error') {
           errorMessage = errorBom.modelObject?.messages[0]?.subText ?? errorMessage
         }
 
-        log('Tab ID Could not be parsed')
+        log('Could not parse Tab ID')
         batchError(`<strong>Error:</strong> ${errorMessage} (<a href='${loginUrl.toString()}'>Login</a>) `)
         resetSearch()
       }
     } else {
-      const errorBom = parseResponse<PageBom>(text, /errorBom = ([^;]+)/)
+      const errorBom = parseResponse<PageBom>(text1, /errorBom = ([^;]+)/)
       if (errorBom?.modelObject?.step === 'Error') {
         errorMessage = errorBom.modelObject?.messages[0]?.subText ?? errorMessage
       }
@@ -1180,12 +1185,8 @@ await (async () => {
 
     await valueSet('cont', { ...cont, ts: Date.now() })
 
-    // Create a form dynamically
     const form = document.createElement('form')
-    // form.setAttribute('name', 'regular_search_form')
-    form.setAttribute('method', 'post')
     form.setAttribute('action', 'https://api.cathaypacific.com/redibe/IBEFacade')
-
     for (const [key, value] of Object.entries(cxString)) {
       const input = document.createElement('input')
       input.setAttribute('type', 'hidden')
