@@ -175,16 +175,16 @@ await (async () => {
 
       <div class="unelevated_faves hidden">
         <div class="faves_tabs">
-          <a href="javascript:void(0);" class="tabs tab_queries">Routes</a>
-          <a href="javascript:void(0);" class="tabs tab_flights">Flights</a>
+          <a href="javascript:void 0" class="tabs tab_queries">Routes</a>
+          <a href="javascript:void 0" class="tabs tab_flights">Flights</a>
         </div>
-        <a href="javascript:void(0);" class="search_selected">${lang.search_selected} &raquo;</a>
+        <a href="javascript:void 0" class="search_selected">${lang.search_selected} &raquo;</a>
         <div class="saved_flights"></div>
         <div class="saved_queries"></div>
       </div>
 
       <div class="unelevated_saved">
-        <a href="javascript:void(0);">
+        <a href="javascript:void 0">
           <svg width="16" height="16" fill="currentColor" class="heart_save" viewBox="0 0 16 16">
             <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"></path>
           </svg>
@@ -193,7 +193,7 @@ await (async () => {
       </div>
 
       <div class="labels">
-        <a href="javascript:void(0);" class="switch">
+        <a href="javascript:void 0" class="switch">
           <svg height="16px" width="16px" viewBox="0 0 365.352 365.352" xml:space="preserve" stroke-width="0" transform="rotate(180)">
             <g stroke-width="0"></g>
             <path d="M363.155,169.453l-14.143-14.143c-1.407-1.407-3.314-2.197-5.304-2.197 c-1.989,0-3.897,0.79-5.304,2.197l-45.125,45.125v-57.503c0-50.023-40.697-90.721-90.721-90.721H162.3c-4.143,0-7.5,3.358-7.5,7.5 v20c0,4.142,3.357,7.5,7.5,7.5h40.26c30.725,0,55.721,24.996,55.721,55.721v57.503l-45.125-45.125 c-1.407-1.407-3.314-2.197-5.304-2.197c-1.989,0-3.896,0.79-5.304,2.197l-14.143,14.143c-1.406,1.406-2.196,3.314-2.196,5.303 c0,1.989,0.79,3.897,2.196,5.303l82.071,82.071c1.465,1.464,3.385,2.197,5.304,2.197c1.919,0,3.839-0.732,5.304-2.197 l82.071-82.071c1.405-1.406,2.196-3.314,2.196-5.303C365.352,172.767,364.561,170.859,363.155,169.453z"></path>
@@ -240,7 +240,7 @@ await (async () => {
       <label class="labels_right"><span>Children</span>
       <input type="number" inputmode="decimal" onFocus="this.select()" id="multi_child" name="multi_child" placeholder="Children" value="0" min="0">
       </label>
-      <a href="javascript:void(0)" class="multi_search">${lang.book_multi}</a>
+      <a href="javascript:void 0" class="multi_search">${lang.book_multi}</a>
     </div>
 
     <div class="bulk_box">
@@ -981,9 +981,9 @@ await (async () => {
       savedList += `
         <div class="saved_query" data-date="${date}" data-route="${from}${to}">
           <label><input type="checkbox" data-date="${date}" data-route="${date}${from}${to}"> ${dateStringToDashedDateString(date)} ${from}-${to}</label>
-          <a href="javascript:void(0);" class="saved_book" data-book data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
+          <a href="javascript:void 0" class="saved_book" data-book data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
           <span class="leg"></span>
-          <a href="javascript:void(0);" class="saved_remove" data-query-string="${date}${from}${to}">
+          <a href="javascript:void 0" class="saved_remove" data-query-string="${date}${from}${to}">
             <svg width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16">
               <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
             </svg>
@@ -1054,9 +1054,9 @@ await (async () => {
             </span>
           </span>
           </label>
-          <a href="javascript:void(0);" class="saved_book" data-book data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
+          <a href="javascript:void 0" class="saved_book" data-book data-date="${date}" data-from="${from}" data-dest="${to}">${lang.query} &raquo;</a>
           <span class="leg"></span>
-          <a href="javascript:void(0);" class="saved_remove" data-flight-key="${flightKey}">
+          <a href="javascript:void 0" class="saved_remove" data-flight-key="${flightKey}">
             <svg width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16">
               <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
             </svg>
@@ -1422,7 +1422,7 @@ await (async () => {
       const resultsRow = `
         <tr data-date="${date}">
           <td class="bulkDate">
-            <a href="javascript:void(0)" data-book data-date="${date}">${dateStringToDashedDateString(date)}</a>
+            <a href="javascript:void 0" data-book data-date="${date}">${dateStringToDashedDateString(date)}</a>
             ${dateToWeekday(dateStringToDate(date))}
           </td>
           <td class="bulk_flights"></td>
@@ -1436,8 +1436,8 @@ await (async () => {
     let flightHTML = `
       <div data-from="${from}" data-to="${to}">
         <span class="flight_title">${from} - ${to}
-          <a href="javascript:void(0)" class="bulk_save ${savedQueries.has(`${date}${from}${to}`) ? 'bulk_saved' : ''}" data-save data-date="${date}" data-from="${from}" data-dest="${to}">${heartSvg}</a>
-          <a href="javascript:void(0)" class="bulk_go_book" data-book data-date="${date}" data-from="${from}" data-dest="${to}">Book &raquo;</a>
+          <a href="javascript:void 0" class="bulk_save ${savedQueries.has(`${date}${from}${to}`) ? 'bulk_saved' : ''}" data-save data-date="${date}" data-from="${from}" data-dest="${to}">${heartSvg}</a>
+          <a href="javascript:void 0" class="bulk_go_book" data-book data-date="${date}" data-from="${from}" data-dest="${to}">Book &raquo;</a>
         </span>
         <div class="flight_list">`
 
