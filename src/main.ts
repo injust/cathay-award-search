@@ -1,7 +1,7 @@
 import { lang } from './localization'
 import captchaCss from './styles/captcha.css?inline'
 import styleCss from './styles/style.css?inline'
-import { dateAdd, dateStringToDashedDateString, dateStringToDate, dateToWeekday, getFlightDuration, getFlightTime, httpRequest, isValidDate, log, queryStringToQuery, queryToSegment, responseParser, valueGet, valueSet, waitForEl } from './utils'
+import { dateAdd, dateStringToDashedDateString, dateStringToDate, dateToWeekday, getFlightDuration, getFlightTime, httpRequest, isValidDate, log, parseResponse, queryStringToQuery, queryToSegment, valueGet, valueSet, waitForEl } from './utils'
 
 await (async () => {
   'use strict'
@@ -1184,11 +1184,11 @@ await (async () => {
 
     if (resp.status === 200) {
       log('Tab ID Response Received. Parsing...')
-      requestParams = responseParser<RequestParams>(text, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
+      requestParams = parseResponse<RequestParams>(text, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
       log('requestParams:', requestParams)
 
       if (Object.keys(requestParams).length === 0) {
-        const errorBom = responseParser<PageBom>(text, /errorBom = ([^;]+)/)
+        const errorBom = parseResponse<PageBom>(text, /errorBom = ([^;]+)/)
         if (errorBom?.modelObject?.step === 'Error') {
           errorMessage = errorBom.modelObject?.messages[0]?.subText ?? errorMessage
         }
@@ -1205,7 +1205,7 @@ await (async () => {
       formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
       if (cb != null) await cb()
     } else {
-      const errorBom = responseParser<PageBom>(text, /errorBom = ([^;]+)/)
+      const errorBom = parseResponse<PageBom>(text, /errorBom = ([^;]+)/)
       if (errorBom?.modelObject?.step === 'Error') {
         errorMessage = errorBom.modelObject?.messages[0]?.subText ?? errorMessage
       }
