@@ -593,8 +593,11 @@ await (async () => {
 
       Array.from(selectedSegments).sort((a, b) => {
         if (+a.dataset.date > +b.dataset.date) return 1
-        log(a.dataset.date, b.dataset.date)
-        if (a.dataset.date === b.dataset.date) return ('new' in a.dataset ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1))
+        // log(a.dataset.date, b.dataset.date)
+        if (a.dataset.date === b.dataset.date) {
+          if ('new' in a.dataset) return 1
+          return a.dataset.segment.localeCompare(b.dataset.segment)
+        }
         return 0
       }).forEach((el, index) => {
         el.dataset.segment = (index + 1).toString()
