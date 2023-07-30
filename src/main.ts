@@ -930,11 +930,11 @@ await (async () => {
     }
 
     const populateNextQuery = async (pageBom: PageBom): Promise<void> => {
-      await insertResults(ssQuery.from, ssQuery.to, ssQuery.date, pageBom)
+      await insertResults(ssQuery, pageBom)
 
       if (toSearch.length > 0) {
         ssQuery = toSearch.shift()
-        await searchAvailability(ssQuery.from, ssQuery.to, ssQuery.date, 1, 0, populateNextQuery)
+        await searchAvailability(ssQuery, 1, 0, populateNextQuery)
       } else {
         stopBatch()
         stopSearch = false // Override stopBatch()
@@ -946,7 +946,7 @@ await (async () => {
     routeChanged = true // To clear the saved search results
     // TODO: Make sure the button changes back to a normal bulk search button
 
-    await searchAvailability(ssQuery.from, ssQuery.to, ssQuery.date, 1, 0, populateNextQuery)
+    await searchAvailability(ssQuery, 1, 0, populateNextQuery)
   }
 
   const updateSavedCount = (): void => {
@@ -1284,11 +1284,11 @@ await (async () => {
     let thisRoute = routes.shift()
 
     const populateNextRoute = async (pageBom: PageBom): Promise<void> => {
-      await insertResults(thisRoute.from, thisRoute.to, bulkDate, pageBom)
+      await insertResults({ ...thisRoute, date: bulkDate }, pageBom)
 
       if (routes.length > 0) {
         thisRoute = routes.shift()
-        await searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uef.adults, uef.children, populateNextRoute)
+        await searchAvailability({ ...thisRoute, date: bulkDate }, uef.adults, uef.children, populateNextRoute)
       } else {
         bulkDate = dateAdd(1, bulkDate)
         if (singleDate) stopBatch()
@@ -1296,14 +1296,14 @@ await (async () => {
       }
     }
 
-    await searchAvailability(thisRoute.from, thisRoute.to, bulkDate, uef.adults, uef.children, populateNextRoute)
+    await searchAvailability({ ...thisRoute, date: bulkDate }, uef.adults, uef.children, populateNextRoute)
   }
 
   // ============================================================
   // Search Availability
   // ============================================================
 
-  const searchAvailability = async (from: string, to: string, date: string, adult: number, child: number, cb: (pageBom: PageBom) => Promise<void>): Promise<void> => {
+  const searchAvailability = async (query: Query, adult: number, child: number, cb: (pageBom: PageBom) => Promise<void>): Promise<void> => {
     if (stopSearch) {
       stopSearch = false
       searching = false
@@ -1313,7 +1313,7 @@ await (async () => {
     searching = true
 
     // If destination is not valid, abort
-    if (!/^[A-Z]{3}$/.test(to)) {
+    if (!/^[A-Z]{3}$/.test(query.to)) {
       // eslint-disable-next-line n/no-callback-literal
       await cb({
         modelObject: {
@@ -1328,10 +1328,10 @@ await (async () => {
     const requests = requestParams
     log('searchAvailability() requests:', requests)
 
-    requests.B_DATE_1 = `${date}0000`
+    requests.B_DATE_1 = `${query.date}0000`
     // requests.B_DATE_2 = `${dateAdd(1, date)}0000`
-    requests.B_LOCATION_1 = from
-    requests.E_LOCATION_1 = to
+    requests.B_LOCATION_1 = query.from
+    requests.E_LOCATION_1 = query.to
     // requests.B_LOCATION_2 = to
     // requests.E_LOCATION_2 = from
     delete requests.ENCT
@@ -1352,7 +1352,7 @@ await (async () => {
     })
 
     const searchAgain = async (): Promise<void> => {
-      await searchAvailability(from, to, date, adult, child, cb)
+      await searchAvailability(query, adult, child, cb)
     }
 
     if (resp.status === 200) {
@@ -1382,7 +1382,9 @@ await (async () => {
   // Insert Search Results
   // ============================================================
 
-  const insertResults = async (from: string, to: string, date: string, pageBom: PageBom): Promise<void> => {
+  const insertResults = async (query: Query, pageBom: PageBom): Promise<void> => {
+    const { from, to, date } = query
+
     if (divTableBody.querySelector(`tr[data-date="${date}"]`) == null) {
       const resultsRow = `
         <tr data-date="${date}">
