@@ -962,9 +962,7 @@ await (async () => {
     const savedArr = Array.from(savedQueries, queryStringToQuery).sort((a, b) => +a.date - +b.date)
 
     for (const query of savedArr) {
-      const date = query.date
-      const from = query.from
-      const to = query.to
+      const { from, to, date } = query
       savedList += `
         <div class="saved_query" data-date="${date}" data-route="${from}${to}">
           <label><input type="checkbox" data-date="${date}" data-route="${date}${from}${to}"> ${dateStringToDashedDateString(date)} ${from}-${to}</label>
