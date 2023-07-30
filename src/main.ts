@@ -1,7 +1,7 @@
 import { lang } from './localization'
 import captchaCss from './styles/captcha.css?inline'
 import styleCss from './styles/style.css?inline'
-import { dateAdd, dateStringToDashedDateString, dateStringToDate, dateToWeekday, getFlightDuration, getFlightTime, httpRequest, isValidDate, log, parseCabinStatus, parseResponse, queryStringToQuery, queryToSegment, valueGet, valueSet, waitForEl } from './utils'
+import { dateAdd, dateStringToDashedDateString, dateStringToDate, dateToWeekday, getFlightDuration, getFlightTime, httpRequest, isValidDate, log, parseCabinStatus, parseResponse, queryStringToQuery, valueGet, valueSet, waitForEl } from './utils'
 
 await (async () => {
   'use strict'
@@ -1075,19 +1075,23 @@ await (async () => {
     log('newQueryPayload()')
 
     return {
-      awardType: 'Standard',
-      brand: 'CX',
-      cabinClass,
-      entryCountry: browserCountry,
-      entryLanguage: browserLang,
-      entryPoint,
-      errorUrl: entryPoint,
-      returnUrl: entryPoint,
-      isFlexibleDate: false,
-      numAdult: passengers.adults,
-      numChild: passengers.children,
-      promotionCode: '',
-      segments: queries.map(queryToSegment)
+      ACTION: 'RED_AWARD_SEARCH',
+      ENTRYPOINT: entryPoint,
+      ENTRYLANGUAGE: browserLang,
+      ENTRYCOUNTRY: browserCountry,
+      RETURNURL: entryPoint,
+      ERRORURL: entryPoint,
+      CABINCLASS: cabinClass,
+      BRAND: 'CX',
+      ADULT: passengers.adults,
+      CHILD: passengers.children,
+      FLEXIBLEDATE: false,
+      ...Object.assign({}, ...queries.map((query, index) => ({
+        [`ORIGIN[${index + 1}]`]: query.from,
+        [`DESTINATION[${index + 1}]`]: query.to,
+        [`DEPARTUREDATE[${index + 1}]`]: query.date
+      }))),
+      LOGINURL: `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/sign-in/campaigns/miles-flight.html`
     }
   }
 
@@ -1170,34 +1174,23 @@ await (async () => {
     if (queries.length === 0) return
     const cxString = newQueryPayload(queries, passengers, cabinClass)
 
-    // cxString = newQueryPayload(uef_from, uef_to, uef_date, uef_adult, uef_child)
-    log('cxString:', cxString)
     btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_cont}`
     btnSearch.innerHTML = `${loadingIconHtml} ${lang.searching_cont}`
     btnSearch.classList.add('searching')
-    const resp = await httpRequest('https://api.cathaypacific.com/redibe/standardAward/create', {
-      headers: { 'Content-Type': 'application/json' },
-      data: JSON.stringify(cxString),
-      method: 'POST',
-      withCredentials: true
-    })
-
-    const data: QueryResponse = await resp.json()
-    log('regularSearch parameters:', data.parameters)
 
     await valueSet('cont', { ...cont, ts: Date.now() })
 
     // Create a form dynamically
     const form = document.createElement('form')
-    form.setAttribute('name', 'regular_search_form')
+    // form.setAttribute('name', 'regular_search_form')
     form.setAttribute('method', 'post')
-    form.setAttribute('action', data.urlToPost ?? availabilityUrl)
+    form.setAttribute('action', 'https://api.cathaypacific.com/redibe/IBEFacade')
 
-    for (const key in data.parameters) {
+    for (const [key, value] of Object.entries(cxString)) {
       const input = document.createElement('input')
       input.setAttribute('type', 'hidden')
       input.setAttribute('name', key)
-      input.setAttribute('value', data.parameters[key])
+      input.setAttribute('value', value)
       form.appendChild(input)
     }
 
@@ -1377,8 +1370,8 @@ await (async () => {
 
     if (pageBom.modelObject?.isContainingErrors) {
       flightHTML += `<span class="bulk_response_error"><strong>Error:</strong> ${pageBom.modelObject?.messages[0]?.text}</span>`
-    } else {
-      for (const flight of pageBom.modelObject?.availabilities?.upsell?.bounds[0].flights) {
+    } else if (pageBom.modelObject?.availabilities?.upsell?.bounds != null) {
+      for (const flight of pageBom.modelObject.availabilities.upsell.bounds[0].flights ?? []) {
         let available = ''
         const f1 = parseCabinStatus(flight.segments[0].cabins?.F?.status)
         const j1 = parseCabinStatus(flight.segments[0].cabins?.B?.status)
