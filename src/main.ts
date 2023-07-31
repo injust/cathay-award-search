@@ -1335,14 +1335,14 @@ await (async () => {
     delete requests.DIRECT_LOGIN
     delete requests.ENC
 
-    const params = Object.entries(requests).map(([key, value]) => `${key}=${value}`).join('&')
+    const formData = Object.entries(requests).map(([key, value]) => `${key}=${value}`).join('&')
 
     const resp = await httpRequest(formSubmitUrl, {
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      data: params,
+      data: formData,
       method: 'POST',
       withCredentials: true
     })
