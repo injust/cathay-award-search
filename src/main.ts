@@ -1066,35 +1066,15 @@ await (async () => {
 
   // Default Search JSON
 
-  const newQueryPayload = (query: Query = {
+  const newQueryPayload = (queries: Query[] = [{
     date: dateAdd(1),
     from: 'HND',
     to: 'ITM'
-  }, passengers: Passengers = {
+  }], passengers: Passengers = {
     adults: 1,
     children: 0
   }, cabinClass: CabinClass = 'Y'): QueryPayload => {
     log('newQueryPayload()')
-
-    return {
-      awardType: 'Standard',
-      brand: 'CX',
-      cabinClass,
-      entryCountry: browserCountry,
-      entryLanguage: browserLang,
-      entryPoint,
-      errorUrl: entryPoint,
-      returnUrl: entryPoint,
-      isFlexibleDate: false,
-      numAdult: passengers.adults,
-      numChild: passengers.children,
-      promotionCode: '',
-      segments: [queryToSegment(query)]
-    }
-  }
-
-  const newMultiPayload = (queries: Query[], passengers: Passengers, cabinClass: CabinClass = 'Y'): QueryPayload => {
-    log('newMultiPayload()')
 
     return {
       awardType: 'Standard',
@@ -1190,14 +1170,8 @@ await (async () => {
     adults: 1,
     children: 0
   }, cabinClass: CabinClass = 'Y', cont = { batch: false, query: false, saved: false }): Promise<void> => {
-    let cxString: QueryPayload
-    if (queries.length === 1) {
-      cxString = newQueryPayload(queries[0], passengers, cabinClass)
-    } else if (queries.length > 0) {
-      cxString = newMultiPayload(queries, passengers, cabinClass)
-    } else {
-      return
-    }
+    if (queries.length === 0) return
+    const cxString = newQueryPayload(queries, passengers, cabinClass)
 
     // cxString = newQueryPayload(uef_from, uef_to, uef_date, uef_adult, uef_child)
     log('cxString:', cxString)
