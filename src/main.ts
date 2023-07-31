@@ -1233,7 +1233,6 @@ await (async () => {
     }
 
     document.body.appendChild(form)
-    // document.forms.regular_search_form.submit()
     form.submit()
   }
 
