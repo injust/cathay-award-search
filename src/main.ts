@@ -19,9 +19,10 @@ await (async () => {
   // Retrieve CX Parameters
 
   const availabilityUrl = 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability'
+  const entryPoint = `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`
   // TODO: Use the membership number URL
   const loginUrl = new URL(`https://www.cathaypacific.com/content/cx/${browserLang}_${browserCountry}/sign-in.html`)
-  loginUrl.searchParams.set('loginreferrer', `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`)
+  loginUrl.searchParams.set('loginreferrer', entryPoint)
 
   let staticFilesPath: string
   let requestParams: RequestParams
@@ -1081,9 +1082,9 @@ await (async () => {
       cabinClass,
       entryCountry: browserCountry,
       entryLanguage: browserLang,
-      entryPoint: `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`,
-      errorUrl: `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow`,
-      returnUrl: `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow`,
+      entryPoint,
+      errorUrl: entryPoint,
+      returnUrl: entryPoint,
       isFlexibleDate: false,
       numAdult: passengers.adults,
       numChild: passengers.children,
@@ -1101,9 +1102,9 @@ await (async () => {
       cabinClass,
       entryCountry: browserCountry,
       entryLanguage: browserLang,
-      entryPoint: `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`,
-      errorUrl: `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc`,
-      returnUrl: `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc`,
+      entryPoint,
+      errorUrl: entryPoint,
+      returnUrl: entryPoint,
       isFlexibleDate: false,
       numAdult: passengers.adults,
       numChild: passengers.children,
