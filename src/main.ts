@@ -1127,7 +1127,13 @@ await (async () => {
       requestParams = parseResponse<RequestParams>(text, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
       log('requestParams:', requestParams)
 
-      if (Object.keys(requestParams).length === 0) {
+      if (requestParams != null && Object.keys(requestParams).length > 0) {
+        tabId = requestParams.TAB_ID ?? ''
+        log('New Tab ID:', tabId)
+        batchError()
+        formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
+        if (cb != null) await cb()
+      } else {
         const errorBom = parseResponse<PageBom>(text, /errorBom = ([^;]+)/)
         if (errorBom?.modelObject?.step === 'Error') {
           errorMessage = errorBom.modelObject?.messages[0]?.subText ?? errorMessage
@@ -1136,14 +1142,7 @@ await (async () => {
         log('Tab ID Could not be parsed')
         batchError(`<strong>Error:</strong> ${errorMessage} (<a href='${loginUrl.toString()}'>Login</a>) `)
         resetSearch()
-        return
       }
-
-      tabId = requestParams.TAB_ID ?? ''
-      log('New Tab ID:', tabId)
-      batchError()
-      formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
-      if (cb != null) await cb()
     } else {
       const errorBom = parseResponse<PageBom>(text, /errorBom = ([^;]+)/)
       if (errorBom?.modelObject?.step === 'Error') {
