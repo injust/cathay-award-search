@@ -1,4 +1,5 @@
 import { Query, json } from './types'
+import dayjs from 'dayjs'
 import { GM } from 'vite-plugin-monkey/dist/client'
 
 // ============================================================
@@ -60,7 +61,7 @@ export const waitForEl = async <E extends Element>(selectors: string): Promise<E
 // Check CX Date String Validity (dateString YYYYMMDD)
 export const isValidDate = (dateString: string): boolean => {
   if (!/^\d{8}$/.test(dateString)) return false
-  const date = dateStringToDate(dateString)
+  const date = dayjs(dateString).toDate()
   const year = date.getFullYear()
   const month = date.getMonth() + 1
   const day = date.getDate()
@@ -73,27 +74,8 @@ export const isValidDate = (dateString: string): boolean => {
   return true
 }
 
-// Add to Date and Return CX Date String
-export const dateAdd = (days = 0, dateString?: string): string => {
-  const newDate = dateString == null ? new Date() : dateStringToDate(dateString)
-  newDate.setDate(newDate.getDate() + days)
-  return dateToDateString(newDate)
-}
-
-// Convert CX Date String to Dashed Date String
-export const dateStringToDashedDateString = (dateString: string): string => `${dateString.substring(0, 4).toString()}-${dateString.substring(4, 6).toString().padStart(2, '0')}-${dateString.substring(6, 8).toString().padStart(2, '0')}`
-
-// Get Weekday from CX Date String
-export const dateToWeekday = (date: Date): string => {
-  const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-  return weekdays[date.getDay()]
-}
-
-// Format Timestamps
-export const formatFlightTime = (timestamp: number): string => {
-  const date = new Date(timestamp)
-  return `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1).toString().padStart(2, '0')}-${date.getUTCDate().toString().padStart(2, '0')} ${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')}`
-}
+// @ts-expect-error
+export const formatFlightTime = (timestamp: number): string => dayjs.utc(timestamp).format('YYYY-MM-DD HH:mm')
 
 export const formatFlightDuration = (timestamp: number): string => {
   const date = new Date(timestamp)
@@ -101,17 +83,13 @@ export const formatFlightDuration = (timestamp: number): string => {
   return `${(hours > 0 ? `${hours.toString()}hr ` : '') + date.getUTCMinutes().toString()}min`
 }
 
-export const dateStringToDate = (dateString: string): Date => new Date(+dateString.substring(0, 4), +dateString.substring(4, 6) - 1, +dateString.substring(6, 8))
-
-export const dateToDateString = (date: Date): string => `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`
-
 export const queryStringToQuery = (query: string): Query => ({
-  date: query.substring(0, 8),
+  date: dayjs(query.substring(0, 8)),
   from: query.substring(8, 11),
   to: query.substring(11, 14)
 })
 
-export const queryToQueryString = (query: Query): string => `${query.date}${query.from}${query.to}`
+export const queryToQueryString = (query: Query): string => `${query.date.format('YYYYMMDD')}${query.from}${query.to}`
 
 export const parseCabinStatus = (status?: string): number => {
   if (status == null) return 0
