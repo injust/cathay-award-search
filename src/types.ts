@@ -1,3 +1,5 @@
+import { Dayjs } from 'dayjs'
+
 declare global {
   interface Window {
     formSubmitUrl?: string
@@ -120,7 +122,7 @@ export interface Route {
 }
 
 export interface Query extends Route {
-  date: string
+  date: Dayjs
 }
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions

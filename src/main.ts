@@ -2,11 +2,15 @@ import { chevronSvg, heartSvg, swapSvg, xSvg } from './images/svg'
 import { lang } from './localization'
 import styleCss from './styles/style.css?inline'
 import { AirportResponse, Airports, AvailabilityResponse, CabinClass, PageBom, Passengers, Profile, Query, QueryPayload, RequestParams, Route, SavedFlights } from './types'
-import { dateAdd, dateStringToDashedDateString, dateStringToDate, dateToWeekday, formatFlightDuration, formatFlightTime, httpRequest, isValidDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, valueGet, valueSet, waitForEl } from './utils'
+import { formatFlightDuration, formatFlightTime, httpRequest, isValidDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, valueGet, valueSet, waitForEl } from './utils'
+import dayjs from 'dayjs'
+import dayjsPluginUTC from 'dayjs-plugin-utc'
 import { unsafeWindow } from 'vite-plugin-monkey/dist/client'
 
 await (async () => {
   'use strict'
+
+  dayjs.extend(dayjsPluginUTC)
 
   // ============================================================
   // Initialize Variables
@@ -65,7 +69,7 @@ await (async () => {
   const uef: { from: string, to: string, date: string, adults: number, children: number } = {
     from: '',
     to: '',
-    date: dateAdd(),
+    date: dayjs().format('YYYYMMDD'),
     adults: 1,
     children: 0,
     ...await valueGet('uef', {})
@@ -336,7 +340,7 @@ await (async () => {
 
         await regularSearch(
           newQueryPayload(
-            [{ from: uef.from.substring(0, 3), to: uef.to.substring(0, 3), date: uef.date }],
+            [{ from: uef.from.substring(0, 3), to: uef.to.substring(0, 3), date: dayjs(uef.date) }],
             { adults: uef.adults, children: uef.children }
           ),
           { query: uef.to.length > 3 }
@@ -400,10 +404,6 @@ await (async () => {
         alert(lang.invalid_date)
         inputDate.value = uef.date
       }
-    })
-
-    inputDate.addEventListener('focus', (e) => {
-      inputDate.setSelectionRange(6, 8)
     })
 
     for (const el of [inputAdult, inputChild, inputMultiAdult, inputMultiChild]) {
@@ -921,7 +921,7 @@ await (async () => {
     let savedList = ''
     for (const queryString of savedQueries) {
       const query = queryStringToQuery(queryString)
-      const savedDate = dateStringToDate(query.date)
+      const savedDate = query.date.toDate()
       const now = new Date()
       if (savedDate <= now) savedQueries.delete(queryString)
     }
@@ -931,7 +931,7 @@ await (async () => {
       const queryString = queryToQueryString(query)
       savedList += `
         <div class="saved_query" data-query="${queryString}">
-          <label><input type="checkbox" data-query="${queryString}" />${dateStringToDashedDateString(query.date)} ${query.from}-${query.to}</label>
+          <label><input type="checkbox" data-query="${queryString}" />${query.date.format('YYYY-MM-DD')} ${query.from}-${query.to}</label>
           <a href="javascript:void 0" class="saved_book" data-book data-query="${queryString}">${lang.query} &raquo;</a>
           <span class="leg"></span>
           <a href="javascript:void 0" class="saved_remove" data-query="${queryString}">${xSvg('saved_delete')}</a>
@@ -947,7 +947,7 @@ await (async () => {
     let savedList = ''
     for (const flightKey of savedFlights.keys()) {
       const query = queryStringToQuery(flightKey) // TODO: Should make something to parse `flightKey`
-      const savedDate = dateStringToDate(query.date)
+      const savedDate = query.date.toDate()
       const now = new Date()
       if (savedDate <= now) savedFlights.delete(flightKey)
     }
@@ -967,7 +967,7 @@ await (async () => {
           <label>
           <input type="checkbox" data-query="${queryString}" />
           <span>
-            <span class="sf_date">${dateStringToDashedDateString(query.date)}</span>
+            <span class="sf_date">${query.date.format('YYYY-MM-DD')}</span>
             <span class="sf_route">${query.from}-${stop !== '' ? `${stop}-` : ''}${query.to}</span>
             <span class="sf_flights">
               ${leg1}${leg2 !== '' ? ` + ${leg2}` : ''}
@@ -1026,7 +1026,7 @@ await (async () => {
   // Default Search JSON
 
   const newQueryPayload = (queries: Query[] = [{
-    date: dateAdd(1),
+    date: dayjs().add(1, 'd'),
     from: 'HND',
     to: 'ITM'
   }], passengers: Passengers = {
@@ -1052,7 +1052,7 @@ await (async () => {
       ...Object.assign({}, ...queries.map((query, index) => ({
         [`ORIGIN[${index + 1}]`]: query.from,
         [`DESTINATION[${index + 1}]`]: query.to,
-        [`DEPARTUREDATE[${index + 1}]`]: query.date
+        [`DEPARTUREDATE[${index + 1}]`]: query.date.format('YYYYMMDD')
       }))),
       LOGINURL: `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/sign-in/campaigns/miles-flight.html`
     }
@@ -1129,7 +1129,7 @@ await (async () => {
     btnSearch.innerHTML = `${loadingIconHtml} ${lang.searching_cont}`
     btnSearch.classList.add('searching')
 
-    await valueSet('cont', { ...defaultContVars, ts: Date.now(), ...cont })
+    await valueSet('cont', { ...defaultContVars, ts: +dayjs(), ...cont })
 
     const formUrl = new URL(ibeFacadeUrl)
     for (const [key, value] of Object.entries(cxString)) {
@@ -1188,7 +1188,7 @@ await (async () => {
     if (!cont.query) {
       await regularSearch(
         newQueryPayload(
-          [{ from: uef.from.substring(0, 3), to: uef.to.substring(0, 3), date: uef.date }],
+          [{ from: uef.from.substring(0, 3), to: uef.to.substring(0, 3), date: dayjs(uef.date) }],
           { adults: uef.adults, children: uef.children }
         ),
         { batch: true, query: true }
@@ -1216,18 +1216,18 @@ await (async () => {
     let thisRoute = routes.shift()
 
     const populateNextRoute = async (pageBom: PageBom): Promise<void> => {
-      await insertResults({ ...thisRoute, date: bulkDate }, pageBom)
+      await insertResults({ ...thisRoute, date: dayjs(bulkDate) }, pageBom)
 
       if ((thisRoute = routes.shift()) != null) {
-        await searchAvailability({ ...thisRoute, date: bulkDate }, populateNextRoute)
+        await searchAvailability({ ...thisRoute, date: dayjs(bulkDate) }, populateNextRoute)
       } else {
-        bulkDate = dateAdd(1, bulkDate)
+        bulkDate = dayjs(bulkDate).add(1, 'd').format('YYYYMMDD')
         if (singleDate) stopBatch()
         await bulkSearch()
       }
     }
 
-    await searchAvailability({ ...thisRoute, date: bulkDate }, populateNextRoute)
+    await searchAvailability({ ...thisRoute, date: dayjs(bulkDate) }, populateNextRoute)
   }
 
   // ============================================================
@@ -1258,8 +1258,8 @@ await (async () => {
     const requests = requestParams
     log('searchAvailability() requests:', requests)
 
-    requests.B_DATE_1 = `${query.date}0000`
-    // requests.B_DATE_2 = `${dateAdd(1, date)}0000`
+    requests.B_DATE_1 = query.date.format('YYYYMMDD0000')
+    // requests.B_DATE_2 = dayjs(date).add(1, 'd').format('YYYYMMDD0000')
     requests.B_LOCATION_1 = query.from
     requests.E_LOCATION_1 = query.to
     // requests.B_LOCATION_2 = to
@@ -1312,12 +1312,12 @@ await (async () => {
   const insertResults = async (query: Query, pageBom: PageBom): Promise<void> => {
     const queryString = queryToQueryString(query)
 
-    if ((divTableBody.lastElementChild as HTMLTableRowElement)?.dataset?.date !== query.date) {
+    if (!query.date.isSame((divTableBody.lastElementChild as HTMLTableRowElement)?.dataset?.date, 'd')) {
       const resultsRow = `
-        <tr data-date="${query.date}">
+        <tr data-date="${query.date.format('YYYYMMDD')}">
           <td class="bulkDate">
-            <div>${dateToWeekday(dateStringToDate(query.date))}</div>
-            <div>${dateStringToDashedDateString(query.date)}</div>
+            <div>${query.date.format('dddd')}</div>
+            <div>${query.date.format('YYYY-MM-DD')}</div>
           </td>
           <td class="bulk_flights"></td>
         </tr>
@@ -1502,7 +1502,7 @@ await (async () => {
     if (cont.query) {
       await resetContVars()
       // If over 5 minutes since cont query, don't auto search
-      if (Date.now() - cont.ts > 60 * 5 * 1000) return
+      if (+dayjs() - cont.ts > 60 * 5 * 1000) return
       btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
       btnBatch.classList.add('bulkSearching')
       document.body.classList.add('cont_query')
