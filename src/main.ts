@@ -941,7 +941,7 @@ await (async () => {
     }
 
     const populateNextQuery = async (pageBom: PageBom): Promise<void> => {
-      insertResults(ssQuery.from, ssQuery.to, ssQuery.date, pageBom)
+      await insertResults(ssQuery.from, ssQuery.to, ssQuery.date, pageBom)
 
       if (toSearch.length > 0) {
         ssQuery = toSearch.shift()
@@ -1322,7 +1322,7 @@ await (async () => {
     let thisRoute = routes.shift()
 
     const populateNextRoute = async (pageBom: PageBom): Promise<void> => {
-      insertResults(thisRoute.from, thisRoute.to, bulkDate, pageBom)
+      await insertResults(thisRoute.from, thisRoute.to, bulkDate, pageBom)
 
       if (routes.length > 0) {
         thisRoute = routes.shift()
@@ -1420,7 +1420,7 @@ await (async () => {
   // Insert Search Results
   // ============================================================
 
-  const insertResults = (from: string, to: string, date: string, pageBom: PageBom): void => {
+  const insertResults = async (from: string, to: string, date: string, pageBom: PageBom): Promise<void> => {
     if (divTableBody.querySelector(`tr[data-date="${date}"]`) == null) {
       const resultsRow = `
         <tr data-date="${date}">
@@ -1447,141 +1447,138 @@ await (async () => {
     if (pageBom.modelObject?.isContainingErrors) {
       flightHTML += `<span class="bulk_response_error"><strong>Error:</strong> ${pageBom.modelObject?.messages[0]?.text}</span>`
     } else {
-      const flights = pageBom.modelObject?.availabilities?.upsell?.bounds[0].flights
-      flights.forEach((flight) => {
-        (async () => {
-          let available = ''
-          const f1 = parseCabinStatus(flight.segments[0].cabins?.F?.status)
-          const j1 = parseCabinStatus(flight.segments[0].cabins?.B?.status)
-          const p1 = parseCabinStatus(flight.segments[0].cabins?.N?.status)
-          const y1 = parseCabinStatus(flight.segments[0].cabins?.E?.status) + parseCabinStatus(flight.segments[0].cabins?.R?.status)
-          let numF = 0
-          let numJ = 0
-          let numP = 0
-          let numY = 0
-          const leg1Airline = flight.segments[0].flightIdentifier.marketingAirline
-          const leg1FlightNum = flight.segments[0].flightIdentifier.flightNumber
-          const leg1DepTime = getFlightTime(flight.segments[0].flightIdentifier.originDate)
-          const leg1ArrTime = getFlightTime(flight.segments[0].destinationDate)
-          const leg1Duration = getFlightDuration(flight.duration)
-          const leg1Origin = flight.segments[0].originLocation
-          const leg1Dest = flight.segments[0].destinationLocation
-          let flightKey: string
+      for (const flight of pageBom.modelObject?.availabilities?.upsell?.bounds[0].flights) {
+        let available = ''
+        const f1 = parseCabinStatus(flight.segments[0].cabins?.F?.status)
+        const j1 = parseCabinStatus(flight.segments[0].cabins?.B?.status)
+        const p1 = parseCabinStatus(flight.segments[0].cabins?.N?.status)
+        const y1 = parseCabinStatus(flight.segments[0].cabins?.E?.status) + parseCabinStatus(flight.segments[0].cabins?.R?.status)
+        let numF = 0
+        let numJ = 0
+        let numP = 0
+        let numY = 0
+        const leg1Airline = flight.segments[0].flightIdentifier.marketingAirline
+        const leg1FlightNum = flight.segments[0].flightIdentifier.flightNumber
+        const leg1DepTime = getFlightTime(flight.segments[0].flightIdentifier.originDate)
+        const leg1ArrTime = getFlightTime(flight.segments[0].destinationDate)
+        const leg1Duration = getFlightDuration(flight.duration)
+        const leg1Origin = flight.segments[0].originLocation
+        const leg1Dest = flight.segments[0].destinationLocation
+        let flightKey: string
 
-          if (flight.segments.length === 1) {
-            if (f1 > 0) {
-              numF = f1
-              available += ` <span class='bulk_cabin bulk_f'>F <b>${numF}</b></span>`
-            }
-            if (j1 > 0) {
-              numJ = j1
-              available += ` <span class='bulk_cabin bulk_j'>J <b>${numJ}</b></span>`
-            }
-            if (p1 > 0) {
-              numP = p1
-              available += ` <span class='bulk_cabin bulk_p'>PY <b>${numP}</b></span>`
-            }
-            if (y1 > 0) {
-              numY = y1
-              available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
-            }
-
-            flightKey = `${date}${from}${to}_${leg1Airline}${leg1FlightNum}`
-
-            if (available !== '') {
-              flightHTML += `
-              <div class="flight_wrapper">
-                <div class="flight_item direct ${savedFlights.has(flightKey) ? 'saved' : ''}" data-flight-info="${flightKey}" data-flight-avail="${numF}_${numJ}_${numP}_${numY}" ${numF > 0 ? 'data-f' : ''} ${numJ > 0 ? 'data-j' : ''} ${numP > 0 ? 'data-p' : ''} ${numY > 0 ? 'data-y' : ''}>
-                  <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
-                  <span class="flight_num">${leg1Airline}${leg1FlightNum}</span>
-                  ${available}
-                  <span class="chevron">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                      <path d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z" fill="currentColor"></path>
-                    </svg>
-                  </span>
-                  <span class="flight_save">${heartSvg}</span>
-                </div>
-                <div class="flight_info">
-                  <span class="info_flight">${leg1Airline}${leg1FlightNum} (${leg1Origin.slice(-3)} ✈ ${leg1Dest.slice(-3)})</span>
-                  <span class="info_dept"><span>Departs:</span> ${leg1DepTime}</span>
-                  <span class="info_arr"><span>Arrives:</span> ${leg1ArrTime}</span>
-                  <span class="info_duration"><span>Total Flight Duration:</span> ${leg1Duration}</span>
-                </div>
-              </div>
-            `
-            }
-          } else {
-            const f2 = parseCabinStatus(flight.segments[1].cabins?.F?.status)
-            const j2 = parseCabinStatus(flight.segments[1].cabins?.B?.status)
-            const p2 = parseCabinStatus(flight.segments[1].cabins?.N?.status)
-            const y2 = parseCabinStatus(flight.segments[1].cabins?.E?.status) + parseCabinStatus(flight.segments[1].cabins?.R?.status)
-
-            if (f1 > 0 && f2 > 0) {
-              numF = Math.min(f1, f2)
-              available += ` <span class='bulk_cabin bulk_f'>F <b>${numF}</b></span>`
-            }
-            if (j1 > 0 && j2 > 0) {
-              numJ = Math.min(j1, j2)
-              available += ` <span class='bulk_cabin bulk_j'>J <b>${numJ}</b></span>`
-            }
-            if (p1 > 0 && p2 > 0) {
-              numP = Math.min(p1, p2)
-              available += ` <span class='bulk_cabin bulk_p'>PY <b>${numP}</b></span>`
-            }
-            if (y1 > 0 && y2 > 0) {
-              numY = Math.min(y1, y2)
-              available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
-            }
-
-            const leg2Airline = flight.segments[1].flightIdentifier.marketingAirline
-            const leg2FlightNum = flight.segments[1].flightIdentifier.flightNumber
-            const leg2DepTime = getFlightTime(flight.segments[1].flightIdentifier.originDate)
-            const leg2ArrTime = getFlightTime(flight.segments[1].destinationDate)
-            const leg2Origin = flight.segments[1].originLocation
-            const leg2Dest = flight.segments[1].destinationLocation
-            const transitTime = getFlightDuration(flight.segments[1].flightIdentifier.originDate - flight.segments[0].destinationDate)
-            const transitAirportCode = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g.exec(flight.flightIdString)[1].replace(':', ' / ')
-            flightKey = `${date}${from}${to}_${leg1Airline}${leg1FlightNum}_${transitAirportCode}_${leg2Airline}${leg2FlightNum}`
-
-            if (available !== '') {
-              flightHTML += `
-              <div class="flight_wrapper">
-                <div class="flight_item ${savedFlights.has(flightKey) ? 'saved' : ''}" data-flight-info="${flightKey}" data-flight-avail="${numF}_${numJ}_${numP}_${numY}" ${numF > 0 ? 'data-f' : ''} ${numJ > 0 ? 'data-j' : ''} ${numP > 0 ? 'data-p' : ''} ${numY > 0 ? 'data-y' : ''}>
-                  <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
-                  <span class="flight_num">${leg1Airline}${leg1FlightNum}
-                  <span class="stopover">${transitAirportCode}</span>
-                  ${leg2Airline}${leg2FlightNum}</span>
-                  ${available}
-                  <span class="chevron">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                      <path d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z" fill="currentColor"></path>
-                    </svg>
-                  </span>
-                  <span class="flight_save">${heartSvg}</span>
-                </div>
-                <div class="flight_info">
-                  <span class="info_flight">${leg1Airline}${leg1FlightNum} (${leg1Origin.slice(-3)} ✈ ${leg1Dest.slice(-3)})</span>
-                  <span class="info_dept"><span>Departs:</span> ${leg1DepTime}</span>
-                  <span class="info_arr"><span>Arrives:</span> ${leg1ArrTime}</span>
-                  <span class="info_transit"><span>Transit Time:</span> ${transitTime}</span>
-                  <span class="info_flight">${leg2Airline}${leg2FlightNum} (${leg2Origin.slice(-3)} ✈ ${leg2Dest.slice(-3)})</span>
-                  <span class="info_dept"><span>Departs:</span> ${leg2DepTime}</span>
-                  <span class="info_arr"><span>Arrives:</span> ${leg2ArrTime}</span>
-                  <span class="info_duration"><span>Total Flight Duration:</span> ${leg1Duration}</span>
-                </div>
-              </div>
-            `
-            }
+        if (flight.segments.length === 1) {
+          if (f1 > 0) {
+            numF = f1
+            available += ` <span class='bulk_cabin bulk_f'>F <b>${numF}</b></span>`
+          }
+          if (j1 > 0) {
+            numJ = j1
+            available += ` <span class='bulk_cabin bulk_j'>J <b>${numJ}</b></span>`
+          }
+          if (p1 > 0) {
+            numP = p1
+            available += ` <span class='bulk_cabin bulk_p'>PY <b>${numP}</b></span>`
+          }
+          if (y1 > 0) {
+            numY = y1
+            available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
           }
 
-          if (savedFlights.has(flightKey)) {
-            savedFlights.set(flightKey, { F: numF, J: numJ, P: numP, Y: numY })
-            updateSavedFlights()
-            await valueSet('saved_flights', Object.fromEntries(savedFlights))
+          flightKey = `${date}${from}${to}_${leg1Airline}${leg1FlightNum}`
+
+          if (available !== '') {
+            flightHTML += `
+            <div class="flight_wrapper">
+              <div class="flight_item direct ${savedFlights.has(flightKey) ? 'saved' : ''}" data-flight-info="${flightKey}" data-flight-avail="${numF}_${numJ}_${numP}_${numY}" ${numF > 0 ? 'data-f' : ''} ${numJ > 0 ? 'data-j' : ''} ${numP > 0 ? 'data-p' : ''} ${numY > 0 ? 'data-y' : ''}>
+                <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
+                <span class="flight_num">${leg1Airline}${leg1FlightNum}</span>
+                ${available}
+                <span class="chevron">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z" fill="currentColor"></path>
+                  </svg>
+                </span>
+                <span class="flight_save">${heartSvg}</span>
+              </div>
+              <div class="flight_info">
+                <span class="info_flight">${leg1Airline}${leg1FlightNum} (${leg1Origin.slice(-3)} ✈ ${leg1Dest.slice(-3)})</span>
+                <span class="info_dept"><span>Departs:</span> ${leg1DepTime}</span>
+                <span class="info_arr"><span>Arrives:</span> ${leg1ArrTime}</span>
+                <span class="info_duration"><span>Total Flight Duration:</span> ${leg1Duration}</span>
+              </div>
+            </div>
+          `
           }
-        })().catch(log)
-      })
+        } else {
+          const f2 = parseCabinStatus(flight.segments[1].cabins?.F?.status)
+          const j2 = parseCabinStatus(flight.segments[1].cabins?.B?.status)
+          const p2 = parseCabinStatus(flight.segments[1].cabins?.N?.status)
+          const y2 = parseCabinStatus(flight.segments[1].cabins?.E?.status) + parseCabinStatus(flight.segments[1].cabins?.R?.status)
+
+          if (f1 > 0 && f2 > 0) {
+            numF = Math.min(f1, f2)
+            available += ` <span class='bulk_cabin bulk_f'>F <b>${numF}</b></span>`
+          }
+          if (j1 > 0 && j2 > 0) {
+            numJ = Math.min(j1, j2)
+            available += ` <span class='bulk_cabin bulk_j'>J <b>${numJ}</b></span>`
+          }
+          if (p1 > 0 && p2 > 0) {
+            numP = Math.min(p1, p2)
+            available += ` <span class='bulk_cabin bulk_p'>PY <b>${numP}</b></span>`
+          }
+          if (y1 > 0 && y2 > 0) {
+            numY = Math.min(y1, y2)
+            available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
+          }
+
+          const leg2Airline = flight.segments[1].flightIdentifier.marketingAirline
+          const leg2FlightNum = flight.segments[1].flightIdentifier.flightNumber
+          const leg2DepTime = getFlightTime(flight.segments[1].flightIdentifier.originDate)
+          const leg2ArrTime = getFlightTime(flight.segments[1].destinationDate)
+          const leg2Origin = flight.segments[1].originLocation
+          const leg2Dest = flight.segments[1].destinationLocation
+          const transitTime = getFlightDuration(flight.segments[1].flightIdentifier.originDate - flight.segments[0].destinationDate)
+          const transitAirportCode = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g.exec(flight.flightIdString)[1].replace(':', ' / ')
+          flightKey = `${date}${from}${to}_${leg1Airline}${leg1FlightNum}_${transitAirportCode}_${leg2Airline}${leg2FlightNum}`
+
+          if (available !== '') {
+            flightHTML += `
+            <div class="flight_wrapper">
+              <div class="flight_item ${savedFlights.has(flightKey) ? 'saved' : ''}" data-flight-info="${flightKey}" data-flight-avail="${numF}_${numJ}_${numP}_${numY}" ${numF > 0 ? 'data-f' : ''} ${numJ > 0 ? 'data-j' : ''} ${numP > 0 ? 'data-p' : ''} ${numY > 0 ? 'data-y' : ''}>
+                <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
+                <span class="flight_num">${leg1Airline}${leg1FlightNum}
+                <span class="stopover">${transitAirportCode}</span>
+                ${leg2Airline}${leg2FlightNum}</span>
+                ${available}
+                <span class="chevron">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z" fill="currentColor"></path>
+                  </svg>
+                </span>
+                <span class="flight_save">${heartSvg}</span>
+              </div>
+              <div class="flight_info">
+                <span class="info_flight">${leg1Airline}${leg1FlightNum} (${leg1Origin.slice(-3)} ✈ ${leg1Dest.slice(-3)})</span>
+                <span class="info_dept"><span>Departs:</span> ${leg1DepTime}</span>
+                <span class="info_arr"><span>Arrives:</span> ${leg1ArrTime}</span>
+                <span class="info_transit"><span>Transit Time:</span> ${transitTime}</span>
+                <span class="info_flight">${leg2Airline}${leg2FlightNum} (${leg2Origin.slice(-3)} ✈ ${leg2Dest.slice(-3)})</span>
+                <span class="info_dept"><span>Departs:</span> ${leg2DepTime}</span>
+                <span class="info_arr"><span>Arrives:</span> ${leg2ArrTime}</span>
+                <span class="info_duration"><span>Total Flight Duration:</span> ${leg1Duration}</span>
+              </div>
+            </div>
+          `
+          }
+        }
+
+        if (savedFlights.has(flightKey)) {
+          savedFlights.set(flightKey, { F: numF, J: numJ, P: numP, Y: numY })
+          updateSavedFlights()
+          await valueSet('saved_flights', Object.fromEntries(savedFlights))
+        }
+      }
     }
     flightHTML += '</div></div>'
 
