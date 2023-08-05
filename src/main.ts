@@ -1119,14 +1119,13 @@ await (async () => {
       container.innerHTML = text1
       const form = container.getElementsByTagName('form')[0]
 
-      let formData = ''
+      const formData = new URLSearchParams()
       for (const [key, value] of new FormData(form).entries()) {
-        formData += `${key}=${value as string}&`
+        formData.append(key, value as string)
       }
 
       log('Requesting new Tab ID')
       const resp = await httpRequest(availabilityUrl, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         data: formData,
         method: 'POST',
         withCredentials: true
@@ -1326,13 +1325,13 @@ await (async () => {
     delete requests.DIRECT_LOGIN
     delete requests.ENC
 
-    const formData = Object.entries(requests).map(([key, value]) => `${key}=${value}`).join('&')
+    const formData = new URLSearchParams()
+    for (const [key, value] of Object.entries(requests)) {
+      formData.append(key, value)
+    }
 
     const resp = await httpRequest(formSubmitUrl, {
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
+      headers: { Accept: 'application/json, text/plain, */*' },
       data: formData,
       method: 'POST',
       withCredentials: true
