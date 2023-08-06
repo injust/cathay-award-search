@@ -20,6 +20,7 @@ await (async () => {
 
   const availabilityUrl = 'https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability'
   const entryPoint = `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`
+  const ibeFacadeUrl = 'https://api.cathaypacific.com/redibe/IBEFacade'
   // TODO: Use the membership number URL
   const loginUrl = new URL(`https://www.cathaypacific.com/content/cx/${browserLang}_${browserCountry}/sign-in.html`)
   loginUrl.searchParams.set('loginreferrer', entryPoint)
@@ -1100,7 +1101,7 @@ await (async () => {
   // ============================================================
 
   const newTabID = async (cb?: () => Promise<void>): Promise<void> => {
-    const url = new URL('https://api.cathaypacific.com/redibe/IBEFacade')
+    const url = new URL(ibeFacadeUrl)
     for (const [key, value] of Object.entries(newQueryPayload())) {
       url.searchParams.append(key, value)
     }
@@ -1185,7 +1186,7 @@ await (async () => {
 
     await valueSet('cont', { ...cont, ts: Date.now() })
 
-    const url = new URL('https://api.cathaypacific.com/redibe/IBEFacade')
+    const url = new URL(ibeFacadeUrl)
     for (const [key, value] of Object.entries(newQueryPayload())) {
       url.searchParams.append(key, value)
     }
@@ -1210,7 +1211,7 @@ await (async () => {
     } catch { }
 
     const form = document.createElement('form')
-    form.setAttribute('action', 'https://api.cathaypacific.com/redibe/IBEFacade')
+    form.setAttribute('action', ibeFacadeUrl)
     for (const [key, value] of Object.entries(cxString)) {
       const input = document.createElement('input')
       input.setAttribute('type', 'hidden')
