@@ -1,7 +1,7 @@
 import { lang } from './localization'
 import captchaCss from './styles/captcha.css?inline'
 import styleCss from './styles/style.css?inline'
-import { dateAdd, dateStringToDashedDateString, dateStringToDate, dateToWeekday, getFlightDuration, getFlightTime, httpRequest, isValidDate, log, parseCabinStatus, parseResponse, queryStringToQuery, valueGet, valueSet, waitForEl } from './utils'
+import { dateAdd, dateStringToDashedDateString, dateStringToDate, dateToWeekday, getFlightDuration, getFlightTime, httpRequest, isValidDate, log, parseCabinStatus, queryStringToQuery, valueGet, valueSet, waitForEl } from './utils'
 
 await (async () => {
   'use strict'
@@ -1127,16 +1127,27 @@ await (async () => {
 
       log('Requesting new Tab ID')
       const resp = await httpRequest(availabilityUrl, {
+        headers: { Accept: 'application/json, text/plain, */*' },
         data: formData,
         method: 'POST',
         withCredentials: true
       })
 
-      log('Parsing Tab ID response')
-      requestParams = parseResponse(await resp.text(), /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
-      log('requestParams:', requestParams)
+      if (resp.status === 200) {
+        let data: AvailabilityResponse
+        try {
+          data = await resp.json()
+        } catch {
+          // const res = response.responseText
+          // const incapsula_script = res.match(/<script src='(\/_Incapsula_[^]+.js)'><\/script>/)
+          // if (incapsula_script) batchError('Cathay bot block triggered.')
+          resetSearch()
+          batchError('Response not valid JSON')
+          return
+        }
+        requestParams = JSON.parse(data.requestParams)
+        log('requestParams:', requestParams)
 
-      if (requestParams != null && Object.keys(requestParams).length > 0) {
         tabId = requestParams.TAB_ID ?? ''
         formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
         log('New Tab ID:', tabId)
@@ -1331,7 +1342,7 @@ await (async () => {
 
     if (resp.status === 200) {
       batchError()
-      let data: { pageBom: string }
+      let data: AvailabilityResponse
       try {
         data = await resp.json()
       } catch {
