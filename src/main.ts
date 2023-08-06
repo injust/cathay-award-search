@@ -1113,12 +1113,11 @@ await (async () => {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       withCredentials: true
     })
-    const text1 = await resp.text()
-    let errorMessage = lang.tab_retrieve_fail
+    const text = await resp.text()
 
     if (resp.status === 200) {
       const container = document.createElement('div')
-      container.innerHTML = text1
+      container.innerHTML = text
       const form = container.getElementsByTagName('form')[0]
 
       const formData = new URLSearchParams()
@@ -1132,38 +1131,25 @@ await (async () => {
         method: 'POST',
         withCredentials: true
       })
-      const text2 = await resp.text()
 
       log('Parsing Tab ID response')
-      requestParams = parseResponse(text2, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
+      requestParams = parseResponse(await resp.text(), /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/)
       log('requestParams:', requestParams)
 
       if (requestParams != null && Object.keys(requestParams).length > 0) {
         tabId = requestParams.TAB_ID ?? ''
-        log('New Tab ID:', tabId)
-        batchError()
         formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
+        log('New Tab ID:', tabId)
+
+        batchError()
         if (cb != null) await cb()
-      } else {
-        const errorBom = parseResponse<PageBom>(text2, /errorBom = ([^;]+)/)
-        if (errorBom?.modelObject?.step === 'Error') {
-          errorMessage = errorBom.modelObject?.messages[0]?.subText ?? errorMessage
-        }
-
-        log('Could not parse Tab ID')
-        batchError(`<strong>Error:</strong> ${errorMessage} (<a href='${loginUrl.toString()}'>Login</a>) `)
-        resetSearch()
+        return
       }
-    } else {
-      const errorBom = parseResponse<PageBom>(text1, /errorBom = ([^;]+)/)
-      if (errorBom?.modelObject?.step === 'Error') {
-        errorMessage = errorBom.modelObject?.messages[0]?.subText ?? errorMessage
-      }
-
-      log('Failed to receive Tab ID')
-      resetSearch()
-      batchError(`<strong>Error:</strong> ${errorMessage} (<a href='${loginUrl.toString()}'>Login</a>) `)
     }
+
+    log('Failed to retrieve new Tab ID')
+    resetSearch()
+    batchError(`<strong>Error:</strong> ${lang.tab_retrieve_fail} (<a href='${loginUrl.toString()}'>Login</a>) `)
   }
 
   // ============================================================
