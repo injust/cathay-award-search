@@ -1185,7 +1185,7 @@ await (async () => {
     await valueSet('cont', { ...cont, ts: Date.now() })
 
     const formUrl = new URL(ibeFacadeUrl)
-    for (const [key, value] of Object.entries(newQueryPayload())) {
+    for (const [key, value] of Object.entries(cxString)) {
       formUrl.searchParams.append(key, value)
     }
 
