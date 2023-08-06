@@ -1343,7 +1343,6 @@ await (async () => {
     }
 
     if (resp.status === 200) {
-      batchError()
       let data: AvailabilityResponse
       try {
         data = await resp.json()
