@@ -1303,7 +1303,6 @@ await (async () => {
       await cb({
         modelObject: {
           messages: [{ text: lang.invalid_code }],
-          step: 'Error',
           isContainingErrors: true
         }
       })
