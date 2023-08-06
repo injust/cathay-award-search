@@ -1340,6 +1340,7 @@ await (async () => {
         // const res = response.responseText
         // const incapsula_script = res.match(/<script src='(\/_Incapsula_[^]+.js)'><\/script>/)
         // if (incapsula_script) batchError('Cathay bot block triggered.')
+        resetSearch()
         batchError('Response not valid JSON')
         return
       }
