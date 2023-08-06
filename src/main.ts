@@ -934,7 +934,7 @@ await (async () => {
       await insertResults(ssQuery, pageBom)
 
       if ((ssQuery = toSearch.shift()) != null) {
-        await searchAvailability(ssQuery, 1, 0, populateNextQuery)
+        await searchAvailability(ssQuery, populateNextQuery)
       } else {
         stopBatch()
         stopSearch = false // Override stopBatch()
@@ -946,7 +946,7 @@ await (async () => {
     routeChanged = true // To clear the saved search results
     // TODO: Make sure the button changes back to a normal bulk search button
 
-    await searchAvailability(ssQuery, 1, 0, populateNextQuery)
+    await searchAvailability(ssQuery, populateNextQuery)
   }
 
   const updateSavedCount = (): void => {
@@ -1275,7 +1275,7 @@ await (async () => {
       await insertResults({ ...thisRoute, date: bulkDate }, pageBom)
 
       if ((thisRoute = routes.shift()) != null) {
-        await searchAvailability({ ...thisRoute, date: bulkDate }, uef.adults, uef.children, populateNextRoute)
+        await searchAvailability({ ...thisRoute, date: bulkDate }, populateNextRoute)
       } else {
         bulkDate = dateAdd(1, bulkDate)
         if (singleDate) stopBatch()
@@ -1283,14 +1283,14 @@ await (async () => {
       }
     }
 
-    await searchAvailability({ ...thisRoute, date: bulkDate }, uef.adults, uef.children, populateNextRoute)
+    await searchAvailability({ ...thisRoute, date: bulkDate }, populateNextRoute)
   }
 
   // ============================================================
   // Search Availability
   // ============================================================
 
-  const searchAvailability = async (query: Query, adult: number, child: number, cb: (pageBom: PageBom) => Promise<void>): Promise<void> => {
+  const searchAvailability = async (query: Query, cb: (pageBom: PageBom) => Promise<void>): Promise<void> => {
     if (stopSearch) {
       stopSearch = false
       searching = false
@@ -1338,7 +1338,7 @@ await (async () => {
     })
 
     const searchAgain = async (): Promise<void> => {
-      await searchAvailability(query, adult, child, cb)
+      await searchAvailability(query, cb)
     }
 
     if (resp.status === 200) {
