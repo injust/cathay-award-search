@@ -26,6 +26,11 @@ interface AirportResponse {
   airports: Airport[] | null
 }
 
+interface AvailabilityResponse {
+  pageBom: string
+  requestParams: string
+}
+
 type CabinClass = 'Y' | 'W' | 'C' | 'F'
 
 interface Passengers {
