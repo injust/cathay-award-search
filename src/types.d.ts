@@ -36,10 +36,7 @@ interface Passengers {
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 type PageBom = {
   modelObject: {
-    messages?: Array<{
-      text?: string
-      subText?: string
-    }>
+    messages?: Array<{ text: string }>
     step: string
     availabilities?: {
       upsell: {
