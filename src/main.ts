@@ -1104,7 +1104,7 @@ await (async () => {
   // Get New TAB_ID
   // ============================================================
 
-  const newTabID = async (cb?: () => Promise<void>): Promise<void> => {
+  const newTabID = async (cb: () => Promise<void>): Promise<void> => {
     const formUrl = new URL(ibeFacadeUrl)
     for (const [key, value] of Object.entries(newQueryPayload())) {
       formUrl.searchParams.append(key, value)
@@ -1155,7 +1155,7 @@ await (async () => {
         log('New Tab ID:', tabId)
 
         batchError()
-        if (cb != null) await cb()
+        await cb()
         return
       }
     }
