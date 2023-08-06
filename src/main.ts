@@ -1103,13 +1103,13 @@ await (async () => {
   // ============================================================
 
   const newTabID = async (cb?: () => Promise<void>): Promise<void> => {
-    const url = new URL(ibeFacadeUrl)
+    const formUrl = new URL(ibeFacadeUrl)
     for (const [key, value] of Object.entries(newQueryPayload())) {
-      url.searchParams.append(key, value)
+      formUrl.searchParams.append(key, value)
     }
 
     log('Simulating IBEFacade form submission')
-    const resp = await httpRequest(url, {
+    const resp = await httpRequest(formUrl, {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       withCredentials: true
     })
@@ -1188,14 +1188,14 @@ await (async () => {
 
     await valueSet('cont', { ...cont, ts: Date.now() })
 
-    const url = new URL(ibeFacadeUrl)
+    const formUrl = new URL(ibeFacadeUrl)
     for (const [key, value] of Object.entries(newQueryPayload())) {
-      url.searchParams.append(key, value)
+      formUrl.searchParams.append(key, value)
     }
 
     log('Simulating IBEFacade form submission')
     try {
-      const resp = await httpRequest(url, {
+      const resp = await httpRequest(formUrl, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         withCredentials: true
       })
