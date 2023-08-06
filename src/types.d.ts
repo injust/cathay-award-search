@@ -42,7 +42,6 @@ interface Passengers {
 type PageBom = {
   modelObject: {
     messages?: Array<{ text: string }>
-    step: string
     availabilities?: {
       upsell: {
         bounds: Array<{
