@@ -1053,6 +1053,8 @@ await (async () => {
 
     const resp = await httpRequest('https://api.cathaypacific.com/redibe/login/getProfile', {
       headers: { 'Content-Type': 'application/json' },
+      data: JSON.stringify({}),
+      method: 'POST',
       withCredentials: true
     })
     const data: Profile = await resp.json()
