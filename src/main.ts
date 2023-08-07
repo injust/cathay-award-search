@@ -545,10 +545,7 @@ await (async () => {
             from: el.dataset.from,
             to: el.dataset.dest,
             date: el.dataset.date
-          }], {
-            adults: 1,
-            children: 0
-          })
+          }])
         }
       })()
     })
