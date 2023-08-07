@@ -442,8 +442,6 @@ await (async () => {
 
         if ('book' in el.dataset) {
           stopBatch()
-          // stopSearch = true
-          // searching = false
           el.innerText = lang.loading
           await regularSearch([{
             // TODO: Why does this need a fallback value?
