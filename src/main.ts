@@ -358,7 +358,7 @@ await (async () => {
         }], {
           adults: uef.adults,
           children: uef.children
-        }, 'Y', { batch: false, query: uef.to.length > 3, saved: false })
+        }, 'Y', { query: uef.to.length > 3 })
       })()
     })
 
@@ -926,7 +926,7 @@ await (async () => {
       await regularSearch([ssQuery], {
         adults: 1,
         children: 0
-      }, 'Y', { batch: false, query: true, saved: true })
+      }, 'Y', { query: true, saved: true })
       return
     }
 
@@ -1176,7 +1176,7 @@ await (async () => {
   }], passengers: Passengers = {
     adults: 1,
     children: 0
-  }, cabinClass: CabinClass = 'Y', cont = { batch: false, query: false, saved: false }): Promise<void> => {
+  }, cabinClass: CabinClass = 'Y', cont = {}): Promise<void> => {
     if (queries.length === 0) return
     const cxString = newQueryPayload(queries, passengers, cabinClass)
 
@@ -1184,7 +1184,7 @@ await (async () => {
     btnSearch.innerHTML = `${loadingIconHtml} ${lang.searching_cont}`
     btnSearch.classList.add('searching')
 
-    await valueSet('cont', { ...cont, ts: Date.now() })
+    await valueSet('cont', { ...defaultContVars, ts: Date.now(), ...cont })
 
     const formUrl = new URL(ibeFacadeUrl)
     for (const [key, value] of Object.entries(cxString)) {
@@ -1248,7 +1248,7 @@ await (async () => {
       }], {
         adults: uef.adults,
         children: uef.children
-      }, 'Y', { batch: true, query: true, saved: false })
+      }, 'Y', { batch: true, query: true })
       return
     }
 
