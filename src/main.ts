@@ -1385,7 +1385,7 @@ await (async () => {
     const heartSvg = '<svg width="16" height="16" fill="currentColor" class="heart_save" viewBox="0 0 16 16"> <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"></path></svg>'
 
     let flightHTML = `
-      <div data-from="${from}" data-to="${to}">
+      <div>
         <span class="flight_title">${from} - ${to}
           <a href="javascript:void 0" class="bulk_save ${savedQueries.has(`${date}${from}${to}`) ? 'bulk_saved' : ''}" data-save data-date="${date}" data-from="${from}" data-dest="${to}">${heartSvg}</a>
           <a href="javascript:void 0" class="bulk_go_book" data-book data-date="${date}" data-from="${from}" data-dest="${to}">Book &raquo;</a>
