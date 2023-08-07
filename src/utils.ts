@@ -113,6 +113,8 @@ export const queryStringToQuery = (query: string): Query => ({
   to: query.substring(11, 14)
 })
 
+export const queryToQueryString = (query: Query): string => `${query.date}${query.from}${query.to}`
+
 export const parseCabinStatus = (status?: string): number => {
   if (status == null) return 0
   const num = +status
