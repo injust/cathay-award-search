@@ -12,7 +12,7 @@ export default defineConfig({
             userscript: {
                 name: 'Cathay Award Search Fixer',
                 namespace: 'https://github.com/injust',
-                version: '3.3.0+injust',
+                version: '3.3.1+injust',
                 author: 'injust',
                 description: 'Un-elevate your Cathay award search',
                 homepageURL: 'https://github.com/injust/cathay-award-search',

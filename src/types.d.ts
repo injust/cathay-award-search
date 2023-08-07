@@ -47,6 +47,8 @@ type PageBom = {
           flights: Array<{
             duration: number
             segments: Array<{
+              originLocation: string
+              destinationLocation: string
               destinationDate: number
               flightIdentifier: {
                 marketingAirline: string
