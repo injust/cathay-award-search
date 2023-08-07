@@ -442,9 +442,8 @@ await (async () => {
           stopBatch()
           el.innerText = lang.loading
           await regularSearch([{
-            // TODO: Why does this need a fallback value?
-            from: el.dataset.from ?? uef.from.substring(0, 3),
-            to: el.dataset.dest ?? uef.to.substring(0, 3),
+            from: el.dataset.from,
+            to: el.dataset.dest,
             date: el.dataset.date
           }], {
             adults: uef.adults,
@@ -541,9 +540,8 @@ await (async () => {
           stopBatch()
           el.innerText = lang.loading
           await regularSearch([{
-            // TODO: Why does this need a fallback value?
-            from: el.dataset.from ?? uef.from,
-            to: el.dataset.dest ?? uef.to,
+            from: el.dataset.from,
+            to: el.dataset.dest,
             date: el.dataset.date
           }], {
             adults: 1,
@@ -1371,8 +1369,8 @@ await (async () => {
       const resultsRow = `
         <tr data-date="${date}">
           <td class="bulkDate">
-            <a href="javascript:void 0" data-book data-date="${date}">${dateStringToDashedDateString(date)}</a>
-            ${dateToWeekday(dateStringToDate(date))}
+            <div>${dateStringToDashedDateString(date)}</div>
+            <div>${dateToWeekday(dateStringToDate(date))}</div>
           </td>
           <td class="bulk_flights"></td>
         </tr>
