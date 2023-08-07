@@ -190,7 +190,6 @@ await (async () => {
           <svg width="16" height="16" fill="currentColor" class="heart_save" viewBox="0 0 16 16">
             <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"></path>
           </svg>
-          <span>0</span>
         </a>
       </div>
 
@@ -296,7 +295,6 @@ await (async () => {
   let linkSearchSaved: HTMLAnchorElement, linkSearchMulti: HTMLAnchorElement
   let divFilters: HTMLDivElement, divLoginPrompt: HTMLDivElement, divFooter: HTMLDivElement, divUeContainer: HTMLDivElement, divHeartSave: HTMLDivElement, divSaved: HTMLDivElement, divFavesTabs: HTMLDivElement, divSavedFlights: HTMLDivElement, divSavedQueries: HTMLDivElement, divMultiBox: HTMLDivElement, divResults: HTMLDivElement, divError: HTMLDivElement
   let divTable: HTMLTableElement, divTableBody: HTMLTableSectionElement
-  let savedCount: HTMLSpanElement
 
   const assignElements = (): void => {
     log('assignElements()')
@@ -335,8 +333,6 @@ await (async () => {
 
     divTable = shadowRoot.querySelector('.bulk_table')
     divTableBody = shadowRoot.querySelector('.bulk_table tbody')
-
-    savedCount = shadowRoot.querySelector('.unelevated_saved a span')
   }
 
   const addFormListeners = (): void => {
@@ -456,7 +452,7 @@ await (async () => {
             savedQueries.add(queryString)
           }
 
-          updateSavedCount()
+          updateSavedQueries()
           await valueSet('saved_queries', Array.from(savedQueries))
         }
       })()
@@ -522,7 +518,7 @@ await (async () => {
 
         if (el.dataset.queryString != null) {
           savedQueries.delete(el.dataset.queryString)
-          updateSavedCount()
+          updateSavedQueries()
           await valueSet('saved_queries', Array.from(savedQueries))
         }
       })()
@@ -932,8 +928,8 @@ await (async () => {
     await searchAvailability(ssQuery, populateNextQuery)
   }
 
-  const updateSavedCount = (): void => {
-    log('updateSavedCount()')
+  const updateSavedQueries = (): void => {
+    log('updateSavedQueries()')
 
     let savedList = ''
     for (const queryString of savedQueries) {
@@ -960,7 +956,6 @@ await (async () => {
       `
     }
     divSavedQueries.innerHTML = savedList
-    savedCount.innerText = savedArr.length.toString()
   }
 
   const updateSavedFlights = (): void => {
@@ -1013,7 +1008,6 @@ await (async () => {
       `
     }
     divSavedFlights.innerHTML = savedList
-    savedCount.innerText = savedArr.length.toString()
   }
 
   const checkAirportCodes = (el: HTMLInputElement): void => {
@@ -1536,7 +1530,7 @@ await (async () => {
     window.addEventListener('scroll', (e) => {
       stickyFooter()
     })
-    updateSavedCount()
+    updateSavedQueries()
     updateSavedFlights()
     await loadAirports()
     autocomplete(inputFrom, airports)
