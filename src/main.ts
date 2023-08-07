@@ -349,14 +349,13 @@ await (async () => {
         uef.children = +inputChild.value
         await valueSet('uef', uef)
 
-        await regularSearch([{
-          from: uef.from.substring(0, 3),
-          to: uef.to.substring(0, 3),
-          date: uef.date
-        }], {
-          adults: uef.adults,
-          children: uef.children
-        }, 'Y', { query: uef.to.length > 3 })
+        await regularSearch(
+          newQueryPayload(
+            [{ from: uef.from.substring(0, 3), to: uef.to.substring(0, 3), date: uef.date }],
+            { adults: uef.adults, children: uef.children }
+          ),
+          { query: uef.to.length > 3 }
+        )
       })().catch(log)
     })
 
@@ -441,10 +440,10 @@ await (async () => {
         if ('book' in el.dataset) {
           stopBatch()
           el.innerText = lang.loading
-          await regularSearch([queryStringToQuery(el.dataset.query)], {
-            adults: uef.adults,
-            children: uef.children
-          })
+          await regularSearch(newQueryPayload(
+            [queryStringToQuery(el.dataset.query)],
+            { adults: uef.adults, children: uef.children }
+          ))
         } else if ('save' in el.dataset) {
           const queryString = el.dataset.query
           if (el.classList.contains('bulk_saved')) {
@@ -535,7 +534,7 @@ await (async () => {
         if ('book' in el.dataset) {
           stopBatch()
           el.innerText = lang.loading
-          await regularSearch([queryStringToQuery(el.dataset.query)])
+          await regularSearch(newQueryPayload([queryStringToQuery(el.dataset.query)]))
         }
       })().catch(log)
     })
@@ -644,10 +643,11 @@ await (async () => {
 
         linkSearchMulti.innerText = lang.loading
         const toSearch = Array.from(selectedSegments).sort((a, b) => +a.dataset.segment - +b.dataset.segment).map(segment => queryStringToQuery(segment.dataset.query))
-        await regularSearch(toSearch, {
-          adults: +inputMultiAdult.value,
-          children: +inputMultiChild.value
-        }, selectMultiCabin.value as CabinClass)
+        await regularSearch(newQueryPayload(
+          toSearch,
+          { adults: +inputMultiAdult.value, children: +inputMultiChild.value },
+          selectMultiCabin.value as CabinClass
+        ))
       })().catch(log)
     })
 
@@ -904,10 +904,10 @@ await (async () => {
     divTableBody.innerHTML = ''
 
     if (!cont.query) {
-      await regularSearch([ssQuery], {
-        adults: 1,
-        children: 0
-      }, 'Y', { query: true, saved: true })
+      await regularSearch(
+        newQueryPayload([ssQuery]),
+        { query: true, saved: true }
+      )
       return
     }
 
@@ -1060,6 +1060,8 @@ await (async () => {
   }, cabinClass: CabinClass = 'Y'): QueryPayload => {
     log('newQueryPayload()')
 
+    if (queries.length === 0) throw new Error('Empty queries array')
+
     return {
       ACTION: 'RED_AWARD_SEARCH',
       ENTRYPOINT: entryPoint,
@@ -1150,17 +1152,7 @@ await (async () => {
   // Regular Search
   // ============================================================
 
-  const regularSearch = async (queries: Query[] = [{
-    from: 'TPE',
-    to: 'TYO',
-    date: dateAdd(1)
-  }], passengers: Passengers = {
-    adults: 1,
-    children: 0
-  }, cabinClass: CabinClass = 'Y', cont = {}): Promise<void> => {
-    if (queries.length === 0) return
-    const cxString = newQueryPayload(queries, passengers, cabinClass)
-
+  const regularSearch = async (cxString: QueryPayload, cont = {}): Promise<void> => {
     btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_cont}`
     btnSearch.innerHTML = `${loadingIconHtml} ${lang.searching_cont}`
     btnSearch.classList.add('searching')
@@ -1222,14 +1214,13 @@ await (async () => {
     }
 
     if (!cont.query) {
-      await regularSearch([{
-        from: uef.from.substring(0, 3),
-        to: uef.to.substring(0, 3),
-        date: uef.date
-      }], {
-        adults: uef.adults,
-        children: uef.children
-      }, 'Y', { batch: true, query: true })
+      await regularSearch(
+        newQueryPayload(
+          [{ from: uef.from.substring(0, 3), to: uef.to.substring(0, 3), date: uef.date }],
+          { adults: uef.adults, children: uef.children }
+        ),
+        { batch: true, query: true }
+      )
       return
     }
 
