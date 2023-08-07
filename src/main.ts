@@ -52,7 +52,7 @@ await (async () => {
 
     formSubmitUrl = unsafeWindow.formSubmitUrl ?? `${availabilityUrl}?TAB_ID=${tabId}`
 
-    loadingIconHtml = `<img src='https://book.cathaypacific.com${staticFilesPath}common/skin/img/icons/cx/icon-loading.gif'>`
+    loadingIconHtml = `<img src='https://book.cathaypacific.com${staticFilesPath}common/skin/img/icons/cx/icon-loading.gif' />`
   }
 
   // ============================================================
@@ -203,26 +203,26 @@ await (async () => {
         </a>
         <label class="labels_left">
           <span>From</span>
-          <input tabindex="1" type="text" id="uef_from" name="uef_from" placeholder="TPE,HKG" value="${uef.from}">
+          <input tabindex="1" type="text" id="uef_from" name="uef_from" placeholder="TPE,HKG" value="${uef.from}" />
           <svg width="16" height="16" fill="currentColor" class="clear_from" viewBox="0 0 16 16">
             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
           </svg>
         </label>
         <label class="labels_right"><span>Adults</span>
-        <input tabindex="4" type="number" inputmode="decimal" onFocus="this.select()" id="uef_adult" name="uef_adult" placeholder="Adults" value="${uef.adults}" min="0">
+        <input tabindex="4" type="number" inputmode="decimal" onFocus="this.select()" id="uef_adult" name="uef_adult" placeholder="Adults" value="${uef.adults}" min="0" />
         </label>
         <label class="labels_left">
           <span>To</span>
-          <input tabindex="2" type="text" id="uef_to" name="uef_to" placeholder="TYO,LHR,SFO" value="${uef.to}">
+          <input tabindex="2" type="text" id="uef_to" name="uef_to" placeholder="TYO,LHR,SFO" value="${uef.to}" />
           <svg width="16" height="16" fill="currentColor" class="clear_to" viewBox="0 0 16 16">
             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
           </svg>
         </label>
         <label class="labels_right"><span>Children</span>
-        <input tabindex="5" type="number" inputmode="decimal" onFocus="this.select()" id="uef_child" name="uef_child" placeholder="Children" value="${uef.children}" min="0">
+        <input tabindex="5" type="number" inputmode="decimal" onFocus="this.select()" id="uef_child" name="uef_child" placeholder="Children" value="${uef.children}" min="0" />
         </label>
         <label class="labels_left"><span>Date</span>
-        <input tabindex="3" class="uef_date" onFocus="this.setSelectionRange(6, 8)" id="uef_date" inputmode="decimal" name="uef_date" placeholder="YYYYMMDD" value="${uef.date}">
+        <input tabindex="3" class="uef_date" onFocus="this.setSelectionRange(6, 8)" id="uef_date" inputmode="decimal" name="uef_date" placeholder="YYYYMMDD" value="${uef.date}" />
         </label>
         <button class="uef_search">${lang.search}</button>
       </div>
@@ -236,10 +236,10 @@ await (async () => {
         <option value="F">${lang.first_full}</option>
       </select>
       <label class="labels_right"><span>Adults</span>
-      <input type="number" inputmode="decimal" onFocus="this.select()" id="multi_adult" name="multi_adult" placeholder="Adults" value="1" min="0">
+      <input type="number" inputmode="decimal" onFocus="this.select()" id="multi_adult" name="multi_adult" placeholder="Adults" value="1" min="0" />
       </label>
       <label class="labels_right"><span>Children</span>
-      <input type="number" inputmode="decimal" onFocus="this.select()" id="multi_child" name="multi_child" placeholder="Children" value="0" min="0">
+      <input type="number" inputmode="decimal" onFocus="this.select()" id="multi_child" name="multi_child" placeholder="Children" value="0" min="0" />
       </label>
       <a href="javascript:void 0" class="multi_search">${lang.book_multi}</a>
     </div>
@@ -247,11 +247,11 @@ await (async () => {
     <div class="bulk_box">
       <div class="bulk_results hidden">
         <div class="filters">
-          <label><input type="checkbox" data-filter="nonstop" ${filters.nonstop ? 'checked' : ''}>${lang.nonstop}</label>
-          <label><input type="checkbox" data-filter="first" ${filters.first ? 'checked' : ''}>${lang.first}</label>
-          <label><input type="checkbox" data-filter="business" ${filters.business ? 'checked' : ''}>${lang.business}</label>
-          <label><input type="checkbox" data-filter="premium" ${filters.premium ? 'checked' : ''}>${lang.premium}</label>
-          <label><input type="checkbox" data-filter="economy" ${filters.economy ? 'checked' : ''}>${lang.economy}</label>
+          <label><input type="checkbox" data-filter="nonstop" ${filters.nonstop ? 'checked' : ''} />${lang.nonstop}</label>
+          <label><input type="checkbox" data-filter="first" ${filters.first ? 'checked' : ''} />${lang.first}</label>
+          <label><input type="checkbox" data-filter="business" ${filters.business ? 'checked' : ''} />${lang.business}</label>
+          <label><input type="checkbox" data-filter="premium" ${filters.premium ? 'checked' : ''} />${lang.premium}</label>
+          <label><input type="checkbox" data-filter="economy" ${filters.economy ? 'checked' : ''} />${lang.economy}</label>
         </div>
         <table class="bulk_table ${filters.nonstop ? 'nonstop_only' : ''} ${filters.first ? 'show_first' : ''} ${filters.business ? 'show_business' : ''} ${filters.premium ? 'show_premium' : ''} ${filters.economy ? 'show_economy' : ''}">
         <thead>
@@ -803,7 +803,7 @@ await (async () => {
           c += ` - <strong>${countryName.substring(0, sc)}</strong>${countryName.substring(sc)}</span>`
           c += '</span>'
           // Insert a input field that will hold the current array item's value
-          c += `<input type='hidden' value='${airportCode}'>`
+          c += `<input type='hidden' value='${airportCode}' />`
           divMatch.dataset.airportCode = airportCode
           divMatch.innerHTML = c
           // Execute a function when someone clicks on the item value (DIV element)
@@ -944,7 +944,7 @@ await (async () => {
       const queryString = queryToQueryString(query)
       savedList += `
         <div class="saved_query" data-query="${queryString}">
-          <label><input type="checkbox" data-query="${queryString}"> ${dateStringToDashedDateString(query.date)} ${query.from}-${query.to}</label>
+          <label><input type="checkbox" data-query="${queryString}" /> ${dateStringToDashedDateString(query.date)} ${query.from}-${query.to}</label>
           <a href="javascript:void 0" class="saved_book" data-book data-query="${queryString}">${lang.query} &raquo;</a>
           <span class="leg"></span>
           <a href="javascript:void 0" class="saved_remove" data-query="${queryString}">
@@ -982,7 +982,7 @@ await (async () => {
       savedList += `
         <div class="saved_flight" data-query="${queryString}">
           <label>
-          <input type="checkbox" data-query="${queryString}">
+          <input type="checkbox" data-query="${queryString}" />
           <span>
             <span class="sf_date">${dateStringToDashedDateString(query.date)}</span>
             <span class="sf_route">${query.from}-${stop !== '' ? `${stop}-` : ''}${query.to}</span>
@@ -1408,7 +1408,7 @@ await (async () => {
             flightHTML += `
             <div class="flight_wrapper">
               <div class="flight_item direct ${savedFlights.has(flightKey) ? 'saved' : ''}" data-flight-info="${flightKey}" data-flight-avail="${numF}_${numJ}_${numP}_${numY}" ${numF > 0 ? 'data-f' : ''} ${numJ > 0 ? 'data-j' : ''} ${numP > 0 ? 'data-p' : ''} ${numY > 0 ? 'data-y' : ''}>
-                <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
+                <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png" />
                 <span class="flight_num">${leg1Airline}${leg1FlightNum}</span>
                 ${available}
                 <span class="chevron">
@@ -1464,7 +1464,7 @@ await (async () => {
             flightHTML += `
             <div class="flight_wrapper">
               <div class="flight_item ${savedFlights.has(flightKey) ? 'saved' : ''}" data-flight-info="${flightKey}" data-flight-avail="${numF}_${numJ}_${numP}_${numY}" ${numF > 0 ? 'data-f' : ''} ${numJ > 0 ? 'data-j' : ''} ${numP > 0 ? 'data-p' : ''} ${numY > 0 ? 'data-y' : ''}>
-                <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png">
+                <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png" />
                 <span class="flight_num">${leg1Airline}${leg1FlightNum}
                 <span class="stopover">${transitAirportCode}</span>
                 ${leg2Airline}${leg2FlightNum}</span>
