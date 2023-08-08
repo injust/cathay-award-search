@@ -185,7 +185,7 @@ await (async () => {
 
       <div class="unelevated_saved">
         <a href="javascript:void 0">
-          <svg width="16" height="16" fill="currentColor" class="heart_save" viewBox="0 0 16 16">
+          <svg height="16" width="16" fill="currentColor" class="heart_save" viewBox="0 0 16 16">
             <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z" />
           </svg>
         </a>
@@ -202,7 +202,7 @@ await (async () => {
         <label class="labels_left">
           <span>From</span>
           <input tabindex="1" type="text" id="uef_from" name="uef_from" placeholder="TPE,HKG" value="${uef.from}" />
-          <svg width="16" height="16" fill="currentColor" class="clear_from" viewBox="0 0 16 16">
+          <svg height="16" width="16" fill="currentColor" class="clear_from" viewBox="0 0 16 16">
             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
           </svg>
         </label>
@@ -212,7 +212,7 @@ await (async () => {
         <label class="labels_left">
           <span>To</span>
           <input tabindex="2" type="text" id="uef_to" name="uef_to" placeholder="TYO,LHR,SFO" value="${uef.to}" />
-          <svg width="16" height="16" fill="currentColor" class="clear_to" viewBox="0 0 16 16">
+          <svg height="16" width="16" fill="currentColor" class="clear_to" viewBox="0 0 16 16">
             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
           </svg>
         </label>
@@ -946,7 +946,7 @@ await (async () => {
           <a href="javascript:void 0" class="saved_book" data-book data-query="${queryString}">${lang.query} &raquo;</a>
           <span class="leg"></span>
           <a href="javascript:void 0" class="saved_remove" data-query="${queryString}">
-            <svg width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16">
+            <svg height="16" width="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16">
               <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
             </svg>
           </a>
@@ -998,7 +998,7 @@ await (async () => {
           <a href="javascript:void 0" class="saved_book" data-book data-query="${queryString}">${lang.query} &raquo;</a>
           <span class="leg"></span>
           <a href="javascript:void 0" class="saved_remove" data-flight-key="${flightKey}">
-            <svg width="16" height="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16">
+            <svg height="16" width="16" fill="currentColor" class="saved_delete" viewBox="0 0 16 16">
               <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
             </svg>
           </a>
@@ -1350,7 +1350,7 @@ await (async () => {
       divTableBody.insertAdjacentHTML('beforeend', resultsRow)
     }
 
-    const heartSvg = '<svg width="16" height="16" fill="currentColor" class="heart_save" viewBox="0 0 16 16"> <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z" /></svg>'
+    const heartSvg = '<svg height="16" width="16" fill="currentColor" class="heart_save" viewBox="0 0 16 16"> <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z" /></svg>'
 
     let flightHTML = `
       <div>
@@ -1410,7 +1410,7 @@ await (async () => {
                 <span class="flight_num">${leg1Airline}${leg1FlightNum}</span>
                 ${available}
                 <span class="chevron">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <svg height="16" width="16" viewBox="0 0 24 24" fill="none">
                     <path d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z" fill="currentColor" />
                   </svg>
                 </span>
@@ -1468,7 +1468,7 @@ await (async () => {
                 ${leg2Airline}${leg2FlightNum}</span>
                 ${available}
                 <span class="chevron">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <svg height="16" width="16" viewBox="0 0 24 24" fill="none">
                     <path d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z" fill="currentColor" />
                   </svg>
                 </span>
