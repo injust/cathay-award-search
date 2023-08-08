@@ -942,7 +942,7 @@ await (async () => {
       const queryString = queryToQueryString(query)
       savedList += `
         <div class="saved_query" data-query="${queryString}">
-          <label><input type="checkbox" data-query="${queryString}" /> ${dateStringToDashedDateString(query.date)} ${query.from}-${query.to}</label>
+          <label><input type="checkbox" data-query="${queryString}" />${dateStringToDashedDateString(query.date)} ${query.from}-${query.to}</label>
           <a href="javascript:void 0" class="saved_book" data-book data-query="${queryString}">${lang.query} &raquo;</a>
           <span class="leg"></span>
           <a href="javascript:void 0" class="saved_remove" data-query="${queryString}">
@@ -1139,7 +1139,7 @@ await (async () => {
 
     log('Failed to retrieve new Tab ID')
     resetSearch()
-    batchError(`<strong>Error:</strong> ${lang.tab_retrieve_fail} (<a href='${loginUrl.toString()}'>Login</a>) `)
+    batchError(`<strong>Error</strong>: ${lang.tab_retrieve_fail} (<a href='${loginUrl.toString()}'>Login</a>) `)
   }
 
   // ============================================================
@@ -1361,7 +1361,7 @@ await (async () => {
         <div class="flight_list">`
 
     if (pageBom.modelObject?.isContainingErrors) {
-      flightHTML += `<span class="bulk_response_error"><strong>Error:</strong> ${pageBom.modelObject?.messages[0]?.text}</span>`
+      flightHTML += `<span class="bulk_response_error"><strong>Error</strong>: ${pageBom.modelObject?.messages[0]?.text}</span>`
     } else if (pageBom.modelObject?.availabilities?.upsell?.bounds != null) {
       for (const flight of pageBom.modelObject.availabilities.upsell.bounds[0].flights ?? []) {
         let available = ''
