@@ -66,8 +66,8 @@ await (async () => {
 
   // Search Parameters
   const uef: Uef = {
-    from: '',
-    to: '',
+    from: [],
+    to: [],
     date: '',
     adults: 1,
     children: 0,
@@ -189,14 +189,14 @@ await (async () => {
         <a href="javascript:void 0" class="switch">${swapSvg()}</a>
         <label class="labels_left">
           <span>From</span>
-          <input tabindex="1" type="search" id="uef_from" name="uef_from" placeholder="Where from?" value="${uef.from}" />
+          <input tabindex="1" type="search" id="uef_from" name="uef_from" placeholder="Where from?" value="${uef.from.join(',')}" />
         </label>
         <label class="labels_right"><span>Adults</span>
         <input tabindex="4" type="number" inputmode="decimal" id="uef_adult" name="uef_adult" placeholder="Adults" value="${uef.adults}" min="0" />
         </label>
         <label class="labels_left">
           <span>To</span>
-          <input tabindex="2" type="search" id="uef_to" name="uef_to" placeholder="Where to?" value="${uef.to}" />
+          <input tabindex="2" type="search" id="uef_to" name="uef_to" placeholder="Where to?" value="${uef.to.join(',')}" />
         </label>
         <label class="labels_right"><span>Children</span>
         <input tabindex="5" type="number" inputmode="decimal" id="uef_child" name="uef_child" placeholder="Children" value="${uef.children}" min="0" />
@@ -243,7 +243,7 @@ await (async () => {
       </div>
       <div class="bulk_footer">
         <div class="bulk_footer_container">
-          <button class="bulk_submit">${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}</button>
+          <button class="bulk_submit">${lang.bulk_batch} ${uef.from.join(',')} - ${uef.to.join(',')} ${lang.bulk_flights}</button>
           <div class="bulk_error hidden"><span></span></div>
         </div>
       </div>
@@ -321,8 +321,8 @@ await (async () => {
           return
         }
 
-        uef.from = inputFrom.value
-        uef.to = inputTo.value
+        uef.from = inputFrom.value.split(',')
+        uef.to = inputTo.value.split(',')
         uef.date = inputDate.value !== '' ? dayjs(inputDate.value).format('YYYYMMDD') : ''
         uef.adults = +inputAdult.value
         uef.children = +inputChild.value
@@ -330,7 +330,7 @@ await (async () => {
 
         await regularSearch(
           newQueryPayload(
-            [{ from: uef.from.substring(0, 3), to: uef.to.substring(0, 3), date: dayjs(uef.date) }],
+            [{ from: uef.from[0], to: uef.to[0], date: dayjs(uef.date) }],
             { adults: uef.adults, children: uef.children }
           ),
           { query: uef.to.length > 3 }
@@ -367,12 +367,12 @@ await (async () => {
         setTimeout(() => {
           checkAirportCodes(el)
           if (el === inputFrom) {
-            uef.from = el.value
+            uef.from = el.value.split(',')
           } else if (el === inputTo) {
-            uef.to = el.value
+            uef.to = el.value.split(',')
           }
           routeChanged = true
-          if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}`
+          if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from.join(',')} - ${uef.to.join(',')} ${lang.bulk_flights}`
         }, 0)
       })
 
@@ -392,7 +392,7 @@ await (async () => {
 
       if (isValidCxDate(inputDate.value)) {
         routeChanged = true
-        if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}`
+        if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from.join(',')} - ${uef.to.join(',')} ${lang.bulk_flights}`
       } else {
         inputDate.value = uef.date
       }
@@ -818,7 +818,7 @@ await (async () => {
   const resetSearch = (): void => {
     searching = false
     remainingDays = 20
-    btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}`
+    btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from.join(',')} - ${uef.to.join(',')} ${lang.bulk_flights}`
     btnBatch.classList.remove('bulk_searching')
     linkSearchSaved.innerText = `${lang.search_selected} »`
   }
@@ -843,8 +843,8 @@ await (async () => {
 
     log('Batch Clicked. Starting Search')
 
-    uef.from = inputFrom.value
-    uef.to = inputTo.value
+    uef.from = inputFrom.value.split(',')
+    uef.to = inputTo.value.split(',')
     uef.date = inputDate.value !== '' ? dayjs(inputDate.value).format('YYYYMMDD') : ''
     uef.adults = +inputAdult.value
     uef.children = +inputChild.value
@@ -1173,7 +1173,7 @@ await (async () => {
     if (!cont.query) {
       await regularSearch(
         newQueryPayload(
-          [{ from: uef.from.substring(0, 3), to: uef.to.substring(0, 3), date: dayjs(uef.date) }],
+          [{ from: uef.from[0], to: uef.to[0], date: dayjs(uef.date) }],
           { adults: uef.adults, children: uef.children }
         ),
         { batch: true, query: true }
@@ -1184,16 +1184,14 @@ await (async () => {
     bulkDate ||= uef.date
 
     const routes: Route[] = []
-    const rtFrom = uef.from.split(',')
-    const rtTo = uef.to.split(',')
-    const queryCount = rtFrom.length * rtTo.length
+    const queryCount = uef.from.length * uef.to.length
 
     if (!noContinue && remainingDays > Math.ceil(25 / queryCount)) {
       remainingDays = Math.ceil(25 / queryCount) - 1
     }
 
-    for (const from of rtFrom) {
-      for (const to of rtTo) {
+    for (const from of uef.from) {
+      for (const to of uef.to) {
         routes.push({ from, to })
       }
     }

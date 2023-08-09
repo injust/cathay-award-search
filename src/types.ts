@@ -124,13 +124,12 @@ export interface RequestParams {
   ENCT?: string
 }
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-export type Route = {
+export interface Route {
   from: string
   to: string
 }
 
-export type Query = Route & {
+export interface Query extends Route {
   date: Dayjs
 }
 
@@ -153,6 +152,8 @@ export interface SavedFlights {
   [key: string]: FlightAvailability
 }
 
-export type Uef = Route & Passengers & {
+export type Uef = Passengers & {
+  from: string[]
+  to: string[]
   date: string
 }
