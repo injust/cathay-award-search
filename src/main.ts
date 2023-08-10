@@ -1,6 +1,5 @@
 import { chevronSvg, heartSvg, swapSvg, xSvg } from './images/svg'
 import { lang } from './localization'
-import captchaCss from './styles/captcha.css?inline'
 import styleCss from './styles/style.css?inline'
 import { dateAdd, dateStringToDashedDateString, dateStringToDate, dateToWeekday, getFlightDuration, getFlightTime, httpRequest, isValidDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, valueGet, valueSet, waitForEl } from './utils'
 
@@ -267,7 +266,6 @@ await (async () => {
   }
 
   addCss(styleCss)
-  addCss(captchaCss, document.body)
 
   // ============================================================
   // Form Listeners
@@ -1096,9 +1094,6 @@ await (async () => {
         try {
           data = await resp.json()
         } catch {
-          // const res = response.responseText
-          // const incapsula_script = res.match(/<script src='(\/_Incapsula_[^]+.js)'><\/script>/)
-          // if (incapsula_script) batchError('Cathay bot block triggered.')
           resetSearch()
           batchError('Response not valid JSON')
           return
@@ -1291,9 +1286,6 @@ await (async () => {
       try {
         data = await resp.json()
       } catch {
-        // const res = response.responseText
-        // const incapsula_script = res.match(/<script src='(\/_Incapsula_[^]+.js)'><\/script>/)
-        // if (incapsula_script) batchError('Cathay bot block triggered.')
         resetSearch()
         batchError('Response not valid JSON')
         return
