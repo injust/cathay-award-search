@@ -359,8 +359,6 @@ await (async () => {
       inputTo.dispatchEvent(new Event('change'))
     })
 
-    let inFocus = false
-
     for (const el of [inputFrom, inputTo]) {
       el.addEventListener('keyup', (e) => {
         if (['Enter', ' ', ','].includes(e.key)) {
@@ -386,16 +384,11 @@ await (async () => {
 
       el.addEventListener('focus', (e) => {
         if (el.value.length > 0) el.value += ','
-      })
-
-      el.addEventListener('click', (e) => {
-        if (!inFocus) el.setSelectionRange(el.value.length, el.value.length)
-        inFocus = true
+        el.setSelectionRange(el.value.length, el.value.length)
       })
 
       el.addEventListener('blur', (e) => {
         el.value = el.value.replace(/,+$/, '')
-        inFocus = false
       })
     }
 
