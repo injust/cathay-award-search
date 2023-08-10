@@ -198,7 +198,7 @@ await (async () => {
           ${xSvg('clear_from')}
         </label>
         <label class="labels_right"><span>Adults</span>
-        <input tabindex="4" type="number" inputmode="decimal" onFocus="this.select()" id="uef_adult" name="uef_adult" placeholder="Adults" value="${uef.adults}" min="0" />
+        <input tabindex="4" type="number" inputmode="decimal" id="uef_adult" name="uef_adult" placeholder="Adults" value="${uef.adults}" min="0" />
         </label>
         <label class="labels_left">
           <span>To</span>
@@ -206,10 +206,10 @@ await (async () => {
           ${xSvg('clear_to')}
         </label>
         <label class="labels_right"><span>Children</span>
-        <input tabindex="5" type="number" inputmode="decimal" onFocus="this.select()" id="uef_child" name="uef_child" placeholder="Children" value="${uef.children}" min="0" />
+        <input tabindex="5" type="number" inputmode="decimal" id="uef_child" name="uef_child" placeholder="Children" value="${uef.children}" min="0" />
         </label>
         <label class="labels_left"><span>Date</span>
-        <input tabindex="3" class="uef_date" onFocus="this.setSelectionRange(6, 8)" id="uef_date" inputmode="decimal" name="uef_date" placeholder="YYYYMMDD" value="${uef.date}" />
+        <input tabindex="3" class="uef_date" id="uef_date" inputmode="decimal" name="uef_date" placeholder="YYYYMMDD" value="${uef.date}" />
         </label>
         <button class="uef_search">${lang.search}</button>
       </div>
@@ -223,10 +223,10 @@ await (async () => {
         <option value="F">${lang.first_full}</option>
       </select>
       <label class="labels_right"><span>Adults</span>
-      <input type="number" inputmode="decimal" onFocus="this.select()" id="multi_adult" name="multi_adult" placeholder="Adults" value="1" min="0" />
+      <input type="number" inputmode="decimal" id="multi_adult" name="multi_adult" placeholder="Adults" value="1" min="0" />
       </label>
       <label class="labels_right"><span>Children</span>
-      <input type="number" inputmode="decimal" onFocus="this.select()" id="multi_child" name="multi_child" placeholder="Children" value="0" min="0" />
+      <input type="number" inputmode="decimal" id="multi_child" name="multi_child" placeholder="Children" value="0" min="0" />
       </label>
       <a href="javascript:void 0" class="multi_search">${lang.book_multi}</a>
     </div>
@@ -408,6 +408,16 @@ await (async () => {
         inputDate.value = uef.date
       }
     })
+
+    inputDate.addEventListener('focus', (e) => {
+      inputDate.setSelectionRange(6, 8)
+    })
+
+    for (const el of [inputAdult, inputChild, inputMultiAdult, inputMultiChild]) {
+      el.addEventListener('focus', (e) => {
+        el.select()
+      })
+    }
 
     clearFrom.addEventListener('click', (e) => {
       inputFrom.value = ''
