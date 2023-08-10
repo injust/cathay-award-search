@@ -1,3 +1,4 @@
+import { Query, json } from './types'
 import { GM } from 'vite-plugin-monkey/dist/client'
 
 // ============================================================
