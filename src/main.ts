@@ -920,8 +920,8 @@ await (async () => {
     for (const queryString of savedQueries) {
       const query = queryStringToQuery(queryString)
       const savedDate = dateStringToDate(query.date)
-      const today = new Date()
-      if (savedDate <= today) savedQueries.delete(queryString)
+      const now = new Date()
+      if (savedDate <= now) savedQueries.delete(queryString)
     }
     const savedArr = Array.from(savedQueries, queryStringToQuery).sort((a, b) => +a.date - +b.date)
 
@@ -946,8 +946,8 @@ await (async () => {
     for (const flightKey of savedFlights.keys()) {
       const query = queryStringToQuery(flightKey) // TODO: Should make something to parse `flightKey`
       const savedDate = dateStringToDate(query.date)
-      const today = new Date()
-      if (savedDate <= today) savedFlights.delete(flightKey)
+      const now = new Date()
+      if (savedDate <= now) savedFlights.delete(flightKey)
     }
     const savedArr = Array.from(savedFlights, ([flightKey, avail]) => ({
       flightKey,
