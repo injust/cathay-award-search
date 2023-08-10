@@ -53,10 +53,7 @@ export const waitForEl = async <E extends Element>(selectors: string): Promise<E
       observer.disconnect()
     }
   })
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
-  })
+  observer.observe(document.body, { childList: true, subtree: true })
 })
 
 // Check CX Date String Validity (dateString YYYYMMDD)

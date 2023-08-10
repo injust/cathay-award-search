@@ -867,10 +867,7 @@ await (async () => {
       routeChanged = false
 
       divTableBody.innerHTML = ''
-      divUeContainer.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      })
+      divUeContainer.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
 
     divResults.classList.remove('hidden')
