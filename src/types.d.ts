@@ -1,4 +1,4 @@
-declare const unsafeWindow: typeof window & {
+interface Window {
   formSubmitUrl?: string
   requestParams?: string | object
   staticFilesPath?: string
