@@ -67,8 +67,8 @@ export const isValidDate = (dateString: string): boolean => {
   const monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
   if (year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0)) monthLength[1] = 29
   if (day <= 0 || day > monthLength[month - 1]) return false
-  const today = new Date()
-  if ((date.getTime() - today.getTime()) / 24 / 60 / 60 / 1000 >= 366 || (date.getTime() - today.getTime()) / 24 / 60 / 60 / 1000 < -1) return false
+  const now = new Date()
+  if ((date.getTime() - now.getTime()) / 24 / 60 / 60 / 1000 >= 366 || (date.getTime() - now.getTime()) / 24 / 60 / 60 / 1000 < -1) return false
   return true
 }
 
