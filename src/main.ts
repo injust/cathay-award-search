@@ -2,7 +2,7 @@ import { chevronSvg, heartSvg, swapSvg, xSvg } from './images/svg'
 import { lang } from './localization'
 import styleCss from './styles/style.css?inline'
 import { AirportResponse, Airports, AvailabilityResponse, CabinClass, PageBom, Passengers, Profile, Query, QueryPayload, RequestParams, Route, SavedFlights } from './types'
-import { dateAdd, dateStringToDashedDateString, dateStringToDate, dateToWeekday, getFlightDuration, getFlightTime, httpRequest, isValidDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, valueGet, valueSet, waitForEl } from './utils'
+import { dateAdd, dateStringToDashedDateString, dateStringToDate, dateToWeekday, formatFlightDuration, formatFlightTime, httpRequest, isValidDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, valueGet, valueSet, waitForEl } from './utils'
 import { unsafeWindow } from 'vite-plugin-monkey/dist/client'
 
 await (async () => {
@@ -1346,9 +1346,9 @@ await (async () => {
         let numY = 0
         const leg1Airline = flight.segments[0].flightIdentifier.marketingAirline
         const leg1FlightNum = flight.segments[0].flightIdentifier.flightNumber
-        const leg1DepTime = getFlightTime(flight.segments[0].flightIdentifier.originDate)
-        const leg1ArrTime = getFlightTime(flight.segments[0].destinationDate)
-        const leg1Duration = getFlightDuration(flight.duration)
+        const leg1DepTime = formatFlightTime(flight.segments[0].flightIdentifier.originDate)
+        const leg1ArrTime = formatFlightTime(flight.segments[0].destinationDate)
+        const leg1Duration = formatFlightDuration(flight.duration)
         const leg1Origin = flight.segments[0].originLocation
         const leg1Dest = flight.segments[0].destinationLocation
         let flightKey: string
@@ -1417,11 +1417,11 @@ await (async () => {
 
           const leg2Airline = flight.segments[1].flightIdentifier.marketingAirline
           const leg2FlightNum = flight.segments[1].flightIdentifier.flightNumber
-          const leg2DepTime = getFlightTime(flight.segments[1].flightIdentifier.originDate)
-          const leg2ArrTime = getFlightTime(flight.segments[1].destinationDate)
+          const leg2DepTime = formatFlightTime(flight.segments[1].flightIdentifier.originDate)
+          const leg2ArrTime = formatFlightTime(flight.segments[1].destinationDate)
           const leg2Origin = flight.segments[1].originLocation
           const leg2Dest = flight.segments[1].destinationLocation
-          const transitTime = getFlightDuration(flight.segments[1].flightIdentifier.originDate - flight.segments[0].destinationDate)
+          const transitTime = formatFlightDuration(flight.segments[1].flightIdentifier.originDate - flight.segments[0].destinationDate)
           const transitAirportCode = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g.exec(flight.flightIdString)[1].replace(':', ' / ')
           flightKey = `${queryString}_${leg1Airline}${leg1FlightNum}_${transitAirportCode}_${leg2Airline}${leg2FlightNum}`
 
