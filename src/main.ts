@@ -1,6 +1,7 @@
 import { chevronSvg, heartSvg, swapSvg, xSvg } from './images/svg'
 import { lang } from './localization'
 import styleCss from './styles/style.css?inline'
+import { AirportResponse, Airports, AvailabilityResponse, CabinClass, PageBom, Passengers, Profile, Query, QueryPayload, RequestParams, Route, SavedFlights } from './types'
 import { dateAdd, dateStringToDashedDateString, dateStringToDate, dateToWeekday, getFlightDuration, getFlightTime, httpRequest, isValidDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, valueGet, valueSet, waitForEl } from './utils'
 import { unsafeWindow } from 'vite-plugin-monkey/dist/client'
 

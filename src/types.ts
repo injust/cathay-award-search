@@ -1,10 +1,12 @@
-interface Window {
-  formSubmitUrl?: string
-  requestParams?: string | object
-  staticFilesPath?: string
+declare global {
+  interface Window {
+    formSubmitUrl?: string
+    requestParams?: string | object
+    staticFilesPath?: string
+  }
 }
 
-type json =
+export type json =
   | string
   | number
   | boolean
@@ -12,34 +14,34 @@ type json =
   | json[]
   | { [key: string]: json }
 
-interface Airport {
+export interface Airport {
   airportCode: string
   countryName: string
   shortName: string
 }
 
-interface Airports {
+export interface Airports {
   [key: string]: Airport
 }
 
-interface AirportResponse {
+export interface AirportResponse {
   airports: Airport[] | null
 }
 
-interface AvailabilityResponse {
+export interface AvailabilityResponse {
   pageBom: string
   requestParams: string
 }
 
-type CabinClass = 'Y' | 'W' | 'C' | 'F'
+export type CabinClass = 'Y' | 'W' | 'C' | 'F'
 
-interface Passengers {
+export interface Passengers {
   adults: number
   children: number
 }
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-type PageBom = {
+export type PageBom = {
   modelObject: {
     messages?: Array<{ text: string }>
     availabilities?: {
@@ -73,11 +75,11 @@ type PageBom = {
   }
 }
 
-interface Profile {
+export interface Profile {
   membershipNumber: string | null
 }
 
-interface QueryPayload {
+export interface QueryPayload {
   ACTION: string
   ENTRYPOINT: string
   ENTRYLANGUAGE: string
@@ -92,13 +94,13 @@ interface QueryPayload {
   LOGINURL: string
 }
 
-interface QueryResponse {
+export interface QueryResponse {
   parameters?: { [key: string]: string }
   urlToPost?: string
 }
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-type RequestParams = {
+export type RequestParams = {
   SERVICE_ID?: string
   TAB_ID?: string
   DIRECT_LOGIN?: string
@@ -112,30 +114,30 @@ type RequestParams = {
   ENCT?: string
 }
 
-interface Route {
+export interface Route {
   from: string
   to: string
 }
 
-interface Query extends Route {
+export interface Query extends Route {
   date: string
 }
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-type FlightAvailability = {
+export type FlightAvailability = {
   F: number
   J: number
   P: number
   Y: number
 }
 
-interface Flight extends Query, FlightAvailability {
+export interface Flight extends Query, FlightAvailability {
   flightKey: string
   leg1: string
   stop: string
   leg2: string
 }
 
-interface SavedFlights {
+export interface SavedFlights {
   [key: string]: FlightAvailability
 }
