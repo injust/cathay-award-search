@@ -1312,8 +1312,8 @@ await (async () => {
       const resultsRow = `
         <tr data-date="${query.date}">
           <td class="bulkDate">
-            <div>${dateStringToDashedDateString(query.date)}</div>
             <div>${dateToWeekday(dateStringToDate(query.date))}</div>
+            <div>${dateStringToDashedDateString(query.date)}</div>
           </td>
           <td class="bulk_flights"></td>
         </tr>
