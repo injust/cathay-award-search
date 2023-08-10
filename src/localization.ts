@@ -29,6 +29,8 @@ export const lang: { [key: string]: string } = {
   invalid_airport: 'Invalid Airport',
   invalid_code: 'Invalid Destination Code',
   invalid_date: 'Invalid Date',
+  date_too_early: 'Date Too Early',
+  date_too_late: 'Date Too Late',
   saved_queries: 'Saved Flight Queries',
   max_segments: 'Max 6 Sectors Accepted',
   book_multi: 'Book Multi-City Award',

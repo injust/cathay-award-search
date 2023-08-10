@@ -2,7 +2,7 @@ import { chevronSvg, heartSvg, swapSvg, xSvg } from './images/svg'
 import { lang } from './localization'
 import styleCss from './styles/style.css?inline'
 import { AirportResponse, Airports, AvailabilityResponse, CabinClass, PageBom, Passengers, Profile, Query, QueryPayload, RequestParams, Route, SavedFlights } from './types'
-import { formatFlightDuration, formatFlightTime, httpRequest, isValidDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, valueGet, valueSet, waitForEl } from './utils'
+import { formatFlightDuration, formatFlightTime, httpRequest, isValidCxDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, valueGet, valueSet, waitForEl } from './utils'
 import dayjs from 'dayjs'
 import dayjsPluginUTC from 'dayjs-plugin-utc'
 import { unsafeWindow } from 'vite-plugin-monkey/dist/client'
@@ -214,7 +214,7 @@ await (async () => {
         <input tabindex="5" type="number" inputmode="decimal" id="uef_child" name="uef_child" placeholder="Children" value="${uef.children}" min="0" />
         </label>
         <label class="labels_left"><span>Date</span>
-        <input tabindex="3" class="uef_date" id="uef_date" inputmode="decimal" name="uef_date" placeholder="YYYYMMDD" value="${uef.date}" />
+        <input tabIndex="3" type="date" class="uef_date" id="uef_date" name="uef_date" value="${uef.date !== '' ? dayjs(uef.date).format('YYYY-MM-DD') : ''}" max="9999-12-31" />
         </label>
         <button class="uef_search">${lang.search}</button>
       </div>
@@ -331,9 +331,14 @@ await (async () => {
 
     btnSearch.addEventListener('click', (e) => {
       void (async () => {
+        if (inputDate.value === '') {
+          alert(lang.invalid_date)
+          return
+        }
+
         uef.from = inputFrom.value
         uef.to = inputTo.value
-        uef.date = inputDate.value
+        uef.date = inputDate.value !== '' ? dayjs(inputDate.value).format('YYYYMMDD') : ''
         uef.adults = +inputAdult.value
         uef.children = +inputChild.value
         await valueSet('uef', uef)
@@ -396,12 +401,14 @@ await (async () => {
       })
     }
 
-    inputDate.addEventListener('change', (e) => {
-      if (isValidDate(inputDate.value)) {
+    inputDate.addEventListener('blur', (e) => {
+      // Reduce alert() noise
+      if (inputDate.value === '') return
+
+      if (isValidCxDate(inputDate.value)) {
         routeChanged = true
         if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}`
       } else {
-        alert(lang.invalid_date)
         inputDate.value = uef.date
       }
     })
@@ -853,13 +860,16 @@ await (async () => {
     if (searching) {
       stopBatch()
       return
+    } else if (inputDate.value === '') {
+      alert(lang.invalid_date)
+      return
     }
 
     log('Batch Clicked. Starting Search')
 
     uef.from = inputFrom.value
     uef.to = inputTo.value
-    uef.date = inputDate.value
+    uef.date = inputDate.value !== '' ? dayjs(inputDate.value).format('YYYYMMDD') : ''
     uef.adults = +inputAdult.value
     uef.children = +inputChild.value
     await valueSet('uef', uef)

@@ -1,3 +1,4 @@
+import { lang } from './localization'
 import { Query, json } from './types'
 import dayjs from 'dayjs'
 import { GM } from 'vite-plugin-monkey/dist/client'
@@ -58,19 +59,21 @@ export const waitForEl = async <E extends Element>(selectors: string): Promise<E
   observer.observe(document.body, { childList: true, subtree: true })
 })
 
-// Check CX Date String Validity (dateString YYYYMMDD)
-export const isValidDate = (dateString: string): boolean => {
-  if (!/^\d{8}$/.test(dateString)) return false
-  const date = dayjs(dateString).toDate()
-  const year = date.getFullYear()
-  const month = date.getMonth() + 1
-  const day = date.getDate()
-  if (year < 1000 || year > 3000 || month === 0 || month > 12) return false
-  const monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-  if (year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0)) monthLength[1] = 29
-  if (day <= 0 || day > monthLength[month - 1]) return false
-  const now = new Date()
-  if ((date.getTime() - now.getTime()) / 24 / 60 / 60 / 1000 >= 366 || (date.getTime() - now.getTime()) / 24 / 60 / 60 / 1000 < -1) return false
+export const isValidCxDate = (dateString: string): boolean => {
+  const date = dayjs(dateString, undefined, true)
+  const now = dayjs()
+
+  if (!date.isValid()) {
+    alert(lang.invalid_date)
+    return false
+  } else if (date.isAfter(now.add(361, 'd'), 'd')) {
+    alert(lang.date_too_late)
+    return false
+  } else if (date.isBefore(now.subtract(1, 'd'), 'd')) {
+    alert(lang.date_too_early)
+    return false
+  }
+
   return true
 }
 
