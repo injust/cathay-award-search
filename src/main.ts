@@ -1310,7 +1310,7 @@ await (async () => {
   const insertResults = async (query: Query, pageBom: PageBom): Promise<void> => {
     const queryString = queryToQueryString(query)
 
-    if (divTableBody.querySelector(`tr[data-date="${query.date}"]`) == null) {
+    if ((divTableBody.lastElementChild as HTMLTableRowElement)?.dataset?.date !== query.date) {
       const resultsRow = `
         <tr data-date="${query.date}">
           <td class="bulkDate">
@@ -1461,7 +1461,7 @@ await (async () => {
     }
     flightHTML += '</div></div>'
 
-    divTableBody.querySelector(`tr[data-date="${query.date}"] .bulk_flights`).insertAdjacentHTML('beforeend', flightHTML)
+    divTableBody.lastElementChild.querySelector('.bulk_flights').insertAdjacentHTML('beforeend', flightHTML)
     stickyFooter()
   }
 
