@@ -69,7 +69,7 @@ await (async () => {
   const uef: { from: string, to: string, date: string, adults: number, children: number } = {
     from: '',
     to: '',
-    date: dayjs().format('YYYYMMDD'),
+    date: '',
     adults: 1,
     children: 0,
     ...await valueGet('uef', {})
