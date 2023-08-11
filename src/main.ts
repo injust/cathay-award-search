@@ -63,8 +63,8 @@ await (async () => {
 
   // Search Parameters
   const uef: { from: string, to: string, date: string, adults: number, children: number } = {
-    from: 'HKG',
-    to: 'TYO',
+    from: '',
+    to: '',
     date: dateAdd(),
     adults: 1,
     children: 0,
@@ -193,7 +193,7 @@ await (async () => {
         <a href="javascript:void 0" class="switch">${swapSvg()}</a>
         <label class="labels_left">
           <span>From</span>
-          <input tabindex="1" type="text" id="uef_from" name="uef_from" placeholder="TPE,HKG" value="${uef.from}" />
+          <input tabindex="1" type="text" id="uef_from" name="uef_from" placeholder="Where from?" value="${uef.from}" />
           ${xSvg('clear_from')}
         </label>
         <label class="labels_right"><span>Adults</span>
@@ -201,7 +201,7 @@ await (async () => {
         </label>
         <label class="labels_left">
           <span>To</span>
-          <input tabindex="2" type="text" id="uef_to" name="uef_to" placeholder="TYO,LHR,SFO" value="${uef.to}" />
+          <input tabindex="2" type="text" id="uef_to" name="uef_to" placeholder="Where to?" value="${uef.to}" />
           ${xSvg('clear_to')}
         </label>
         <label class="labels_right"><span>Children</span>
