@@ -381,7 +381,7 @@ await (async () => {
           checkAirportCodes(el)
           if (el === inputFrom) {
             uef.from = el.value
-          } else {
+          } else if (el === inputTo) {
             uef.to = el.value
           }
           routeChanged = true
