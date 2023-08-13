@@ -1,8 +1,8 @@
-// ==UserScript==
+﻿// ==UserScript==
 // @name                Cathay Award Search Fixer 2022
 // @name:zh-TW          國泰獎勵機票搜尋引擎修復神器 2022
 // @namespace           jayliutw
-// @version             3.3.1
+// @version             4.0.1
 // @description         Un-Elevate Your Cathay Award Search 2022.
 // @author              jayliutw
 // @connect             greasyfork.org
@@ -10,6 +10,9 @@
 // @connect             userscripts.jayliu.net
 // @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/redeem-flight-awards.html*
 // @match               https://*.cathaypacific.com/cx/*/book-a-trip/redeem-flights/facade.html*
+// @match               https://api.cathaypacific.com/redibe/IBEFacade*
+// @match               https://cxplanner.jayliu.net/*
+// @match               https://userscripts.jayliu.net/*
 // @match               https://book.cathaypacific.com/*
 // @grant               GM_setValue
 // @grant               GM_getValue
@@ -20,12 +23,20 @@
 // ==/UserScript==
 
 
+if(window.location.href.indexOf("planner") > -1) {
+    unsafeWindow.checkVersion = function(){
+        return GM_info.script.version;
+    }
+}
+
 //============================================================
 // Main Userscript
 //============================================================
 
 (function() {
     'use strict';
+
+
 
 const debug = false;
 
@@ -69,6 +80,8 @@ function httpRequest(request, native = false){
     let tab_id = "";
     let availability_url = "https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability?TAB_ID=";
     let form_submit_url = availability_url + tab_id;
+
+    let autoScroll = true;
 
     function initCXvars(){
         if(typeof staticFilesPath !== "undefined" && static_path != staticFilesPath){
@@ -159,12 +172,18 @@ function httpRequest(request, native = false){
     let cont_batch = value_get("cont_batch", "0") == "0" ? 0 : 1;; ///cont_batch/.test(window.location.hash); //urlParams.get('cont_batch');
     let cont_saved = value_get("cont_saved", "0") == "0" ? 0 : 1;; ///cont_saved/.test(window.location.hash); //urlParams.get('cont_saved');
     let cont_ts = value_get("cont_ts", "0"); //window.location.hash.match(/cont_ts=([0-9]+)&/) ? window.location.hash.match(/cont_ts=([0-9]+)&/)[1] : 0;
+    let redirect_search = value_get("redirect_search", "0"); ///cont_query/.test(window.location.hash); //urlParams.get('cont_query');
+    let cxplanner_flights = value_get("cxplanner_flights", []) == [] ? 0 : value_get("cxplanner_flights", []); ///cont_query/.test(window.location.hash); //urlParams.get('cont_query');
 
     function reset_cont_vars() {
-        value_set("cont_query", "0");
-        value_set("cont_batch", "0");
-        value_set("cont_saved", "0");
-        value_set("cont_ts", "0");
+        if(redirect_search != "0"){
+            value_set("redirect_search", "0")
+        } else {
+            value_set("cont_query", "0");
+            value_set("cont_batch", "0");
+            value_set("cont_saved", "0");
+            value_set("cont_ts", "0");
+        }
     }
 
 //============================================================
@@ -191,14 +210,31 @@ function httpRequest(request, native = false){
 
         const current_page = window.location.href;
 
-        if(current_page.indexOf("redeem-flight-awards.html") > -1){
+        if(current_page.indexOf("/redibe/IBEFacade") > -1){
+
+            log("initRoot /redibe/IBEFacade")
+            waitForElm('h1').then((elm) => {
+                if(elm.innerText == "Access Denied") {
+                    document.body.querySelector("body > p").innerHTML = `<a href="https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html">Go back and try again.</a>`
+                }
+            });
+
+        } else if(current_page.indexOf("redeem-flight-awards.html") > -1){
             reset_cont_vars();
 
             log("initRoot redeem-flight-awards.html")
             waitForElm('.redibe-v3-flightsearch form').then((elm) => {
                 elm.before(shadowWrapper);
                 initSearchBox();
-                checkLogin();
+                if(redirect_search != "0") {
+                    btn_search.innerHTML = lang.searching;
+                    btn_search.classList.add("searching");
+                    setTimeout(function(){
+                        location.href = redirect_search;
+                    },1500);
+                } else {
+                    checkLogin();
+                }
             });
 
         } else if(current_page.indexOf("facade.html") > -1){
@@ -219,6 +255,7 @@ function httpRequest(request, native = false){
                 boxes.forEach( box => { box.remove() });
                 document.body.append(shadowWrapper);
                 shadowContainer.classList.add("results_container");
+                if(cxplanner_flights) initCXplannerBox();
                 initSearchBox();
                 checkLogin();
             });
@@ -316,6 +353,7 @@ function httpRequest(request, native = false){
         "prem_donate":"To enable these extended features, please click below to view the Extras package on buymeacoffee.com.<a href='https://www.buymeacoffee.com/jayliutw/e/106024' target='_blank' class='unlock_btn'>Unlock Advanced Features</a>If you've previously donated to me through Buy Me a Coffee before the release of these features, you should have received an email inviting you to a BMaC membership, and you will be receiving these features for free. Seriously guys, thanks for your donations. I hope these exclusive features are a nice surprise for you. It takes quite some time and effort to build, maintain, and support this tweak, and the positive feedback and heartwarming support I've been receiving from the community has made it all the more worth it. Thank you guys, for your generous donations, especially seeing as you were all getting nothing extra in return.<br><br>If you haven't donated yet, and you've found this tool helpful, please consider buying me a coffee at: <a href='https://buymeacoffee.com/jayliutw' target='_blank'>https://buymeacoffee.com/jayliutw</a>",
         "human":"Cathay's website needs you to prove you're a human:",
         "bot_check":"Please Complete Cathay Bot Check",
+        "mixed":"Mixed Class Available via"
     } : {
         "ec" : "TW",
         "el": "zh",
@@ -376,6 +414,7 @@ function httpRequest(request, native = false){
         "prem_donate":"若有興起解鎖上述進階功能，請點擊下方按鈕至 buymeacoffee.com 查看進階功能 Extras 包：<a href='https://www.buymeacoffee.com/jayliutw/e/106024' target='_blank' class='unlock_btn'>解鎖進階功能</a>如果過去曾經已透過 buymeacoffee.com 贊助過咖啡，應該會收到一封 Email 邀請加入一個 Buy Me a Coffee 的免費會籍，而會員都會免費獲得解鎖進階功能 Extras 包喔！真心感謝各位的熱心贊助，也希望這些獨家的新功能有給你們帶來一點小驚喜！開發、維護這個插件其實花我不少的私人時間，但是獲得各位的熱情反饋和實質鼓勵讓這一切都感到非常值得。每次看到有人開環球票然後 Tag 我，就覺得倍感溫馨。尤其是之前請過咖啡的各位，贊助並沒有獲得任何額外的好處卻還是選擇斗內，真的是由衷感謝！<br><br>還沒贊助過的朋友們，如果也覺得這個工具幫到你，也歡迎請我喝咖啡喔：<a href='https://buymeacoffee.com/jayliutw' target='_blank'>https://buymeacoffee.com/jayliutw</a><br><br>如果曾經用別的方式贊助過我，請跟我聯繫，好讓我邀請加入會籍：<a href='mailto:epicurean.tw@gmail.com' target='_blank'>epicurean.tw@gmail.com</a>",
         "human":"國泰網站需要你證明你是真人：",
         "bot_check":"請解除國泰網站機器人檢查",
+        "mixed":"潛在混艙航班經由"
     };
 
 //============================================================
@@ -509,8 +548,9 @@ function httpRequest(request, native = false){
             display:inline-block;
             padding: 3px 0;
             vertical-align: top;
-            line-height: 10px;
-            font-size: 9px;
+            line-height: 22px;
+            font-size: 18px;
+            zoom:0.5;
             text-transform:uppercase;
         }
         .unelevated_form .unelevated_saved { position:absolute; right:10px;top:6px;background: #ae4b4b; display: inline-block; border-radius: 5px; padding: 3px 10px;}
@@ -903,12 +943,17 @@ function httpRequest(request, native = false){
         a.uef_toggle:after {content:'«'} .uef_collapsed a.uef_toggle:after {content : '»'}
         .bulk_box {min-height: 60px; transition: margin-top 0.7s ease-out;background: #f7f6f0; border: 1px solid #bcbec0; box-shadow: 0px 0px 7px rgb(0 0 0 / 20%); margin-top: -11px !important; margin-bottom: 20px; z-index: 9; position: relative;}
         .bulk_box_hidden {position:relative; margin-top:-80px;}
-        .bulk_results {transition: all 0.5s ease-out; min-height: 30px; margin: 10px;}
+        .bulk_results {transition: all 0.5s ease-out; min-height: 30px; margin: 0 10px 10px 10px;}
         .bulk_results_hidden { height:0; min-height:0; margin:0; overflow:hidden; transition: all 0.5s ease-out;}
         .filters {
-            text-align:center;
-            font-size:12px;
-            margin-bottom:10px;
+            text-align: center;
+            font-size: 12px;
+            padding: 10px 0px 10px 0px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: #f7f6f0;
+            border-bottom: 1px solid #c6c2c1;
         }
         .filters input{
             vertical-align: -2px;
@@ -918,7 +963,7 @@ function httpRequest(request, native = false){
         .filters label {
             display:inline-block;
         }
-        .bulk_table { width:100%; border: 1px solid #c6c2c1; margin-top: 3px; font-size: 12px; border-spacing: 0; border-collapse: collapse; }
+        .bulk_table { width:100%; border: 1px solid #c6c2c1; margin-top: -1px; font-size: 12px; border-spacing: 0; border-collapse: collapse; }
         .bulk_table th { text-align:center !important; font-weight:bold; background: #ebedec; line-height:17px; font-size: 12px; }
         .bulk_table td { background:white; }
         .bulk_table tr:nth-child(even) td { background:#f9f9f9; }
@@ -1126,8 +1171,10 @@ function httpRequest(request, native = false){
         .flight_item * {  pointer-events: none; }
         .flight_item .flight_save {  pointer-events: auto; }
 
-        .bulk_footer{ min-height: 45px; margin: 10px;}
-        .bulk_footer.bulk_sticky .bulk_footer_container { position: fixed; bottom: 0; padding: 10px; background: #f7f6f0; margin: 0 auto; border-top: 1px solid #c6c2c1; box-shadow: 0px 0px 7px rgb(0 0 0 / 20%); max-width: 858px; left: 0; right: 0; }
+        .bulk_footer{ min-height: 45px; position:sticky; bottom:0;}
+        /*.bulk_footer.bulk_sticky .bulk_footer_container { position: fixed; bottom: 0; padding: 10px; background: #f7f6f0; margin: 0 auto; border-top: 1px solid #c6c2c1; box-shadow: 0px 0px 7px rgb(0 0 0 / 20%); max-width: 858px; left: 0; right: 0; }*/
+        .bulk_footer .bulk_footer_container { padding: 10px; background: #f7f6f0; margin: 0; }
+        .bulk_footer.bulk_sticky .bulk_footer_container { border-top: 1px solid #c6c2c1; box-shadow: 0px 0px 7px rgb(0 0 0 / 20%); }
         @media screen and (max-width: 500px) { .bulk_footer.bulk_sticky .bulk_footer_container  { max-width: 838px;} }
         button.bulk_submit {position:relative;background-color: #367778; border: none; color: white; vertical-align: middle; margin: 0px auto; height: 45px; line-height: 35px; padding: 5px 0; width: 100%; display: block; font-family: "GT Walsheim","Cathay Sans EN", CathaySans_Rg, sans-serif !important;font-size:15px}
         .bulk_submit img, button.uef_search img {line-height: 35px; height: 25px; width:auto; display: inline-block; margin-right: 10px; vertical-align: -7px;}
@@ -1300,6 +1347,23 @@ function httpRequest(request, native = false){
             background-color: DodgerBlue !important;
             color: #ffffff;
         }
+        #planner_routes {
+            background: #f7f6f0;
+            padding: 5px 10px;
+            margin-bottom: -10px;
+            border: 1px solid #bcbec0;
+            box-shadow: 0px 0px 7px rgb(0 0 0 / 20%);
+            border-bottom: none;
+        }
+        #planner_routes:empty {
+            display:none;
+        }
+        a.planner_route {
+            color: #016564;
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 14px;
+        }
     `;
 
     addCss(`.captcha_wrapper {
@@ -1321,6 +1385,13 @@ function httpRequest(request, native = false){
         }
         `, document.body)
 
+    if(window.location.href.indexOf("air/booking/availability") > -1 ){
+        addCss(`
+        html, body {overflow-x:inherit !important;}
+        header {overflow-x:hidden;}
+        `, document.body);
+    }
+
 //============================================================
 // Form Listeners
 //============================================================
@@ -1329,7 +1400,7 @@ function httpRequest(request, native = false){
     let input_from, input_to, input_date, input_adult, input_child;
     let clear_from, clear_to;
     let link_search_saved, link_search_multi, div_filters;
-    let div_update, div_login_prompt, div_footer,div_ue_container, div_saved, div_faves_tabs, div_saved_queries;
+    let div_update, div_login_prompt, div_bulk_box, div_footer,div_ue_container, div_saved, div_faves_tabs, div_saved_queries;
     let div_saved_flights, div_multi_box, div_table, div_table_body;
     let premium_switch;
 
@@ -1352,6 +1423,7 @@ function httpRequest(request, native = false){
         div_filters =        shadowRoot.querySelector(".filters");
         div_update =        shadowRoot.querySelector(".unelevated_update");
         div_login_prompt =  shadowRoot.querySelector(".login_prompt");
+        div_bulk_box =        shadowRoot.querySelector(".bulk_box");
         div_footer =        shadowRoot.querySelector(".bulk_footer");
         div_ue_container =  shadowRoot.querySelector(".unelevated_form");
         div_saved = shadowRoot.querySelector(".unelevated_faves");
@@ -1378,6 +1450,7 @@ function httpRequest(request, native = false){
         });
 
         btn_batch.addEventListener("click", function(e) {
+            autoScroll = true;
             bulk_click();
         });
 
@@ -1457,7 +1530,7 @@ function httpRequest(request, native = false){
                 //stop_search = true;
                 //searching = false;
                 e.target.innerText = lang.loading;
-                regularSearch([{from:(e.target.dataset.from ? e.target.dataset.from : uef_from.substring(0,3)), to:(e.target.dataset.dest ? e.target.dataset.dest : uef_to.substring(0,3)), date:e.target.dataset.date}], {adult:uef_adult, child:uef_child})
+                regularSearch([{from:(e.target.dataset.from ? e.target.dataset.from : uef_from.substring(0,3)), to:(e.target.dataset.dest ? e.target.dataset.dest : uef_to.substring(0,3)), date:e.target.dataset.date}], {adult:uef_adult, child:uef_child}, "Y", false, false, false)
             } else if (e.target.dataset.save) {
                 key = e.target.dataset.date + e.target.dataset.from + e.target.dataset.dest;
                 if(e.target.classList.contains("bulk_saved")){
@@ -1562,7 +1635,7 @@ function httpRequest(request, native = false){
 
                 let pos = 1;
                 Array.from(segments_array).sort(function(a,b){
-                    if(+a.dataset.date > +b.dataset.date) return 1; console.log(a.dataset.date + " " + b.dataset.date);
+                    if(+a.dataset.date > +b.dataset.date) return 1;
                     if(a.dataset.date == b.dataset.date) return (a.dataset.new ? 1 : (a.dataset.segment > b.dataset.segment ? 1 : -1));
                     return false;
                 }).forEach(function(elm){
@@ -1660,6 +1733,12 @@ function httpRequest(request, native = false){
         origins:[],
         dest:[]
     };
+
+
+    unsafeWindow.innerFunc = function innerFunc(){
+        console.log("innerfunc");
+    };
+
 
     function getOrigins(){
         log("getOrigins()");
@@ -1940,7 +2019,14 @@ function httpRequest(request, native = false){
         btn_batch.classList.add("bulk_searching");
         shadowRoot.querySelector(".bulk_table tbody").innerHTML = "";
 
-        if(!cont_query){
+
+        if(!cont_query && window.location.href.indexOf("air/booking/availability") > -1 ){
+                const boxes = document.querySelectorAll("body > div");
+                boxes.forEach( box => { box.remove() });
+                document.body.append(shadowWrapper);
+                shadowContainer.classList.add("results_container");
+                document.body.classList.add("cont_query");
+        } else if (!cont_query) {
             regularSearch([{from:ss_query.from, to:ss_query.to, date:ss_query.date}], {adult:1, child:0}, "Y", true, false, true);
             return;
         }
@@ -2115,56 +2201,55 @@ function httpRequest(request, native = false){
 
     // Default Search JSON
 
-    function newQueryPayload(route = {from: "HND", to: "ITM", date: dateAdd(14)}, passengers = {adult:1, child:0}, cabinclass ="Y",oneway = false) {
+    function newQueryPayload(route = {from: "HND", to: "ITM", date: dateAdd(14)}, passengers = {adult:1, child:0}, cabinclass ="Y",oneway = false, flexible = "false") {
         log("newQueryPayload()");
-        return {
-            "awardType": "Standard",
-            "brand": "CX",
-            "cabinClass": cabinclass,
-            "entryCountry": lang.ec,
-            "entryLanguage": lang.el,
-            "entryPoint": "https://www.cathaypacific.com/cx/" + lang.el + "_" + lang.ec + "/book-a-trip/redeem-flights/redeem-flight-awards.html",
-            "errorUrl": "https://www.cathaypacific.com/cx/" + lang.el + "_" + lang.ec + "/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow",
-            "returnUrl": "https://www.cathaypacific.com/cx/" + lang.el + "_" + lang.ec + "/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow",
-            "isFlexibleDate": false,
-            "numAdult": passengers.adult,
-            "numChild": passengers.child,
-            "promotionCode": "",
-            "segments": [
-                {
-                    "departureDate": route.date,
-                    "origin": route.from,
-                    "destination": route.to
-                }
-            ]
-        };
+        const target = new URL('https://api.cathaypacific.com/redibe/IBEFacade');
+        const params = new URLSearchParams();
+        params.set('ACTION', 'RED_AWARD_SEARCH');
+        params.set('ENTRYPOINT', 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html');
+        params.set('ENTRYLANGUAGE', lang.el);
+        params.set('ENTRYCOUNTRY', lang.ec);
+        params.set('RETURNURL', 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow');
+        params.set('ERRORURL', 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow');
+        params.set('CABINCLASS', cabinclass);
+        params.set('BRAND', 'CX');
+        params.set('ADULT', passengers.adult);
+        params.set('CHILD', passengers.child);
+        params.set('FLEXIBLEDATE', flexible);
+        params.set('ORIGIN[1]', route.from);
+        params.set('DESTINATION[1]', route.to);
+        params.set('DEPARTUREDATE[1]', route.date);
+        params.set('LOGINURL', 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/sign-in/campaigns/miles-flight.html?loginreferrer=https%3A%2F%2Fwww.cathaypacific.com%2Fcx%2F' + lang.el + '_' + lang.ec + '%2Fbook-a-trip%2Fredeem-flights%2Fredeem-flight-awards.html%3Fauto_submit%3Dtrue%26recent_search%3Dow%26vs%3D2');
+        target.search = params.toString();
+        return target;
     }
 
     function newMultiPayload(routes, passengers, cabinclass = "Y") {
         log("newMultiPayload()");
-        let legs = [];
-        routes.forEach( segment => {
-            legs.push({
-                "departureDate": segment.date,
-                "origin": segment.from,
-                "destination": segment.to
-            })
-        })
-        return {
-            "awardType": "Standard",
-            "brand": "CX",
-            "cabinClass": cabinclass,
-            "entryCountry": lang.ec,
-            "entryLanguage": lang.el,
-            "entryPoint": "https://www.cathaypacific.com/cx/" + lang.el + "_" + lang.ec + "/book-a-trip/redeem-flights/redeem-flight-awards.html",
-            "errorUrl": "https://www.cathaypacific.com/cx/" + lang.el + "_" + lang.ec + "/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc",
-            "returnUrl": "https://www.cathaypacific.com/cx/" + lang.el + "_" + lang.ec + "/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc",
-            "isFlexibleDate": false,
-            "numAdult": passengers.adult,
-            "numChild": passengers.child,
-            "promotionCode": "",
-            "segments": legs
-        };
+
+        const target = new URL('https://api.cathaypacific.com/redibe/IBEFacade');
+        const params = new URLSearchParams();
+        params.set('ACTION', 'RED_AWARD_SEARCH');
+        params.set('ENTRYPOINT', 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html');
+        params.set('ENTRYLANGUAGE', lang.el);
+        params.set('ENTRYCOUNTRY', lang.ec);
+        params.set('RETURNURL', 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc');
+        params.set('ERRORURL', 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc');
+        params.set('CABINCLASS', cabinclass);
+        params.set('BRAND', 'CX');
+        params.set('ADULT', passengers.adult);
+        params.set('CHILD', passengers.child);
+        params.set('FLEXIBLEDATE', 'false');
+
+        for (var i = 0; i < routes.length; i++) {
+            params.set('ORIGIN['+(i+1)+']', routes[i].from);
+            params.set('DESTINATION['+(i+1)+']', routes[i].to);
+            params.set('DEPARTUREDATE['+(i+1)+']', routes[i].date);
+        }
+
+        params.set('LOGINURL', 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/sign-in/campaigns/miles-flight.html?loginreferrer=https%3A%2F%2Fwww.cathaypacific.com%2Fcx%2F' + lang.el + '_' + lang.ec + '%2Fbook-a-trip%2Fredeem-flights%2Fredeem-flight-awards.html%3Fauto_submit%3Dtrue%26recent_search%3Dow%26vs%3D2');
+        target.search = params.toString();
+        return target;
     }
 
 //============================================================
@@ -2183,128 +2268,98 @@ function httpRequest(request, native = false){
 
      function newTabID(callback){
         log("Creating New Request Parameters...");
+
+        let parameters = {};
+        if (requestParams.ENC) {
+            parameters.SERVICE_ID = "1";
+            parameters.LANGUAGE = "TW";
+            parameters.EMBEDDED_TRANSACTION = "AirAvailabilityServlet";
+            parameters.SITE = "CXAWCXAW";
+            parameters.ENC = requestParams.ENC;
+            parameters.ENCT = "2";
+            parameters.ENTRYCOUNTRY = "";
+            parameters.ENTRYLANGUAGE = "";
+        } else {
+            alert("Error, No ENC.")
+            return;
+        }
+        var form_data = "";
+        for ( var key in parameters ) {
+            form_data = form_data + key + "="+ parameters[key] + "&";
+        }
+        log("Requesting New Tab ID...");
         httpRequest({
             method: "POST",
-            url: "https://api.cathaypacific.com/redibe/standardAward/create",
+            url: "https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/x-www-form-urlencoded"
             },
+            data: form_data,
             withCredentials: "true",
-            data: JSON.stringify(newQueryPayload()),
-            onload: function(response) {
-                log("Initial Request Parameters Received.");
-                var data = JSON.parse(response.responseText);
-                var parameters = (data.parameters);
-                var urlToPost = data.urlToPost || "https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability";
-                var form_data = "";
-                for ( var key in parameters ) {
-                    form_data = form_data + key + "="+ parameters[key] + "&";
-                }
-
-                log("Requesting New Tab ID...");
-                httpRequest({
-                    method: "POST",
-                    url: urlToPost,
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    data: form_data,
-                    withCredentials: "true",
-                    onreadystatechange: function(response) {
-                        var errorBOM = ""
-                        var errorMessage = lang.tab_retrieve_fail;
-                        if(response.readyState == 4 && response.status == 200) {
-                            log("Tab ID Response Received. Parsing...");
-                            var data = response.responseText;
-                            requestVars = response_parser(data, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/);
-                            log(response_parser(data, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/));
-                            if(!requestVars) {
-                                errorBOM = response_parser(data, /errorBom = ([^;]+)/);
-                                if(errorBOM?.modelObject?.step == "Error"){
-                                    errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage;
-                                }
-                                log("Tab ID Could not be parsed.");
-                                batchError("<strong>Error:</strong> " + errorMessage + " (<a href='"+login_url+"'>Login</a>) ");
-                                resetSearch();
-                                return false;
-                            }
-                            tab_id = requestVars.TAB_ID ? requestVars.TAB_ID : "";
-                            log("New Tab ID: " + tab_id);
-                            batchError(false);
-                            form_submit_url = availability_url + tab_id;
-                            if(callback) callback();
-                        } else if (response.readyState == 4) {
-                            errorBOM = response_parser(response.responseText, /errorBom = ([^;]+)/);
-                            if(errorBOM?.modelObject?.step == "Error"){
-                                errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage;
-                            }
-                            log("Failed to receive Tab ID.");
-                            resetSearch();
-                            batchError("<strong>Error:</strong> " + errorMessage + " ( <a href='"+login_url+"'>Login</a> ) ");
+            onreadystatechange: function(response) {
+                var errorBOM = ""
+                var errorMessage = lang.tab_retrieve_fail;
+                if(response.readyState == 4 && response.status == 200) {
+                    log("Tab ID Response Received. Parsing...");
+                    var data = response.responseText;
+                    requestVars = response_parser(data, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/);
+                    log(response_parser(data, /requestParams = JSON\.parse\(JSON\.stringify\('([^']+)/));
+                    if(!requestVars) {
+                        errorBOM = response_parser(data, /errorBom = ([^;]+)/);
+                        if(errorBOM?.modelObject?.step == "Error"){
+                            errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage;
                         }
+                        log("Tab ID Could not be parsed.");
+                        batchError("<strong>Error:</strong> " + errorMessage + " (<a href='"+login_url+"'>Login</a>) ");
+                        resetSearch();
+                        return false;
                     }
-                }, true);
+                    tab_id = requestVars.TAB_ID ? requestVars.TAB_ID : "";
+                    log("New Tab ID: " + tab_id);
+                    batchError(false);
+                    form_submit_url = availability_url + tab_id;
+                    if(callback) callback();
+                } else if (response.readyState == 4) {
+                    errorBOM = response_parser(response.responseText, /errorBom = ([^;]+)/);
+                    if(errorBOM?.modelObject?.step == "Error"){
+                        errorMessage = errorBOM.modelObject?.messages[0]?.subText || errorMessage;
+                    }
+                    log("Failed to receive Tab ID.");
+                    resetSearch();
+                    batchError("<strong>Error:</strong> " + errorMessage + " ( <a href='"+login_url+"'>Login</a> ) ");
+                }
             }
-        });
+        }, true);
     }
 
 //============================================================
 // Regular Search
 //============================================================
 
-    function regularSearch(route = [{from: "TPE", to: "TYO", date: dateAdd(14)}], passengers = {adult:1,child:0}, cabinclass ="Y", is_cont_query = false, is_cont_batch = false, is_cont_saved = false) {
-        var cx_string;
+    function regularSearch(route = [{from: "TPE", to: "TYO", date: dateAdd(14)}], passengers = {adult:1,child:0}, cabinclass ="Y", is_cont_query = false, is_cont_batch = false, is_cont_saved = false, flexible = "false"){
+        var target;
         if (route.length == 1) {
-            cx_string = JSON.stringify(newQueryPayload(route[0], passengers, cabinclass,true));
+            target = newQueryPayload(route[0], passengers, cabinclass, false, flexible);
         } else if (route.length > 1) {
-            cx_string = JSON.stringify(newMultiPayload(route, passengers, cabinclass));
+            target = newMultiPayload(route, passengers, cabinclass);
         } else {
             return;
         }
 
-        //var cx_string = JSON.stringify(newQueryPayload(uef_from, uef_to, uef_date, uef_adult, uef_child));
-        log("cx_string:");
-        log(cx_string);
         btn_search.innerHTML = lang.searching;
         btn_search.classList.add("searching");
-        httpRequest({
-            method: "POST",
-            url: "https://api.cathaypacific.com/redibe/standardAward/create",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            withCredentials: "true",
-            data: cx_string,
-            onload: function(response) {
-                var data = JSON.parse(response.responseText);
-                var parameters = data.parameters;
-                var urlToPost = data.urlToPost || "https://book.cathaypacific.com/CathayPacificAwardV3/dyn/air/booking/availability";
-                log("regularSearch parameters:");
-                log(parameters);
-                var action_url = new URL(urlToPost) ;
-                if (is_cont_query) value_set("cont_query","1");
-                if (is_cont_batch) value_set("cont_batch","1");
-                if (is_cont_saved) value_set("cont_saved","1");
-                value_set("cont_ts",Date.now());
-                // Create a form dynamically
-                var form = document.createElement("form");
-                form.setAttribute("name", "regular_search_form");
-                form.setAttribute("method", "post");
-                form.setAttribute("action", action_url);
 
-                for(var item in parameters) {
-                    var input = document.createElement("input");
-                    input.setAttribute("type", "hidden");
-                    input.setAttribute("name", item);
-                    input.setAttribute("value", parameters[item]);
-                    form.appendChild(input);
-                }
 
-                document.getElementsByTagName("body")[0].appendChild(form);
-                //document.forms.regular_search_form.submit();
-                form.submit();
-            }
-        });
+        if (is_cont_query) value_set("cont_query","1");
+        if (is_cont_batch) value_set("cont_batch","1");
+        if (is_cont_saved) value_set("cont_saved","1");
+        value_set("cont_ts",Date.now());
+        if(window.location.href.indexOf("redeem-flight-awards.html") > -1) {
+            location.href = target;
+        } else {
+            value_set("redirect_search",target.href);
+            location.href = `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html`;
+        }
     }
 
 //============================================================
@@ -2314,7 +2369,6 @@ function httpRequest(request, native = false){
     var bulk_date = "";
 
     function bulk_search(single_date = false) {
-
         log("bulk_search start, remaining_days:" + remaining_days);
         var no_continue = false;
         if(remaining_days-- == 0){
@@ -2330,8 +2384,14 @@ function httpRequest(request, native = false){
         uef_adult = input_adult.value;
         uef_child = input_child.value;
 
-        if(!cont_query){
-            regularSearch([{from:uef_from.substring(0,3), to:uef_to.substring(0,3), date:uef_date}], {adult:uef_adult, child:uef_child}, "Y", true, true);
+        if(!cont_query && window.location.href.indexOf("air/booking/availability") > -1 ){
+                const boxes = document.querySelectorAll("body > div");
+                boxes.forEach( box => { box.remove() });
+                document.body.append(shadowWrapper);
+                shadowContainer.classList.add("results_container");
+                document.body.classList.add("cont_query");
+        } else if (!cont_query) {
+            regularSearch([{from:uef_from.substring(0,3), to:uef_to.substring(0,3), date:uef_date}], {adult:uef_adult, child:uef_child}, "Y", true, true, false, false);
             return;
         }
 
@@ -2400,7 +2460,7 @@ function httpRequest(request, native = false){
             return;
         }
 
-        var requests = requestVars;
+        var requests = { ...requestVars };
 
         log("searchAvailability() requests");
         log(requests);
@@ -2447,8 +2507,14 @@ function httpRequest(request, native = false){
                         batchError("Response not valid JSON.");
                         return;
                     }
-                    var pageBom = JSON.parse(data.pageBom);
-                    callback(pageBom);
+                    if(data.modelObject) {
+                        callback(data);
+                    } else if(data.pageBom) {
+                        var pageBom = JSON.parse(data.pageBom);
+                        callback(pageBom);
+                    } else {
+                        batchError("modelObject does not exist.");
+                    }
                 } else if(response.readyState == 4 && response.status == 404) {
                     batchError(lang.key_exhausted);
                     newTabID(search_again);
@@ -2516,7 +2582,7 @@ function insertResults(from, to, date, pageBom){
                 if (j1 >= 1) { available = available + ` <span class='bulk_cabin bulk_j'>J <b>${j1}</b></span>`; d_j = true; }
                 if (p1 >= 1) { available = available + ` <span class='bulk_cabin bulk_p'>PY <b>${p1}</b></span>`; d_p = true; }
                 if (y1 >= 1) { available = available + ` <span class='bulk_cabin bulk_y'>Y <b>${y1}</b></span>`; d_y = true; }
-                flightkey = date+from+to+"_"+leg1_airline+leg1_flight_no;
+                flightkey = date+leg1_origin.slice(-3)+leg1_dest.slice(-3)+"_"+leg1_airline+leg1_flight_no;
                 if (available != "") {
                     flightHTML += `<div class="flight_wrapper">`;
                     flightHTML += `<div class='flight_item direct ${(saved_flights[flightkey] ? " saved" :"")}' data-flightinfo='${flightkey}' data-flightavail='${f1 + "_" + j1+ "_" + p1+ "_" + y1}' data-direct='1' data-f='${(d_f ? 1 : 0)}' data-j='${(d_j ? 1 : 0)}' data-p='${(d_p ? 1 : 0)}' data-y='${(d_y ? 1 : 0)}'>
@@ -2555,7 +2621,7 @@ function insertResults(from, to, date, pageBom){
                 var leg2_dest = flight.segments[1].destinationLocation;
                 var transit_time = getFlightTime(flight.segments[1].flightIdentifier.originDate - flight.segments[0].destinationDate,true);
                 var stopcity = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g.exec(flight.flightIdString)[1].replace(":"," / ");
-                flightkey = date+from+to+"_"+leg1_airline+leg1_flight_no+"_"+stopcity+"_"+leg2_airline+leg2_flight_no;
+                flightkey = date+leg1_origin.slice(-3)+leg2_dest.slice(-3)+"_"+leg1_airline+leg1_flight_no+"_"+stopcity+"_"+leg2_airline+leg2_flight_no;
                 if (available != "") {
                     flightHTML += `<div class="flight_wrapper">`;
                     flightHTML += `<div class='flight_item ${(saved_flights[flightkey] ? " saved" :"")}' data-direct='0' data-flightinfo='${flightkey}'  data-flightavail='${n_f + "_" + n_j + "_" + n_p + "_" + n_y}' data-f='${ d_f ? 1 : 0 }' data-j='${ d_j ? 1 : 0 }' data-p='${ d_p ? 1 : 0 }' data-y='${ d_y ? 1 : 0 }'>
@@ -2589,19 +2655,106 @@ function insertResults(from, to, date, pageBom){
 
     shadowRoot.querySelector('.bulk_table tr[data-date="' + date + '"] .bulk_flights').insertAdjacentHTML("beforeend", flightHTML);
     stickyFooter();
+    if(autoScroll) shadowRoot.querySelector(".bulk_results").scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
 }
 
+window.addEventListener('wheel', function(){
+    if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
+        autoScroll = true;
+    } else {
+        autoScroll = false;
+    }
+});
+window.addEventListener('touchmove', function(){
+    if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
+        autoScroll = true;
+    } else {
+        autoScroll = false;
+    }
+});
+
+
+
+
+//============================================================
+// Update Saved Flights
+//============================================================
+
+    function updateFlights(){
+            let saved = value_get("saved_flights",{});
+            unsafeWindow.ue_saved_flights = saved;
+            unsafeWindow.ue_flights = {};
+            let route, flightnum;
+            Object.entries(saved).sort((a, b) => a[0].substring(0, 8) - b[0].substring(0, 8)).forEach(flight => {
+                if(flight[0].split("_")[2]) return;
+                route = flight[0].substring(8, 14);
+                flightnum = flight[0].split("_")[1];
+                unsafeWindow.ue_flights[route] = unsafeWindow.ue_flights[route] || [];
+                unsafeWindow.ue_flights[route].push({
+                    date: flight[0].substring(0, 8),
+                    flight: flightnum,
+                    y: flight[1].y,
+                    j: flight[1].j,
+                    f: flight[1].f
+                });
+            })
+            unsafeWindow.populateFlights();
+    }
+
+    if(window.location.href.indexOf("https://cxplanner.jayliu.net/") > -1 || window.location.href.indexOf("Development/cx_planner") == 21) {
+        unsafeWindow.ue_saved_flights = value_get("saved_flights",{});
+        updateFlights();
+        window.addEventListener("focus", function(e){
+            unsafeWindow.ue_saved_flights = value_get("saved_flights",{});
+            setTimeout(function() {
+            unsafeWindow.ue_saved_flights = value_get("saved_flights",{});
+              updateFlights(e);
+            }, 500);
+        });
+    }
+
+
+    unsafeWindow.searchAwards = function(e){
+        let origin = e.target.closest("tr").querySelector(".rt-origin span");
+        let dest = e.target.closest("tr").querySelector(".rt-dest span");
+
+        if(!data.routes[[origin.innerText,dest.innerText].sort().join("-")]?.length) {
+            alert("Invalid route.");
+            return;
+        }
+
+        let saved = unsafeWindow.ue_flights || {};
+        let target = newQueryPayload({from:origin.innerText, to:dest.innerText, date:dateAdd(14)}, {adult:1, child:0}, "Y", true, false);
+
+        value_set("uef_from",origin.innerText);
+        value_set("uef_to",dest.innerText);
+        value_set("cont_ts",Date.now());
+        value_set("cont_query","1");
+        value_set("cont_batch","0");
+        value_set("redirect_search",target.href);
+        value_set("cxplanner_flights",fullRoute);
+
+        const url = `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html`;
+        window.open(url, "cxplanner", "noopener noreferrer");
+
+        //location.href = `https://www.cathaypacific.com/cx/${lang.el}_${lang.ec}/book-a-trip/redeem-flights/redeem-flight-awards.html`;
+        //console.log(target.href)
+
+    };
 //============================================================
 // Sticky Footer
 //============================================================
 
     function stickyFooter() {
-        var footerOffset = div_footer.getBoundingClientRect();
+        var bulkboxOffset = div_bulk_box.getBoundingClientRect();
         var ueformOffset = div_ue_container.getBoundingClientRect();
-        if (footerOffset.top < window.innerHeight - 55 || ueformOffset.top + div_ue_container.clientHeight > window.innerHeight - 72) {
+        //if (footerOffset.top < window.innerHeight - 55 || ueformOffset.top + div_ue_container.clientHeight > window.innerHeight - 72) {
+        if(bulkboxOffset.bottom < window.innerHeight) {
             div_footer.classList.remove("bulk_sticky");
+            shadowRoot.querySelector(".bulk_results").style.paddingBottom = "0px"
         } else {
             div_footer.classList.add("bulk_sticky");
+            shadowRoot.querySelector(".bulk_results").style.paddingBottom = "65px"
         }
     }
 
@@ -2704,6 +2857,8 @@ function insertResults(from, to, date, pageBom){
         log("currentVersion: "+ currentVersion);
         log("metaData.version: "+ liveVersion);
 
+        shadowRoot.querySelector(".unelevated_update a").href = value_get("update_link","https://cxplanner.jayliu.net/private.html");
+
         let newVersion = hasUpdate(liveVersion,currentVersion);
         if(newVersion){
             value_set("latestVersion",liveVersion);
@@ -2715,10 +2870,12 @@ function insertResults(from, to, date, pageBom){
     function getLatest(date) {
         GM_xmlhttpRequest({
             method: 'GET',
-            url: 'https://userscripts.jayliu.net/latest.json?v='+date,
+            url: 'https://cxplanner.jayliu.net/latest_private.json?v='+date,
             onload: function(e) {
                 const response = JSON.parse(e.responseText);
                 const version = response.latest_version;
+                const link = response.update_link;
+                value_set("update_link", (link ? link : "https://cxplanner.jayliu.net/private.html"));
                 //const key = /\/\/ @version +([0-9\.]+)/;
                 //const version = e.responseText.match(key) ? e.responseText.match(key)[1] : "0";
                 showUpdate(version);
@@ -2771,6 +2928,30 @@ function insertResults(from, to, date, pageBom){
         }
     };
 
-    initRoot();
+    function initCXplannerBox(){
+        if(cxplanner_flights){
+            const cxplanner_box = document.createElement("div");
+            let html = "";
+            cxplanner_flights.forEach(item=>{
+                if(item) html += `<a href="#" class="planner_route" data-route="${item}">${item}</a>`;
+            })
+            cxplanner_box.innerHTML = "<div id='planner_routes'>"+html+"</div>";
+            shadowContainer.appendChild(cxplanner_box);
+
+            value_set("cxplanner_flights", [])
+            cxplanner_box.addEventListener("click",function(e){
+                if(e.target.dataset["route"]){
+                    input_from.value = e.target.dataset["route"].split("-")[0];
+                    input_to.value = e.target.dataset["route"].split("-")[1];
+                }
+            })
+        }
+
+    }
+
+
+    if(window.location.href.indexOf("cathaypacific") > -1){
+        initRoot();
+    }
 
 })();
