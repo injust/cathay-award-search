@@ -260,7 +260,7 @@ await (async () => {
         </div>
       </div>
     </div>
-  `
+  `.trim()
 
   // ============================================================
   // Styles
@@ -946,7 +946,7 @@ await (async () => {
           <span class="leg"></span>
           <a href="javascript:void 0" class="saved_remove" data-query="${queryString}">${xSvg('saved_delete')}</a>
         </div>
-      `
+      `.trim()
     }
     divSavedQueries.innerHTML = savedList
   }
@@ -994,7 +994,7 @@ await (async () => {
           <span class="leg"></span>
           <a href="javascript:void 0" class="saved_remove" data-flight-key="${flightKey}">${xSvg('saved_delete')}</a>
         </div>
-      `
+      `.trim()
     }
     divSavedFlights.innerHTML = savedList
   }
@@ -1331,7 +1331,7 @@ await (async () => {
           </td>
           <td class="bulk_flights"></td>
         </tr>
-      `
+      `.trim()
       divTableBody.insertAdjacentHTML('beforeend', resultsRow)
     }
 
@@ -1341,7 +1341,8 @@ await (async () => {
           <a href="javascript:void 0" class="bulk_save ${savedQueries.has(queryString) ? 'bulk_saved' : ''}" data-save data-query="${queryString}">${heartSvg('heart_save')}</a>
           <a href="javascript:void 0" class="bulk_go_book" data-book data-query="${queryString}">Book &raquo;</a>
         </span>
-        <div class="flight_list">`
+        <div class="flight_list">
+    `.trim()
 
     if (pageBom.modelObject?.isContainingErrors) {
       flightHTML += `<span class="bulk_response_error"><strong>Error</strong>: ${pageBom.modelObject?.messages[0]?.text}</span>`
@@ -1402,7 +1403,7 @@ await (async () => {
                 <span class="info_duration"><span>Total Flight Duration:</span> ${leg1Duration}</span>
               </div>
             </div>
-          `
+          `.trim()
           }
         } else {
           const f2 = parseCabinStatus(flight.segments[1].cabins?.F?.status)
@@ -1460,7 +1461,7 @@ await (async () => {
                 <span class="info_duration"><span>Total Flight Duration:</span> ${leg1Duration}</span>
               </div>
             </div>
-          `
+          `.trim()
           }
         }
 
