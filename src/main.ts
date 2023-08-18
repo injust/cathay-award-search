@@ -1104,16 +1104,15 @@ await (async () => {
       })
 
       if (resp.status === 200) {
-        let data: AvailabilityResponse
         try {
-          data = await resp.json()
+          const data: AvailabilityResponse = await resp.json()
+          requestParams = JSON.parse(data.requestParams)
+          log('requestParams:', requestParams)
         } catch {
           resetSearch()
           batchError('Response not valid JSON')
           return
         }
-        requestParams = JSON.parse(data.requestParams)
-        log('requestParams:', requestParams)
 
         tabId = requestParams.TAB_ID ?? ''
         formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
@@ -1296,16 +1295,14 @@ await (async () => {
     }
 
     if (resp.status === 200) {
-      let data: AvailabilityResponse
       try {
-        data = await resp.json()
+        const data: AvailabilityResponse = await resp.json()
+        const pageBom: PageBom = JSON.parse(data.pageBom)
+        await cb(pageBom)
       } catch {
         resetSearch()
         batchError('Response not valid JSON')
-        return
       }
-      const pageBom: PageBom = JSON.parse(data.pageBom)
-      await cb(pageBom)
     } else {
       batchError(resp.status === 404 ? lang.key_exhausted : resp.status >= 300 ? lang.getting_key : lang.error)
       await newTabID(searchAgain)
