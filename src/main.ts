@@ -1304,11 +1304,8 @@ await (async () => {
       }
       const pageBom: PageBom = JSON.parse(data.pageBom)
       await cb(pageBom)
-    } else if (resp.status === 404) {
-      batchError(lang.key_exhausted)
-      await newTabID(searchAgain)
-    } else if (resp.status >= 300) {
-      batchError(lang.getting_key)
+    } else {
+      batchError(resp.status === 404 ? lang.key_exhausted : resp.status >= 300 ? lang.getting_key : lang.error)
       await newTabID(searchAgain)
     }
   }
