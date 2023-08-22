@@ -1477,7 +1477,7 @@ await (async () => {
   const stickyFooter = (): void => {
     const footerOffset = divFooter.getBoundingClientRect()
     const ueformOffset = divUeContainer.getBoundingClientRect()
-    if (footerOffset.top < window.innerHeight - 55 || ueformOffset.top + divUeContainer.clientHeight > window.innerHeight - 72) {
+    if (footerOffset.top < document.documentElement.clientHeight - 55 || ueformOffset.top + divUeContainer.clientHeight > document.documentElement.clientHeight - 72) {
       divFooter.classList.remove('bulk_sticky')
     } else {
       divFooter.classList.add('bulk_sticky')
