@@ -1493,7 +1493,7 @@ await (async () => {
     shadowContainer.appendChild(searchBox)
     assignElements()
     addFormListeners()
-    window.addEventListener('scroll', (e) => {
+    document.addEventListener('scroll', (e) => {
       stickyFooter()
     })
     updateSavedQueries()
