@@ -282,7 +282,7 @@ await (async () => {
   let selectMultiCabin: HTMLSelectElement
   let clearFrom: SVGElement, clearTo: SVGElement
   let linkSearchSaved: HTMLAnchorElement, linkSearchMulti: HTMLAnchorElement
-  let divFilters: HTMLDivElement, divLoginPrompt: HTMLDivElement, divFooter: HTMLDivElement, divUeContainer: HTMLDivElement, divHeartSave: HTMLDivElement, divSaved: HTMLDivElement, divFavesTabs: HTMLDivElement, divSavedFlights: HTMLDivElement, divSavedQueries: HTMLDivElement, divMultiBox: HTMLDivElement, divResults: HTMLDivElement, divError: HTMLDivElement
+  let divFilters: HTMLDivElement, divLoginPrompt: HTMLDivElement, divFooter: HTMLDivElement, divUeContainer: HTMLDivElement, divHeartSave: HTMLDivElement, divSaved: HTMLDivElement, divFavesTabs: HTMLDivElement, divSavedFlights: HTMLDivElement, divSavedQueries: HTMLDivElement, divMultiBox: HTMLDivElement, divBulk: HTMLDivElement, divResults: HTMLDivElement, divError: HTMLDivElement
   let divTable: HTMLTableElement, divTableBody: HTMLTableSectionElement
 
   const assignElements = (): void => {
@@ -317,6 +317,7 @@ await (async () => {
     divSavedFlights = shadowRoot.querySelector('.unelevated_faves .saved_flights')
     divSavedQueries = shadowRoot.querySelector('.unelevated_faves .saved_queries')
     divMultiBox = shadowRoot.querySelector('.multi_box')
+    divBulk = shadowRoot.querySelector('.bulk_box')
     divResults = shadowRoot.querySelector('.bulk_results')
     divError = shadowRoot.querySelector('.bulk_error')
 
@@ -1475,12 +1476,12 @@ await (async () => {
   // ============================================================
 
   const stickyFooter = (): void => {
-    const footerOffset = divFooter.getBoundingClientRect()
-    const ueformOffset = divUeContainer.getBoundingClientRect()
-    if (footerOffset.top < document.documentElement.clientHeight - 55 || ueformOffset.top + divUeContainer.clientHeight > document.documentElement.clientHeight - 72) {
-      divFooter.classList.remove('bulk_sticky')
-    } else {
+    const bulkBoxRect = divBulk.getBoundingClientRect()
+    const ueFormRect = divUeContainer.getBoundingClientRect()
+    if (ueFormRect.bottom + 65 < document.documentElement.clientHeight && document.documentElement.clientHeight < bulkBoxRect.bottom) {
       divFooter.classList.add('bulk_sticky')
+    } else {
+      divFooter.classList.remove('bulk_sticky')
     }
   }
 
