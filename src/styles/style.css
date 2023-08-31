@@ -757,6 +757,7 @@ span.info_duration {
     position: relative;
     display: inline-block;
     overflow: hidden;
+    visibility: hidden;
 
     max-width: 0px;
     padding: 6px 0px;
@@ -794,12 +795,16 @@ span.info_duration {
 .show_business .flight_item[data-j],
 .show_premium .flight_item[data-p],
 .show_economy .flight_item[data-y] {
+    visibility: visible;
+
     max-width: 280px;
     padding: 6px 6px;
     margin-right: 6px;
 }
 
 .nonstop_only .flight_item:not(.direct) {
+    visibility: hidden;
+
     max-width: 0px;
     padding: 6px 0px;
     margin-right: 0px;
