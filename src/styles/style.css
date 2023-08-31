@@ -791,10 +791,10 @@ span.info_duration {
     max-width: 20px;
 }
 
-.show_first .flight_item[data-f],
-.show_business .flight_item[data-j],
-.show_premium .flight_item[data-p],
-.show_economy .flight_item[data-y] {
+.show_first .flight_item.f,
+.show_business .flight_item.j,
+.show_premium .flight_item.p,
+.show_economy .flight_item.y {
     visibility: visible;
 
     max-width: 280px;
