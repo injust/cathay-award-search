@@ -35,10 +35,6 @@ export const lang: { [key: string]: string } = {
   max_segments: 'Max 6 Sectors Accepted',
   book_multi: 'Book Multi-City Award',
   query: 'Search',
-  delete: 'Remove',
   search_selected: 'Search All Saved',
-  no_saved: 'You do not have any saved queries. Click on ♥ in batch results to save.',
-  loading: 'Searching...',
-  human: "Cathay's website needs you to prove you're a human:",
-  bot_check: 'Please Complete Cathay Bot Check'
+  loading: 'Searching...'
 }
