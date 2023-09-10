@@ -196,7 +196,6 @@
 .saved_queries:empty:after,
 .saved_flights:empty:after {
     display: flex;
-    content: "You do not have any saved queries. Click on ♥ in batch results to save.";
     text-align: center;
     font-size: 14px;
     align-items: center;
@@ -205,6 +204,14 @@
     opacity: 40%;
     line-height: 25px;
     margin: 0 25px;
+}
+
+.saved_queries:empty:after {
+    content: "You don't have any saved queries. Click on ♥ in batch results to save.";
+}
+
+.saved_flights:empty:after {
+    content: "You don't have any saved flights. Click on ♥ in batch results to save.";
 }
 
 .unelevated_faves .saved_query {
