@@ -2,7 +2,7 @@
 // @name                Cathay Award Search Fixer 2022
 // @name:zh-TW          國泰獎勵機票搜尋引擎修復神器 2022
 // @namespace           jayliutw
-// @version             4.0.1
+// @version             4.0.2
 // @description         Un-Elevate Your Cathay Award Search 2022.
 // @author              jayliutw
 // @connect             greasyfork.org
@@ -2213,8 +2213,8 @@ function httpRequest(request, native = false){
         params.set('ERRORURL', 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=ow');
         params.set('CABINCLASS', cabinclass);
         params.set('BRAND', 'CX');
-        params.set('ADULT', passengers.adult);
-        params.set('CHILD', passengers.child);
+        params.set('ADULT', passengers.adult || 1);
+        params.set('CHILD', passengers.child || 0);
         params.set('FLEXIBLEDATE', flexible);
         params.set('ORIGIN[1]', route.from);
         params.set('DESTINATION[1]', route.to);
@@ -2237,8 +2237,8 @@ function httpRequest(request, native = false){
         params.set('ERRORURL', 'https://www.cathaypacific.com/cx/' + lang.el + '_' + lang.ec + '/book-a-trip/redeem-flights/redeem-flight-awards.html?recent_search=mc');
         params.set('CABINCLASS', cabinclass);
         params.set('BRAND', 'CX');
-        params.set('ADULT', passengers.adult);
-        params.set('CHILD', passengers.child);
+        params.set('ADULT', passengers.adult || 1);
+        params.set('CHILD', passengers.child || 0);
         params.set('FLEXIBLEDATE', 'false');
 
         for (var i = 0; i < routes.length; i++) {
