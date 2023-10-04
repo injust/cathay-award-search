@@ -2,7 +2,7 @@
 // @name                Cathay Award Search Fixer 2022
 // @name:zh-TW          國泰獎勵機票搜尋引擎修復神器 2022
 // @namespace           jayliutw
-// @version             4.0.2
+// @version             4.0.3
 // @description         Un-Elevate Your Cathay Award Search 2022.
 // @author              jayliutw
 // @connect             greasyfork.org
@@ -253,6 +253,10 @@ function httpRequest(request, native = false){
             waitForElm('body > header').then((elm) => {
                 const boxes = document.querySelectorAll("body > div");
                 boxes.forEach( box => { box.remove() });
+                addCss(`
+                html, body {overflow-x:inherit !important;}
+                header {overflow-x:hidden;}
+                `, document.body);
                 document.body.append(shadowWrapper);
                 shadowContainer.classList.add("results_container");
                 if(cxplanner_flights) initCXplannerBox();
@@ -350,7 +354,7 @@ function httpRequest(request, native = false){
         "prem_feat4":"Submit oneworld Multi-City Award Search",
         "prem_text4":"From your saved routes, create a multi-city itinerary search that would have taken ages on Cathay's multicity search.",
         "prem_feat5":"And more to come!",
-        "prem_donate":"To enable these extended features, please click below to view the Extras package on buymeacoffee.com.<a href='https://www.buymeacoffee.com/jayliutw/e/106024' target='_blank' class='unlock_btn'>Unlock Advanced Features</a>If you've previously donated to me through Buy Me a Coffee before the release of these features, you should have received an email inviting you to a BMaC membership, and you will be receiving these features for free. Seriously guys, thanks for your donations. I hope these exclusive features are a nice surprise for you. It takes quite some time and effort to build, maintain, and support this tweak, and the positive feedback and heartwarming support I've been receiving from the community has made it all the more worth it. Thank you guys, for your generous donations, especially seeing as you were all getting nothing extra in return.<br><br>If you haven't donated yet, and you've found this tool helpful, please consider buying me a coffee at: <a href='https://buymeacoffee.com/jayliutw' target='_blank'>https://buymeacoffee.com/jayliutw</a>",
+        "prem_donate":"To enable these extended features, please click below to view the Extras package on buymeacoffee.com.<a href='https://www.buymeacoffee.com/jayliutw/e/106024' target='_blank' class='unlock_btn'>Unlock Advanced Features</a>",
         "human":"Cathay's website needs you to prove you're a human:",
         "bot_check":"Please Complete Cathay Bot Check",
         "mixed":"Mixed Class Available via"
@@ -411,7 +415,7 @@ function httpRequest(request, native = false){
         "prem_feat4":"多城市行程(環球票)查詢",
         "prem_text4":"在你收藏的行程清單裡，簡單勾選你的行程（最多6個）就能組出國泰網站「多個城市」查詢的參數，並直接搜尋和選航班！",
         "prem_feat5":"還有更多待產中，請拭目以待！",
-        "prem_donate":"若有興起解鎖上述進階功能，請點擊下方按鈕至 buymeacoffee.com 查看進階功能 Extras 包：<a href='https://www.buymeacoffee.com/jayliutw/e/106024' target='_blank' class='unlock_btn'>解鎖進階功能</a>如果過去曾經已透過 buymeacoffee.com 贊助過咖啡，應該會收到一封 Email 邀請加入一個 Buy Me a Coffee 的免費會籍，而會員都會免費獲得解鎖進階功能 Extras 包喔！真心感謝各位的熱心贊助，也希望這些獨家的新功能有給你們帶來一點小驚喜！開發、維護這個插件其實花我不少的私人時間，但是獲得各位的熱情反饋和實質鼓勵讓這一切都感到非常值得。每次看到有人開環球票然後 Tag 我，就覺得倍感溫馨。尤其是之前請過咖啡的各位，贊助並沒有獲得任何額外的好處卻還是選擇斗內，真的是由衷感謝！<br><br>還沒贊助過的朋友們，如果也覺得這個工具幫到你，也歡迎請我喝咖啡喔：<a href='https://buymeacoffee.com/jayliutw' target='_blank'>https://buymeacoffee.com/jayliutw</a><br><br>如果曾經用別的方式贊助過我，請跟我聯繫，好讓我邀請加入會籍：<a href='mailto:epicurean.tw@gmail.com' target='_blank'>epicurean.tw@gmail.com</a>",
+        "prem_donate":"若有興起解鎖上述進階功能，請點擊下方按鈕至 buymeacoffee.com 查看進階功能 Extras 包：<a href='https://www.buymeacoffee.com/jayliutw/e/106024' target='_blank' class='unlock_btn'>解鎖進階功能</a>",
         "human":"國泰網站需要你證明你是真人：",
         "bot_check":"請解除國泰網站機器人檢查",
         "mixed":"潛在混艙航班經由"
@@ -1385,13 +1389,6 @@ function httpRequest(request, native = false){
         }
         `, document.body)
 
-    if(window.location.href.indexOf("air/booking/availability") > -1 ){
-        addCss(`
-        html, body {overflow-x:inherit !important;}
-        header {overflow-x:hidden;}
-        `, document.body);
-    }
-
 //============================================================
 // Form Listeners
 //============================================================
@@ -2023,6 +2020,10 @@ function httpRequest(request, native = false){
         if(!cont_query && window.location.href.indexOf("air/booking/availability") > -1 ){
                 const boxes = document.querySelectorAll("body > div");
                 boxes.forEach( box => { box.remove() });
+                addCss(`
+                html, body {overflow-x:inherit !important;}
+                header {overflow-x:hidden;}
+                `, document.body);
                 document.body.append(shadowWrapper);
                 shadowContainer.classList.add("results_container");
                 document.body.classList.add("cont_query");
@@ -2177,6 +2178,7 @@ function httpRequest(request, native = false){
     }
 
     function checkLogin(){
+        return;
         log("checkLogin()");
         httpRequest({
             method: "GET",
@@ -2387,6 +2389,10 @@ function httpRequest(request, native = false){
         if(!cont_query && window.location.href.indexOf("air/booking/availability") > -1 ){
                 const boxes = document.querySelectorAll("body > div");
                 boxes.forEach( box => { box.remove() });
+                addCss(`
+                html, body {overflow-x:inherit !important;}
+                header {overflow-x:hidden;}
+                `, document.body);
                 document.body.append(shadowWrapper);
                 shadowContainer.classList.add("results_container");
                 document.body.classList.add("cont_query");
@@ -2941,6 +2947,7 @@ window.addEventListener('touchmove', function(){
             value_set("cxplanner_flights", [])
             cxplanner_box.addEventListener("click",function(e){
                 if(e.target.dataset["route"]){
+                    route_changed = true;
                     input_from.value = e.target.dataset["route"].split("-")[0];
                     input_to.value = e.target.dataset["route"].split("-")[1];
                 }
