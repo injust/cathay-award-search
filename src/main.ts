@@ -40,7 +40,7 @@ await (async () => {
   const initCxVars = async (): Promise<void> => {
     log('initCxVars()')
 
-    staticFilesPath = await valueGet<string>('static_files_path', '/CathayPacificAwardV3/JULY_2023_NEW.7/')
+    staticFilesPath = await valueGet<string>('static_files_path', '/CathayPacificAwardV3/AUG_2023_NEW.24/')
     if (unsafeWindow.staticFilesPath != null) {
       // log('typeof unsafeWindow.staticFilesPath:', typeof unsafeWindow.staticFilesPath)
       if (staticFilesPath !== unsafeWindow.staticFilesPath) staticFilesPath = await valueSet('static_files_path', unsafeWindow.staticFilesPath)
