@@ -123,16 +123,12 @@ await (async () => {
       await resetContVars()
       const el = await waitForEl<HTMLFormElement>('.redibe-v3-flightsearch form')
       el.before(shadowWrapper)
-      await initSearchBox()
-      await checkLogin()
     } else if (window.location.href.includes('facade.html')) {
       log('initRoot facade.html')
 
       await resetContVars()
       const el = await waitForEl('.ibered__search-panel')
       el.before(shadowWrapper)
-      await initSearchBox()
-      await checkLogin()
     } else if (window.location.href.includes('air/booking/availability')) {
       if (cont.query) {
         log('initRoot air/booking/availability with cont.query')
@@ -142,8 +138,6 @@ await (async () => {
         for (const box of boxes) box.remove()
         document.body.append(shadowWrapper)
         shadowContainer.classList.add('results_container')
-        await initSearchBox()
-        await checkLogin()
       } else {
         log('initRoot air/booking/availability without cont.query')
 
@@ -152,8 +146,6 @@ await (async () => {
         shadowWrapper.style.margin = '30px 20px 0px 20px'
         shadowWrapper.style.padding = '0'
         document.querySelector('#section-flights, #section-flights-departure').before(shadowWrapper)
-        await initSearchBox()
-        await checkLogin()
       }
     } else if (window.location.href.includes('air/booking/complexAvailability')) {
       log('initRoot air/booking/complexAvailability')
@@ -163,9 +155,10 @@ await (async () => {
       shadowWrapper.style.margin = '30px 20px 0px 20px'
       shadowWrapper.style.padding = '0'
       document.querySelector('.mc-trips').before(shadowWrapper)
-      await initSearchBox()
-      await checkLogin()
     }
+
+    await initSearchBox()
+    await checkLogin()
   }
 
   // ============================================================
