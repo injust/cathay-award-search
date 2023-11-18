@@ -792,7 +792,6 @@ await (async () => {
           let c = `<span class='sa_code'><strong>${airportCode.substring(0, sa)}</strong>${airportCode.substring(sa)}</span>`
           c += `<span class='sc_code'><strong>${shortName.substring(0, se)}</strong>${shortName.substring(se)}`
           c += ` - <strong>${countryName.substring(0, sc)}</strong>${countryName.substring(sc)}</span>`
-          c += '</span>'
           // Insert a input field that will hold the current array item's value
           c += `<input type='hidden' value='${airportCode}' />`
           divMatch.dataset.airportCode = airportCode
