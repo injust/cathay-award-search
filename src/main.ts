@@ -1,8 +1,10 @@
 import { chevronSvg, heartSvg, swapSvg, xSvg } from './images/svg.ts'
 import { lang } from './localization.ts'
 import styleCss from './styles/style.css?inline'
-import { AirportResponse, Airports, AvailabilityResponse, CabinClass, Filters, PageBom, Passengers, Profile, Query, QueryPayload, RequestParams, Route, SavedFlights, Uef } from './types.ts'
+import { Airport, AirportResponse, Airports, AvailabilityResponse, CabinClass, Filters, PageBom, Passengers, Profile, Query, QueryPayload, RequestParams, Route, SavedFlights, Uef } from './types.ts'
 import { assert, formatFlightDuration, formatFlightTime, httpRequest, isValidCxDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, valueGet, valueSet, waitForEl } from './utils.ts'
+import { autocomplete } from '@algolia/autocomplete-js'
+import '@algolia/autocomplete-theme-classic'
 import dayjs from 'dayjs'
 import dayjsPluginUTC from 'dayjs-plugin-utc'
 import { unsafeWindow } from 'vite-plugin-monkey/dist/client'
@@ -184,10 +186,7 @@ await (async () => {
 
       <div class="labels">
         <a href="javascript:void 0" class="switch">${swapSvg()}</a>
-        <label class="labels_left">
-          <span>From</span>
-          <input tabindex="1" type="search" id="uef_from" name="uef_from" placeholder="Where from?" value="${uef.from.join(',')}" />
-        </label>
+        <div class="labels_left" id="autocomplete_from"></div>
         <label class="labels_right"><span>Adults</span>
         <input tabindex="4" type="number" inputmode="decimal" id="uef_adult" name="uef_adult" placeholder="Adults" value="${uef.adults}" min="0" />
         </label>
@@ -350,7 +349,7 @@ await (async () => {
       inputTo.dispatchEvent(new Event('change'))
     })
 
-    for (const el of [inputFrom, inputTo]) {
+    for (const el of [inputTo]) {
       el.addEventListener('keyup', (e) => {
         if (['Enter', ' ', ','].includes(e.key)) {
           if (e.key === 'Enter') el.value += ','
@@ -664,6 +663,46 @@ await (async () => {
       shadowRoot.querySelector('.bulk_error span').innerHTML = html
       divError.classList.remove('hidden')
     }
+  }
+
+  const initAutocomplete = (): void => {
+    const foo: HTMLDivElement = shadowRoot.querySelector('#autocomplete_from')
+
+    autocomplete<Airport>({
+      container: foo,
+      placeholder: 'Where from?',
+      getSources: () => [
+        {
+          sourceId: 'links',
+          getItems ({ query }) {
+            return Object.values(airports).filter(airport => [airport.airportCode, airport.shortName, airport.countryName].some(value => value.toUpperCase().includes(query.toUpperCase())))
+          },
+          getItemInputValue ({ item }) {
+            return item.airportCode
+          },
+          templates: {
+            // TODO: `components.Highlight` doesn't highlight anything
+            item ({ item, components, html }) {
+              return html`<div>
+                <div class="sa_code">${components.Highlight({
+                hit: item,
+                attribute: 'airportCode',
+                tagName: 'em'
+              })}</div><div class="sc_code">${components.Highlight({
+                hit: item,
+                attribute: 'shortName',
+                tagName: 'em'
+              })} - ${components.Highlight({
+                hit: item,
+                attribute: 'countryName',
+                tagName: 'em'
+              })}</div>
+              </div>`
+            }
+          }
+        }
+      ]
+    })
   }
 
   // ============================================================
@@ -1306,6 +1345,7 @@ await (async () => {
     updateSavedQueries()
     updateSavedFlights()
     await loadAirports()
+    initAutocomplete()
 
     if (cont.query) {
       await resetContVars()

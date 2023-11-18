@@ -16,7 +16,8 @@ export type json =
   | json[]
   | { [key: string]: json }
 
-export interface Airport {
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+export type Airport = {
   airportCode: string
   countryName: string
   shortName: string
