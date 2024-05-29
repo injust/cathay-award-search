@@ -28,8 +28,7 @@ await (async () => {
   const entryPoint = `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html`
   const ibeFacadeUrl = 'https://api.cathaypacific.com/redibe/IBEFacade'
   // TODO: Use the membership number URL
-  const loginUrl = new URL(`https://www.cathaypacific.com/content/cx/${browserLang}_${browserCountry}/sign-in.html`)
-  loginUrl.searchParams.set('loginreferrer', entryPoint)
+  const loginUrl = `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/sign-in.html`
 
   let staticFilesPath: string
   let requestParams: RequestParams
@@ -170,7 +169,7 @@ await (async () => {
     <div class="unelevated_form">
       <div class="unelevated_title"><a href="https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html">Unelevated Award Search</a></div>
 
-      <div class="login_prompt hidden"><span class="unelevated_error"><a href="${loginUrl.toString()}">${lang.login}</a></span></div>
+      <div class="login_prompt hidden"><span class="unelevated_error"><a href="${loginUrl}">${lang.login}</a></span></div>
 
       <div class="unelevated_faves hidden">
         <div class="faves_tabs">
@@ -1055,7 +1054,7 @@ await (async () => {
         [`DESTINATION[${index + 1}]`]: query.to,
         [`DEPARTUREDATE[${index + 1}]`]: query.date.format('YYYYMMDD')
       }))),
-      LOGINURL: `https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/sign-in/campaigns/miles-flight.html`
+      LOGINURL: loginUrl
     }
   }
 
@@ -1117,7 +1116,7 @@ await (async () => {
 
     log('Failed to retrieve new Tab ID')
     resetSearch()
-    batchError(`<strong>Error</strong>: ${lang.tab_retrieve_fail} (<a href='${loginUrl.toString()}'>Login</a>) `)
+    batchError(`<strong>Error</strong>: ${lang.tab_retrieve_fail} (<a href='${loginUrl}'>Login</a>) `)
   }
 
   // ============================================================
