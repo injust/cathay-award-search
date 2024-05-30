@@ -1,3 +1,4 @@
+import { preact } from '@preact/preset-vite'
 import { UserConfig } from 'vite'
 import monkey, { cdn } from 'vite-plugin-monkey'
 
@@ -30,5 +31,6 @@ export default {
                 },
             },
         }),
+        preact(),
     ],
 } satisfies UserConfig
