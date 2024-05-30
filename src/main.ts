@@ -10,7 +10,7 @@ import { unsafeWindow } from 'vite-plugin-monkey/dist/client'
 await (async () => {
   'use strict'
 
-  dayjs.extend(dayjsPluginUTC)
+  dayjs.extend(dayjsPluginUTC.default)
 
   // ============================================================
   // Initialize Variables

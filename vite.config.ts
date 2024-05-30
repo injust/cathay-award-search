@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
-import monkey from 'vite-plugin-monkey'
+import monkey, { cdn } from 'vite-plugin-monkey'
 
 export default defineConfig({
     build: {
@@ -22,6 +22,12 @@ export default defineConfig({
                 ],
                 sandbox: 'JavaScript',
                 noframes: true,
+            },
+            build: {
+                externalGlobals: {
+                    dayjs: cdn.jsdelivr('dayjs'),
+                    'dayjs-plugin-utc': cdn.jsdelivr('dayjsPluginUTC'),
+                },
             },
         }),
     ],
