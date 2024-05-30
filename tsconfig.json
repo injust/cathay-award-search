@@ -30,6 +30,8 @@
         "isolatedModules": true,
 
         /* Language and environment */
+        "jsx": "react-jsx",
+        "jsxImportSource": "preact",
         "lib": [
             "ESNext",
             "DOM",
