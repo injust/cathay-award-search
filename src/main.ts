@@ -1094,8 +1094,8 @@ await (async () => {
       })
 
       if (resp.status === 200) {
+        const data: AvailabilityResponse = await resp.json()
         try {
-          const data: AvailabilityResponse = await resp.json()
           requestParams = JSON.parse(data.requestParams)
           log('requestParams:', requestParams)
         } catch {
@@ -1285,14 +1285,15 @@ await (async () => {
     }
 
     if (resp.status === 200) {
+      const data: AvailabilityResponse = await resp.json()
+      let pageBom: PageBom
       try {
-        const data: AvailabilityResponse = await resp.json()
-        const pageBom: PageBom = JSON.parse(data.pageBom)
-        await cb(pageBom)
+        pageBom = JSON.parse(data.pageBom)
       } catch {
         resetSearch()
         batchError('Response not valid JSON')
       }
+      await cb(pageBom)
     } else {
       batchError(resp.status === 404 ? lang.key_exhausted : resp.status >= 300 ? lang.getting_key : lang.error)
       await newTabID(searchAgain)
