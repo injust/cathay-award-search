@@ -1,5 +1,5 @@
-import { lang } from './localization'
-import { Query, json } from './types'
+import { lang } from './localization.ts'
+import { Query, json } from './types.ts'
 import dayjs from 'dayjs'
 import { GM } from 'vite-plugin-monkey/dist/client'
 
