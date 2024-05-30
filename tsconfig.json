@@ -1,28 +1,43 @@
 {
+    "include": [
+        "src/**/*"
+    ],
     "compilerOptions": {
-        "target": "ESNext",
-        "useDefineForClassFields": true,
+        /* Type checking */
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": false,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noUncheckedIndexedAccess": true,
+        "noUnusedLocals": true,
+        "strict": true,
+        "strictNullChecks": false,
+
+        /* Modules */
+        "allowImportingTsExtensions": true,
         "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "resolveJsonModule": true,
+        "types": [
+            "vite/client",
+            "vite-plugin-monkey/client"
+        ],
+
+        /* Emit */
+        "noEmit": true,
+
+        /* Interop constraints */
+        "isolatedModules": true,
+
+        /* Language and environment */
         "lib": [
             "ESNext",
             "DOM",
             "DOM.Iterable"
         ],
-        "moduleResolution": "Node",
-        "resolveJsonModule": true,
-        "isolatedModules": true,
-        "esModuleInterop": true,
-        "noEmit": true,
-        "noUnusedLocals": true,
-        // "noUnusedParameters": true,
-        "noImplicitReturns": true,
-        "skipLibCheck": true,
-        "types": [
-            "vite-plugin-monkey/client",
-            "vite/client"
-        ]
-    },
-    "include": [
-        "src/**/*"
-    ]
+        "target": "ESNext",
+
+        /* Completeness */
+        "skipLibCheck": true
+    }
 }
