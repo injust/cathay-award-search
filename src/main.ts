@@ -1,10 +1,13 @@
-import { chevronSvg, heartSvg, swapSvg, xSvg } from './images/svg.ts'
+import { SearchBox } from './components/SearchBox.tsx'
+import { chevronSvg, heartSvg } from './images/svg.tsx'
 import { lang } from './localization.ts'
 import styleCss from './styles/style.css?inline'
-import { AirportResponse, Airports, AvailabilityResponse, CabinClass, Filters, PageBom, Passengers, Profile, Query, QueryPayload, RequestParams, Route, SavedFlights, Uef } from './types.ts'
+import { AirportResponse, Airports, AvailabilityResponse, CabinClass, PageBom, Passengers, Profile, Query, QueryPayload, RequestParams, Route, SavedFlights, Uef } from './types.ts'
 import { assert, formatFlightDuration, formatFlightTime, httpRequest, isValidCxDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, valueGet, valueSet, waitForEl } from './utils.ts'
 import dayjs from 'dayjs'
 import dayjsPluginUTC from 'dayjs-plugin-utc'
+import { render } from 'preact'
+import { signal } from '@preact/signals'
 import { unsafeWindow } from 'vite-plugin-monkey/dist/client'
 
 await (async () => {
@@ -75,11 +78,11 @@ await (async () => {
   }
 
   // Saved Queries
-  const savedFlights = new Map(Object.entries(await valueGet<SavedFlights>('saved_flights', {})))
-  const savedQueries = new Set(await valueGet<string[]>('saved_queries', []))
+  const savedFlights = signal(new Map(Object.entries(await valueGet<SavedFlights>('saved_flights', {}))))
+  const savedQueries = signal(new Set(await valueGet<string[]>('saved_queries', [])))
 
   // Saved Search Result Filters
-  const filters: Filters = {
+  const savedFilters = {
     nonstop: false,
     first: true,
     business: true,
@@ -158,96 +161,6 @@ await (async () => {
   }
 
   // ============================================================
-  // Search Box
-  // ============================================================
-
-  const searchBox = document.createElement('div')
-  searchBox.innerHTML = `
-    <div class="unelevated_form">
-      <div class="unelevated_title"><a href="https://www.cathaypacific.com/cx/${browserLang}_${browserCountry}/book-a-trip/redeem-flights/redeem-flight-awards.html">Unelevated Award Search</a></div>
-
-      <div class="login_prompt hidden"><span class="unelevated_error"><a href="${loginUrl}">${lang.login}</a></span></div>
-
-      <div class="unelevated_faves hidden">
-        <div class="faves_tabs">
-          <a href="javascript:void 0" class="tabs tab_queries">Routes</a>
-          <a href="javascript:void 0" class="tabs tab_flights">Flights</a>
-        </div>
-        <a href="javascript:void 0" class="search_selected">${lang.search_selected} &raquo;</a>
-        <div class="saved_flights"></div>
-        <div class="saved_queries"></div>
-      </div>
-
-      <div class="unelevated_saved">
-        <a href="javascript:void 0">${heartSvg('heart_save')}</a>
-      </div>
-
-      <div class="labels">
-        <a href="javascript:void 0" class="switch">${swapSvg()}</a>
-        <label class="labels_left">
-          <span>From</span>
-          <input tabindex="1" type="search" id="uef_from" name="uef_from" placeholder="Where from?" value="${uef.from.join(',')}" />
-        </label>
-        <label class="labels_right"><span>Adults</span>
-        <input tabindex="4" type="number" inputmode="decimal" id="uef_adult" name="uef_adult" placeholder="Adults" value="${uef.adults}" min="0" />
-        </label>
-        <label class="labels_left">
-          <span>To</span>
-          <input tabindex="2" type="search" id="uef_to" name="uef_to" placeholder="Where to?" value="${uef.to.join(',')}" />
-        </label>
-        <label class="labels_right"><span>Children</span>
-        <input tabindex="5" type="number" inputmode="decimal" id="uef_child" name="uef_child" placeholder="Children" value="${uef.children}" min="0" />
-        </label>
-        <label class="labels_left"><span>Date</span>
-        <input tabIndex="3" type="date" class="uef_date" id="uef_date" name="uef_date" value="${uef.date !== '' ? dayjs(uef.date).format('YYYY-MM-DD') : ''}" max="9999-12-31" />
-        </label>
-        <button class="uef_search">${lang.search}</button>
-      </div>
-    </div>
-
-    <div class="multi_box hidden">
-      <select id="multi_cabin">
-        <option value="Y">${lang.economy_full}</option>
-        <option value="W">${lang.premium_full}</option>
-        <option value="C">${lang.business_full}</option>
-        <option value="F">${lang.first_full}</option>
-      </select>
-      <label class="labels_right"><span>Adults</span>
-      <input type="number" inputmode="decimal" id="multi_adult" name="multi_adult" placeholder="Adults" value="1" min="0" />
-      </label>
-      <label class="labels_right"><span>Children</span>
-      <input type="number" inputmode="decimal" id="multi_child" name="multi_child" placeholder="Children" value="0" min="0" />
-      </label>
-      <a href="javascript:void 0" class="multi_search">${lang.book_multi}</a>
-    </div>
-
-    <div class="bulk_box">
-      <div class="bulk_results hidden">
-        <div class="filters">
-          <label><input type="checkbox" data-filter="nonstop" ${filters.nonstop ? 'checked' : ''} />${lang.nonstop}</label>
-          <label><input type="checkbox" data-filter="first" ${filters.first ? 'checked' : ''} />${lang.first}</label>
-          <label><input type="checkbox" data-filter="business" ${filters.business ? 'checked' : ''} />${lang.business}</label>
-          <label><input type="checkbox" data-filter="premium" ${filters.premium ? 'checked' : ''} />${lang.premium}</label>
-          <label><input type="checkbox" data-filter="economy" ${filters.economy ? 'checked' : ''} />${lang.economy}</label>
-        </div>
-        <table class="bulk_table ${filters.nonstop ? 'nonstop_only' : ''} ${filters.first ? 'show_first' : ''} ${filters.business ? 'show_business' : ''} ${filters.premium ? 'show_premium' : ''} ${filters.economy ? 'show_economy' : ''}">
-        <thead>
-          <th class="bulk_date">${lang.date}</th>
-          <th class="bulk_flights">${lang.flights} <span class="info-x info-f">${lang.first}</span><span class="info-x info-j">${lang.business}</span><span class="info-x info-p">${lang.premium}</span><span class="info-x info-y">${lang.economy}</span></th>
-        </thead>
-        <tbody></tbody>
-        </table>
-      </div>
-      <div class="bulk_footer">
-        <div class="bulk_footer_container">
-          <button class="bulk_submit">${lang.bulk_batch} ${uef.from.join(',')} - ${uef.to.join(',')} ${lang.bulk_flights}</button>
-          <div class="bulk_error hidden"><span></span></div>
-        </div>
-      </div>
-    </div>
-  `.trim()
-
-  // ============================================================
   // Styles
   // ============================================================
 
@@ -268,7 +181,7 @@ await (async () => {
   let inputFrom: HTMLInputElement, inputTo: HTMLInputElement, inputDate: HTMLInputElement, inputAdult: HTMLInputElement, inputChild: HTMLInputElement, inputMultiAdult: HTMLInputElement, inputMultiChild: HTMLInputElement
   let selectMultiCabin: HTMLSelectElement
   let linkSearchSaved: HTMLAnchorElement, linkSearchMulti: HTMLAnchorElement
-  let divFilters: HTMLDivElement, divLoginPrompt: HTMLDivElement, divFooter: HTMLDivElement, divUeContainer: HTMLDivElement, divHeartSave: HTMLDivElement, divSaved: HTMLDivElement, divFavesTabs: HTMLDivElement, divSavedFlights: HTMLDivElement, divSavedQueries: HTMLDivElement, divMultiBox: HTMLDivElement, divBulk: HTMLDivElement, divResults: HTMLDivElement, divError: HTMLDivElement
+  let divLoginPrompt: HTMLDivElement, divFooter: HTMLDivElement, divUeContainer: HTMLDivElement, divSaved: HTMLDivElement, divSavedQueries: HTMLDivElement, divMultiBox: HTMLDivElement, divBulk: HTMLDivElement, divResults: HTMLDivElement, divError: HTMLDivElement
   let divTable: HTMLTableElement, divTableBody: HTMLTableSectionElement
 
   const assignElements = (): void => {
@@ -290,14 +203,10 @@ await (async () => {
     linkSearchSaved = shadowRoot.querySelector('.search_selected')
     linkSearchMulti = shadowRoot.querySelector('.multi_search')
 
-    divFilters = shadowRoot.querySelector('.filters')
     divLoginPrompt = shadowRoot.querySelector('.login_prompt')
     divFooter = shadowRoot.querySelector('.bulk_footer')
     divUeContainer = shadowRoot.querySelector('.unelevated_form')
-    divHeartSave = shadowRoot.querySelector('.unelevated_saved')
     divSaved = shadowRoot.querySelector('.unelevated_faves')
-    divFavesTabs = shadowRoot.querySelector('.unelevated_faves .faves_tabs')
-    divSavedFlights = shadowRoot.querySelector('.unelevated_faves .saved_flights')
     divSavedQueries = shadowRoot.querySelector('.unelevated_faves .saved_queries')
     divMultiBox = shadowRoot.querySelector('.multi_box')
     divBulk = shadowRoot.querySelector('.bulk_box')
@@ -395,12 +304,6 @@ await (async () => {
       }
     })
 
-    for (const el of [inputAdult, inputChild, inputMultiAdult, inputMultiChild]) {
-      el.addEventListener('focus', (e) => {
-        el.select()
-      })
-    }
-
     divTable.addEventListener('click', (e) => {
       (async () => {
         if ((e.target as HTMLElement).tagName !== 'A') return
@@ -417,14 +320,11 @@ await (async () => {
           const queryString = el.dataset.query
           if (el.classList.contains('bulk_saved')) {
             el.classList.remove('bulk_saved')
-            savedQueries.delete(queryString)
+            savedQueries.value.delete(queryString)
           } else {
             el.classList.add('bulk_saved')
-            savedQueries.add(queryString)
+            savedQueries.value.add(queryString)
           }
-
-          updateSavedQueries()
-          await valueSet('saved_queries', Array.from(savedQueries))
         }
       })().catch(log)
     })
@@ -457,16 +357,13 @@ await (async () => {
 
           if (flightItem.classList.contains('saved')) {
             flightItem.classList.remove('saved')
-            savedFlights.delete(flightKey)
+            savedFlights.value.delete(flightKey)
           } else {
             flightItem.classList.add('saved')
-            savedFlights.set(flightKey, {
+            savedFlights.value.set(flightKey, {
               F: flightAvail[0], J: flightAvail[1], PY: flightAvail[2], Y: flightAvail[3]
             })
           }
-
-          updateSavedFlights()
-          await valueSet('saved_flights', Object.fromEntries(savedFlights))
         }
       })().catch(log)
     })
@@ -481,17 +378,8 @@ await (async () => {
       (async () => {
         const el = e.target as HTMLElement
 
-        if (el.dataset.flightKey != null) {
-          savedFlights.delete(el.dataset.flightKey)
-          updateSavedFlights()
-          await valueSet('saved_flights', Object.fromEntries(savedFlights))
-        }
-
-        if (el.dataset.queryString != null) {
-          savedQueries.delete(el.dataset.queryString)
-          updateSavedQueries()
-          await valueSet('saved_queries', Array.from(savedQueries))
-        }
+        if (el.dataset.flightKey != null) savedFlights.value.delete(el.dataset.flightKey)
+        if (el.dataset.queryString != null) savedQueries.value.delete(el.dataset.queryString)
       })().catch(log)
     })
 
@@ -560,39 +448,9 @@ await (async () => {
       })
     })
 
-    const filterToClassName = (filter: string): string => {
-      switch (filter) {
-        case 'nonstop':
-          return `${filter}_only`
-        case 'first':
-        case 'business':
-        case 'premium':
-        case 'economy':
-          return `show_${filter}`
-        default:
-          throw new Error(`Unknown filter "${filter}"`)
-      }
-    }
-
-    for (const el of divFilters.getElementsByTagName('input')) {
-      el.addEventListener('click', (e) => {
-        (async () => {
-          const className = filterToClassName(el.dataset.filter)
-          filters[el.dataset.filter] = el.checked
-          await valueSet('filters', filters)
-
-          if (el.checked) {
-            divTable.classList.add(className)
-          } else {
-            divTable.classList.remove(className)
-          }
-        })().catch(log)
-      })
-    }
-
     linkSearchSaved.addEventListener('click', (e) => {
       (async () => {
-        if (savedQueries.size === 0) {
+        if (savedQueries.value.size === 0) {
           alert('No Saved Queries')
           return
         }
@@ -618,20 +476,6 @@ await (async () => {
           selectMultiCabin.value as CabinClass
         ))
       })().catch(log)
-    })
-
-    divFavesTabs.addEventListener('click', (e) => {
-      const el = e.target as HTMLElement
-
-      if (el.classList.contains('tab_flights')) {
-        divSaved.classList.add('flights')
-      } else if (el.classList.contains('tab_queries')) {
-        divSaved.classList.remove('flights')
-      }
-    })
-
-    divHeartSave.addEventListener('click', (e) => {
-      divSaved.classList.toggle('hidden')
     })
   }
 
@@ -860,7 +704,7 @@ await (async () => {
   }
 
   const savedSearch = async (): Promise<void> => {
-    const toSearch = Array.from(savedQueries, queryStringToQuery).sort((a, b) => +a.date - +b.date)
+    const toSearch = Array.from(savedQueries.value, queryStringToQuery).sort((a, b) => +a.date - +b.date)
 
     let ssQuery = toSearch.shift()
 
@@ -894,80 +738,6 @@ await (async () => {
     // TODO: Make sure the button changes back to a normal bulk search button
 
     await searchAvailability(ssQuery, populateNextQuery)
-  }
-
-  const updateSavedQueries = (): void => {
-    log('updateSavedQueries()')
-
-    let savedList = ''
-    for (const queryString of savedQueries) {
-      const query = queryStringToQuery(queryString)
-      const savedDate = query.date.toDate()
-      const now = new Date()
-      if (savedDate <= now) savedQueries.delete(queryString)
-    }
-    const savedArr = Array.from(savedQueries, queryStringToQuery).sort((a, b) => +a.date - +b.date)
-
-    for (const query of savedArr) {
-      const queryString = queryToQueryString(query)
-      savedList += `
-        <div class="saved_query" data-query="${queryString}">
-          <label><input type="checkbox" data-query="${queryString}" />${query.date.format('YYYY-MM-DD')} ${query.from}-${query.to}</label>
-          <a href="javascript:void 0" class="saved_book" data-book data-query="${queryString}">${lang.query} &raquo;</a>
-          <span class="leg"></span>
-          <a href="javascript:void 0" class="saved_remove" data-query="${queryString}">${xSvg('saved_delete')}</a>
-        </div>
-      `.trim()
-    }
-    divSavedQueries.innerHTML = savedList
-  }
-
-  const updateSavedFlights = (): void => {
-    log('updateSavedFlights()')
-
-    let savedList = ''
-    for (const flightKey of savedFlights.keys()) {
-      const query = queryStringToQuery(flightKey) // TODO: Should make something to parse `flightKey`
-      const savedDate = query.date.toDate()
-      const now = new Date()
-      if (savedDate <= now) savedFlights.delete(flightKey)
-    }
-    const savedArr = Array.from(savedFlights, ([flightKey, avail]) => ({
-      flightKey,
-      query: queryStringToQuery(flightKey), // TODO: Should make something to parse `flightKey`
-      leg1: flightKey.split('_')[1] ?? '',
-      stop: flightKey.split('_')[2] ?? '',
-      leg2: flightKey.split('_')[3] ?? '',
-      avail
-    })).sort((a, b) => +a.query.date - +b.query.date)
-
-    for (const { flightKey, query, leg1, stop, leg2, avail } of savedArr) {
-      const queryString = queryToQueryString(query)
-      savedList += `
-        <div class="saved_flight" data-query="${queryString}">
-          <label>
-          <input type="checkbox" data-query="${queryString}" />
-          <span>
-            <span class="date">${query.date.format('YYYY-MM-DD')}</span>
-            <span class="route">${query.from}-${stop !== '' ? `${stop}-` : ''}${query.to}</span>
-            <span class="flights">
-              ${leg1}${leg2 !== '' ? ` + ${leg2}` : ''}
-              <span class="avail">
-                ${avail.F > 0 ? `<span class="f">F ${avail.F}</span>` : ''}
-                ${avail.J > 0 ? `<span class="j">J ${avail.J}</span>` : ''}
-                ${avail.PY > 0 ? `<span class="py">PY ${avail.PY}</span>` : ''}
-                ${avail.Y > 0 ? `<span class="y">Y ${avail.Y}</span>` : ''}
-              </span>
-            </span>
-          </span>
-          </label>
-          <a href="javascript:void 0" class="saved_book" data-book data-query="${queryString}">${lang.query} &raquo;</a>
-          <span class="leg"></span>
-          <a href="javascript:void 0" class="saved_remove" data-flight-key="${flightKey}">${xSvg('saved_delete')}</a>
-        </div>
-      `.trim()
-    }
-    divSavedFlights.innerHTML = savedList
   }
 
   const checkAirportCodes = (el: HTMLInputElement): void => {
@@ -1302,7 +1072,7 @@ await (async () => {
     let flightHtml = `
       <div>
         <span class="flight_title">${query.from} - ${query.to}
-          <a href="javascript:void 0" class="bulk_save ${savedQueries.has(queryString) ? 'bulk_saved' : ''}" data-save data-query="${queryString}">${heartSvg('heart_save')}</a>
+          <a href="javascript:void 0" class="bulk_save ${savedQueries.value.has(queryString) ? 'bulk_saved' : ''}" data-save data-query="${queryString}">${heartSvg('heart_save')}</a>
           <a href="javascript:void 0" class="bulk_go_book" data-book data-query="${queryString}">Book &raquo;</a>
         </span>
         <div class="flight_list">
@@ -1343,7 +1113,7 @@ await (async () => {
           if (available !== '') {
             flightHtml += `
             <div class="flight_wrapper">
-              <div class="flight_item direct ${savedFlights.has(flightKey) ? 'saved' : ''} ${numF > 0 ? 'f' : ''} ${numJ > 0 ? 'j' : ''} ${numPY > 0 ? 'py' : ''} ${numY > 0 ? 'y' : ''}" data-flight-key="${flightKey}" data-flight-avail="${numF}_${numJ}_${numPY}_${numY}">
+              <div class="flight_item direct ${savedFlights.value.has(flightKey) ? 'saved' : ''} ${numF > 0 ? 'f' : ''} ${numJ > 0 ? 'j' : ''} ${numPY > 0 ? 'py' : ''} ${numY > 0 ? 'y' : ''}" data-flight-key="${flightKey}" data-flight-avail="${numF}_${numJ}_${numPY}_${numY}">
                 <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png" />
                 <span class="flight_num">${leg1Airline}${leg1FlightNum}</span>
                 ${available}
@@ -1375,7 +1145,7 @@ await (async () => {
           if (available !== '') {
             flightHtml += `
             <div class="flight_wrapper">
-              <div class="flight_item ${savedFlights.has(flightKey) ? 'saved' : ''} ${numF > 0 ? 'f' : ''} ${numJ > 0 ? 'j' : ''} ${numPY > 0 ? 'py' : ''} ${numY > 0 ? 'y' : ''}" data-flight-key="${flightKey}" data-flight-avail="${numF}_${numJ}_${numPY}_${numY}">
+              <div class="flight_item ${savedFlights.value.has(flightKey) ? 'saved' : ''} ${numF > 0 ? 'f' : ''} ${numJ > 0 ? 'j' : ''} ${numPY > 0 ? 'py' : ''} ${numY > 0 ? 'y' : ''}" data-flight-key="${flightKey}" data-flight-avail="${numF}_${numJ}_${numPY}_${numY}">
                 <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png" />
                 <span class="flight_num">${leg1Airline}${leg1FlightNum}
                 <span class="stopover">${transitAirportCode}</span>
@@ -1399,11 +1169,7 @@ await (async () => {
           }
         }
 
-        if (savedFlights.has(flightKey)) {
-          savedFlights.set(flightKey, { F: numF, J: numJ, PY: numPY, Y: numY })
-          updateSavedFlights()
-          await valueSet('saved_flights', Object.fromEntries(savedFlights))
-        }
+        if (savedFlights.value.has(flightKey)) savedFlights.value.set(flightKey, { F: numF, J: numJ, PY: numPY, Y: numY })
       }
     }
     flightHtml += '</div></div>'
@@ -1433,14 +1199,12 @@ await (async () => {
   const initSearchBox = async (): Promise<void> => {
     log('initSearchBox()')
 
-    shadowContainer.appendChild(searchBox)
+    render(SearchBox({ browserLang, browserCountry, loginUrl, savedFilters, savedFlights, savedQueries, uef }), shadowContainer)
     assignElements()
     addFormListeners()
     document.addEventListener('scroll', (e) => {
       stickyFooter()
     })
-    updateSavedQueries()
-    updateSavedFlights()
     await loadAirports()
     autocomplete(inputFrom, airports)
     autocomplete(inputTo, airports)
