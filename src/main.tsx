@@ -681,14 +681,16 @@ await (async () => {
           const sc = countryName.substring(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
           // Create a DIV element for each matching element
           const divMatch = document.createElement('div')
-          // Make the matching letters bold
-          let c = `<span class='sa_code'><strong>${airportCode.substring(0, sa)}</strong>${airportCode.substring(sa)}</span>`
-          c += `<span class='sc_code'><strong>${shortName.substring(0, se)}</strong>${shortName.substring(se)}`
-          c += ` - <strong>${countryName.substring(0, sc)}</strong>${countryName.substring(sc)}</span>`
-          // Insert a input field that will hold the current array item's value
-          c += `<input type='hidden' value='${airportCode}' />`
+          divMatch.innerHTML = render(
+            <>
+              {/* Make the matching letters bold */}
+              <span class='sa_code'><strong>{airportCode.substring(0, sa)}</strong>{airportCode.substring(sa)}</span>
+              <span class='sc_code'><strong>{shortName.substring(0, se)}</strong>{shortName.substring(se)} - <strong>{countryName.substring(0, sc)}</strong>{countryName.substring(sc)}</span>
+              {/* Hidden input field that holds the value of the current array item */}
+              <input type='hidden' value={airportCode} />
+            </>
+          )
           divMatch.dataset.airportCode = airportCode
-          divMatch.innerHTML = c
           // Execute a function when someone clicks on the item value (DIV element)
           divMatch.addEventListener('click', (e) => {
             const el = e.target as HTMLElement
@@ -1176,7 +1178,7 @@ await (async () => {
     `.trim()
 
     if (pageBom.modelObject?.isContainingErrors) {
-      flightHtml += `<span class="bulk_response_error"><strong>Error</strong>: ${pageBom.modelObject?.messages[0]?.text}</span>`
+      flightHtml += render(<span class='bulk_response_error'><strong>Error</strong>: {pageBom.modelObject?.messages[0]?.text}</span>)
     } else if (pageBom.modelObject?.availabilities?.upsell?.bounds != null) {
       assert(pageBom.modelObject.availabilities.upsell.bounds.length === 1, pageBom.modelObject.availabilities.upsell.bounds)
 
