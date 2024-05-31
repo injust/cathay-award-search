@@ -140,7 +140,7 @@ export type Query = Route & {
 export type FlightAvailability = {
   F: number
   J: number
-  P: number
+  PY: number
   Y: number
 }
 

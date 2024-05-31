@@ -478,7 +478,7 @@ await (async () => {
           } else {
             flightItem.classList.add('saved')
             savedFlights.set(flightKey, {
-              F: +flightAvail[0], J: +flightAvail[1], P: +flightAvail[2], Y: +flightAvail[3]
+              F: +flightAvail[0], J: +flightAvail[1], PY: +flightAvail[2], Y: +flightAvail[3]
             })
           }
 
@@ -974,7 +974,7 @@ await (async () => {
               <span class="avail">
                 ${avail.F > 0 ? `<span class="f">F ${avail.F}</span>` : ''}
                 ${avail.J > 0 ? `<span class="j">J ${avail.J}</span>` : ''}
-                ${avail.P > 0 ? `<span class="p">PY ${avail.P}</span>` : ''}
+                ${avail.PY > 0 ? `<span class="py">PY ${avail.PY}</span>` : ''}
                 ${avail.Y > 0 ? `<span class="y">Y ${avail.Y}</span>` : ''}
               </span>
             </span>
@@ -1340,7 +1340,7 @@ await (async () => {
         const y1 = parseCabinStatus(flight.segments[0].cabins?.E?.status) + parseCabinStatus(flight.segments[0].cabins?.R?.status)
         let numF = 0
         let numJ = 0
-        let numP = 0
+        let numPY = 0
         let numY = 0
         const leg1Airline = flight.segments[0].flightIdentifier.marketingAirline
         const leg1FlightNum = flight.segments[0].flightIdentifier.flightNumber
@@ -1354,7 +1354,7 @@ await (async () => {
         if (flight.segments.length === 1) {
           if ((numF = f1) > 0) available += ` <span class='bulk_cabin bulk_f'>F <b>${numF}</b></span>`
           if ((numJ = j1) > 0) available += ` <span class='bulk_cabin bulk_j'>J <b>${numJ}</b></span>`
-          if ((numP = p1) > 0) available += ` <span class='bulk_cabin bulk_p'>PY <b>${numP}</b></span>`
+          if ((numPY = p1) > 0) available += ` <span class='bulk_cabin bulk_p'>PY <b>${numPY}</b></span>`
           if ((numY = y1) > 0) available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
 
           flightKey = `${queryString}_${leg1Airline}${leg1FlightNum}`
@@ -1362,7 +1362,7 @@ await (async () => {
           if (available !== '') {
             flightHtml += `
             <div class="flight_wrapper">
-              <div class="flight_item direct ${savedFlights.has(flightKey) ? 'saved' : ''} ${numF > 0 ? 'f' : ''} ${numJ > 0 ? 'j' : ''} ${numP > 0 ? 'p' : ''} ${numY > 0 ? 'y' : ''}" data-flight-key="${flightKey}" data-flight-avail="${numF}_${numJ}_${numP}_${numY}">
+              <div class="flight_item direct ${savedFlights.has(flightKey) ? 'saved' : ''} ${numF > 0 ? 'f' : ''} ${numJ > 0 ? 'j' : ''} ${numPY > 0 ? 'py' : ''} ${numY > 0 ? 'y' : ''}" data-flight-key="${flightKey}" data-flight-avail="${numF}_${numJ}_${numPY}_${numY}">
                 <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png" />
                 <span class="flight_num">${leg1Airline}${leg1FlightNum}</span>
                 ${available}
@@ -1386,7 +1386,7 @@ await (async () => {
 
           if ((numF = Math.min(f1, f2)) > 0) available += ` <span class='bulk_cabin bulk_f'>F <b>${numF}</b></span>`
           if ((numJ = Math.min(j1, j2)) > 0) available += ` <span class='bulk_cabin bulk_j'>J <b>${numJ}</b></span>`
-          if ((numP = Math.min(p1, p2)) > 0) available += ` <span class='bulk_cabin bulk_p'>PY <b>${numP}</b></span>`
+          if ((numPY = Math.min(p1, p2)) > 0) available += ` <span class='bulk_cabin bulk_p'>PY <b>${numPY}</b></span>`
           if ((numY = Math.min(y1, y2)) > 0) available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
 
           const leg2Airline = flight.segments[1].flightIdentifier.marketingAirline
@@ -1402,7 +1402,7 @@ await (async () => {
           if (available !== '') {
             flightHtml += `
             <div class="flight_wrapper">
-              <div class="flight_item ${savedFlights.has(flightKey) ? 'saved' : ''} ${numF > 0 ? 'f' : ''} ${numJ > 0 ? 'j' : ''} ${numP > 0 ? 'p' : ''} ${numY > 0 ? 'y' : ''}" data-flight-key="${flightKey}" data-flight-avail="${numF}_${numJ}_${numP}_${numY}">
+              <div class="flight_item ${savedFlights.has(flightKey) ? 'saved' : ''} ${numF > 0 ? 'f' : ''} ${numJ > 0 ? 'j' : ''} ${numPY > 0 ? 'py' : ''} ${numY > 0 ? 'y' : ''}" data-flight-key="${flightKey}" data-flight-avail="${numF}_${numJ}_${numPY}_${numY}">
                 <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png" />
                 <span class="flight_num">${leg1Airline}${leg1FlightNum}
                 <span class="stopover">${transitAirportCode}</span>
@@ -1427,7 +1427,7 @@ await (async () => {
         }
 
         if (savedFlights.has(flightKey)) {
-          savedFlights.set(flightKey, { F: numF, J: numJ, P: numP, Y: numY })
+          savedFlights.set(flightKey, { F: numF, J: numJ, PY: numPY, Y: numY })
           updateSavedFlights()
           await valueSet('saved_flights', Object.fromEntries(savedFlights))
         }

@@ -299,7 +299,7 @@
             background: #832c40;
         }
 
-        .p {
+        .py {
             background: #487c93;
         }
 
@@ -802,7 +802,7 @@ span.info_duration {
 
 .show_first .flight_item.f,
 .show_business .flight_item.j,
-.show_premium .flight_item.p,
+.show_premium .flight_item.py,
 .show_economy .flight_item.y {
     visibility: visible;
 
