@@ -1,10 +1,13 @@
-import { chevronSvg, heartSvg, swapSvg, xSvg } from './images/svg.ts'
+import { Chevron, Heart, Swap} from './components/Icons.tsx'
+import { SavedFlights as SavedFlightsView } from './components/SavedFlights.tsx'
+import { SavedQueries } from './components/SavedQueries.tsx'
 import { lang } from './localization.ts'
 import styleCss from './styles/style.css?inline'
 import { AirportResponse, Airports, AvailabilityResponse, CabinClass, Filters, PageBom, Passengers, Profile, Query, QueryPayload, RequestParams, Route, SavedFlights, Uef } from './types.ts'
 import { assert, formatFlightDuration, formatFlightTime, httpRequest, isValidCxDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, valueGet, valueSet, waitForEl } from './utils.ts'
 import dayjs from 'dayjs'
 import dayjsPluginUTC from 'dayjs-plugin-utc'
+import { render } from 'preact-render-to-string'
 import { unsafeWindow } from 'vite-plugin-monkey/dist/client'
 
 await (async () => {
@@ -179,11 +182,11 @@ await (async () => {
       </div>
 
       <div class="unelevated_saved">
-        <a href="javascript:void 0">${heartSvg('heart_save')}</a>
+        <a href="javascript:void 0">${render(Heart({ className: 'heart_save' }))}</a>
       </div>
 
       <div class="labels">
-        <a href="javascript:void 0" class="switch">${swapSvg()}</a>
+        <a href="javascript:void 0" class="switch">${render(Swap({}))}</a>
         <label class="labels_left">
           <span>From</span>
           <input tabindex="1" type="search" id="uef_from" name="uef_from" placeholder="Where from?" value="${uef.from.join(',')}" />
@@ -899,75 +902,27 @@ await (async () => {
   const updateSavedQueries = (): void => {
     log('updateSavedQueries()')
 
-    let savedList = ''
     for (const queryString of savedQueries) {
       const query = queryStringToQuery(queryString)
       const savedDate = query.date.toDate()
       const now = new Date()
       if (savedDate <= now) savedQueries.delete(queryString)
     }
-    const savedArr = Array.from(savedQueries, queryStringToQuery).sort((a, b) => +a.date - +b.date)
 
-    for (const query of savedArr) {
-      const queryString = queryToQueryString(query)
-      savedList += `
-        <div class="saved_query" data-query="${queryString}">
-          <label><input type="checkbox" data-query="${queryString}" />${query.date.format('YYYY-MM-DD')} ${query.from}-${query.to}</label>
-          <a href="javascript:void 0" class="saved_book" data-book data-query="${queryString}">${lang.query} &raquo;</a>
-          <span class="leg"></span>
-          <a href="javascript:void 0" class="saved_remove" data-query="${queryString}">${xSvg('saved_delete')}</a>
-        </div>
-      `.trim()
-    }
-    divSavedQueries.innerHTML = savedList
+    divSavedQueries.innerHTML = render(SavedQueries({ savedQueries }))
   }
 
   const updateSavedFlights = (): void => {
     log('updateSavedFlights()')
 
-    let savedList = ''
     for (const flightKey of savedFlights.keys()) {
       const query = queryStringToQuery(flightKey) // TODO: Should make something to parse `flightKey`
       const savedDate = query.date.toDate()
       const now = new Date()
       if (savedDate <= now) savedFlights.delete(flightKey)
     }
-    const savedArr = Array.from(savedFlights, ([flightKey, avail]) => ({
-      flightKey,
-      query: queryStringToQuery(flightKey), // TODO: Should make something to parse `flightKey`
-      leg1: flightKey.split('_')[1] ?? '',
-      stop: flightKey.split('_')[2] ?? '',
-      leg2: flightKey.split('_')[3] ?? '',
-      avail
-    })).sort((a, b) => +a.query.date - +b.query.date)
 
-    for (const { flightKey, query, leg1, stop, leg2, avail } of savedArr) {
-      const queryString = queryToQueryString(query)
-      savedList += `
-        <div class="saved_flight" data-query="${queryString}">
-          <label>
-          <input type="checkbox" data-query="${queryString}" />
-          <span>
-            <span class="date">${query.date.format('YYYY-MM-DD')}</span>
-            <span class="route">${query.from}-${stop !== '' ? `${stop}-` : ''}${query.to}</span>
-            <span class="flights">
-              ${leg1}${leg2 !== '' ? ` + ${leg2}` : ''}
-              <span class="avail">
-                ${avail.F > 0 ? `<span class="f">F ${avail.F}</span>` : ''}
-                ${avail.J > 0 ? `<span class="j">J ${avail.J}</span>` : ''}
-                ${avail.PY > 0 ? `<span class="py">PY ${avail.PY}</span>` : ''}
-                ${avail.Y > 0 ? `<span class="y">Y ${avail.Y}</span>` : ''}
-              </span>
-            </span>
-          </span>
-          </label>
-          <a href="javascript:void 0" class="saved_book" data-book data-query="${queryString}">${lang.query} &raquo;</a>
-          <span class="leg"></span>
-          <a href="javascript:void 0" class="saved_remove" data-flight-key="${flightKey}">${xSvg('saved_delete')}</a>
-        </div>
-      `.trim()
-    }
-    divSavedFlights.innerHTML = savedList
+    divSavedFlights.innerHTML = render(SavedFlightsView({ savedFlights }))
   }
 
   const checkAirportCodes = (el: HTMLInputElement): void => {
@@ -1302,7 +1257,7 @@ await (async () => {
     let flightHtml = `
       <div>
         <span class="flight_title">${query.from} - ${query.to}
-          <a href="javascript:void 0" class="bulk_save ${savedQueries.has(queryString) ? 'bulk_saved' : ''}" data-save data-query="${queryString}">${heartSvg('heart_save')}</a>
+          <a href="javascript:void 0" class="bulk_save ${savedQueries.has(queryString) ? 'bulk_saved' : ''}" data-save data-query="${queryString}">${render(Heart({ className: 'heart_save' }))}</a>
           <a href="javascript:void 0" class="bulk_go_book" data-book data-query="${queryString}">Book &raquo;</a>
         </span>
         <div class="flight_list">
@@ -1347,8 +1302,8 @@ await (async () => {
                 <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png" />
                 <span class="flight_num">${leg1Airline}${leg1FlightNum}</span>
                 ${available}
-                <span class="chevron">${chevronSvg()}</span>
-                <span class="flight_save">${heartSvg('heart_save')}</span>
+                <span class="chevron">${render(Chevron({}))}</span>
+                <span class="flight_save">${render(Heart({ className: 'heart_save' }))}</span>
               </div>
               <div class="flight_info">
                 <span class="info_flight">${leg1Airline}${leg1FlightNum} (${leg1Origin.slice(-3)} ✈ ${leg1Dest.slice(-3)})</span>
@@ -1381,8 +1336,8 @@ await (async () => {
                 <span class="stopover">${transitAirportCode}</span>
                 ${leg2Airline}${leg2FlightNum}</span>
                 ${available}
-                <span class="chevron">${chevronSvg()}</span>
-                <span class="flight_save">${heartSvg('heart_save')}</span>
+                <span class="chevron">${render(Chevron({}))}</span>
+                <span class="flight_save">${render(Heart({ className: 'heart_save' }))}</span>
               </div>
               <div class="flight_info">
                 <span class="info_flight">${leg1Airline}${leg1FlightNum} (${leg1Origin.slice(-3)} ✈ ${leg1Dest.slice(-3)})</span>
