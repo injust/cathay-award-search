@@ -237,7 +237,7 @@ await (async () => {
         </div>
         <table class="bulk_table ${filters.nonstop ? 'nonstop_only' : ''} ${filters.first ? 'show_first' : ''} ${filters.business ? 'show_business' : ''} ${filters.premium ? 'show_premium' : ''} ${filters.economy ? 'show_economy' : ''}">
         <thead>
-          <th class="bulkDate">${lang.date}</th>
+          <th class="bulk_date">${lang.date}</th>
           <th class="bulk_flights">${lang.flights} <span class="info-x info-f">${lang.first}</span><span class="info-x info-j">${lang.business}</span><span class="info-x info-p">${lang.premium}</span><span class="info-x info-y">${lang.economy}</span></th>
         </thead>
         <tbody></tbody>
@@ -833,7 +833,7 @@ await (async () => {
     searching = false
     remainingDays = 20
     btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from} - ${uef.to} ${lang.bulk_flights}`
-    btnBatch.classList.remove('bulkSearching')
+    btnBatch.classList.remove('bulk_searching')
     linkSearchSaved.innerText = `${lang.search_selected} »`
   }
 
@@ -874,7 +874,7 @@ await (async () => {
 
     divResults.classList.remove('hidden')
     btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
-    btnBatch.classList.add('bulkSearching')
+    btnBatch.classList.add('bulk_searching')
     await bulkSearch(singleDate)
   }
 
@@ -885,7 +885,7 @@ await (async () => {
 
     divResults.classList.remove('hidden')
     btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
-    btnBatch.classList.add('bulkSearching')
+    btnBatch.classList.add('bulk_searching')
     divTableBody.innerHTML = ''
 
     if (!cont.query) {
@@ -967,15 +967,15 @@ await (async () => {
           <label>
           <input type="checkbox" data-query="${queryString}" />
           <span>
-            <span class="sf_date">${query.date.format('YYYY-MM-DD')}</span>
-            <span class="sf_route">${query.from}-${stop !== '' ? `${stop}-` : ''}${query.to}</span>
-            <span class="sf_flights">
+            <span class="date">${query.date.format('YYYY-MM-DD')}</span>
+            <span class="route">${query.from}-${stop !== '' ? `${stop}-` : ''}${query.to}</span>
+            <span class="flights">
               ${leg1}${leg2 !== '' ? ` + ${leg2}` : ''}
-              <span class="sf_avail">
-                ${avail.F > 0 ? `<span class="av_f">F ${avail.F}</span>` : ''}
-                ${avail.J > 0 ? `<span class="av_j">J ${avail.J}</span>` : ''}
-                ${avail.P > 0 ? `<span class="av_p">PY ${avail.P}</span>` : ''}
-                ${avail.Y > 0 ? `<span class="av_y">Y ${avail.Y}</span>` : ''}
+              <span class="avail">
+                ${avail.F > 0 ? `<span class="f">F ${avail.F}</span>` : ''}
+                ${avail.J > 0 ? `<span class="j">J ${avail.J}</span>` : ''}
+                ${avail.P > 0 ? `<span class="p">PY ${avail.P}</span>` : ''}
+                ${avail.Y > 0 ? `<span class="y">Y ${avail.Y}</span>` : ''}
               </span>
             </span>
           </span>
@@ -1310,7 +1310,7 @@ await (async () => {
     if (!query.date.isSame((divTableBody.lastElementChild as HTMLTableRowElement)?.dataset?.date, 'd')) {
       const resultsRow = `
         <tr data-date="${query.date.format('YYYYMMDD')}">
-          <td class="bulkDate">
+          <td class="bulk_date">
             <div>${query.date.format('dddd')}</div>
             <div>${query.date.format('YYYY-MM-DD')}</div>
           </td>
@@ -1476,7 +1476,7 @@ await (async () => {
       // If over 5 minutes since cont query, don't auto search
       if (+dayjs() - cont.ts > 60 * 5 * 1000) return
       btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
-      btnBatch.classList.add('bulkSearching')
+      btnBatch.classList.add('bulk_searching')
       document.body.classList.add('cont_query')
       setTimeout(async () => {
         if (cont.saved) {

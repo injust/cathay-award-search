@@ -248,63 +248,65 @@
     padding: 3px 10px;
     font-size: 10px;
     font-family: "Cathay Sans EN", CathaySans_Md, sans-serif;
-}
 
-.unelevated_faves .saved_flights .saved_flight label {
-    margin: 0 0 5px 0;
-    min-width: 150px;
-    display: inline-block;
-}
+    label {
+        margin: 0 0 5px 0;
+        min-width: 150px;
+        display: inline-block;
+    }
 
-.unelevated_faves .saved_flights .saved_flight label>span {
-    display: inline-block;
-    vertical-align: top;
-}
+    label>span {
+        display: inline-block;
+        vertical-align: top;
+    }
 
-span.sf_date {
-    display: block;
-}
+    span.date {
+        display: block;
+    }
 
-span.sf_route {
-    background: #CCCCCC;
-    padding: 2px 6px;
-    border-radius: 5px 0 0 5px;
-    display: inline-block;
-}
+    span.route {
+        background: #CCCCCC;
+        padding: 2px 6px;
+        border-radius: 5px 0 0 5px;
+        display: inline-block;
+    }
 
-span.sf_flights {
-    background: #e3cfc8;
-    padding: 2px 6px;
-    border-radius: 0 5px 5px 0;
-    display: inline-block;
-}
+    span.flights {
+        background: #e3cfc8;
+        padding: 2px 6px;
+        border-radius: 0 5px 5px 0;
+        display: inline-block;
+    }
 
-span.sf_avail>span {
-    display: inline-block;
-    line-height: 11px;
-    font-size: 10px;
-    padding: 2px 4px;
-    color: white;
-    font-weight: normal;
-    border-radius: 3px;
-    margin-left: 3px;
-    height: 15px;
-}
+    span.avail {
+        >span {
+            display: inline-block;
+            line-height: 11px;
+            font-size: 10px;
+            padding: 2px 4px;
+            color: white;
+            font-weight: normal;
+            border-radius: 3px;
+            margin-left: 3px;
+            height: 15px;
+        }
 
-span.sf_avail .av_j {
-    background: #002e6c;
-}
+        .j {
+            background: #002e6c;
+        }
 
-span.sf_avail .av_f {
-    background: #832c40;
-}
+        .f {
+            background: #832c40;
+        }
 
-span.sf_avail .av_p {
-    background: #487c93;
-}
+        .p {
+            background: #487c93;
+        }
 
-span.sf_avail .av_y {
-    background: #016564;
+        .y {
+            background: #016564;
+        }
+    }
 }
 
 .multi_box {
@@ -602,17 +604,17 @@ a.uef_toggle:after {
     padding: 5px;
 }
 
-.bulk_table .bulkDate {
+.bulk_table .bulk_date {
     width: 80px;
     text-align: center;
-}
 
-.bulk_table .bulkDate a {
-    text-decoration: underline !important;
-    font-family: "Cathay Sans EN", CathaySans_Md, sans-serif;
-    font-weight: 400;
-    display: block;
-    margin-bottom: 5px;
+    a {
+        text-decoration: underline !important;
+        font-family: "Cathay Sans EN", CathaySans_Md, sans-serif;
+        font-weight: 400;
+        display: block;
+        margin-bottom: 5px;
+    }
 }
 
 .bulk_table td.bulk_flights {
@@ -985,7 +987,7 @@ button.uef_search img {
     vertical-align: -7px;
 }
 
-.bulkSearching,
+.bulk_searching,
 .uef_search.searching {
     background-color: #b9cdc9 !important;
 }
