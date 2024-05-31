@@ -26,8 +26,11 @@ export default {
             },
             build: {
                 externalGlobals: {
+                    classnames: cdn.jsdelivr('classNames'),
                     dayjs: cdn.jsdelivr('dayjs'),
                     'dayjs-plugin-utc': cdn.jsdelivr('dayjsPluginUTC'),
+                    preact: cdn.jsdelivr('preact'),
+                    'preact-render-to-string': cdn.jsdelivr('preactRenderToString', 'dist/index.umd.min.js'),
                 },
             },
         }),
