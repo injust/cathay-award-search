@@ -1352,22 +1352,10 @@ await (async () => {
         let flightKey: string
 
         if (flight.segments.length === 1) {
-          if (f1 > 0) {
-            numF = f1
-            available += ` <span class='bulk_cabin bulk_f'>F <b>${numF}</b></span>`
-          }
-          if (j1 > 0) {
-            numJ = j1
-            available += ` <span class='bulk_cabin bulk_j'>J <b>${numJ}</b></span>`
-          }
-          if (p1 > 0) {
-            numP = p1
-            available += ` <span class='bulk_cabin bulk_p'>PY <b>${numP}</b></span>`
-          }
-          if (y1 > 0) {
-            numY = y1
-            available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
-          }
+          if ((numF = f1) > 0) available += ` <span class='bulk_cabin bulk_f'>F <b>${numF}</b></span>`
+          if ((numJ = j1) > 0) available += ` <span class='bulk_cabin bulk_j'>J <b>${numJ}</b></span>`
+          if ((numP = p1) > 0) available += ` <span class='bulk_cabin bulk_p'>PY <b>${numP}</b></span>`
+          if ((numY = y1) > 0) available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
 
           flightKey = `${queryString}_${leg1Airline}${leg1FlightNum}`
 
@@ -1396,22 +1384,10 @@ await (async () => {
           const p2 = parseCabinStatus(flight.segments[1].cabins?.N?.status)
           const y2 = parseCabinStatus(flight.segments[1].cabins?.E?.status) + parseCabinStatus(flight.segments[1].cabins?.R?.status)
 
-          if (f1 > 0 && f2 > 0) {
-            numF = Math.min(f1, f2)
-            available += ` <span class='bulk_cabin bulk_f'>F <b>${numF}</b></span>`
-          }
-          if (j1 > 0 && j2 > 0) {
-            numJ = Math.min(j1, j2)
-            available += ` <span class='bulk_cabin bulk_j'>J <b>${numJ}</b></span>`
-          }
-          if (p1 > 0 && p2 > 0) {
-            numP = Math.min(p1, p2)
-            available += ` <span class='bulk_cabin bulk_p'>PY <b>${numP}</b></span>`
-          }
-          if (y1 > 0 && y2 > 0) {
-            numY = Math.min(y1, y2)
-            available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
-          }
+          if ((numF = Math.min(f1, f2)) > 0) available += ` <span class='bulk_cabin bulk_f'>F <b>${numF}</b></span>`
+          if ((numJ = Math.min(j1, j2)) > 0) available += ` <span class='bulk_cabin bulk_j'>J <b>${numJ}</b></span>`
+          if ((numP = Math.min(p1, p2)) > 0) available += ` <span class='bulk_cabin bulk_p'>PY <b>${numP}</b></span>`
+          if ((numY = Math.min(y1, y2)) > 0) available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
 
           const leg2Airline = flight.segments[1].flightIdentifier.marketingAirline
           const leg2FlightNum = flight.segments[1].flightIdentifier.flightNumber
