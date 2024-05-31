@@ -469,7 +469,7 @@ await (async () => {
 
         if (el.classList.contains('flight_save')) {
           const flightItem = el.parentNode as HTMLDivElement
-          const flightAvail = flightItem.dataset.flightAvail.split('_')
+          const flightAvail = flightItem.dataset.flightAvail.split('_').map(Number)
           const flightKey = flightItem.dataset.flightKey
 
           if (flightItem.classList.contains('saved')) {
@@ -478,7 +478,7 @@ await (async () => {
           } else {
             flightItem.classList.add('saved')
             savedFlights.set(flightKey, {
-              F: +flightAvail[0], J: +flightAvail[1], PY: +flightAvail[2], Y: +flightAvail[3]
+              F: flightAvail[0], J: flightAvail[1], PY: flightAvail[2], Y: flightAvail[3]
             })
           }
 
