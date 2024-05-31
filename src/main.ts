@@ -1116,7 +1116,7 @@ await (async () => {
 
     log('Failed to retrieve new Tab ID')
     resetSearch()
-    batchError(`<strong>Error</strong>: ${lang.tab_retrieve_fail} (<a href='${loginUrl}'>Login</a>) `)
+    batchError(`<strong>Error</strong>: ${lang.tab_retrieve_fail} (<a href='${loginUrl}'>Login</a>)`)
   }
 
   // ============================================================
