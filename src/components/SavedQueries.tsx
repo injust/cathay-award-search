@@ -11,7 +11,7 @@ export const SavedQueries: FunctionComponent<SavedQueriesProps> = ({ savedQuerie
   const sortedQueries = Array.from(savedQueries, queryStringToQuery).sort((a, b) => +a.date - +b.date)
 
   return (
-    <>
+    <div class='saved_queries'>
       {sortedQueries.map(query => {
         const queryString = queryToQueryString(query)
 
@@ -24,6 +24,6 @@ export const SavedQueries: FunctionComponent<SavedQueriesProps> = ({ savedQuerie
           </div>
         )
       })}
-    </>
+    </div>
   )
 }

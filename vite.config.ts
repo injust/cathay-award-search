@@ -8,7 +8,7 @@ export default {
     },
     plugins: [
         monkey({
-            entry: 'src/main.ts',
+            entry: 'src/main.tsx',
             userscript: {
                 name: 'Cathay Award Search Fixer',
                 namespace: 'https://github.com/injust',

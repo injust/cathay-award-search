@@ -19,7 +19,7 @@ export const SavedFlights: FunctionComponent<SavedFlightsProps> = ({ savedFlight
   })).sort((a, b) => +a.query.date - +b.query.date)
 
   return (
-    <>
+    <div class='saved_flights'>
       {sortedFlights.map(({ flightKey, query, leg1, stop, leg2, avail }) => {
         const queryString = queryToQueryString(query)
 
@@ -47,6 +47,6 @@ export const SavedFlights: FunctionComponent<SavedFlightsProps> = ({ savedFlight
           </div>
         )
       })}
-    </>
+    </div>
   )
 }
