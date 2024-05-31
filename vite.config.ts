@@ -28,6 +28,7 @@ export default {
                 externalGlobals: {
                     dayjs: cdn.jsdelivr('dayjs'),
                     'dayjs-plugin-utc': cdn.jsdelivr('dayjsPluginUTC'),
+                    preact: cdn.jsdelivr('preact'),
                 },
             },
         }),
