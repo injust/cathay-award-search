@@ -674,11 +674,11 @@ await (async () => {
   // UI Logic
   // ============================================================
 
-  const batchError = (label?: string): void => {
-    if (label == null) {
+  const batchError = (html?: string): void => {
+    if (html == null) {
       divError.classList.add('hidden')
     } else {
-      shadowRoot.querySelector('.bulk_error span').innerHTML = label
+      shadowRoot.querySelector('.bulk_error span').innerHTML = html
       divError.classList.remove('hidden')
     }
   }
