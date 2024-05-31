@@ -3,6 +3,7 @@ import { SavedFlights } from './SavedFlights.tsx'
 import { SavedQueries } from './SavedQueries.tsx'
 import { lang } from '../localization.ts'
 import { Filters, FlightAvailability, Uef } from '../types.js'
+import classNames from 'classnames'
 import dayjs from 'dayjs'
 import { FunctionComponent } from 'preact'
 
@@ -86,7 +87,7 @@ export const SearchBox: FunctionComponent<SearchBoxProps> = ({ browserLang, brow
             <label><input type='checkbox' checked={savedFilters.premium} data-filter='premium' />{lang.premium}</label>
             <label><input type='checkbox' checked={savedFilters.economy} data-filter='economy' />{lang.economy}</label>
           </div>
-          <table class={`bulk_table ${savedFilters.nonstop ? 'nonstop_only' : ''} ${savedFilters.first ? 'show_first' : ''} ${savedFilters.business ? 'show_business' : ''} ${savedFilters.premium ? 'show_premium' : ''} ${savedFilters.economy ? 'show_economy' : ''}`}>
+          <table class={classNames('bulk_table', { nonstop_only: savedFilters.nonstop, show_first: savedFilters.first, show_business: savedFilters.business, show_premium: savedFilters.premium, show_economy: savedFilters.economy })}>
             <thead>
               <th class='bulk_date'>{lang.date}</th>
               <th class='bulk_flights'>{lang.flights} <span class='info-x info-f'>{lang.first}</span><span class='info-x info-j'>{lang.business}</span><span class='info-x info-p'>{lang.premium}</span><span class='info-x info-y'>{lang.economy}</span></th>

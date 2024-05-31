@@ -6,6 +6,7 @@ import { lang } from './localization.ts'
 import styleCss from './styles/style.css?inline'
 import { AirportResponse, Airports, AvailabilityResponse, CabinClass, Filters, PageBom, Passengers, Profile, Query, QueryPayload, RequestParams, Route, SavedFlights, Uef } from './types.ts'
 import { assert, formatFlightDuration, formatFlightTime, httpRequest, isValidCxDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, valueGet, valueSet, waitForEl } from './utils.ts'
+import classNames from 'classnames'
 import dayjs from 'dayjs'
 import dayjsPluginUTC from 'dayjs-plugin-utc'
 import { VNode } from 'preact'
@@ -1212,7 +1213,7 @@ await (async () => {
           if (available.length > 0) {
             flightHtml += render(
               <div class='flight_wrapper'>
-                <div class={`flight_item direct ${savedFlights.has(flightKey) ? 'saved' : ''} ${numF > 0 ? 'f' : ''} ${numJ > 0 ? 'j' : ''} ${numPY > 0 ? 'py' : ''} ${numY > 0 ? 'y' : ''}`} data-flight-key={flightKey} data-flight-avail={`${numF}_${numJ}_${numPY}_${numY}`}>
+                <div class={classNames('flight_item', 'direct', { saved: savedFlights.has(flightKey), f: numF > 0, j: numJ > 0, py: numPY > 0, y: numY > 0 })} data-flight-key={flightKey} data-flight-avail={`${numF}_${numJ}_${numPY}_${numY}`}>
                   <img src={`https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png`} />
                   <span class='flight_num'>{leg1Airline}{leg1FlightNum}</span>
                   {...available}
@@ -1244,7 +1245,7 @@ await (async () => {
           if (available.length > 0) {
             flightHtml += render(
               <div class='flight_wrapper'>
-                <div class={`flight_item ${savedFlights.has(flightKey) ? 'saved' : ''} ${numF > 0 ? 'f' : ''} ${numJ > 0 ? 'j' : ''} ${numPY > 0 ? 'py' : ''} ${numY > 0 ? 'y' : ''}`} data-flight-key={flightKey} data-flight-avail={`${numF}_${numJ}_${numPY}_${numY}`}>
+                <div class={classNames('flight_item', { saved: savedFlights.has(flightKey), f: numF > 0, j: numJ > 0, py: numPY > 0, y: numY > 0 })} data-flight-key={flightKey} data-flight-avail={`${numF}_${numJ}_${numPY}_${numY}`}>
                   <img src={`https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png`} />
                   <span class='flight_num'>{leg1Airline}{leg1FlightNum}
                     <span class='stopover'>{transitAirportCode}</span>
