@@ -1320,7 +1320,7 @@ await (async () => {
       divTableBody.insertAdjacentHTML('beforeend', resultsRow)
     }
 
-    let flightHTML = `
+    let flightHtml = `
       <div>
         <span class="flight_title">${query.from} - ${query.to}
           <a href="javascript:void 0" class="bulk_save ${savedQueries.has(queryString) ? 'bulk_saved' : ''}" data-save data-query="${queryString}">${heartSvg('heart_save')}</a>
@@ -1330,7 +1330,7 @@ await (async () => {
     `.trim()
 
     if (pageBom.modelObject?.isContainingErrors) {
-      flightHTML += `<span class="bulk_response_error"><strong>Error</strong>: ${pageBom.modelObject?.messages[0]?.text}</span>`
+      flightHtml += `<span class="bulk_response_error"><strong>Error</strong>: ${pageBom.modelObject?.messages[0]?.text}</span>`
     } else if (pageBom.modelObject?.availabilities?.upsell?.bounds != null) {
       for (const flight of pageBom.modelObject.availabilities.upsell.bounds[0].flights ?? []) {
         let available = ''
@@ -1360,7 +1360,7 @@ await (async () => {
           flightKey = `${queryString}_${leg1Airline}${leg1FlightNum}`
 
           if (available !== '') {
-            flightHTML += `
+            flightHtml += `
             <div class="flight_wrapper">
               <div class="flight_item direct ${savedFlights.has(flightKey) ? 'saved' : ''} ${numF > 0 ? 'f' : ''} ${numJ > 0 ? 'j' : ''} ${numP > 0 ? 'p' : ''} ${numY > 0 ? 'y' : ''}" data-flight-key="${flightKey}" data-flight-avail="${numF}_${numJ}_${numP}_${numY}">
                 <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png" />
@@ -1400,7 +1400,7 @@ await (async () => {
           flightKey = `${queryString}_${leg1Airline}${leg1FlightNum}_${transitAirportCode}_${leg2Airline}${leg2FlightNum}`
 
           if (available !== '') {
-            flightHTML += `
+            flightHtml += `
             <div class="flight_wrapper">
               <div class="flight_item ${savedFlights.has(flightKey) ? 'saved' : ''} ${numF > 0 ? 'f' : ''} ${numJ > 0 ? 'j' : ''} ${numP > 0 ? 'p' : ''} ${numY > 0 ? 'y' : ''}" data-flight-key="${flightKey}" data-flight-avail="${numF}_${numJ}_${numP}_${numY}">
                 <img src="https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png" />
@@ -1433,9 +1433,9 @@ await (async () => {
         }
       }
     }
-    flightHTML += '</div></div>'
+    flightHtml += '</div></div>'
 
-    divTableBody.lastElementChild.querySelector('.bulk_flights').insertAdjacentHTML('beforeend', flightHTML)
+    divTableBody.lastElementChild.querySelector('.bulk_flights').insertAdjacentHTML('beforeend', flightHtml)
     stickyFooter()
   }
 
