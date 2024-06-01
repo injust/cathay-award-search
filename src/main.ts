@@ -1348,14 +1348,15 @@ await (async () => {
         if (numPY > 0) available += ` <span class='bulk_cabin bulk_p'>PY <b>${numPY}</b></span>`
         if (numY > 0) available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
 
+        let flightKey: string
+        const duration = formatFlightDuration(flight.duration)
+
         const leg1Airline = flight.segments[0].flightIdentifier.marketingAirline
         const leg1FlightNum = flight.segments[0].flightIdentifier.flightNumber
         const leg1DepTime = formatFlightTime(flight.segments[0].flightIdentifier.originDate)
         const leg1ArrTime = formatFlightTime(flight.segments[0].destinationDate)
-        const leg1Duration = formatFlightDuration(flight.duration)
         const leg1Origin = flight.segments[0].originLocation
         const leg1Dest = flight.segments[0].destinationLocation
-        let flightKey: string
 
         if (flight.segments.length === 1) {
           flightKey = `${queryString}_${leg1Airline}${leg1FlightNum}`
@@ -1374,20 +1375,22 @@ await (async () => {
                 <span class="info_flight">${leg1Airline}${leg1FlightNum} (${leg1Origin.slice(-3)} ✈ ${leg1Dest.slice(-3)})</span>
                 <span class="info_dept"><span>Departs:</span> ${leg1DepTime}</span>
                 <span class="info_arr"><span>Arrives:</span> ${leg1ArrTime}</span>
-                <span class="info_duration"><span>Total Flight Duration:</span> ${leg1Duration}</span>
+                <span class="info_duration"><span>Total Flight Duration:</span> ${duration}</span>
               </div>
             </div>
           `.trim()
           }
         } else {
+          const transitTime = formatFlightDuration(flight.segments[1].flightIdentifier.originDate - flight.segments[0].destinationDate)
+          const transitAirportCode = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g.exec(flight.flightIdString)[1].replace(':', ' / ')
+
           const leg2Airline = flight.segments[1].flightIdentifier.marketingAirline
           const leg2FlightNum = flight.segments[1].flightIdentifier.flightNumber
           const leg2DepTime = formatFlightTime(flight.segments[1].flightIdentifier.originDate)
           const leg2ArrTime = formatFlightTime(flight.segments[1].destinationDate)
           const leg2Origin = flight.segments[1].originLocation
           const leg2Dest = flight.segments[1].destinationLocation
-          const transitTime = formatFlightDuration(flight.segments[1].flightIdentifier.originDate - flight.segments[0].destinationDate)
-          const transitAirportCode = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g.exec(flight.flightIdString)[1].replace(':', ' / ')
+
           flightKey = `${queryString}_${leg1Airline}${leg1FlightNum}_${transitAirportCode}_${leg2Airline}${leg2FlightNum}`
 
           if (available !== '') {
@@ -1410,7 +1413,7 @@ await (async () => {
                 <span class="info_flight">${leg2Airline}${leg2FlightNum} (${leg2Origin.slice(-3)} ✈ ${leg2Dest.slice(-3)})</span>
                 <span class="info_dept"><span>Departs:</span> ${leg2DepTime}</span>
                 <span class="info_arr"><span>Arrives:</span> ${leg2ArrTime}</span>
-                <span class="info_duration"><span>Total Flight Duration:</span> ${leg1Duration}</span>
+                <span class="info_duration"><span>Total Flight Duration:</span> ${duration}</span>
               </div>
             </div>
           `.trim()
