@@ -1,11 +1,12 @@
-import { Chevron, Heart } from './components/Icons.tsx'
+import { FlightResult } from './components/FlightResult.tsx'
+import { Heart } from './components/Icons.tsx'
 import { SavedFlights as SavedFlightsView } from './components/SavedFlights.tsx'
 import { SavedQueries } from './components/SavedQueries.tsx'
 import { SearchBox } from './components/SearchBox.tsx'
 import { lang } from './localization.ts'
 import styleCss from './styles/style.css?inline'
 import { AirportResponse, Airports, AvailabilityResponse, CabinClass, Filters, PageBom, Passengers, Profile, Query, QueryPayload, RequestParams, Route, SavedFlights, Uef } from './types.ts'
-import { assert, formatFlightDuration, formatFlightTime, httpRequest, isValidCxDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, valueGet, valueSet, waitForEl } from './utils.ts'
+import { assert, httpRequest, isValidCxDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, valueGet, valueSet, waitForEl } from './utils.ts'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
 import dayjsPluginUTC from 'dayjs-plugin-utc'
@@ -1169,17 +1170,10 @@ await (async () => {
       divTableBody.insertAdjacentHTML('beforeend', resultsRow)
     }
 
-    let flightHtml = `
-      <div>
-        <span class="flight_title">${query.from} - ${query.to}
-          <a href="javascript:void 0" class="bulk_save ${savedQueries.has(queryString) ? 'bulk_saved' : ''}" data-save data-query="${queryString}">${render(<Heart className='heart_save' />)}</a>
-          <a href="javascript:void 0" class="bulk_go_book" data-book data-query="${queryString}">Book &raquo;</a>
-        </span>
-        <div class="flight_list">
-    `.trim()
+    const flightResults: VNode[] = []
 
     if (pageBom.modelObject?.isContainingErrors) {
-      flightHtml += render(<span class='bulk_response_error'><strong>Error</strong>: {pageBom.modelObject?.messages[0]?.text}</span>)
+      flightResults.push(<span class='bulk_response_error'><strong>Error</strong>: {pageBom.modelObject?.messages[0]?.text}</span>)
     } else if (pageBom.modelObject?.availabilities?.upsell?.bounds != null) {
       assert(pageBom.modelObject.availabilities.upsell.bounds.length === 1, pageBom.modelObject.availabilities.upsell.bounds)
 
@@ -1191,84 +1185,21 @@ await (async () => {
         const numPY = Math.min(...flight.segments.map(segment => parseCabinStatus(segment.cabins?.N?.status)))
         const numY = Math.min(...flight.segments.map(segment => parseCabinStatus(segment.cabins?.E?.status) + parseCabinStatus(segment.cabins?.R?.status)))
 
-        const available: VNode[] = []
-        if (numF > 0) available.push(<span class='bulk_cabin bulk_f'>F <b>{numF}</b></span>)
-        if (numJ > 0) available.push(<span class='bulk_cabin bulk_j'>J <b>{numJ}</b></span>)
-        if (numPY > 0) available.push(<span class='bulk_cabin bulk_p'>PY <b>{numPY}</b></span>)
-        if (numY > 0) available.push(<span class='bulk_cabin bulk_y'>Y <b>{numY}</b></span>)
-
         let flightKey: string
-        const duration = formatFlightDuration(flight.duration)
-
         const leg1Airline = flight.segments[0].flightIdentifier.marketingAirline
         const leg1FlightNum = flight.segments[0].flightIdentifier.flightNumber
-        const leg1DepTime = formatFlightTime(flight.segments[0].flightIdentifier.originDate)
-        const leg1ArrTime = formatFlightTime(flight.segments[0].destinationDate)
-        const leg1Origin = flight.segments[0].originLocation
-        const leg1Dest = flight.segments[0].destinationLocation
 
         if (flight.segments.length === 1) {
           flightKey = `${queryString}_${leg1Airline}${leg1FlightNum}`
-
-          if (available.length > 0) {
-            flightHtml += render(
-              <div class='flight_wrapper'>
-                <div class={classNames('flight_item', 'direct', { saved: savedFlights.has(flightKey), f: numF > 0, j: numJ > 0, py: numPY > 0, y: numY > 0 })} data-flight-key={flightKey} data-flight-avail={`${numF}_${numJ}_${numPY}_${numY}`}>
-                  <img src={`https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png`} />
-                  <span class='flight_num'>{leg1Airline}{leg1FlightNum}</span>
-                  {...available}
-                  <span class='chevron'><Chevron /></span>
-                  <span class='flight_save'><Heart className='heart_save' /></span>
-                </div>
-                <div class='flight_info'>
-                  <span class='info_flight'>{leg1Airline}{leg1FlightNum} ({leg1Origin.slice(-3)} ✈ {leg1Dest.slice(-3)})</span>
-                  <span class='info_dept'><span>Departs:</span> {leg1DepTime}</span>
-                  <span class='info_arr'><span>Arrives:</span> {leg1ArrTime}</span>
-                  <span class='info_duration'><span>Total Flight Duration:</span> {duration}</span>
-                </div>
-              </div>
-            )
-          }
         } else {
-          const transitTime = formatFlightDuration(flight.segments[1].flightIdentifier.originDate - flight.segments[0].destinationDate)
           const transitAirportCode = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g.exec(flight.flightIdString)[1].replace(':', ' / ')
-
           const leg2Airline = flight.segments[1].flightIdentifier.marketingAirline
           const leg2FlightNum = flight.segments[1].flightIdentifier.flightNumber
-          const leg2DepTime = formatFlightTime(flight.segments[1].flightIdentifier.originDate)
-          const leg2ArrTime = formatFlightTime(flight.segments[1].destinationDate)
-          const leg2Origin = flight.segments[1].originLocation
-          const leg2Dest = flight.segments[1].destinationLocation
 
           flightKey = `${queryString}_${leg1Airline}${leg1FlightNum}_${transitAirportCode}_${leg2Airline}${leg2FlightNum}`
-
-          if (available.length > 0) {
-            flightHtml += render(
-              <div class='flight_wrapper'>
-                <div class={classNames('flight_item', { saved: savedFlights.has(flightKey), f: numF > 0, j: numJ > 0, py: numPY > 0, y: numY > 0 })} data-flight-key={flightKey} data-flight-avail={`${numF}_${numJ}_${numPY}_${numY}`}>
-                  <img src={`https://book.cathaypacific.com${staticFilesPath}common/skin/img/airlines/logo-${leg1Airline.toLowerCase()}.png`} />
-                  <span class='flight_num'>{leg1Airline}{leg1FlightNum}
-                    <span class='stopover'>{transitAirportCode}</span>
-                    {leg2Airline}{leg2FlightNum}
-                  </span>
-                  {...available}
-                  <span class='chevron'><Chevron /></span>
-                  <span class='flight_save'><Heart className='heart_save' /></span>
-                </div>
-                <div class='flight_info'>
-                  <span class='info_flight'>{leg1Airline}{leg1FlightNum} ({leg1Origin.slice(-3)} ✈ {leg1Dest.slice(-3)})</span>
-                  <span class='info_dept'><span>Departs:</span> {leg1DepTime}</span>
-                  <span class='info_arr'><span>Arrives:</span> {leg1ArrTime}</span>
-                  <span class='info_transit'><span>Transit Time:</span> {transitTime}</span>
-                  <span class='info_flight'>{leg2Airline}{leg2FlightNum} ({leg2Origin.slice(-3)} ✈ {leg2Dest.slice(-3)})</span>
-                  <span class='info_dept'><span>Departs:</span> {leg2DepTime}</span>
-                  <span class='info_arr'><span>Arrives:</span> {leg2ArrTime}</span>
-                  <span class='info_duration'><span>Total Flight Duration:</span> {duration}</span>
-                </div>
-              </div>
-            )
-          }
         }
+
+        flightResults.push(FlightResult({ flight, flightKey, savedFlights, staticFilesPath }))
 
         if (savedFlights.has(flightKey)) {
           savedFlights.set(flightKey, { F: numF, J: numJ, PY: numPY, Y: numY })
@@ -1277,7 +1208,16 @@ await (async () => {
         }
       }
     }
-    flightHtml += '</div></div>'
+
+    const flightHtml = render(
+      <div>
+        <span class='flight_title'>{query.from} - {query.to}
+          <a href='javascript:void 0' class={classNames('bulk_save', { bulk_saved: savedQueries.has(queryString) })} data-save data-query={queryString}><Heart className='heart_save' /></a>
+          <a href='javascript:void 0' class='bulk_go_book' data-book data-query={queryString}>Book &raquo;</a>
+        </span>
+        <div class='flight_list'>{...flightResults}</div>
+      </div>
+    )
 
     divTableBody.lastElementChild.querySelector('.bulk_flights').insertAdjacentHTML('beforeend', flightHtml)
     stickyFooter()
