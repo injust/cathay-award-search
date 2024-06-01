@@ -58,32 +58,34 @@ export interface PageBom {
     availabilities?: {
       upsell: {
         bounds: Array<{
-          flights: Array<{
-            duration: number
-            segments: Array<{
-              originLocation: string
-              destinationLocation: string
-              destinationDate: number
-              flightIdentifier: {
-                marketingAirline: string
-                flightNumber: string
-                originDate: number
-              }
-              cabins: {
-                F?: { status: string }
-                B?: { status: string }
-                N?: { status: string }
-                E?: { status: string }
-                R?: { status: string }
-              }
-            }>
-            flightIdString: string
-          }>
+          flights: PageBomFlight[]
         }>
       }
     }
     isContainingErrors: boolean
   }
+}
+
+export interface PageBomFlight {
+  duration: number
+  segments: Array<{
+    originLocation: string
+    destinationLocation: string
+    destinationDate: number
+    flightIdentifier: {
+      marketingAirline: string
+      flightNumber: string
+      originDate: number
+    }
+    cabins: {
+      F?: { status: string }
+      B?: { status: string }
+      N?: { status: string }
+      E?: { status: string }
+      R?: { status: string }
+    }
+  }>
+  flightIdString: string
 }
 
 export interface Profile {
