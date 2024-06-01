@@ -189,16 +189,14 @@ await (async () => {
         <a href="javascript:void 0" class="switch">${swapSvg()}</a>
         <label class="labels_left">
           <span>From</span>
-          <input tabindex="1" type="text" id="uef_from" name="uef_from" placeholder="Where from?" value="${uef.from}" />
-          ${xSvg('clear_from')}
+          <input tabindex="1" type="search" id="uef_from" name="uef_from" placeholder="Where from?" value="${uef.from}" />
         </label>
         <label class="labels_right"><span>Adults</span>
         <input tabindex="4" type="number" inputmode="decimal" id="uef_adult" name="uef_adult" placeholder="Adults" value="${uef.adults}" min="0" />
         </label>
         <label class="labels_left">
           <span>To</span>
-          <input tabindex="2" type="text" id="uef_to" name="uef_to" placeholder="Where to?" value="${uef.to}" />
-          ${xSvg('clear_to')}
+          <input tabindex="2" type="search" id="uef_to" name="uef_to" placeholder="Where to?" value="${uef.to}" />
         </label>
         <label class="labels_right"><span>Children</span>
         <input tabindex="5" type="number" inputmode="decimal" id="uef_child" name="uef_child" placeholder="Children" value="${uef.children}" min="0" />
@@ -272,7 +270,6 @@ await (async () => {
   let btnSearch: HTMLButtonElement, btnBatch: HTMLButtonElement
   let inputFrom: HTMLInputElement, inputTo: HTMLInputElement, inputDate: HTMLInputElement, inputAdult: HTMLInputElement, inputChild: HTMLInputElement, inputMultiAdult: HTMLInputElement, inputMultiChild: HTMLInputElement
   let selectMultiCabin: HTMLSelectElement
-  let clearFrom: SVGElement, clearTo: SVGElement
   let linkSearchSaved: HTMLAnchorElement, linkSearchMulti: HTMLAnchorElement
   let divFilters: HTMLDivElement, divLoginPrompt: HTMLDivElement, divFooter: HTMLDivElement, divUeContainer: HTMLDivElement, divHeartSave: HTMLDivElement, divSaved: HTMLDivElement, divFavesTabs: HTMLDivElement, divSavedFlights: HTMLDivElement, divSavedQueries: HTMLDivElement, divMultiBox: HTMLDivElement, divBulk: HTMLDivElement, divResults: HTMLDivElement, divError: HTMLDivElement
   let divTable: HTMLTableElement, divTableBody: HTMLTableSectionElement
@@ -292,9 +289,6 @@ await (async () => {
     inputMultiChild = shadowRoot.querySelector('#multi_child')
 
     selectMultiCabin = shadowRoot.querySelector('#multi_cabin')
-
-    clearFrom = shadowRoot.querySelector('.clear_from')
-    clearTo = shadowRoot.querySelector('.clear_to')
 
     linkSearchSaved = shadowRoot.querySelector('.search_selected')
     linkSearchMulti = shadowRoot.querySelector('.multi_search')
@@ -409,14 +403,6 @@ await (async () => {
         el.select()
       })
     }
-
-    clearFrom.addEventListener('click', (e) => {
-      inputFrom.value = ''
-    })
-
-    clearTo.addEventListener('click', (e) => {
-      inputTo.value = ''
-    })
 
     divTable.addEventListener('click', (e) => {
       (async () => {

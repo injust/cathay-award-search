@@ -460,14 +460,6 @@ a.switch svg path {
     font-size: 16px;
 }
 
-svg.clear_from,
-svg.clear_to {
-    position: absolute;
-    right: 20px;
-    top: 15px;
-    opacity: 30%;
-}
-
 .unelevated_form button.uef_search {
     background-color: #367778;
     white-space: nowrap;
