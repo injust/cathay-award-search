@@ -7,6 +7,7 @@ import { GM } from 'vite-plugin-monkey/dist/client'
 // Logging
 // ============================================================
 
+export const assert = console.assert
 export const log = console.debug
 
 // ============================================================

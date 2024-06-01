@@ -2,7 +2,7 @@ import { chevronSvg, heartSvg, swapSvg, xSvg } from './images/svg.ts'
 import { lang } from './localization.ts'
 import styleCss from './styles/style.css?inline'
 import { AirportResponse, Airports, AvailabilityResponse, CabinClass, Filters, PageBom, Passengers, Profile, Query, QueryPayload, RequestParams, Route, SavedFlights, Uef } from './types.ts'
-import { formatFlightDuration, formatFlightTime, httpRequest, isValidCxDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, valueGet, valueSet, waitForEl } from './utils.ts'
+import { assert, formatFlightDuration, formatFlightTime, httpRequest, isValidCxDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, valueGet, valueSet, waitForEl } from './utils.ts'
 import dayjs from 'dayjs'
 import dayjsPluginUTC from 'dayjs-plugin-utc'
 import { unsafeWindow } from 'vite-plugin-monkey/dist/client'
@@ -1332,7 +1332,11 @@ await (async () => {
     if (pageBom.modelObject?.isContainingErrors) {
       flightHtml += `<span class="bulk_response_error"><strong>Error</strong>: ${pageBom.modelObject?.messages[0]?.text}</span>`
     } else if (pageBom.modelObject?.availabilities?.upsell?.bounds != null) {
+      assert(pageBom.modelObject.availabilities.upsell.bounds.length === 1, pageBom.modelObject.availabilities.upsell.bounds)
+
       for (const flight of pageBom.modelObject.availabilities.upsell.bounds[0].flights ?? []) {
+        assert(flight.segments.length > 0 && flight.segments.length <= 2, flight.segments)
+
         let available = ''
         const f1 = parseCabinStatus(flight.segments[0].cabins?.F?.status)
         const j1 = parseCabinStatus(flight.segments[0].cabins?.B?.status)
