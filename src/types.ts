@@ -52,8 +52,7 @@ export type Passengers = {
   children: number
 }
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-export type PageBom = {
+export interface PageBom {
   modelObject: {
     messages?: Array<{ text: string }>
     availabilities?: {
@@ -111,8 +110,7 @@ export interface QueryResponse {
   urlToPost?: string
 }
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-export type RequestParams = {
+export interface RequestParams {
   SERVICE_ID?: string
   TAB_ID?: string
   DIRECT_LOGIN?: string
