@@ -1337,15 +1337,17 @@ await (async () => {
       for (const flight of pageBom.modelObject.availabilities.upsell.bounds[0].flights ?? []) {
         assert(flight.segments.length > 0 && flight.segments.length <= 2, flight.segments)
 
+        const numF = Math.min(...flight.segments.map(segment => parseCabinStatus(segment.cabins?.F?.status)))
+        const numJ = Math.min(...flight.segments.map(segment => parseCabinStatus(segment.cabins?.B?.status)))
+        const numPY = Math.min(...flight.segments.map(segment => parseCabinStatus(segment.cabins?.N?.status)))
+        const numY = Math.min(...flight.segments.map(segment => parseCabinStatus(segment.cabins?.E?.status) + parseCabinStatus(segment.cabins?.R?.status)))
+
         let available = ''
-        const f1 = parseCabinStatus(flight.segments[0].cabins?.F?.status)
-        const j1 = parseCabinStatus(flight.segments[0].cabins?.B?.status)
-        const p1 = parseCabinStatus(flight.segments[0].cabins?.N?.status)
-        const y1 = parseCabinStatus(flight.segments[0].cabins?.E?.status) + parseCabinStatus(flight.segments[0].cabins?.R?.status)
-        let numF = 0
-        let numJ = 0
-        let numPY = 0
-        let numY = 0
+        if (numF > 0) available += ` <span class='bulk_cabin bulk_f'>F <b>${numF}</b></span>`
+        if (numJ > 0) available += ` <span class='bulk_cabin bulk_j'>J <b>${numJ}</b></span>`
+        if (numPY > 0) available += ` <span class='bulk_cabin bulk_p'>PY <b>${numPY}</b></span>`
+        if (numY > 0) available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
+
         const leg1Airline = flight.segments[0].flightIdentifier.marketingAirline
         const leg1FlightNum = flight.segments[0].flightIdentifier.flightNumber
         const leg1DepTime = formatFlightTime(flight.segments[0].flightIdentifier.originDate)
@@ -1356,11 +1358,6 @@ await (async () => {
         let flightKey: string
 
         if (flight.segments.length === 1) {
-          if ((numF = f1) > 0) available += ` <span class='bulk_cabin bulk_f'>F <b>${numF}</b></span>`
-          if ((numJ = j1) > 0) available += ` <span class='bulk_cabin bulk_j'>J <b>${numJ}</b></span>`
-          if ((numPY = p1) > 0) available += ` <span class='bulk_cabin bulk_p'>PY <b>${numPY}</b></span>`
-          if ((numY = y1) > 0) available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
-
           flightKey = `${queryString}_${leg1Airline}${leg1FlightNum}`
 
           if (available !== '') {
@@ -1383,16 +1380,6 @@ await (async () => {
           `.trim()
           }
         } else {
-          const f2 = parseCabinStatus(flight.segments[1].cabins?.F?.status)
-          const j2 = parseCabinStatus(flight.segments[1].cabins?.B?.status)
-          const p2 = parseCabinStatus(flight.segments[1].cabins?.N?.status)
-          const y2 = parseCabinStatus(flight.segments[1].cabins?.E?.status) + parseCabinStatus(flight.segments[1].cabins?.R?.status)
-
-          if ((numF = Math.min(f1, f2)) > 0) available += ` <span class='bulk_cabin bulk_f'>F <b>${numF}</b></span>`
-          if ((numJ = Math.min(j1, j2)) > 0) available += ` <span class='bulk_cabin bulk_j'>J <b>${numJ}</b></span>`
-          if ((numPY = Math.min(p1, p2)) > 0) available += ` <span class='bulk_cabin bulk_p'>PY <b>${numPY}</b></span>`
-          if ((numY = Math.min(y1, y2)) > 0) available += ` <span class='bulk_cabin bulk_y'>Y <b>${numY}</b></span>`
-
           const leg2Airline = flight.segments[1].flightIdentifier.marketingAirline
           const leg2FlightNum = flight.segments[1].flightIdentifier.flightNumber
           const leg2DepTime = formatFlightTime(flight.segments[1].flightIdentifier.originDate)
