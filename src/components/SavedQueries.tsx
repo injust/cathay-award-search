@@ -1,6 +1,6 @@
 import { xSvg } from '../images/svg.tsx'
 import { lang } from '../localization.ts'
-import { queryStringToQuery, queryToQueryString, valueSet } from '../utils.ts'
+import { log, queryStringToQuery, queryToQueryString, valueSet } from '../utils.ts'
 import { FunctionComponent } from 'preact'
 import { Signal, batch, computed, useSignalEffect } from '@preact/signals'
 
@@ -11,17 +11,19 @@ interface SavedQueriesProps {
 export const SavedQueries: FunctionComponent<SavedQueriesProps> = ({ savedQueries }) => {
   const sortedQueries = computed(() => Array.from(savedQueries.value, queryStringToQuery).sort((a, b) => +a.date - +b.date))
 
-  useSignalEffect(async () => {
-    batch(() => {
-      for (const queryString of savedQueries.value) {
-        const query = queryStringToQuery(queryString)
-        const savedDate = query.date.toDate()
-        const now = new Date()
-        if (savedDate <= now) savedQueries.value.delete(queryString)
-      }
-    })
+  useSignalEffect(() => {
+    (async () => {
+      batch(() => {
+        for (const queryString of savedQueries.value) {
+          const query = queryStringToQuery(queryString)
+          const savedDate = query.date.toDate()
+          const now = new Date()
+          if (savedDate <= now) savedQueries.value.delete(queryString)
+        }
+      })
 
-    await valueSet('saved_queries', Array.from(savedQueries.value))
+      await valueSet('saved_queries', Array.from(savedQueries.value))
+    })().catch(log)
   })
 
   return (

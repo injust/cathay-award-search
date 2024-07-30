@@ -1,7 +1,7 @@
 import { xSvg } from '../images/svg.tsx'
 import { lang } from '../localization.ts'
 import { FlightAvailability } from '../types.ts'
-import { queryStringToQuery, queryToQueryString, valueSet } from '../utils.ts'
+import { log, queryStringToQuery, queryToQueryString, valueSet } from '../utils.ts'
 import { FunctionComponent } from 'preact'
 import { Signal, batch, computed, useSignalEffect } from '@preact/signals'
 
@@ -20,17 +20,19 @@ export const SavedFlights: FunctionComponent<SavedFlightsProps> = ({ savedFlight
   })).sort((a, b) => +a.query.date - +b.query.date)
   )
 
-  useSignalEffect(async () => {
-    batch(() => {
-      for (const flightKey of savedFlights.value.keys()) {
-        const query = queryStringToQuery(flightKey) // TODO: Should make something to parse `flightKey`
-        const savedDate = query.date.toDate()
-        const now = new Date()
-        if (savedDate <= now) savedFlights.value.delete(flightKey)
-      }
-    })
+  useSignalEffect(() => {
+    (async () => {
+      batch(() => {
+        for (const flightKey of savedFlights.value.keys()) {
+          const query = queryStringToQuery(flightKey) // TODO: Should make something to parse `flightKey`
+          const savedDate = query.date.toDate()
+          const now = new Date()
+          if (savedDate <= now) savedFlights.value.delete(flightKey)
+        }
+      })
 
-    await valueSet('saved_flights', Object.fromEntries(savedFlights.value))
+      await valueSet('saved_flights', Object.fromEntries(savedFlights.value))
+    })().catch(log)
   })
 
   return (
