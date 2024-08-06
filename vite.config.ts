@@ -1,7 +1,7 @@
-import { defineConfig } from 'vite'
+import { UserConfig } from 'vite'
 import monkey, { cdn } from 'vite-plugin-monkey'
 
-export default defineConfig({
+export default {
     build: {
         minify: true,
     },
@@ -31,4 +31,4 @@ export default defineConfig({
             },
         }),
     ],
-})
+} satisfies UserConfig
