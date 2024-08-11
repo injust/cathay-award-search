@@ -886,7 +886,7 @@ span.flight_save * {
 span.flight_save svg {
     height: 12px;
     width: 12px;
-    padding: 5px;
+    padding: 5px 3px;
 }
 
 .flight_item.saved span.flight_save {
