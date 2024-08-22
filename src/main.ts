@@ -440,7 +440,7 @@ await (async () => {
         if (el.classList.contains('active')) {
           el.classList.remove('active')
         } else {
-          for (const el of shadowRoot.querySelectorAll<HTMLDivElement>('.flight_item')) {
+          for (const el of shadowRoot.querySelectorAll<HTMLDivElement>('.flight_item.active')) {
             el.classList.remove('active')
           }
           el.classList.add('active')
@@ -475,7 +475,7 @@ await (async () => {
     })
 
     document.addEventListener('scroll', (e) => {
-      for (const el of shadowRoot.querySelectorAll<HTMLDivElement>('.flight_item')) {
+      for (const el of shadowRoot.querySelectorAll<HTMLDivElement>('.flight_item.active')) {
         el.classList.remove('active')
       }
     })
@@ -726,18 +726,15 @@ await (async () => {
 
     // Remove the "active" class from all autocomplete items
     const removeActive = (divMatches: HTMLCollectionOf<HTMLDivElement>): void => {
-      for (let i = 0; i < divMatches.length; i++) {
-        divMatches[i].classList.remove('autocomplete-active')
+      for (const divMatch of divMatches) {
+        divMatch.classList.remove('autocomplete-active')
       }
     }
 
     // Close all autocomplete lists in the document, except the one passed as an argument
     const closeAllLists = (el?: HTMLElement): void => {
-      const x = shadowRoot.querySelectorAll('.autocomplete-items')
-      for (let i = 0; i < x.length; i++) {
-        if (el !== x[i] && el !== input) {
-          x[i].parentNode.removeChild(x[i])
-        }
+      for (const list of shadowRoot.querySelectorAll('.autocomplete-items')) {
+        if (el !== list && el !== input) list.parentNode.removeChild(list)
       }
     }
 
@@ -745,8 +742,9 @@ await (async () => {
       // Close any already open lists of autocomplete values
       closeAllLists()
 
-      if (!/[^,]+$/.test(el.value)) return
-      const val = el.value.match(/[^,]+$/)[0]
+      const matches = el.value.match(/[^,]+$/)
+      if (matches === null) return
+      const val = matches[0]
 
       currentFocus = -1
 
