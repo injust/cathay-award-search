@@ -78,7 +78,7 @@ await (async () => {
   const savedFlights = new Map(Object.entries(await valueGet<SavedFlights>('saved_flights', {})))
   const savedQueries = new Set(await valueGet<string[]>('saved_queries', []))
 
-  // Search Result Filters
+  // Saved Search Result Filters
   const filters: Filters = {
     nonstop: false,
     first: true,
