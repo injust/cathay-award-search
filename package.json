@@ -9,6 +9,8 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@algolia/autocomplete-js": "^1.18.1",
+        "@algolia/autocomplete-theme-classic": "^1.18.1",
         "dayjs": "^1.11.13",
         "dayjs-plugin-utc": "^0.1.2"
     },
