@@ -9,6 +9,7 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "classnames": "^2.5.1",
         "dayjs": "^1.11.13",
         "dayjs-plugin-utc": "^0.1.2",
         "preact": "^10.26.4",
