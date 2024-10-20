@@ -28,5 +28,5 @@ export const lang: { [key: string]: string } = {
   date_too_early: 'Date Too Early',
   date_too_late: 'Date Too Late',
   book_multi: 'Book Multi-City Award',
-  search_selected: 'Search All Saved'
+  search_all_saved: 'Search All Saved'
 }

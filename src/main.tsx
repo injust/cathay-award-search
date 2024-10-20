@@ -208,7 +208,7 @@ await (async () => {
 
     selectMultiCabin = shadowRoot.querySelector('#multi_cabin')
 
-    linkSearchSaved = shadowRoot.querySelector('.search_selected')
+    linkSearchSaved = shadowRoot.querySelector('.search_all_saved')
     linkSearchMulti = shadowRoot.querySelector('.multi_search')
 
     divFilters = shadowRoot.querySelector('.filters')
@@ -738,7 +738,7 @@ await (async () => {
     remainingDays = 20
     btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from.join(',')} - ${uef.to.join(',')} ${lang.bulk_flights}`
     btnBatch.classList.remove('bulk_searching')
-    linkSearchSaved.innerText = `${lang.search_selected} »`
+    linkSearchSaved.innerText = `${lang.search_all_saved} »`
   }
 
   const stopBatch = (): void => {

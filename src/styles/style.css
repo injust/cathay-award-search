@@ -1061,7 +1061,7 @@ span.info-y {
     font-family: "Cathay Sans EN", CathaySans_Md, sans-serif;
 }
 
-a.search_selected {
+a.search_all_saved {
     position: absolute;
     right: 15px;
     top: 6px;
@@ -1072,7 +1072,7 @@ a.search_selected {
     display: block;
 }
 
-.flights a.search_selected {
+.flights a.search_all_saved {
     position: absolute;
     right: 15px;
     top: 6px;
@@ -1105,7 +1105,7 @@ a.search_selected {
 
 .multi_on .saved_book,
 .multi_on .saved_remove,
-.multi_on .search_selected {
+.multi_on .search_all_saved {
     display: none;
 }
 

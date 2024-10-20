@@ -30,7 +30,7 @@ export const SearchBox: FunctionComponent<SearchBoxProps> = ({ browserLang, brow
             <a href='javascript:void 0' class='tabs tab_queries'>Routes</a>
             <a href='javascript:void 0' class='tabs tab_flights'>Flights</a>
           </div>
-          <a href='javascript:void 0' class='search_selected'>{lang.search_selected} &raquo;</a>
+          <a href='javascript:void 0' class='search_all_saved'>{lang.search_all_saved} &raquo;</a>
           {SavedFlights({ savedFlights })}
           {SavedQueries({ savedQueries })}
         </div>
