@@ -454,14 +454,8 @@ await (async () => {
         }
       }
 
-      if (selectedSegments.length === 6) {
-        for (const el of divSavedQueries.getElementsByTagName('input')) {
-          if (!el.checked) el.disabled = true
-        }
-      } else {
-        for (const el of divSavedQueries.getElementsByTagName('input')) {
-          el.disabled = false
-        }
+      for (const el of divSavedQueries.getElementsByTagName('input')) {
+        el.disabled = selectedSegments.length === 6 && !el.checked
       }
 
       Array.from(selectedSegments).sort((a, b) => {
