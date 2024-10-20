@@ -767,7 +767,7 @@ await (async () => {
       bulkDate = uef.date
       routeChanged = false
 
-      divTableBody.innerHTML = ''
+      divTableBody.replaceChildren()
       divUeContainer.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
 
@@ -783,7 +783,7 @@ await (async () => {
 
     divResults.classList.remove('hidden')
     btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
-    divTableBody.innerHTML = ''
+    divTableBody.replaceChildren()
 
     if (!cont.query) {
       await regularSearch(
