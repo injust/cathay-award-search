@@ -918,7 +918,7 @@ await (async () => {
   // Get New TAB_ID
   // ============================================================
 
-  const newTabID = async (cb: () => Promise<void>): Promise<void> => {
+  const newTabID = async (): Promise<string> => {
     const formUrl = new URL(ibeFacadeUrl)
     for (const [key, value] of Object.entries(newQueryPayload())) {
       formUrl.searchParams.append(key, value)
@@ -956,23 +956,19 @@ await (async () => {
           log('requestParams:', requestParams)
         } catch {
           resetSearch()
-          batchError('Response not valid JSON')
-          return
+          throw new Error('Response not valid JSON')
         }
 
         tabId = requestParams.TAB_ID ?? ''
         formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
         log('New Tab ID:', tabId)
-
-        batchError()
-        await cb()
-        return
+        return tabId
       }
     }
 
     log('Failed to retrieve new Tab ID')
     resetSearch()
-    batchError(`<strong>Error</strong>: ${lang.tab_retrieve_fail} (<a href='${loginUrl}'>Login</a>)`)
+    throw new Error(`<strong>Error</strong>: ${lang.tab_retrieve_fail} (<a href='${loginUrl}'>Login</a>)`)
   }
 
   // ============================================================
@@ -1134,10 +1130,6 @@ await (async () => {
       withCredentials: true
     })
 
-    const searchAgain = async (): Promise<void> => {
-      await searchAvailability(query, cb)
-    }
-
     if (resp.status === 200) {
       const data: AvailabilityResponse = await resp.json()
       let pageBom: PageBom
@@ -1150,7 +1142,15 @@ await (async () => {
       await cb(pageBom)
     } else {
       batchError(resp.status === 404 ? lang.key_exhausted : resp.status >= 300 ? lang.getting_key : lang.error)
-      await newTabID(searchAgain)
+
+      try {
+        tabId = await newTabID()
+        batchError()
+        await searchAvailability(query, cb)
+      } catch (error) {
+        if (!(error instanceof Error)) throw error
+        batchError(error.message)
+      }
     }
   }
 
