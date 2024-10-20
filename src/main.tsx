@@ -122,7 +122,7 @@ await (async () => {
   shadowWrapper.style.padding = '0'
   const shadowRoot = shadowWrapper.attachShadow({ mode: 'closed' })
   const shadowContainer = document.createElement('div')
-  shadowRoot.appendChild(shadowContainer)
+  shadowRoot.append(shadowContainer)
 
   const initRoot = async (): Promise<void> => {
     log('initRoot()')
@@ -173,10 +173,10 @@ await (async () => {
   // ============================================================
 
   // Append CSS to DOM Element (Default to Shadow Root)
-  const addCss = (css: string, target: Node = shadowRoot): void => {
+  const addCss = (css: string, target: ParentNode = shadowRoot): void => {
     const styleSheet = document.createElement('style')
     styleSheet.innerHTML = css
-    target.appendChild(styleSheet)
+    target.append(styleSheet)
   }
 
   addCss(styleCss)
@@ -666,10 +666,10 @@ await (async () => {
       divContainer.setAttribute('class', 'autocomplete-items')
 
       // Append the DIV element as a child of the autocomplete container
-      el.parentNode.appendChild(divContainer)
+      el.parentNode.append(divContainer)
       const sep = document.createElement('span')
       sep.style.display = 'none'
-      divContainer.appendChild(sep)
+      divContainer.append(sep)
 
       const favs = ['TPE', 'TSA', 'KHH', 'RMQ', 'TYO', 'HND', 'NRT', 'KIX', 'ITM', 'CTS', 'FUK', 'NGO', 'OKA', 'ICN', 'PUS', 'GMP', 'CJU', 'HKG', 'MFM', 'BKK', 'CNX', 'HKT', 'CGK', 'DPS', 'SUB', 'KUL', 'BKI', 'PEN', 'DAD', 'HAN', 'SGN', 'CEB', 'MNL', 'SIN', 'PNH', 'DEL', 'BOM', 'DXB', 'DOH', 'TLV', 'BCN', 'MAD', 'MXP', 'CDG', 'ZRH', 'MUC', 'FCO', 'FRA', 'CDG', 'AMS', 'LHR', 'LGW', 'LON', 'MAN', 'FCO', 'BOS', 'JFK', 'YYZ', 'ORD', 'IAD', 'YVR', 'SFO', 'LAX', 'SAN', 'SEA', 'JNB', 'PER', 'SYD', 'BNE', 'MEL', 'AKL', 'HEL', 'BLR', 'SHA', 'PVG', 'PEK', 'CAN', 'KTM', 'ADL', 'CPT', 'ATH', 'IST', 'SOF', 'VCE', 'BUD', 'PRG', 'VIE', 'BER', 'WAW', 'KBP', 'CPH', 'DUS', 'BRU', 'OSL', 'ARN', 'DUB', 'MIA', 'ATL', 'IAH', 'DFW', 'PHL', 'CMN', 'LAS', 'SJC', 'DEN', 'AUS', 'MSY', 'MCO', 'EWR', 'NYC', 'LIS', 'OPO', 'SPU', 'DBV', 'ZAG', 'MLE', 'LIM', 'BOG', 'CNS', 'GRU', 'SCL', 'GIG', 'EZE', 'MEX', 'CUN']
       // For each autocomplete value, check if it starts with the same letters as the text field value
@@ -707,7 +707,7 @@ await (async () => {
           } else if (favs.includes(airportCode)) {
             divContainer.insertBefore(divMatch, sep)
           } else {
-            divContainer.appendChild(divMatch)
+            divContainer.append(divMatch)
           }
         }
       }
@@ -994,7 +994,7 @@ await (async () => {
         const form = container.getElementsByTagName('form')[0]
 
         log('Submitting SubmissionDetails form')
-        document.body.appendChild(form)
+        document.body.append(form)
         form.submit()
         return
       }
@@ -1007,11 +1007,11 @@ await (async () => {
       input.setAttribute('type', 'hidden')
       input.setAttribute('name', key)
       input.setAttribute('value', value)
-      form.appendChild(input)
+      form.append(input)
     }
 
     log('Fallback: Submitting IBEFacade form')
-    document.body.appendChild(form)
+    document.body.append(form)
     form.submit()
   }
 
