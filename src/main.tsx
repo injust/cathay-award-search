@@ -730,7 +730,8 @@ await (async () => {
     searching = false
     remainingDays = 20
     btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from.join(',')} - ${uef.to.join(',')} ${lang.bulk_flights}`
-    btnBatch.classList.remove('bulk_searching')
+    btnSearch.disabled = false
+    btnBatch.disabled = false
     linkSearchSaved.innerText = `${lang.search_all_saved} »`
   }
 
@@ -771,7 +772,6 @@ await (async () => {
 
     divResults.classList.remove('hidden')
     btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
-    btnBatch.classList.add('bulk_searching')
     await bulkSearch(singleDate)
   }
 
@@ -782,7 +782,6 @@ await (async () => {
 
     divResults.classList.remove('hidden')
     btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
-    btnBatch.classList.add('bulk_searching')
     divTableBody.innerHTML = ''
 
     if (!cont.query) {
@@ -971,7 +970,8 @@ await (async () => {
   const regularSearch = async (cxString: QueryPayload, cont = {}): Promise<void> => {
     btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_cont}`
     btnSearch.innerHTML = `${loadingIconHtml} ${lang.searching_cont}`
-    btnSearch.classList.add('searching')
+    btnSearch.disabled = true
+    btnBatch.disabled = true
 
     await GM.setValue('cont', { ...defaultContVars, ts: +dayjs(), ...cont })
 
@@ -1247,7 +1247,6 @@ await (async () => {
       // If over 5 minutes since cont query, don't auto search
       if (+dayjs() - cont.ts > 60 * 5 * 1000) return
       btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
-      btnBatch.classList.add('bulk_searching')
       document.body.classList.add('cont_query')
 
       setTimeout(async () => {
