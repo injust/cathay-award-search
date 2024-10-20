@@ -737,7 +737,7 @@ await (async () => {
   }
 
   const stopBatch = (): void => {
-    log('Batch Clicked. Stopping Search')
+    log('Stopping batch search')
 
     stopSearch = true
     resetSearch()
@@ -754,7 +754,7 @@ await (async () => {
       return
     }
 
-    log('Batch Clicked. Starting Search')
+    log('Starting batch search')
 
     uef.from = inputFrom.value.split(',')
     uef.to = inputTo.value.split(',')
