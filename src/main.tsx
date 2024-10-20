@@ -1066,13 +1066,13 @@ await (async () => {
       }
     }
 
-    let thisRoute = routes.shift()
+    let route = routes.shift()
 
     const populateNextRoute = async (pageBom: PageBom): Promise<void> => {
-      await insertResults({ ...thisRoute, date: dayjs(bulkDate) }, pageBom)
+      await insertResults({ ...route, date: dayjs(bulkDate) }, pageBom)
 
-      if ((thisRoute = routes.shift()) != null) {
-        await searchAvailability({ ...thisRoute, date: dayjs(bulkDate) }, populateNextRoute)
+      if ((route = routes.shift()) != null) {
+        await searchAvailability({ ...route, date: dayjs(bulkDate) }, populateNextRoute)
       } else {
         bulkDate = dayjs(bulkDate).add(1, 'd').format('YYYYMMDD')
         if (singleDate) stopBatch()
@@ -1080,7 +1080,7 @@ await (async () => {
       }
     }
 
-    await searchAvailability({ ...thisRoute, date: dayjs(bulkDate) }, populateNextRoute)
+    await searchAvailability({ ...route, date: dayjs(bulkDate) }, populateNextRoute)
   }
 
   // ============================================================
