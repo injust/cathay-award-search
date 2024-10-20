@@ -1253,6 +1253,7 @@ await (async () => {
     document.addEventListener('scroll', (e) => {
       stickyFooter()
     })
+
     await loadAirports()
     autocomplete(inputFrom, airports)
     autocomplete(inputTo, airports)
@@ -1264,6 +1265,7 @@ await (async () => {
       btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
       btnBatch.classList.add('bulk_searching')
       document.body.classList.add('cont_query')
+
       setTimeout(async () => {
         if (cont.saved) {
           await savedSearch()
