@@ -8,14 +8,6 @@ declare global {
   }
 }
 
-export type json =
-  | string
-  | number
-  | boolean
-  | null
-  | json[]
-  | { [key: string]: json }
-
 export interface Airport {
   airportCode: string
   countryName: string
@@ -37,8 +29,7 @@ export interface AvailabilityResponse {
 
 export type CabinClass = 'Y' | 'W' | 'C' | 'F'
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-export type Filters = {
+export interface Filters {
   nonstop: boolean
   first: boolean
   business: boolean
@@ -46,8 +37,7 @@ export type Filters = {
   economy: boolean
 }
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-export type Passengers = {
+export interface Passengers {
   adults: number
   children: number
 }
@@ -135,8 +125,7 @@ export interface Query extends Route {
   date: Dayjs
 }
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-export type FlightAvailability = {
+export interface FlightAvailability {
   F: number
   J: number
   PY: number
@@ -154,7 +143,7 @@ export interface SavedFlights {
   [key: string]: FlightAvailability
 }
 
-export type Uef = Passengers & {
+export interface Uef extends Passengers {
   from: string[]
   to: string[]
   date: string

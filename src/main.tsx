@@ -6,13 +6,13 @@ import { SearchBox } from './components/SearchBox.tsx'
 import { lang } from './localization.ts'
 import styleCss from './styles/style.css?inline'
 import { AirportResponse, Airports, AvailabilityResponse, CabinClass, Filters, PageBom, Passengers, Profile, Query, QueryPayload, RequestParams, Route, SavedFlights, Uef } from './types.ts'
-import { assert, httpRequest, isValidCxDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, valueGet, valueSet, waitForEl } from './utils.ts'
+import { assert, httpRequest, isValidCxDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, waitForEl } from './utils.ts'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
 import dayjsPluginUTC from 'dayjs-plugin-utc'
 import { VNode } from 'preact'
 import { render } from 'preact-render-to-string'
-import { unsafeWindow } from 'vite-plugin-monkey/dist/client'
+import { GM, unsafeWindow } from 'vite-plugin-monkey/dist/client'
 
 await (async () => {
   'use strict'
@@ -46,10 +46,13 @@ await (async () => {
   const initCxVars = async (): Promise<void> => {
     log('initCxVars()')
 
-    staticFilesPath = await valueGet('static_files_path', '/CathayPacificAwardV3/SEP2024_1.0.20/')
+    staticFilesPath = await GM.getValue('static_files_path', '/CathayPacificAwardV3/SEP2024_1.0.20/')
     if (unsafeWindow.staticFilesPath != null) {
       // log('typeof unsafeWindow.staticFilesPath:', typeof unsafeWindow.staticFilesPath)
-      if (staticFilesPath !== unsafeWindow.staticFilesPath) staticFilesPath = await valueSet('static_files_path', unsafeWindow.staticFilesPath)
+      if (staticFilesPath !== unsafeWindow.staticFilesPath) {
+        staticFilesPath = unsafeWindow.staticFilesPath
+        await GM.setValue('static_files_path', staticFilesPath)
+      }
     }
 
     if (typeof unsafeWindow.requestParams === 'string') {
@@ -78,12 +81,12 @@ await (async () => {
     date: '',
     adults: 1,
     children: 0,
-    ...await valueGet('uef', {})
+    ...await GM.getValue('uef', {})
   }
 
   // Saved Queries
-  const savedFlights = new Map(Object.entries(await valueGet<SavedFlights>('saved_flights', {})))
-  const savedQueries = new Set(await valueGet<string[]>('saved_queries', []))
+  const savedFlights = new Map(Object.entries(await GM.getValue<SavedFlights>('saved_flights', {})))
+  const savedQueries = new Set(await GM.getValue<string[]>('saved_queries', []))
 
   // Saved Search Result Filters
   const filters: Filters = {
@@ -92,11 +95,11 @@ await (async () => {
     business: true,
     premium: true,
     economy: true,
-    ...await valueGet('filters', {})
+    ...await GM.getValue('filters', {})
   }
 
   const defaultContVars = { batch: false, query: false, saved: false, ts: 0 }
-  const cont = { ...defaultContVars, ...await valueGet('cont', {}) }
+  const cont = { ...defaultContVars, ...await GM.getValue('cont', {}) }
   // const urlParams = new URLSearchParams(window.location.search)
   // const cont = {
   //   batch: urlParams.has('cont_batch'),
@@ -106,7 +109,7 @@ await (async () => {
   // }
 
   const resetContVars = async (): Promise<void> => {
-    await valueSet('cont', defaultContVars)
+    await GM.setValue('cont', defaultContVars)
   }
 
   // ============================================================
@@ -240,7 +243,7 @@ await (async () => {
         uef.date = inputDate.value !== '' ? dayjs(inputDate.value).format('YYYYMMDD') : ''
         uef.adults = +inputAdult.value
         uef.children = +inputChild.value
-        await valueSet('uef', uef)
+        await GM.setValue('uef', uef)
 
         await regularSearch(
           newQueryPayload(
@@ -341,7 +344,7 @@ await (async () => {
           }
 
           updateSavedQueries()
-          await valueSet('saved_queries', Array.from(savedQueries))
+          await GM.setValue('saved_queries', Array.from(savedQueries))
         }
       })().catch(log)
     })
@@ -383,7 +386,7 @@ await (async () => {
           }
 
           updateSavedFlights()
-          await valueSet('saved_flights', Object.fromEntries(savedFlights))
+          await GM.setValue('saved_flights', Object.fromEntries(savedFlights))
         }
       })().catch(log)
     })
@@ -401,13 +404,13 @@ await (async () => {
         if (el.dataset.flightKey != null) {
           savedFlights.delete(el.dataset.flightKey)
           updateSavedFlights()
-          await valueSet('saved_flights', Object.fromEntries(savedFlights))
+          await GM.setValue('saved_flights', Object.fromEntries(savedFlights))
         }
 
         if (el.dataset.queryString != null) {
           savedQueries.delete(el.dataset.queryString)
           updateSavedQueries()
-          await valueSet('saved_queries', Array.from(savedQueries))
+          await GM.setValue('saved_queries', Array.from(savedQueries))
         }
       })().catch(log)
     })
@@ -496,7 +499,7 @@ await (async () => {
         (async () => {
           const className = filterToClassName(el.dataset.filter)
           filters[el.dataset.filter] = el.checked
-          await valueSet('filters', filters)
+          await GM.setValue('filters', filters)
 
           if (el.checked) {
             divTable.classList.add(className)
@@ -762,7 +765,7 @@ await (async () => {
     uef.date = inputDate.value !== '' ? dayjs(inputDate.value).format('YYYYMMDD') : ''
     uef.adults = +inputAdult.value
     uef.children = +inputChild.value
-    await valueSet('uef', uef)
+    await GM.setValue('uef', uef)
 
     if (routeChanged) {
       bulkDate = uef.date
@@ -980,7 +983,7 @@ await (async () => {
     btnSearch.innerHTML = `${loadingIconHtml} ${lang.searching_cont}`
     btnSearch.classList.add('searching')
 
-    await valueSet('cont', { ...defaultContVars, ts: +dayjs(), ...cont })
+    await GM.setValue('cont', { ...defaultContVars, ts: +dayjs(), ...cont })
 
     const formUrl = new URL(ibeFacadeUrl)
     for (const [key, value] of Object.entries(cxString)) {
@@ -1204,7 +1207,7 @@ await (async () => {
         if (savedFlights.has(flightKey)) {
           savedFlights.set(flightKey, { F: numF, J: numJ, PY: numPY, Y: numY })
           updateSavedFlights()
-          await valueSet('saved_flights', Object.fromEntries(savedFlights))
+          await GM.setValue('saved_flights', Object.fromEntries(savedFlights))
         }
       }
     }

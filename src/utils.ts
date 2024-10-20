@@ -1,7 +1,6 @@
 import { lang } from './localization.ts'
-import { Query, json } from './types.ts'
+import { Query } from './types.ts'
 import dayjs from 'dayjs'
-import { GM } from 'vite-plugin-monkey/dist/client'
 
 // ============================================================
 // Logging
@@ -9,18 +8,6 @@ import { GM } from 'vite-plugin-monkey/dist/client'
 
 export const assert = console.assert
 export const log = console.debug
-
-// ============================================================
-// Greasymonkey Function Wrappers
-// ============================================================
-
-// Get and Set Stored Values
-export const valueGet: <T extends json>(key: string, defaultValue?: T) => Promise<T> = GM.getValue
-
-export const valueSet = async <T extends json>(key: string, value: T): Promise<T> => {
-  await GM.setValue(key, value)
-  return value
-}
 
 // ============================================================
 // XMLHttpRequest
