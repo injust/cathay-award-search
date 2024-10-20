@@ -985,6 +985,13 @@ button.uef_search.searching {
     background-color: #b9cdc9 !important;
 }
 
+button.bulk_submit,
+button.multi_search,
+button.uef_search,
+div.unelevated_saved {
+    cursor: pointer;
+}
+
 .col-select-departure-flight>.row:last-of-type {
     padding-bottom: 140px;
 }
