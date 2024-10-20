@@ -46,14 +46,16 @@ export const httpRequest = async (url: string | URL, request?: {
 
 // Wait for Element to Load
 export const waitForEl = async <E extends Element>(selectors: string): Promise<E | null> => await new Promise((resolve) => {
-  if (document.querySelector<E>(selectors) != null) {
-    resolve(document.querySelector<E>(selectors))
+  const el = document.querySelector<E>(selectors)
+  if (el != null) {
+    resolve(el)
     return
   }
 
   const observer = new MutationObserver((mutations) => {
-    if (document.querySelector<E>(selectors) != null) {
-      resolve(document.querySelector<E>(selectors))
+    const el = document.querySelector<E>(selectors)
+    if (el != null) {
+      resolve(el)
       observer.disconnect()
     }
   })
