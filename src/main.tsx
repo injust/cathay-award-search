@@ -14,10 +14,10 @@ import { VNode } from 'preact'
 import { render } from 'preact-render-to-string'
 import { GM, unsafeWindow } from 'vite-plugin-monkey/dist/client'
 
+dayjs.extend(dayjsPluginUTC.default)
+
 await (async () => {
   'use strict'
-
-  dayjs.extend(dayjsPluginUTC.default)
 
   // ============================================================
   // Initialize Variables
