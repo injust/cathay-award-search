@@ -1095,7 +1095,7 @@ await (async () => {
 
     searching = true
 
-    // If destination is not valid, abort
+    // Abort if invalid destination
     if (!/^[A-Z]{3}$/.test(query.to)) {
       // eslint-disable-next-line n/no-callback-literal
       await cb({
