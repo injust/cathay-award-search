@@ -1496,7 +1496,7 @@ await (async () => {
     } else {
       const flights = pageBom.modelObject?.availabilities?.upsell?.bounds[0].flights
       flights.forEach((flight) => {
-        void (async () => {
+        (async () => {
           let available = ''
           // TODO: Maybe use ?? operator instead of ||, but need to account for NaN
           const f1 = +flight.segments[0].cabins?.F?.status || 0
@@ -1512,6 +1512,8 @@ await (async () => {
           const leg1DepTime = getFlightTime(flight.segments[0].flightIdentifier.originDate)
           const leg1ArrTime = getFlightTime(flight.segments[0].destinationDate)
           const leg1Duration = getFlightTime(flight.duration, true)
+          const leg1Origin = flight.segments[0].originLocation
+          const leg1Dest = flight.segments[0].destinationLocation
           let flightKey: string
 
           if (flight.segments.length === 1) {
@@ -1549,7 +1551,7 @@ await (async () => {
                   <span class="flight_save">${heartSvg}</span>
                 </div>
                 <div class="flight_info">
-                  <span class="info_flight">${leg1Airline}${leg1FlightNum}</span>
+                  <span class="info_flight">${leg1Airline}${leg1FlightNum} (${leg1Origin.slice(-3)} ✈ ${leg1Dest.slice(-3)})</span>
                   <span class="info_dept"><span>Departs:</span> ${leg1DepTime}</span>
                   <span class="info_arr"><span>Arrives:</span> ${leg1ArrTime}</span>
                   <span class="info_duration"><span>Total Flight Duration:</span> ${leg1Duration}</span>
@@ -1585,6 +1587,8 @@ await (async () => {
             const leg2FlightNum = flight.segments[1].flightIdentifier.flightNumber
             const leg2DepTime = getFlightTime(flight.segments[1].flightIdentifier.originDate)
             const leg2ArrTime = getFlightTime(flight.segments[1].destinationDate)
+            const leg2Origin = flight.segments[1].originLocation
+            const leg2Dest = flight.segments[1].destinationLocation
             const transitTime = getFlightTime(flight.segments[1].flightIdentifier.originDate - flight.segments[0].destinationDate, true)
             const transitAirportCode = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g.exec(flight.flightIdString)[1].replace(':', ' / ')
             flightKey = `${date}${from}${to}_${leg1Airline}${leg1FlightNum}_${transitAirportCode}_${leg2Airline}${leg2FlightNum}`
@@ -1606,11 +1610,11 @@ await (async () => {
                   <span class="flight_save">${heartSvg}</span>
                 </div>
                 <div class="flight_info">
-                  <span class="info_flight">${leg1Airline}${leg1FlightNum}</span>
+                  <span class="info_flight">${leg1Airline}${leg1FlightNum} (${leg1Origin.slice(-3)} ✈ ${leg1Dest.slice(-3)})</span>
                   <span class="info_dept"><span>Departs:</span> ${leg1DepTime}</span>
                   <span class="info_arr"><span>Arrives:</span> ${leg1ArrTime}</span>
                   <span class="info_transit"><span>Transit Time:</span> ${transitTime}</span>
-                  <span class="info_flight">${leg2Airline}${leg2FlightNum}</span>
+                  <span class="info_flight">${leg2Airline}${leg2FlightNum} (${leg2Origin.slice(-3)} ✈ ${leg2Dest.slice(-3)})</span>
                   <span class="info_dept"><span>Departs:</span> ${leg2DepTime}</span>
                   <span class="info_arr"><span>Arrives:</span> ${leg2ArrTime}</span>
                   <span class="info_duration"><span>Total Flight Duration:</span> ${leg1Duration}</span>
@@ -1625,7 +1629,7 @@ await (async () => {
             updateSavedFlights()
             await valueSet('saved_flights', Object.fromEntries(savedFlights))
           }
-        })()
+        })().catch(log)
       })
     }
     flightHTML += '</div></div>'

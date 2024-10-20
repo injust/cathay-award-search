@@ -1,7 +1,7 @@
 {
     "name": "cathay-award-search",
     "private": true,
-    "version": "3.3.0+injust",
+    "version": "3.3.1+injust",
     "type": "module",
     "scripts": {
         "dev": "vite",
