@@ -1160,11 +1160,6 @@ await (async () => {
 
   const insertResults = async (query: Query, pageBom: PageBom): Promise<void> => {
     const queryString = queryToQueryString(query)
-
-    if (!query.date.isSame((divTableBody.lastElementChild as HTMLTableRowElement)?.dataset?.date, 'd')) {
-      divTableBody.insertAdjacentHTML('beforeend', render(FlightResultsRow({ query })))
-    }
-
     const flightResults: VNode[] = []
 
     if (pageBom.modelObject?.isContainingErrors) {
@@ -1202,6 +1197,10 @@ await (async () => {
           await GM.setValue('saved_flights', Object.fromEntries(savedFlights))
         }
       }
+    }
+
+    if (!query.date.isSame((divTableBody.lastElementChild as HTMLTableRowElement)?.dataset?.date, 'd')) {
+      divTableBody.insertAdjacentHTML('beforeend', render(FlightResultsRow({ query })))
     }
 
     const flightHtml = render(
