@@ -238,6 +238,7 @@ await (async () => {
           alert(lang.invalid_date)
           return
         }
+        if (searching) stopBatch()
 
         uef.from = inputFrom.value.split(',')
         uef.to = inputTo.value.split(',')
