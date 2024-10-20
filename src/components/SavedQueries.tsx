@@ -18,7 +18,7 @@ export const SavedQueries: FunctionComponent<SavedQueriesProps> = ({ savedQuerie
         return (
           <div key={queryString} class='saved_query' data-query={queryString}>
             <label><input type='checkbox' data-query={queryString} />{query.date.format('YYYY-MM-DD')} {query.from}-{query.to}</label>
-            <a href='javascript:void 0' class='saved_book' data-book data-query={queryString}>{lang.search} &raquo;</a>
+            <a href='javascript:void 0' class='saved_search' data-book data-query={queryString}>{lang.search} &raquo;</a>
             <span class='leg' />
             <a href='javascript:void 0' class='saved_remove' data-query={queryString}><X className='saved_delete' /></a>
           </div>

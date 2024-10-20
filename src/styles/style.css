@@ -1103,7 +1103,7 @@ a.search_all_saved {
     line-height: 36px !important;
 }
 
-.multi_on .saved_book,
+.multi_on .saved_search,
 .multi_on .saved_remove,
 .multi_on .search_all_saved {
     display: none;
@@ -1119,7 +1119,7 @@ a.search_all_saved {
     fill: #b4afaf;
 }
 
-.saved_book *,
+.saved_search *,
 .saved_remove * {
     pointer-events: none;
 }
