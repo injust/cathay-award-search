@@ -75,7 +75,7 @@ export const SearchBox: FunctionComponent<SearchBoxProps> = ({ browserLang, brow
         <label class='labels_right'><span>Children</span>
           <input type='number' inputMode='decimal' onFocus={e => e.currentTarget.select()} id='multi_child' name='multi_child' placeholder='Children' value={0} min={0} />
         </label>
-        <a href='javascript:void 0' class='multi_search'>{lang.book_multi}</a>
+        <button class='multi_search'>{lang.book_multi}</button>
       </div>
 
       <div class='bulk_box'>
