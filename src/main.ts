@@ -155,9 +155,6 @@ await (async () => {
       shadowWrapper.style.padding = '0'
       document.querySelector('.mc-trips').before(shadowWrapper)
     }
-
-    await initSearchBox()
-    await checkLogin()
   }
 
   // ============================================================
@@ -1434,7 +1431,8 @@ await (async () => {
   // ============================================================
 
   const initSearchBox = async (): Promise<void> => {
-    await initCxVars()
+    log('initSearchBox()')
+
     shadowContainer.appendChild(searchBox)
     assignElements()
     addFormListeners()
@@ -1465,4 +1463,7 @@ await (async () => {
   }
 
   await initRoot()
+  await initCxVars()
+  await initSearchBox()
+  await checkLogin()
 })()
