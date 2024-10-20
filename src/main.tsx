@@ -1,4 +1,5 @@
 import { FlightResult } from './components/FlightResult.tsx'
+import { FlightResultsRow } from './components/FlightResultsRow.tsx'
 import { Heart } from './components/Icons.tsx'
 import { SavedFlights as SavedFlightsView } from './components/SavedFlights.tsx'
 import { SavedQueries } from './components/SavedQueries.tsx'
@@ -1161,16 +1162,7 @@ await (async () => {
     const queryString = queryToQueryString(query)
 
     if (!query.date.isSame((divTableBody.lastElementChild as HTMLTableRowElement)?.dataset?.date, 'd')) {
-      const resultsRow = render(
-        <tr data-date={query.date.format('YYYYMMDD')}>
-          <td class='bulk_date'>
-            <div>{query.date.format('dddd')}</div>
-            <div>{query.date.format('YYYY-MM-DD')}</div>
-          </td>
-          <td class='bulk_flights' />
-        </tr>
-      )
-      divTableBody.insertAdjacentHTML('beforeend', resultsRow)
+      divTableBody.insertAdjacentHTML('beforeend', render(FlightResultsRow({ query })))
     }
 
     const flightResults: VNode[] = []
