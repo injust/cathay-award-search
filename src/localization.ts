@@ -4,7 +4,6 @@ export const lang: { [key: string]: string } = {
   searching_w_cancel: 'Searching... (Click to Stop)',
   searching_cont: 'Please wait... (Page will refresh)',
   next_batch: 'Load More...',
-  search_all_cabins: 'Search Availability in All Cabins',
   flights: 'Available Flights',
   nonstop: 'Non-Stop',
   first: 'First',
@@ -16,9 +15,6 @@ export const lang: { [key: string]: string } = {
   premium_full: 'Premium Economy',
   economy_full: 'Economy Class',
   date: 'Date',
-  no_availability: 'No Redemption Availability',
-  expired: 'Search Next 20 (Requires Refresh)',
-  super: 'SuperCharged Award Search',
   error: 'Unknown Error... Try Again',
   bulk_batch: 'Batch Search',
   bulk_flights: 'Flights',
@@ -31,10 +27,6 @@ export const lang: { [key: string]: string } = {
   invalid_date: 'Invalid Date',
   date_too_early: 'Date Too Early',
   date_too_late: 'Date Too Late',
-  saved_queries: 'Saved Flight Queries',
-  max_segments: 'Max 6 Sectors Accepted',
   book_multi: 'Book Multi-City Award',
-  query: 'Search',
-  search_selected: 'Search All Saved',
-  loading: 'Searching...'
+  search_selected: 'Search All Saved'
 }

@@ -41,7 +41,7 @@ export const SavedFlights: FunctionComponent<SavedFlightsProps> = ({ savedFlight
                 </span>
               </span>
             </label>
-            <a href='javascript:void 0' class='saved_book' data-book data-query={queryString}>{lang.query} &raquo;</a>
+            <a href='javascript:void 0' class='saved_book' data-book data-query={queryString}>{lang.search} &raquo;</a>
             <span class='leg' />
             <a href='javascript:void 0' class='saved_remove' data-flight-key={flightKey}><X className='saved_delete' /></a>
           </div>

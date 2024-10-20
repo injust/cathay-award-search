@@ -329,7 +329,7 @@ await (async () => {
 
         if ('book' in el.dataset) {
           stopBatch()
-          el.innerText = lang.loading
+          el.innerText = lang.searching
           await regularSearch(newQueryPayload(
             [queryStringToQuery(el.dataset.query)],
             { adults: uef.adults, children: uef.children }
@@ -423,7 +423,7 @@ await (async () => {
 
         if ('book' in el.dataset) {
           stopBatch()
-          el.innerText = lang.loading
+          el.innerText = lang.searching
           await regularSearch(newQueryPayload([queryStringToQuery(el.dataset.query)]))
         }
       })().catch(log)
@@ -518,7 +518,7 @@ await (async () => {
           return
         }
 
-        linkSearchSaved.innerText = lang.loading
+        linkSearchSaved.innerText = lang.searching
         await savedSearch()
       })().catch(log)
     })
@@ -531,7 +531,7 @@ await (async () => {
           return
         }
 
-        linkSearchMulti.innerText = lang.loading
+        linkSearchMulti.innerText = lang.searching
         const toSearch = Array.from(selectedSegments).sort((a, b) => +a.dataset.segment - +b.dataset.segment).map(segment => queryStringToQuery(segment.dataset.query))
         await regularSearch(newQueryPayload(
           toSearch,
