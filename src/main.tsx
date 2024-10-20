@@ -434,7 +434,6 @@ await (async () => {
       const el = e.target as HTMLInputElement
 
       const selectedSegments = divSavedQueries.querySelectorAll<HTMLDivElement>('.selected')
-
       for (const el of selectedSegments) {
         delete el.dataset.new
       }
