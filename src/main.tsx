@@ -815,10 +815,11 @@ await (async () => {
   const updateSavedQueries = (): void => {
     log('updateSavedQueries()')
 
+    const now = new Date()
+
     for (const queryString of savedQueries) {
       const query = queryStringToQuery(queryString)
       const savedDate = query.date.toDate()
-      const now = new Date()
       if (savedDate <= now) savedQueries.delete(queryString)
     }
 
@@ -828,10 +829,11 @@ await (async () => {
   const updateSavedFlights = (): void => {
     log('updateSavedFlights()')
 
+    const now = new Date()
+
     for (const flightKey of savedFlights.keys()) {
       const query = queryStringToQuery(flightKey) // TODO: Should make something to parse `flightKey`
       const savedDate = query.date.toDate()
-      const now = new Date()
       if (savedDate <= now) savedFlights.delete(flightKey)
     }
 
