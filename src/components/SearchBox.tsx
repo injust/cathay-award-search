@@ -1,11 +1,12 @@
+import classNames from 'classnames'
+import dayjs from 'dayjs'
+import { FunctionComponent } from 'preact'
+
 import { Heart, Swap } from './Icons.tsx'
 import { SavedFlights } from './SavedFlights.tsx'
 import { SavedQueries } from './SavedQueries.tsx'
 import { lang } from '../localization.ts'
 import { Filters, FlightAvailability, Uef } from '../types.js'
-import classNames from 'classnames'
-import dayjs from 'dayjs'
-import { FunctionComponent } from 'preact'
 
 interface SearchBoxProps {
   browserLang: string

@@ -1,5 +1,6 @@
-import { Query } from '../types.ts'
 import { FunctionComponent } from 'preact'
+
+import { Query } from '../types.ts'
 
 interface FlightResultsRowProps {
   query: Query

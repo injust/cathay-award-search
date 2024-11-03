@@ -1,7 +1,8 @@
+import { FunctionComponent } from 'preact'
+
 import { X } from './Icons.tsx'
 import { lang } from '../localization.ts'
 import { queryStringToQuery, queryToQueryString } from '../utils.ts'
-import { FunctionComponent } from 'preact'
 
 interface SavedQueriesProps {
   savedQueries: Set<string>

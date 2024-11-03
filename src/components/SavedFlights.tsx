@@ -1,8 +1,9 @@
+import { FunctionComponent } from 'preact'
+
 import { X } from './Icons.tsx'
 import { lang } from '../localization.ts'
 import { FlightAvailability } from '../types.ts'
 import { queryStringToQuery, queryToQueryString } from '../utils.ts'
-import { FunctionComponent } from 'preact'
 
 interface SavedFlightsProps {
   savedFlights: Map<string, FlightAvailability>

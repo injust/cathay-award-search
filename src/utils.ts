@@ -1,6 +1,7 @@
+import dayjs from 'dayjs'
+
 import { lang } from './localization.ts'
 import { Query } from './types.ts'
-import dayjs from 'dayjs'
 
 // ============================================================
 // Logging

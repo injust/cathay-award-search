@@ -1,8 +1,9 @@
+import classNames from 'classnames'
+import { FunctionComponent, VNode } from 'preact'
+
 import { Chevron, Heart } from './Icons.tsx'
 import { FlightAvailability, PageBomFlight } from '../types.ts'
 import { formatFlightDuration, formatFlightTime, parseCabinStatus } from '../utils.ts'
-import classNames from 'classnames'
-import { FunctionComponent, VNode } from 'preact'
 
 interface FlightResultProps {
   flight: PageBomFlight

@@ -1,3 +1,10 @@
+import classNames from 'classnames'
+import dayjs from 'dayjs'
+import dayjsPluginUTC from 'dayjs-plugin-utc'
+import { VNode } from 'preact'
+import { render } from 'preact-render-to-string'
+import { GM, unsafeWindow } from 'vite-plugin-monkey/dist/client'
+
 import { FlightResult } from './components/FlightResult.tsx'
 import { FlightResultsRow } from './components/FlightResultsRow.tsx'
 import { Heart } from './components/Icons.tsx'
@@ -8,12 +15,6 @@ import { lang } from './localization.ts'
 import styleCss from './styles/style.css?inline'
 import { AirportResponse, Airports, AvailabilityResponse, CabinClass, Filters, PageBom, Passengers, Profile, Query, QueryPayload, RequestParams, Route, SavedFlights, Uef } from './types.ts'
 import { assert, httpRequest, isValidCxDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, waitForEl } from './utils.ts'
-import classNames from 'classnames'
-import dayjs from 'dayjs'
-import dayjsPluginUTC from 'dayjs-plugin-utc'
-import { VNode } from 'preact'
-import { render } from 'preact-render-to-string'
-import { GM, unsafeWindow } from 'vite-plugin-monkey/dist/client'
 
 dayjs.extend(dayjsPluginUTC.default)
 
