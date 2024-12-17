@@ -1,14 +1,14 @@
 import { xSvg } from '../images/svg.tsx'
 import { lang } from '../localization.ts'
 import { log, queryStringToQuery, queryToQueryString, valueSet } from '../utils.ts'
-import { FunctionComponent } from 'preact'
+import { JSX } from 'preact'
 import { Signal, batch, computed, useSignalEffect } from '@preact/signals'
 
 interface SavedQueriesProps {
   savedQueries: Signal<Set<string>>
 }
 
-export const SavedQueries: FunctionComponent<SavedQueriesProps> = ({ savedQueries }) => {
+export const SavedQueries = ({ savedQueries }: SavedQueriesProps): JSX.Element => {
   const sortedQueries = computed(() => Array.from(savedQueries.value, queryStringToQuery).sort((a, b) => +a.date - +b.date))
 
   useSignalEffect(() => {

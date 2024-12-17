@@ -2,14 +2,14 @@ import { xSvg } from '../images/svg.tsx'
 import { lang } from '../localization.ts'
 import { FlightAvailability } from '../types.ts'
 import { log, queryStringToQuery, queryToQueryString, valueSet } from '../utils.ts'
-import { FunctionComponent } from 'preact'
+import { JSX } from 'preact'
 import { Signal, batch, computed, useSignalEffect } from '@preact/signals'
 
 interface SavedFlightsProps {
   savedFlights: Signal<Map<string, FlightAvailability>>
 }
 
-export const SavedFlights: FunctionComponent<SavedFlightsProps> = ({ savedFlights }) => {
+export const SavedFlights = ({ savedFlights }: SavedFlightsProps): JSX.Element => {
   const sortedFlights = computed(() => Array.from(savedFlights.value, ([flightKey, avail]) => ({
     flightKey,
     query: queryStringToQuery(flightKey), // TODO: Should make something to parse `flightKey`

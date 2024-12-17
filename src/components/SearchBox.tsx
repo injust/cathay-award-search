@@ -5,7 +5,7 @@ import { valueSet } from '../utils.ts'
 import { SavedFlights } from './SavedFlights.tsx'
 import { SavedQueries } from './SavedQueries.tsx'
 import dayjs from 'dayjs'
-import { FunctionComponent } from 'preact'
+import { JSX } from 'preact'
 import { Signal, useSignal, useSignalEffect } from '@preact/signals'
 
 interface SearchBoxProps {
@@ -18,7 +18,7 @@ interface SearchBoxProps {
   uef: Uef
 }
 
-export const SearchBox: FunctionComponent<SearchBoxProps> = ({ browserLang, browserCountry, loginUrl, savedFilters, savedFlights, savedQueries, uef }) => {
+export const SearchBox = ({ browserLang, browserCountry, loginUrl, savedFilters, savedFlights, savedQueries, uef }: SearchBoxProps): JSX.Element => {
   const showFaves = useSignal(false)
   const showSavedFlights = useSignal(false)
 
