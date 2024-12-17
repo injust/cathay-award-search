@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'preact'
+import { JSX } from 'preact'
 
 import { X } from './Icons.tsx'
 import { lang } from '../localization.ts'
@@ -8,7 +8,7 @@ interface SavedQueriesProps {
   savedQueries: Set<string>
 }
 
-export const SavedQueries: FunctionComponent<SavedQueriesProps> = ({ savedQueries }) => {
+export const SavedQueries = ({ savedQueries }: SavedQueriesProps): JSX.Element => {
   const sortedQueries = Array.from(savedQueries, queryStringToQuery).sort((a, b) => +a.date - +b.date)
 
   return (

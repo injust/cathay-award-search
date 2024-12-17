@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'preact'
+import { JSX } from 'preact'
 
 import { Query } from '../types.ts'
 
@@ -6,7 +6,7 @@ interface FlightResultsRowProps {
   query: Query
 }
 
-export const FlightResultsRow: FunctionComponent<FlightResultsRowProps> = ({ query }) => {
+export const FlightResultsRow = ({ query }: FlightResultsRowProps): JSX.Element => {
   return (
     <tr data-date={query.date.format('YYYYMMDD')}>
       <td class='bulk_date'>

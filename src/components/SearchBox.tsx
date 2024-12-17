@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import dayjs from 'dayjs'
-import { FunctionComponent } from 'preact'
+import { JSX } from 'preact'
 
 import { Heart, Swap } from './Icons.tsx'
 import { SavedFlights } from './SavedFlights.tsx'
@@ -18,7 +18,7 @@ interface SearchBoxProps {
   uef: Uef
 }
 
-export const SearchBox: FunctionComponent<SearchBoxProps> = ({ browserLang, browserCountry, loginUrl, savedFilters, savedFlights, savedQueries, uef }) => {
+export const SearchBox = ({ browserLang, browserCountry, loginUrl, savedFilters, savedFlights, savedQueries, uef }: SearchBoxProps): JSX.Element => {
   return (
     <div>
       <div class='unelevated_form'>

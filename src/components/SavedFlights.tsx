@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'preact'
+import { JSX } from 'preact'
 
 import { X } from './Icons.tsx'
 import { lang } from '../localization.ts'
@@ -9,7 +9,7 @@ interface SavedFlightsProps {
   savedFlights: Map<string, FlightAvailability>
 }
 
-export const SavedFlights: FunctionComponent<SavedFlightsProps> = ({ savedFlights }) => {
+export const SavedFlights = ({ savedFlights }: SavedFlightsProps): JSX.Element => {
   const sortedFlights = Array.from(savedFlights, ([flightKey, avail]) => ({
     flightKey,
     query: queryStringToQuery(flightKey), // TODO: Should make something to parse `flightKey`

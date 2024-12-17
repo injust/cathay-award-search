@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { FunctionComponent, VNode } from 'preact'
+import { JSX, VNode } from 'preact'
 
 import { Chevron, Heart } from './Icons.tsx'
 import { FlightAvailability, PageBomFlight } from '../types.ts'
@@ -12,7 +12,7 @@ interface FlightResultProps {
   staticFilesPath: string
 }
 
-export const FlightResult: FunctionComponent<FlightResultProps> = ({ flight, flightKey, savedFlights, staticFilesPath }) => {
+export const FlightResult = ({ flight, flightKey, savedFlights, staticFilesPath }: FlightResultProps): JSX.Element => {
   const numF = Math.min(...flight.segments.map(segment => parseCabinStatus(segment.cabins?.F?.status)))
   const numJ = Math.min(...flight.segments.map(segment => parseCabinStatus(segment.cabins?.B?.status)))
   const numPY = Math.min(...flight.segments.map(segment => parseCabinStatus(segment.cabins?.N?.status)))
