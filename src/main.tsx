@@ -996,7 +996,7 @@ const regularSearch = async (cxString: QueryPayload, cont = {}): Promise<void> =
       const form = container.getElementsByTagName('form')[0]
 
       log('Submitting SubmissionDetails form')
-      document.body.append(form)
+      shadowRoot.append(form)
       form.submit()
       return
     }
@@ -1013,7 +1013,7 @@ const regularSearch = async (cxString: QueryPayload, cont = {}): Promise<void> =
   }
 
   log('Fallback: Submitting IBEFacade form')
-  document.body.append(form)
+  shadowRoot.append(form)
   form.submit()
 }
 
