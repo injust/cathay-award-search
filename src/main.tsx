@@ -1195,7 +1195,7 @@ const insertResults = async (query: Query, pageBom: PageBom): Promise<void> => {
     }
   }
 
-  if (!query.date.isSame((divTableBody.lastElementChild as HTMLTableRowElement)?.dataset?.date, 'd')) {
+  if (divTableBody.childElementCount === 0 || !query.date.isSame((divTableBody.lastElementChild as HTMLTableRowElement).dataset.date, 'd')) {
     divTableBody.insertAdjacentHTML('beforeend', render(FlightResultsRow({ query })))
   }
 
