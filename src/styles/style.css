@@ -114,7 +114,6 @@
     color: #ae4b4b;
 }
 
-
 .feat_text {
     display: block;
     font-size: 14px;
@@ -239,9 +238,6 @@
     background: #f1efe6;
 }
 
-
-
-
 .unelevated_faves .saved_flights .saved_flight {
     position: relative;
     margin: 0;
@@ -255,7 +251,7 @@
         display: inline-block;
     }
 
-    label>span {
+    label > span {
         display: inline-block;
         vertical-align: top;
     }
@@ -265,7 +261,7 @@
     }
 
     span.route {
-        background: #CCCCCC;
+        background: #cccccc;
         padding: 2px 6px;
         border-radius: 5px 0 0 5px;
         display: inline-block;
@@ -279,7 +275,7 @@
     }
 
     span.avail {
-        >span {
+        > span {
             display: inline-block;
             line-height: 11px;
             font-size: 10px;
@@ -349,7 +345,7 @@
     margin-right: 10px;
 }
 
-.multi_box label>span {
+.multi_box label > span {
     position: absolute;
     top: 0px;
     left: 5px;
@@ -414,7 +410,7 @@ a.switch {
 }
 
 a.switch svg path {
-    fill: #AAA;
+    fill: #aaa;
 }
 
 .unelevated_form .labels {
@@ -438,7 +434,7 @@ a.switch svg path {
     width: 35%;
 }
 
-.unelevated_form .labels label>span {
+.unelevated_form .labels label > span {
     position: absolute;
     top: 0px;
     left: 5px;
@@ -476,7 +472,6 @@ a.switch svg path {
     font-size: 15px;
 }
 
-
 .heavy_user_prompt {
     background: linear-gradient(339deg, #fdf98b, #e4c63f, #fef985, #eec946);
     box-shadow: -1px 1px 3px rgb(155 95 70 / 40%);
@@ -500,7 +495,6 @@ a.switch svg path {
     text-align: center;
 }
 
-
 a.uef_toggle,
 a.uef_toggle:hover {
     background: #367778;
@@ -517,11 +511,11 @@ a.uef_toggle:hover {
 }
 
 a.uef_toggle:after {
-    content: "«";
+    content: '«';
 }
 
 .uef_collapsed a.uef_toggle:after {
-    content: "»";
+    content: '»';
 }
 
 .bulk_box {
@@ -620,14 +614,14 @@ a.uef_toggle:after {
 .bulk_table td.bulk_flights .flight_list:empty:after {
     display: block;
     height: 24px;
-    content: "No Redemption Availability";
+    content: 'No Redemption Availability';
     margin-bottom: 5px;
     margin-top: -3px;
     margin-left: 10px;
     font-family: Cathay Sans EN, CathaySans_Rg, sans-serif;
     font-weight: 400;
     line-height: 24px;
-    color: #AAA;
+    color: #aaa;
 }
 
 .bulk_table td.bulk_flights .flight_list span.bulk_response_error {
@@ -709,7 +703,7 @@ a.bulk_go_book * {
     box-shadow: 0px 0px 5px rgb(0 0 0 / 30%);
 }
 
-.flight_info>span {
+.flight_info > span {
     display: block;
 }
 
@@ -718,8 +712,8 @@ a.bulk_go_book * {
     font-family: CathaySans_Bd, sans-serif;
 }
 
-.info_dept>span,
-.info_arr>span {
+.info_dept > span,
+.info_arr > span {
     display: inline-block;
     width: 50px;
     color: #999;
@@ -742,7 +736,7 @@ span.info_duration {
     margin-bottom: 5px;
 }
 
-.flight_item.active+.flight_info {
+.flight_item.active + .flight_info {
     display: block;
 }
 
@@ -863,7 +857,6 @@ span.bulk_y {
     padding: 2px 5px;
     margin-left: 3px;
 }
-
 
 .flight_item:hover img,
 .flight_item:focus img,
@@ -993,7 +986,7 @@ div.unelevated_saved {
     cursor: pointer;
 }
 
-.col-select-departure-flight>.row:last-of-type {
+.col-select-departure-flight > .row:last-of-type {
     padding-bottom: 140px;
 }
 
@@ -1200,7 +1193,6 @@ span.unelevated_error a {
     top: 100%;
     left: 0;
     right: 8px;
-    ;
     margin-top: -8px;
     max-height: 200px;
     overflow: scroll;

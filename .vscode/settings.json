@@ -1,9 +1,0 @@
-{
-    "[typescript]": {
-        "editor.defaultFormatter": null
-    },
-    "[typescriptreact]": {
-        "editor.defaultFormatter": null
-    },
-    "standard.engine": "ts-standard"
-}

@@ -3,7 +3,7 @@
 import classNames from 'classnames'
 import dayjs from 'dayjs'
 import dayjsPluginUTC from 'dayjs-plugin-utc'
-import { VNode } from 'preact'
+import type { VNode } from 'preact'
 import { render } from 'preact-render-to-string'
 import { GM, unsafeWindow } from 'vite-plugin-monkey/dist/client'
 
@@ -15,8 +15,32 @@ import { SavedQueries } from './components/SavedQueries.tsx'
 import { SearchBox } from './components/SearchBox.tsx'
 import { lang } from './localization.ts'
 import styleCss from './styles/style.css?inline'
-import { AirportResponse, Airports, AvailabilityResponse, CabinClass, Filters, PageBom, Passengers, Profile, Query, QueryPayload, RequestParams, Route, SavedFlights, Uef } from './types.ts'
-import { assert, httpRequest, isValidCxDate, log, parseCabinStatus, queryStringToQuery, queryToQueryString, waitForEl } from './utils.ts'
+import type {
+    AirportResponse,
+    Airports,
+    AvailabilityResponse,
+    CabinClass,
+    Filters,
+    PageBom,
+    Passengers,
+    Profile,
+    Query,
+    QueryPayload,
+    RequestParams,
+    Route,
+    SavedFlights,
+    Uef,
+} from './types.ts'
+import {
+    assert,
+    httpRequest,
+    isValidCxDate,
+    log,
+    parseCabinStatus,
+    queryStringToQuery,
+    queryToQueryString,
+    waitForEl,
+} from './utils.ts'
 
 dayjs.extend(dayjsPluginUTC.default)
 
@@ -45,30 +69,32 @@ let formSubmitUrl: string
 let loadingIconHtml: string
 
 const initCxVars = async (): Promise<void> => {
-  log('initCxVars()')
+    log('initCxVars()')
 
-  staticFilesPath = await GM.getValue('static_files_path', '/CathayPacificAwardV3/SEP2024_1.0.20/')
-  if (unsafeWindow.staticFilesPath != null) {
-    // log('typeof unsafeWindow.staticFilesPath:', typeof unsafeWindow.staticFilesPath)
-    if (staticFilesPath !== unsafeWindow.staticFilesPath) {
-      staticFilesPath = unsafeWindow.staticFilesPath
-      await GM.setValue('static_files_path', staticFilesPath)
+    staticFilesPath = await GM.getValue('static_files_path', '/CathayPacificAwardV3/SEP2024_1.0.20/')
+    if (unsafeWindow.staticFilesPath != null) {
+        // log('typeof unsafeWindow.staticFilesPath:', typeof unsafeWindow.staticFilesPath)
+        if (staticFilesPath !== unsafeWindow.staticFilesPath) {
+            staticFilesPath = unsafeWindow.staticFilesPath
+            await GM.setValue('static_files_path', staticFilesPath)
+        }
     }
-  }
 
-  if (typeof unsafeWindow.requestParams === 'string') {
-    requestParams = JSON.parse(unsafeWindow.requestParams)
-  } else if (typeof unsafeWindow.requestParams === 'object') {
-    requestParams = unsafeWindow.requestParams
-  } else {
-    requestParams = {}
-  }
+    if (typeof unsafeWindow.requestParams === 'string') {
+        requestParams = JSON.parse(unsafeWindow.requestParams)
+    } else if (typeof unsafeWindow.requestParams === 'object') {
+        requestParams = unsafeWindow.requestParams
+    } else {
+        requestParams = {}
+    }
 
-  tabId = requestParams.TAB_ID ?? ''
+    tabId = requestParams.TAB_ID ?? ''
 
-  formSubmitUrl = unsafeWindow.formSubmitUrl ?? `${availabilityUrl}?TAB_ID=${tabId}`
+    formSubmitUrl = unsafeWindow.formSubmitUrl ?? `${availabilityUrl}?TAB_ID=${tabId}`
 
-  loadingIconHtml = render(<img src={`https://book.cathaypacific.com${staticFilesPath}common/skin/img/icons/cx/icon-loading.gif`} />)
+    loadingIconHtml = render(
+        <img src={`https://book.cathaypacific.com${staticFilesPath}common/skin/img/icons/cx/icon-loading.gif`} />
+    )
 }
 
 // ============================================================
@@ -77,12 +103,12 @@ const initCxVars = async (): Promise<void> => {
 
 // Search Parameters
 const uef: Uef = {
-  from: [],
-  to: [],
-  date: '',
-  adults: 1,
-  children: 0,
-  ...await GM.getValue('uef', {})
+    from: [],
+    to: [],
+    date: '',
+    adults: 1,
+    children: 0,
+    ...(await GM.getValue('uef', {})),
 }
 
 // Saved Queries
@@ -91,16 +117,16 @@ const savedQueries = new Set(await GM.getValue<string[]>('saved_queries', []))
 
 // Saved Search Result Filters
 const filters: Filters = {
-  nonstop: false,
-  first: true,
-  business: true,
-  premium: true,
-  economy: true,
-  ...await GM.getValue('filters', {})
+    nonstop: false,
+    first: true,
+    business: true,
+    premium: true,
+    economy: true,
+    ...(await GM.getValue('filters', {})),
 }
 
 const defaultContVars = { batch: false, query: false, saved: false, ts: 0 }
-const cont = { ...defaultContVars, ...await GM.getValue('cont', {}) }
+const cont = { ...defaultContVars, ...(await GM.getValue('cont', {})) }
 // const urlParams = new URLSearchParams(window.location.search)
 // const cont = {
 //   batch: urlParams.has('cont_batch'),
@@ -110,7 +136,7 @@ const cont = { ...defaultContVars, ...await GM.getValue('cont', {}) }
 // }
 
 const resetContVars = async (): Promise<void> => {
-  await GM.setValue('cont', defaultContVars)
+    await GM.setValue('cont', defaultContVars)
 }
 
 // ============================================================
@@ -125,47 +151,47 @@ const shadowContainer = document.createElement('div')
 shadowRoot.append(shadowContainer)
 
 const initRoot = async (): Promise<void> => {
-  log('initRoot()')
+    log('initRoot()')
 
-  if (window.location.href.includes('redeem-flight-awards.html')) {
-    log('initRoot redeem-flight-awards.html')
+    if (window.location.href.includes('redeem-flight-awards.html')) {
+        log('initRoot redeem-flight-awards.html')
 
-    await resetContVars()
-    const el = await waitForEl<HTMLFormElement>('.redibe-v3-flightsearch form')
-    el.before(shadowWrapper)
-  } else if (window.location.href.includes('facade.html')) {
-    log('initRoot facade.html')
+        await resetContVars()
+        const el = await waitForEl<HTMLFormElement>('.redibe-v3-flightsearch form')
+        el.before(shadowWrapper)
+    } else if (window.location.href.includes('facade.html')) {
+        log('initRoot facade.html')
 
-    await resetContVars()
-    const el = await waitForEl('.ibered__search-panel')
-    el.before(shadowWrapper)
-  } else if (window.location.href.includes('air/booking/availability')) {
-    if (cont.query) {
-      log('initRoot air/booking/availability with cont.query')
+        await resetContVars()
+        const el = await waitForEl('.ibered__search-panel')
+        el.before(shadowWrapper)
+    } else if (window.location.href.includes('air/booking/availability')) {
+        if (cont.query) {
+            log('initRoot air/booking/availability with cont.query')
 
-      await waitForEl<HTMLElement>('body > header')
-      const boxes = document.querySelectorAll<HTMLDivElement>('body > div')
-      for (const box of boxes) box.remove()
-      document.body.append(shadowWrapper)
-      shadowContainer.classList.add('results_container')
-    } else {
-      log('initRoot air/booking/availability without cont.query')
+            await waitForEl<HTMLElement>('body > header')
+            const boxes = document.querySelectorAll<HTMLDivElement>('body > div')
+            for (const box of boxes) box.remove()
+            document.body.append(shadowWrapper)
+            shadowContainer.classList.add('results_container')
+        } else {
+            log('initRoot air/booking/availability without cont.query')
 
-      await resetContVars()
-      await waitForEl<HTMLDivElement>('#section-flights .bound-route, #section-flights-departure .bound-route')
-      shadowWrapper.style.margin = '30px 20px 0px 20px'
-      shadowWrapper.style.padding = '0'
-      document.querySelector('#section-flights, #section-flights-departure').before(shadowWrapper)
+            await resetContVars()
+            await waitForEl<HTMLDivElement>('#section-flights .bound-route, #section-flights-departure .bound-route')
+            shadowWrapper.style.margin = '30px 20px 0px 20px'
+            shadowWrapper.style.padding = '0'
+            document.querySelector('#section-flights, #section-flights-departure').before(shadowWrapper)
+        }
+    } else if (window.location.href.includes('air/booking/complexAvailability')) {
+        log('initRoot air/booking/complexAvailability')
+
+        await resetContVars()
+        await waitForEl('.mc-trips .bound-route')
+        shadowWrapper.style.margin = '30px 20px 0px 20px'
+        shadowWrapper.style.padding = '0'
+        document.querySelector('.mc-trips').before(shadowWrapper)
     }
-  } else if (window.location.href.includes('air/booking/complexAvailability')) {
-    log('initRoot air/booking/complexAvailability')
-
-    await resetContVars()
-    await waitForEl('.mc-trips .bound-route')
-    shadowWrapper.style.margin = '30px 20px 0px 20px'
-    shadowWrapper.style.padding = '0'
-    document.querySelector('.mc-trips').before(shadowWrapper)
-  }
 }
 
 // ============================================================
@@ -174,9 +200,9 @@ const initRoot = async (): Promise<void> => {
 
 // Append CSS to DOM Element (Default to Shadow Root)
 const addCss = (css: string, target: ParentNode = shadowRoot): void => {
-  const styleSheet = document.createElement('style')
-  styleSheet.innerHTML = css
-  target.append(styleSheet)
+    const styleSheet = document.createElement('style')
+    styleSheet.innerHTML = css
+    target.append(styleSheet)
 }
 
 addCss(styleCss)
@@ -186,368 +212,410 @@ addCss(styleCss)
 // ============================================================
 
 let btnSearch: HTMLButtonElement, btnBatch: HTMLButtonElement
-let inputFrom: HTMLInputElement, inputTo: HTMLInputElement, inputDate: HTMLInputElement, inputAdult: HTMLInputElement, inputChild: HTMLInputElement, inputMultiAdult: HTMLInputElement, inputMultiChild: HTMLInputElement
+let inputFrom: HTMLInputElement,
+    inputTo: HTMLInputElement,
+    inputDate: HTMLInputElement,
+    inputAdult: HTMLInputElement,
+    inputChild: HTMLInputElement,
+    inputMultiAdult: HTMLInputElement,
+    inputMultiChild: HTMLInputElement
 let selectMultiCabin: HTMLSelectElement
 let linkSearchSaved: HTMLAnchorElement, linkSearchMulti: HTMLAnchorElement
-let divFilters: HTMLDivElement, divLoginPrompt: HTMLDivElement, divFooter: HTMLDivElement, divUeContainer: HTMLDivElement, divHeartSave: HTMLDivElement, divSaved: HTMLDivElement, divFavesTabs: HTMLDivElement, divSavedFlights: HTMLDivElement, divSavedQueries: HTMLDivElement, divMultiBox: HTMLDivElement, divBulk: HTMLDivElement, divResults: HTMLDivElement, divError: HTMLDivElement
+let divFilters: HTMLDivElement,
+    divLoginPrompt: HTMLDivElement,
+    divFooter: HTMLDivElement,
+    divUeContainer: HTMLDivElement,
+    divHeartSave: HTMLDivElement,
+    divSaved: HTMLDivElement,
+    divFavesTabs: HTMLDivElement,
+    divSavedFlights: HTMLDivElement,
+    divSavedQueries: HTMLDivElement,
+    divMultiBox: HTMLDivElement,
+    divBulk: HTMLDivElement,
+    divResults: HTMLDivElement,
+    divError: HTMLDivElement
 let divTable: HTMLTableElement, divTableBody: HTMLTableSectionElement
 
 const assignElements = (): void => {
-  log('assignElements()')
+    log('assignElements()')
 
-  btnSearch = shadowRoot.querySelector('.uef_search') // Search Button
-  btnBatch = shadowRoot.querySelector('.bulk_submit') // Batch Search Button
+    btnSearch = shadowRoot.querySelector('.uef_search') // Search Button
+    btnBatch = shadowRoot.querySelector('.bulk_submit') // Batch Search Button
 
-  inputFrom = shadowRoot.querySelector('#uef_from')
-  inputTo = shadowRoot.querySelector('#uef_to')
-  inputDate = shadowRoot.querySelector('#uef_date')
-  inputAdult = shadowRoot.querySelector('#uef_adult')
-  inputChild = shadowRoot.querySelector('#uef_child')
-  inputMultiAdult = shadowRoot.querySelector('#multi_adult')
-  inputMultiChild = shadowRoot.querySelector('#multi_child')
+    inputFrom = shadowRoot.querySelector('#uef_from')
+    inputTo = shadowRoot.querySelector('#uef_to')
+    inputDate = shadowRoot.querySelector('#uef_date')
+    inputAdult = shadowRoot.querySelector('#uef_adult')
+    inputChild = shadowRoot.querySelector('#uef_child')
+    inputMultiAdult = shadowRoot.querySelector('#multi_adult')
+    inputMultiChild = shadowRoot.querySelector('#multi_child')
 
-  selectMultiCabin = shadowRoot.querySelector('#multi_cabin')
+    selectMultiCabin = shadowRoot.querySelector('#multi_cabin')
 
-  linkSearchSaved = shadowRoot.querySelector('.search_all_saved')
-  linkSearchMulti = shadowRoot.querySelector('.multi_search')
+    linkSearchSaved = shadowRoot.querySelector('.search_all_saved')
+    linkSearchMulti = shadowRoot.querySelector('.multi_search')
 
-  divFilters = shadowRoot.querySelector('.filters')
-  divLoginPrompt = shadowRoot.querySelector('.login_prompt')
-  divFooter = shadowRoot.querySelector('.bulk_footer')
-  divUeContainer = shadowRoot.querySelector('.unelevated_form')
-  divHeartSave = shadowRoot.querySelector('.unelevated_saved')
-  divSaved = shadowRoot.querySelector('.unelevated_faves')
-  divFavesTabs = shadowRoot.querySelector('.unelevated_faves .faves_tabs')
-  divSavedFlights = shadowRoot.querySelector('.unelevated_faves .saved_flights')
-  divSavedQueries = shadowRoot.querySelector('.unelevated_faves .saved_queries')
-  divMultiBox = shadowRoot.querySelector('.multi_box')
-  divBulk = shadowRoot.querySelector('.bulk_box')
-  divResults = shadowRoot.querySelector('.bulk_results')
-  divError = shadowRoot.querySelector('.bulk_error')
+    divFilters = shadowRoot.querySelector('.filters')
+    divLoginPrompt = shadowRoot.querySelector('.login_prompt')
+    divFooter = shadowRoot.querySelector('.bulk_footer')
+    divUeContainer = shadowRoot.querySelector('.unelevated_form')
+    divHeartSave = shadowRoot.querySelector('.unelevated_saved')
+    divSaved = shadowRoot.querySelector('.unelevated_faves')
+    divFavesTabs = shadowRoot.querySelector('.unelevated_faves .faves_tabs')
+    divSavedFlights = shadowRoot.querySelector('.unelevated_faves .saved_flights')
+    divSavedQueries = shadowRoot.querySelector('.unelevated_faves .saved_queries')
+    divMultiBox = shadowRoot.querySelector('.multi_box')
+    divBulk = shadowRoot.querySelector('.bulk_box')
+    divResults = shadowRoot.querySelector('.bulk_results')
+    divError = shadowRoot.querySelector('.bulk_error')
 
-  divTable = shadowRoot.querySelector('.bulk_table')
-  divTableBody = shadowRoot.querySelector('.bulk_table tbody')
+    divTable = shadowRoot.querySelector('.bulk_table')
+    divTableBody = shadowRoot.querySelector('.bulk_table tbody')
 }
 
 const addFormListeners = (): void => {
-  log('addFormListeners()')
+    log('addFormListeners()')
 
-  btnSearch.addEventListener('click', (e) => {
-    (async () => {
-      if (inputDate.value === '') {
-        alert(lang.invalid_date)
-        return
-      }
-      if (searching) stopBatch()
+    btnSearch.addEventListener('click', e => {
+        ;(async () => {
+            if (inputDate.value === '') {
+                alert(lang.invalid_date)
+                return
+            }
+            if (searching) stopBatch()
 
-      uef.from = inputFrom.value.split(',')
-      uef.to = inputTo.value.split(',')
-      uef.date = inputDate.value !== '' ? dayjs(inputDate.value).format('YYYYMMDD') : ''
-      uef.adults = +inputAdult.value
-      uef.children = +inputChild.value
-      await GM.setValue('uef', uef)
+            uef.from = inputFrom.value.split(',')
+            uef.to = inputTo.value.split(',')
+            uef.date = inputDate.value !== '' ? dayjs(inputDate.value).format('YYYYMMDD') : ''
+            uef.adults = +inputAdult.value
+            uef.children = +inputChild.value
+            await GM.setValue('uef', uef)
 
-      await regularSearch(
-        newQueryPayload(
-          [{ from: uef.from[0], to: uef.to[0], date: dayjs(uef.date) }],
-          { adults: uef.adults, children: uef.children }
-        ),
-        { query: uef.to.length > 3 }
-      )
-    })().catch(log)
-  })
-
-  btnBatch.addEventListener('click', (e) => {
-    (async () => {
-      await bulkClick()
-    })().catch(log)
-  })
-
-  shadowRoot.querySelector('.switch').addEventListener('click', (e) => {
-    const from = inputFrom.value
-    const to = inputTo.value
-    inputFrom.value = to
-    inputTo.value = from
-    inputFrom.dispatchEvent(new Event('change'))
-    inputTo.dispatchEvent(new Event('change'))
-  })
-
-  for (const el of [inputFrom, inputTo]) {
-    el.addEventListener('keyup', (e) => {
-      if (['Enter', ' ', ','].includes(e.key)) {
-        if (e.key === 'Enter') el.value += ','
-        el.value = el.value.toUpperCase().split(/[ ,]+/).join(',')
-      }
+            await regularSearch(
+                newQueryPayload([{ from: uef.from[0], to: uef.to[0], date: dayjs(uef.date) }], {
+                    adults: uef.adults,
+                    children: uef.children,
+                }),
+                { query: uef.to.length > 3 }
+            )
+        })().catch(log)
     })
 
-    el.addEventListener('change', (e) => {
-      el.value = el.value.toUpperCase().split(/[ ,]+/).join(',').replace(/,+$/, '')
-      // setTimeout(fn, 0) lets the page reflect the updated DOM
-      setTimeout(() => {
-        checkAirportCodes(el)
-        if (el === inputFrom) {
-          uef.from = el.value.split(',')
-        } else if (el === inputTo) {
-          uef.to = el.value.split(',')
-        }
-        routeChanged = true
-        if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from.join(',')} - ${uef.to.join(',')} ${lang.bulk_flights}`
-      }, 0)
+    btnBatch.addEventListener('click', e => {
+        ;(async () => {
+            await bulkClick()
+        })().catch(log)
     })
 
-    el.addEventListener('focus', (e) => {
-      if (el.value.length > 0) el.value += ','
-      el.setSelectionRange(el.value.length, el.value.length)
+    shadowRoot.querySelector('.switch').addEventListener('click', e => {
+        const from = inputFrom.value
+        const to = inputTo.value
+        inputFrom.value = to
+        inputTo.value = from
+        inputFrom.dispatchEvent(new Event('change'))
+        inputTo.dispatchEvent(new Event('change'))
     })
 
-    el.addEventListener('blur', (e) => {
-      el.value = el.value.replace(/,+$/, '')
-    })
-  }
+    for (const el of [inputFrom, inputTo]) {
+        el.addEventListener('keyup', e => {
+            if (['Enter', ' ', ','].includes(e.key)) {
+                if (e.key === 'Enter') el.value += ','
+                el.value = el.value
+                    .toUpperCase()
+                    .split(/[ ,]+/)
+                    .join(',')
+            }
+        })
 
-  inputDate.addEventListener('blur', (e) => {
-    // Reduce alert() noise
-    if (inputDate.value === '') return
+        el.addEventListener('change', e => {
+            el.value = el.value
+                .toUpperCase()
+                .split(/[ ,]+/)
+                .join(',')
+                .replace(/,+$/, '')
+            // setTimeout(fn, 0) lets the page reflect the updated DOM
+            setTimeout(() => {
+                checkAirportCodes(el)
+                if (el === inputFrom) {
+                    uef.from = el.value.split(',')
+                } else if (el === inputTo) {
+                    uef.to = el.value.split(',')
+                }
+                routeChanged = true
+                if (!searching)
+                    btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from.join(',')} - ${uef.to.join(',')} ${
+                        lang.bulk_flights
+                    }`
+            }, 0)
+        })
 
-    if (isValidCxDate(inputDate.value)) {
-      routeChanged = true
-      if (!searching) btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from.join(',')} - ${uef.to.join(',')} ${lang.bulk_flights}`
-    } else {
-      inputDate.value = uef.date
+        el.addEventListener('focus', e => {
+            if (el.value.length > 0) el.value += ','
+            el.setSelectionRange(el.value.length, el.value.length)
+        })
+
+        el.addEventListener('blur', e => {
+            el.value = el.value.replace(/,+$/, '')
+        })
     }
-  })
 
-  for (const el of [inputAdult, inputChild, inputMultiAdult, inputMultiChild]) {
-    el.addEventListener('focus', (e) => {
-      el.select()
-    })
-  }
+    inputDate.addEventListener('blur', e => {
+        // Reduce alert() noise
+        if (inputDate.value === '') return
 
-  divTable.addEventListener('click', (e) => {
-    (async () => {
-      if ((e.target as HTMLElement).tagName !== 'A') return
-      const el = e.target as HTMLAnchorElement
-
-      if ('book' in el.dataset) {
-        stopBatch()
-        el.innerText = lang.searching
-        await regularSearch(newQueryPayload(
-          [queryStringToQuery(el.dataset.query)],
-          { adults: uef.adults, children: uef.children }
-        ))
-      } else if ('save' in el.dataset) {
-        const queryString = el.dataset.query
-        if (el.classList.contains('bulk_saved')) {
-          el.classList.remove('bulk_saved')
-          savedQueries.delete(queryString)
+        if (isValidCxDate(inputDate.value)) {
+            routeChanged = true
+            if (!searching)
+                btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from.join(',')} - ${uef.to.join(',')} ${
+                    lang.bulk_flights
+                }`
         } else {
-          el.classList.add('bulk_saved')
-          savedQueries.add(queryString)
+            inputDate.value = uef.date
         }
+    })
 
-        updateSavedQueries()
-        await GM.setValue('saved_queries', Array.from(savedQueries))
-      }
-    })().catch(log)
-  })
+    for (const el of [inputAdult, inputChild, inputMultiAdult, inputMultiChild]) {
+        el.addEventListener('focus', e => {
+            el.select()
+        })
+    }
 
-  divTable.addEventListener('click', (e) => {
-    if ((e.target as HTMLElement).tagName !== 'DIV') return
-    const el = e.target as HTMLDivElement
+    divTable.addEventListener('click', e => {
+        ;(async () => {
+            if ((e.target as HTMLElement).tagName !== 'A') return
+            const el = e.target as HTMLAnchorElement
 
-    if (el.classList.contains('flight_item')) {
-      if (el.classList.contains('active')) {
-        el.classList.remove('active')
-      } else {
+            if ('book' in el.dataset) {
+                stopBatch()
+                el.innerText = lang.searching
+                await regularSearch(
+                    newQueryPayload([queryStringToQuery(el.dataset.query)], {
+                        adults: uef.adults,
+                        children: uef.children,
+                    })
+                )
+            } else if ('save' in el.dataset) {
+                const queryString = el.dataset.query
+                if (el.classList.contains('bulk_saved')) {
+                    el.classList.remove('bulk_saved')
+                    savedQueries.delete(queryString)
+                } else {
+                    el.classList.add('bulk_saved')
+                    savedQueries.add(queryString)
+                }
+
+                updateSavedQueries()
+                await GM.setValue('saved_queries', Array.from(savedQueries))
+            }
+        })().catch(log)
+    })
+
+    divTable.addEventListener('click', e => {
+        if ((e.target as HTMLElement).tagName !== 'DIV') return
+        const el = e.target as HTMLDivElement
+
+        if (el.classList.contains('flight_item')) {
+            if (el.classList.contains('active')) {
+                el.classList.remove('active')
+            } else {
+                for (const el of shadowRoot.querySelectorAll<HTMLDivElement>('.flight_item.active')) {
+                    el.classList.remove('active')
+                }
+                el.classList.add('active')
+            }
+        }
+    })
+
+    divTable.addEventListener('click', e => {
+        ;(async () => {
+            if ((e.target as HTMLElement).tagName !== 'SPAN') return
+            const el = e.target as HTMLSpanElement
+
+            if (el.classList.contains('flight_save')) {
+                const flightItem = el.parentNode as HTMLDivElement
+                const flightAvail = flightItem.dataset.flightAvail.split('_').map(Number)
+                const flightKey = flightItem.dataset.flightKey
+
+                if (flightItem.classList.contains('saved')) {
+                    flightItem.classList.remove('saved')
+                    savedFlights.delete(flightKey)
+                } else {
+                    flightItem.classList.add('saved')
+                    savedFlights.set(flightKey, {
+                        F: flightAvail[0],
+                        J: flightAvail[1],
+                        PY: flightAvail[2],
+                        Y: flightAvail[3],
+                    })
+                }
+
+                updateSavedFlights()
+                await GM.setValue('saved_flights', Object.fromEntries(savedFlights))
+            }
+        })().catch(log)
+    })
+
+    document.addEventListener('scroll', e => {
         for (const el of shadowRoot.querySelectorAll<HTMLDivElement>('.flight_item.active')) {
-          el.classList.remove('active')
+            el.classList.remove('active')
         }
-        el.classList.add('active')
-      }
-    }
-  })
-
-  divTable.addEventListener('click', (e) => {
-    (async () => {
-      if ((e.target as HTMLElement).tagName !== 'SPAN') return
-      const el = e.target as HTMLSpanElement
-
-      if (el.classList.contains('flight_save')) {
-        const flightItem = el.parentNode as HTMLDivElement
-        const flightAvail = flightItem.dataset.flightAvail.split('_').map(Number)
-        const flightKey = flightItem.dataset.flightKey
-
-        if (flightItem.classList.contains('saved')) {
-          flightItem.classList.remove('saved')
-          savedFlights.delete(flightKey)
-        } else {
-          flightItem.classList.add('saved')
-          savedFlights.set(flightKey, {
-            F: flightAvail[0], J: flightAvail[1], PY: flightAvail[2], Y: flightAvail[3]
-          })
-        }
-
-        updateSavedFlights()
-        await GM.setValue('saved_flights', Object.fromEntries(savedFlights))
-      }
-    })().catch(log)
-  })
-
-  document.addEventListener('scroll', (e) => {
-    for (const el of shadowRoot.querySelectorAll<HTMLDivElement>('.flight_item.active')) {
-      el.classList.remove('active')
-    }
-  })
-
-  divSaved.addEventListener('click', (e) => {
-    (async () => {
-      const el = e.target as HTMLElement
-
-      if (el.dataset.flightKey != null) {
-        savedFlights.delete(el.dataset.flightKey)
-        updateSavedFlights()
-        await GM.setValue('saved_flights', Object.fromEntries(savedFlights))
-      }
-
-      if (el.dataset.queryString != null) {
-        savedQueries.delete(el.dataset.queryString)
-        updateSavedQueries()
-        await GM.setValue('saved_queries', Array.from(savedQueries))
-      }
-    })().catch(log)
-  })
-
-  divSavedQueries.addEventListener('click', (e) => {
-    (async () => {
-      if ((e.target as HTMLElement).tagName !== 'A') return
-      const el = e.target as HTMLAnchorElement
-
-      if ('book' in el.dataset) {
-        stopBatch()
-        el.innerText = lang.searching
-        await regularSearch(newQueryPayload([queryStringToQuery(el.dataset.query)]))
-      }
-    })().catch(log)
-  })
-
-  divSavedQueries.addEventListener('click', (e) => {
-    if ((e.target as HTMLElement).tagName !== 'INPUT') return
-    const el = e.target as HTMLInputElement
-
-    const selectedSegments = divSavedQueries.querySelectorAll<HTMLDivElement>('.selected')
-    for (const el of selectedSegments) {
-      delete el.dataset.new
-    }
-
-    const savedQuery = el.parentNode.parentNode as HTMLDivElement
-    if (el.checked) {
-      savedQuery.dataset.new = ''
-      savedQuery.classList.add('selected')
-      divSaved.classList.add('multi_on')
-      divMultiBox.classList.remove('hidden')
-    } else {
-      savedQuery.classList.remove('selected')
-      savedQuery.querySelector<HTMLSpanElement>('.leg').innerText = ''
-      delete savedQuery.dataset.segment
-      if (selectedSegments.length === 0) {
-        divSaved.classList.remove('multi_on')
-        divMultiBox.classList.add('hidden')
-      }
-    }
-
-    for (const el of divSavedQueries.getElementsByTagName('input')) {
-      el.disabled = selectedSegments.length === 6 && !el.checked
-    }
-
-    Array.from(selectedSegments).sort((a, b) => {
-      const aDate = queryStringToQuery(a.dataset.query).date
-      const bDate = queryStringToQuery(b.dataset.query).date
-      if (+aDate > +bDate) return 1
-      // log(aDate, bDate)
-      if (aDate === bDate) {
-        if ('new' in a.dataset) return 1
-        return a.dataset.segment.localeCompare(b.dataset.segment)
-      }
-      return 0
-    }).forEach((el, index) => {
-      el.dataset.segment = (index + 1).toString()
-      el.querySelector<HTMLSpanElement>('.leg').innerText = `Segment ${index + 1}`
     })
-  })
 
-  const filterToClassName = (filter: string): string => {
-    switch (filter) {
-      case 'nonstop':
-        return `${filter}_only`
-      case 'first':
-      case 'business':
-      case 'premium':
-      case 'economy':
-        return `show_${filter}`
-      default:
-        throw new Error(`Unknown filter "${filter}"`)
-    }
-  }
+    divSaved.addEventListener('click', e => {
+        ;(async () => {
+            const el = e.target as HTMLElement
 
-  for (const el of divFilters.getElementsByTagName('input')) {
-    el.addEventListener('click', (e) => {
-      (async () => {
-        const className = filterToClassName(el.dataset.filter)
-        filters[el.dataset.filter] = el.checked
-        await GM.setValue('filters', filters)
+            if (el.dataset.flightKey != null) {
+                savedFlights.delete(el.dataset.flightKey)
+                updateSavedFlights()
+                await GM.setValue('saved_flights', Object.fromEntries(savedFlights))
+            }
 
+            if (el.dataset.queryString != null) {
+                savedQueries.delete(el.dataset.queryString)
+                updateSavedQueries()
+                await GM.setValue('saved_queries', Array.from(savedQueries))
+            }
+        })().catch(log)
+    })
+
+    divSavedQueries.addEventListener('click', e => {
+        ;(async () => {
+            if ((e.target as HTMLElement).tagName !== 'A') return
+            const el = e.target as HTMLAnchorElement
+
+            if ('book' in el.dataset) {
+                stopBatch()
+                el.innerText = lang.searching
+                await regularSearch(newQueryPayload([queryStringToQuery(el.dataset.query)]))
+            }
+        })().catch(log)
+    })
+
+    divSavedQueries.addEventListener('click', e => {
+        if ((e.target as HTMLElement).tagName !== 'INPUT') return
+        const el = e.target as HTMLInputElement
+
+        const selectedSegments = divSavedQueries.querySelectorAll<HTMLDivElement>('.selected')
+        for (const el of selectedSegments) {
+            delete el.dataset.new
+        }
+
+        const savedQuery = el.parentNode.parentNode as HTMLDivElement
         if (el.checked) {
-          divTable.classList.add(className)
+            savedQuery.dataset.new = ''
+            savedQuery.classList.add('selected')
+            divSaved.classList.add('multi_on')
+            divMultiBox.classList.remove('hidden')
         } else {
-          divTable.classList.remove(className)
+            savedQuery.classList.remove('selected')
+            savedQuery.querySelector<HTMLSpanElement>('.leg').innerText = ''
+            delete savedQuery.dataset.segment
+            if (selectedSegments.length === 0) {
+                divSaved.classList.remove('multi_on')
+                divMultiBox.classList.add('hidden')
+            }
         }
-      })().catch(log)
+
+        for (const el of divSavedQueries.getElementsByTagName('input')) {
+            el.disabled = selectedSegments.length === 6 && !el.checked
+        }
+
+        Array.from(selectedSegments)
+            .sort((a, b) => {
+                const aDate = queryStringToQuery(a.dataset.query).date
+                const bDate = queryStringToQuery(b.dataset.query).date
+                if (+aDate > +bDate) return 1
+                // log(aDate, bDate)
+                if (aDate === bDate) {
+                    if ('new' in a.dataset) return 1
+                    return a.dataset.segment.localeCompare(b.dataset.segment)
+                }
+                return 0
+            })
+            .forEach((el, index) => {
+                el.dataset.segment = (index + 1).toString()
+                el.querySelector<HTMLSpanElement>('.leg').innerText = `Segment ${index + 1}`
+            })
     })
-  }
 
-  linkSearchSaved.addEventListener('click', (e) => {
-    (async () => {
-      if (savedQueries.size === 0) {
-        alert('No Saved Queries')
-        return
-      }
-
-      linkSearchSaved.innerText = lang.searching
-      await savedSearch()
-    })().catch(log)
-  })
-
-  linkSearchMulti.addEventListener('click', (e) => {
-    (async () => {
-      const selectedSegments = divSavedQueries.querySelectorAll<HTMLDivElement>('.selected')
-      if (selectedSegments.length === 0) {
-        alert('No Selected Segments')
-        return
-      }
-
-      linkSearchMulti.innerText = lang.searching
-      const toSearch = Array.from(selectedSegments).sort((a, b) => +a.dataset.segment - +b.dataset.segment).map(segment => queryStringToQuery(segment.dataset.query))
-      await regularSearch(newQueryPayload(
-        toSearch,
-        { adults: +inputMultiAdult.value, children: +inputMultiChild.value },
-        selectMultiCabin.value as CabinClass
-      ))
-    })().catch(log)
-  })
-
-  divFavesTabs.addEventListener('click', (e) => {
-    const el = e.target as HTMLElement
-
-    if (el.classList.contains('tab_flights')) {
-      divSaved.classList.add('flights')
-    } else if (el.classList.contains('tab_queries')) {
-      divSaved.classList.remove('flights')
+    const filterToClassName = (filter: string): string => {
+        switch (filter) {
+            case 'nonstop':
+                return `${filter}_only`
+            case 'first':
+            case 'business':
+            case 'premium':
+            case 'economy':
+                return `show_${filter}`
+            default:
+                throw new Error(`Unknown filter "${filter}"`)
+        }
     }
-  })
 
-  divHeartSave.addEventListener('click', (e) => {
-    divSaved.classList.toggle('hidden')
-  })
+    for (const el of divFilters.getElementsByTagName('input')) {
+        el.addEventListener('click', e => {
+            ;(async () => {
+                const className = filterToClassName(el.dataset.filter)
+                filters[el.dataset.filter] = el.checked
+                await GM.setValue('filters', filters)
+
+                if (el.checked) {
+                    divTable.classList.add(className)
+                } else {
+                    divTable.classList.remove(className)
+                }
+            })().catch(log)
+        })
+    }
+
+    linkSearchSaved.addEventListener('click', e => {
+        ;(async () => {
+            if (savedQueries.size === 0) {
+                alert('No Saved Queries')
+                return
+            }
+
+            linkSearchSaved.innerText = lang.searching
+            await savedSearch()
+        })().catch(log)
+    })
+
+    linkSearchMulti.addEventListener('click', e => {
+        ;(async () => {
+            const selectedSegments = divSavedQueries.querySelectorAll<HTMLDivElement>('.selected')
+            if (selectedSegments.length === 0) {
+                alert('No Selected Segments')
+                return
+            }
+
+            linkSearchMulti.innerText = lang.searching
+            const toSearch = Array.from(selectedSegments)
+                .sort((a, b) => +a.dataset.segment - +b.dataset.segment)
+                .map(segment => queryStringToQuery(segment.dataset.query))
+            await regularSearch(
+                newQueryPayload(
+                    toSearch,
+                    { adults: +inputMultiAdult.value, children: +inputMultiChild.value },
+                    selectMultiCabin.value as CabinClass
+                )
+            )
+        })().catch(log)
+    })
+
+    divFavesTabs.addEventListener('click', e => {
+        const el = e.target as HTMLElement
+
+        if (el.classList.contains('tab_flights')) {
+            divSaved.classList.add('flights')
+        } else if (el.classList.contains('tab_queries')) {
+            divSaved.classList.remove('flights')
+        }
+    })
+
+    divHeartSave.addEventListener('click', e => {
+        divSaved.classList.toggle('hidden')
+    })
 }
 
 // ============================================================
@@ -557,15 +625,17 @@ const addFormListeners = (): void => {
 const airports: Airports = {}
 
 const loadAirports = async (): Promise<void> => {
-  log('loadAirports()')
+    log('loadAirports()')
 
-  const resp = await httpRequest(`https://api.cathaypacific.com/redibe/airport/origin/${browserLang}_${browserCountry}/`)
-  const data: AirportResponse = JSON.parse((await resp.text()).replace('Taiwan China', 'Taiwan'))
-  if (data.airports !== null) {
-    for (const { airportCode, countryName, shortName } of data.airports) {
-      airports[airportCode] = { airportCode, countryName, shortName }
+    const resp = await httpRequest(
+        `https://api.cathaypacific.com/redibe/airport/origin/${browserLang}_${browserCountry}/`
+    )
+    const data: AirportResponse = JSON.parse((await resp.text()).replace('Taiwan China', 'Taiwan'))
+    if (data.airports !== null) {
+        for (const { airportCode, countryName, shortName } of data.airports) {
+            airports[airportCode] = { airportCode, countryName, shortName }
+        }
     }
-  }
 }
 
 // ============================================================
@@ -573,150 +643,289 @@ const loadAirports = async (): Promise<void> => {
 // ============================================================
 
 const batchError = (html?: string): void => {
-  if (html == null) {
-    divError.classList.add('hidden')
-  } else {
-    shadowRoot.querySelector('.bulk_error span').innerHTML = html
-    divError.classList.remove('hidden')
-  }
+    if (html == null) {
+        divError.classList.add('hidden')
+    } else {
+        shadowRoot.querySelector('.bulk_error span').innerHTML = html
+        divError.classList.remove('hidden')
+    }
 }
 
 // Arguments: the text field element and an array of possible autocomplete values
 const autocomplete = (input: HTMLInputElement, airports: Airports): void => {
-  let currentFocus: number
-  // Execute a function when someone writes in the text field
-  input.addEventListener('input', (e) => {
-    newAC(input, e)
-  })
-  // input.addEventListener('click', (e) => {
-  //   newAC(input, e)
-  // })
-  // Execute a function presses a key on the keyboard
-  input.addEventListener('keydown', (e) => {
-    const divContainer = shadowRoot.getElementById(`${input.id}-autocomplete-list`) as HTMLDivElement
-    if (divContainer == null) return
+    let currentFocus: number
+    // Execute a function when someone writes in the text field
+    input.addEventListener('input', e => {
+        newAC(input, e)
+    })
+    // input.addEventListener('click', (e) => {
+    //   newAC(input, e)
+    // })
+    // Execute a function presses a key on the keyboard
+    input.addEventListener('keydown', e => {
+        const divContainer = shadowRoot.getElementById(`${input.id}-autocomplete-list`) as HTMLDivElement
+        if (divContainer == null) return
 
-    const divMatches = divContainer.getElementsByTagName('div')
-    if (e.key === 'ArrowDown') {
-      currentFocus++
-      setActive(divMatches)
-    } else if (e.key === 'ArrowUp') {
-      currentFocus--
-      setActive(divMatches)
-    } else if (e.key === 'Enter') {
-      // Prevent the form from being submitted
-      e.preventDefault()
-      closeAllLists()
-      if (currentFocus > -1) {
-        // Simulate a click on the "active" item
-        if (divMatches.length > 0) divMatches[currentFocus].click()
-      } else if (divMatches.length > 0) {
-        divContainer.querySelector<HTMLDivElement>(':not').click()
-      }
-    } else if (['Tab', ' '].includes(e.key)) {
-      closeAllLists()
-      // Simulate a click on the first item
-      if (divMatches.length > 0) divMatches[0].click()
-    }
-  })
-
-  // Classify an item as "active"
-  const setActive = (divMatches: HTMLCollectionOf<HTMLDivElement>): void => {
-    if (divMatches.length === 0) return
-    // Start by removing the "active" class on all items
-    removeActive(divMatches)
-
-    if (currentFocus >= divMatches.length) {
-      currentFocus = 0
-    } else if (currentFocus < 0) {
-      currentFocus = divMatches.length - 1
-    }
-
-    // Add class "autocomplete-active"
-    divMatches[currentFocus].classList.add('autocomplete-active')
-  }
-
-  // Remove the "active" class from all autocomplete items
-  const removeActive = (divMatches: HTMLCollectionOf<HTMLDivElement>): void => {
-    for (const divMatch of divMatches) {
-      divMatch.classList.remove('autocomplete-active')
-    }
-  }
-
-  // Close all autocomplete lists in the document, except the one passed as an argument
-  const closeAllLists = (el?: HTMLElement): void => {
-    for (const list of shadowRoot.querySelectorAll('.autocomplete-items')) {
-      if (el !== list && el !== input) list.parentNode.removeChild(list)
-    }
-  }
-
-  const newAC = (el: HTMLInputElement, e: Event): void => {
-    // Close any already open lists of autocomplete values
-    closeAllLists()
-
-    const matches = el.value.match(/[^,]+$/)
-    if (matches === null) return
-    const val = matches[0]
-
-    currentFocus = -1
-
-    // Create a DIV element that will contain the items (values)
-    const divContainer = document.createElement('div')
-    divContainer.setAttribute('id', `${el.id}-autocomplete-list`)
-    divContainer.setAttribute('class', 'autocomplete-items')
-
-    // Append the DIV element as a child of the autocomplete container
-    el.parentNode.append(divContainer)
-    const sep = document.createElement('span')
-    sep.style.display = 'none'
-    divContainer.append(sep)
-
-    const favs = ['TPE', 'TSA', 'KHH', 'RMQ', 'TYO', 'HND', 'NRT', 'KIX', 'ITM', 'CTS', 'FUK', 'NGO', 'OKA', 'ICN', 'PUS', 'GMP', 'CJU', 'HKG', 'MFM', 'BKK', 'CNX', 'HKT', 'CGK', 'DPS', 'SUB', 'KUL', 'BKI', 'PEN', 'DAD', 'HAN', 'SGN', 'CEB', 'MNL', 'SIN', 'PNH', 'DEL', 'BOM', 'DXB', 'DOH', 'TLV', 'BCN', 'MAD', 'MXP', 'CDG', 'ZRH', 'MUC', 'FCO', 'FRA', 'CDG', 'AMS', 'LHR', 'LGW', 'LON', 'MAN', 'FCO', 'BOS', 'JFK', 'YYZ', 'ORD', 'IAD', 'YVR', 'SFO', 'LAX', 'SAN', 'SEA', 'JNB', 'PER', 'SYD', 'BNE', 'MEL', 'AKL', 'HEL', 'BLR', 'SHA', 'PVG', 'PEK', 'CAN', 'KTM', 'ADL', 'CPT', 'ATH', 'IST', 'SOF', 'VCE', 'BUD', 'PRG', 'VIE', 'BER', 'WAW', 'KBP', 'CPH', 'DUS', 'BRU', 'OSL', 'ARN', 'DUB', 'MIA', 'ATL', 'IAH', 'DFW', 'PHL', 'CMN', 'LAS', 'SJC', 'DEN', 'AUS', 'MSY', 'MCO', 'EWR', 'NYC', 'LIS', 'OPO', 'SPU', 'DBV', 'ZAG', 'MLE', 'LIM', 'BOG', 'CNS', 'GRU', 'SCL', 'GIG', 'EZE', 'MEX', 'CUN']
-    // For each autocomplete value, check if it starts with the same letters as the text field value
-    for (const { airportCode, countryName, shortName } of Object.values(airports)) {
-      if (airportCode.length > 3) return
-      if (val.toUpperCase() === airportCode.substring(0, val.length).toUpperCase() || val.toUpperCase() === countryName.substring(0, val.length).toUpperCase() || val.toUpperCase() === shortName.substring(0, val.length).toUpperCase()) {
-        const sa = airportCode.substring(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
-        const se = shortName.substring(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
-        const sc = countryName.substring(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
-        // Create a DIV element for each matching element
-        const divMatch = document.createElement('div')
-        divMatch.innerHTML = render(
-          <>
-            {/* Make the matching letters bold */}
-            <span class='sa_code'><strong>{airportCode.substring(0, sa)}</strong>{airportCode.substring(sa)}</span>
-            <span class='sc_code'><strong>{shortName.substring(0, se)}</strong>{shortName.substring(se)} - <strong>{countryName.substring(0, sc)}</strong>{countryName.substring(sc)}</span>
-            {/* Hidden input field that holds the value of the current array item */}
-            <input type='hidden' value={airportCode} />
-          </>
-        )
-        divMatch.dataset.airportCode = airportCode
-        // Execute a function when someone clicks on the item value (DIV element)
-        divMatch.addEventListener('click', (e) => {
-          const el = e.target as HTMLElement
-
-          // Insert the value for the autocomplete text field
-          input.value = [input.value.replace(/([,]?[^,]*)$/, ''), el.dataset.airportCode].filter(Boolean).join(',')
-          input.dispatchEvent(new Event('change'))
-          // Close the list of autocomplete values (or any other open lists of autocomplete values)
-          closeAllLists()
-        })
-
-        if (['TPE', 'KHH', 'HKG'].includes(airportCode)) {
-          divContainer.prepend(divMatch)
-        } else if (favs.includes(airportCode)) {
-          divContainer.insertBefore(divMatch, sep)
-        } else {
-          divContainer.append(divMatch)
+        const divMatches = divContainer.getElementsByTagName('div')
+        if (e.key === 'ArrowDown') {
+            currentFocus++
+            setActive(divMatches)
+        } else if (e.key === 'ArrowUp') {
+            currentFocus--
+            setActive(divMatches)
+        } else if (e.key === 'Enter') {
+            // Prevent the form from being submitted
+            e.preventDefault()
+            closeAllLists()
+            if (currentFocus > -1) {
+                // Simulate a click on the "active" item
+                if (divMatches.length > 0) divMatches[currentFocus].click()
+            } else if (divMatches.length > 0) {
+                divContainer.querySelector<HTMLDivElement>(':not').click()
+            }
+        } else if (['Tab', ' '].includes(e.key)) {
+            closeAllLists()
+            // Simulate a click on the first item
+            if (divMatches.length > 0) divMatches[0].click()
         }
-      }
+    })
+
+    // Classify an item as "active"
+    const setActive = (divMatches: HTMLCollectionOf<HTMLDivElement>): void => {
+        if (divMatches.length === 0) return
+        // Start by removing the "active" class on all items
+        removeActive(divMatches)
+
+        if (currentFocus >= divMatches.length) {
+            currentFocus = 0
+        } else if (currentFocus < 0) {
+            currentFocus = divMatches.length - 1
+        }
+
+        // Add class "autocomplete-active"
+        divMatches[currentFocus].classList.add('autocomplete-active')
     }
-  }
-  // Execute a function when someone clicks in the document
-  document.addEventListener('click', (e) => {
-    if (e.target === input) return
-    closeAllLists(e.target as HTMLElement)
-  })
+
+    // Remove the "active" class from all autocomplete items
+    const removeActive = (divMatches: HTMLCollectionOf<HTMLDivElement>): void => {
+        for (const divMatch of divMatches) {
+            divMatch.classList.remove('autocomplete-active')
+        }
+    }
+
+    // Close all autocomplete lists in the document, except the one passed as an argument
+    const closeAllLists = (el?: HTMLElement): void => {
+        for (const list of shadowRoot.querySelectorAll('.autocomplete-items')) {
+            if (el !== list && el !== input) list.parentNode.removeChild(list)
+        }
+    }
+
+    const newAC = (el: HTMLInputElement, e: Event): void => {
+        // Close any already open lists of autocomplete values
+        closeAllLists()
+
+        const matches = el.value.match(/[^,]+$/)
+        if (matches === null) return
+        const val = matches[0]
+
+        currentFocus = -1
+
+        // Create a DIV element that will contain the items (values)
+        const divContainer = document.createElement('div')
+        divContainer.setAttribute('id', `${el.id}-autocomplete-list`)
+        divContainer.setAttribute('class', 'autocomplete-items')
+
+        // Append the DIV element as a child of the autocomplete container
+        el.parentNode.append(divContainer)
+        const sep = document.createElement('span')
+        sep.style.display = 'none'
+        divContainer.append(sep)
+
+        const favs = [
+            'TPE',
+            'TSA',
+            'KHH',
+            'RMQ',
+            'TYO',
+            'HND',
+            'NRT',
+            'KIX',
+            'ITM',
+            'CTS',
+            'FUK',
+            'NGO',
+            'OKA',
+            'ICN',
+            'PUS',
+            'GMP',
+            'CJU',
+            'HKG',
+            'MFM',
+            'BKK',
+            'CNX',
+            'HKT',
+            'CGK',
+            'DPS',
+            'SUB',
+            'KUL',
+            'BKI',
+            'PEN',
+            'DAD',
+            'HAN',
+            'SGN',
+            'CEB',
+            'MNL',
+            'SIN',
+            'PNH',
+            'DEL',
+            'BOM',
+            'DXB',
+            'DOH',
+            'TLV',
+            'BCN',
+            'MAD',
+            'MXP',
+            'CDG',
+            'ZRH',
+            'MUC',
+            'FCO',
+            'FRA',
+            'CDG',
+            'AMS',
+            'LHR',
+            'LGW',
+            'LON',
+            'MAN',
+            'FCO',
+            'BOS',
+            'JFK',
+            'YYZ',
+            'ORD',
+            'IAD',
+            'YVR',
+            'SFO',
+            'LAX',
+            'SAN',
+            'SEA',
+            'JNB',
+            'PER',
+            'SYD',
+            'BNE',
+            'MEL',
+            'AKL',
+            'HEL',
+            'BLR',
+            'SHA',
+            'PVG',
+            'PEK',
+            'CAN',
+            'KTM',
+            'ADL',
+            'CPT',
+            'ATH',
+            'IST',
+            'SOF',
+            'VCE',
+            'BUD',
+            'PRG',
+            'VIE',
+            'BER',
+            'WAW',
+            'KBP',
+            'CPH',
+            'DUS',
+            'BRU',
+            'OSL',
+            'ARN',
+            'DUB',
+            'MIA',
+            'ATL',
+            'IAH',
+            'DFW',
+            'PHL',
+            'CMN',
+            'LAS',
+            'SJC',
+            'DEN',
+            'AUS',
+            'MSY',
+            'MCO',
+            'EWR',
+            'NYC',
+            'LIS',
+            'OPO',
+            'SPU',
+            'DBV',
+            'ZAG',
+            'MLE',
+            'LIM',
+            'BOG',
+            'CNS',
+            'GRU',
+            'SCL',
+            'GIG',
+            'EZE',
+            'MEX',
+            'CUN',
+        ]
+        // For each autocomplete value, check if it starts with the same letters as the text field value
+        for (const { airportCode, countryName, shortName } of Object.values(airports)) {
+            if (airportCode.length > 3) return
+            if (
+                val.toUpperCase() === airportCode.substring(0, val.length).toUpperCase() ||
+                val.toUpperCase() === countryName.substring(0, val.length).toUpperCase() ||
+                val.toUpperCase() === shortName.substring(0, val.length).toUpperCase()
+            ) {
+                const sa = airportCode.substring(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
+                const se = shortName.substring(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
+                const sc = countryName.substring(0, val.length).toUpperCase() === val.toUpperCase() ? val.length : 0
+                // Create a DIV element for each matching element
+                const divMatch = document.createElement('div')
+                divMatch.innerHTML = render(
+                    <>
+                        {/* Make the matching letters bold */}
+                        <span class="sa_code">
+                            <strong>{airportCode.substring(0, sa)}</strong>
+                            {airportCode.substring(sa)}
+                        </span>
+                        <span class="sc_code">
+                            <strong>{shortName.substring(0, se)}</strong>
+                            {shortName.substring(se)} - <strong>{countryName.substring(0, sc)}</strong>
+                            {countryName.substring(sc)}
+                        </span>
+                        {/* Hidden input field that holds the value of the current array item */}
+                        <input type="hidden" value={airportCode} />
+                    </>
+                )
+                divMatch.dataset.airportCode = airportCode
+                // Execute a function when someone clicks on the item value (DIV element)
+                divMatch.addEventListener('click', e => {
+                    const el = e.target as HTMLElement
+
+                    // Insert the value for the autocomplete text field
+                    input.value = [input.value.replace(/([,]?[^,]*)$/, ''), el.dataset.airportCode]
+                        .filter(Boolean)
+                        .join(',')
+                    input.dispatchEvent(new Event('change'))
+                    // Close the list of autocomplete values (or any other open lists of autocomplete values)
+                    closeAllLists()
+                })
+
+                if (['TPE', 'KHH', 'HKG'].includes(airportCode)) {
+                    divContainer.prepend(divMatch)
+                } else if (favs.includes(airportCode)) {
+                    divContainer.insertBefore(divMatch, sep)
+                } else {
+                    divContainer.append(divMatch)
+                }
+            }
+        }
+    }
+    // Execute a function when someone clicks in the document
+    document.addEventListener('click', e => {
+        if (e.target === input) return
+        closeAllLists(e.target as HTMLElement)
+    })
 }
 
 // ============================================================
@@ -728,146 +937,145 @@ let stopSearch = false
 let remainingDays = 20
 
 const resetSearch = (): void => {
-  searching = false
-  remainingDays = 20
-  btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from.join(',')} - ${uef.to.join(',')} ${lang.bulk_flights}`
-  btnSearch.disabled = false
-  btnBatch.disabled = false
-  linkSearchSaved.innerText = `${lang.search_all_saved} »`
+    searching = false
+    remainingDays = 20
+    btnBatch.innerHTML = `${lang.bulk_batch} ${uef.from.join(',')} - ${uef.to.join(',')} ${lang.bulk_flights}`
+    btnSearch.disabled = false
+    btnBatch.disabled = false
+    linkSearchSaved.innerText = `${lang.search_all_saved} »`
 }
 
 const stopBatch = (): void => {
-  log('Stopping batch search')
+    log('Stopping batch search')
 
-  stopSearch = true
-  resetSearch()
-  if (!routeChanged) btnBatch.innerHTML = lang.next_batch // Override resetSearch()
-  batchError()
+    stopSearch = true
+    resetSearch()
+    if (!routeChanged) btnBatch.innerHTML = lang.next_batch // Override resetSearch()
+    batchError()
 }
 
 const bulkClick = async (singleDate = false): Promise<void> => {
-  if (searching) {
-    stopBatch()
-    return
-  } else if (inputDate.value === '') {
-    alert(lang.invalid_date)
-    return
-  }
+    if (searching) {
+        stopBatch()
+        return
+    } else if (inputDate.value === '') {
+        alert(lang.invalid_date)
+        return
+    }
 
-  log('Starting batch search')
+    log('Starting batch search')
 
-  uef.from = inputFrom.value.split(',')
-  uef.to = inputTo.value.split(',')
-  uef.date = inputDate.value !== '' ? dayjs(inputDate.value).format('YYYYMMDD') : ''
-  uef.adults = +inputAdult.value
-  uef.children = +inputChild.value
-  await GM.setValue('uef', uef)
+    uef.from = inputFrom.value.split(',')
+    uef.to = inputTo.value.split(',')
+    uef.date = inputDate.value !== '' ? dayjs(inputDate.value).format('YYYYMMDD') : ''
+    uef.adults = +inputAdult.value
+    uef.children = +inputChild.value
+    await GM.setValue('uef', uef)
 
-  if (routeChanged) {
-    bulkDate = uef.date
-    routeChanged = false
+    if (routeChanged) {
+        bulkDate = uef.date
+        routeChanged = false
 
-    divTableBody.replaceChildren()
-    divUeContainer.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+        divTableBody.replaceChildren()
+        divUeContainer.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
 
-  divResults.classList.remove('hidden')
-  btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
-  await bulkSearch(singleDate)
+    divResults.classList.remove('hidden')
+    btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
+    await bulkSearch(singleDate)
 }
 
 const savedSearch = async (): Promise<void> => {
-  const toSearch = Array.from(savedQueries, queryStringToQuery).sort((a, b) => +a.date - +b.date)
+    const toSearch = Array.from(savedQueries, queryStringToQuery).sort((a, b) => +a.date - +b.date)
 
-  let ssQuery = toSearch.shift()
+    let ssQuery = toSearch.shift()
 
-  divResults.classList.remove('hidden')
-  btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
-  divTableBody.replaceChildren()
+    divResults.classList.remove('hidden')
+    btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
+    divTableBody.replaceChildren()
 
-  if (!cont.query) {
-    await regularSearch(
-      newQueryPayload([ssQuery]),
-      { query: true, saved: true }
-    )
-    return
-  }
-
-  const populateNextQuery = async (pageBom: PageBom): Promise<void> => {
-    await insertResults(ssQuery, pageBom)
-
-    if ((ssQuery = toSearch.shift()) != null) {
-      await searchAvailability(ssQuery, populateNextQuery)
-    } else {
-      stopBatch()
-      stopSearch = false // Override stopBatch()
+    if (!cont.query) {
+        await regularSearch(newQueryPayload([ssQuery]), { query: true, saved: true })
+        return
     }
-  }
 
-  // You can't resume a saved search after stopping it
-  // It will actually start a bulk search and append the results to the saved search results
-  routeChanged = true // To clear the saved search results
-  // TODO: Make sure the button changes back to a normal bulk search button
+    const populateNextQuery = async (pageBom: PageBom): Promise<void> => {
+        await insertResults(ssQuery, pageBom)
 
-  await searchAvailability(ssQuery, populateNextQuery)
+        if ((ssQuery = toSearch.shift()) != null) {
+            await searchAvailability(ssQuery, populateNextQuery)
+        } else {
+            stopBatch()
+            stopSearch = false // Override stopBatch()
+        }
+    }
+
+    // You can't resume a saved search after stopping it
+    // It will actually start a bulk search and append the results to the saved search results
+    routeChanged = true // To clear the saved search results
+    // TODO: Make sure the button changes back to a normal bulk search button
+
+    await searchAvailability(ssQuery, populateNextQuery)
 }
 
 const updateSavedQueries = (): void => {
-  log('updateSavedQueries()')
+    log('updateSavedQueries()')
 
-  const now = new Date()
+    const now = new Date()
 
-  for (const queryString of savedQueries) {
-    const query = queryStringToQuery(queryString)
-    const savedDate = query.date.toDate()
-    if (savedDate <= now) savedQueries.delete(queryString)
-  }
+    for (const queryString of savedQueries) {
+        const query = queryStringToQuery(queryString)
+        const savedDate = query.date.toDate()
+        if (savedDate <= now) savedQueries.delete(queryString)
+    }
 
-  divSavedQueries.innerHTML = render(SavedQueries({ savedQueries }))
+    divSavedQueries.innerHTML = render(SavedQueries({ savedQueries }))
 }
 
 const updateSavedFlights = (): void => {
-  log('updateSavedFlights()')
+    log('updateSavedFlights()')
 
-  const now = new Date()
+    const now = new Date()
 
-  for (const flightKey of savedFlights.keys()) {
-    const query = queryStringToQuery(flightKey) // TODO: Should make something to parse `flightKey`
-    const savedDate = query.date.toDate()
-    if (savedDate <= now) savedFlights.delete(flightKey)
-  }
+    for (const flightKey of savedFlights.keys()) {
+        const query = queryStringToQuery(flightKey) // TODO: Should make something to parse `flightKey`
+        const savedDate = query.date.toDate()
+        if (savedDate <= now) savedFlights.delete(flightKey)
+    }
 
-  divSavedFlights.innerHTML = render(SavedFlightsView({ savedFlights }))
+    divSavedFlights.innerHTML = render(SavedFlightsView({ savedFlights }))
 }
 
 const checkAirportCodes = (el: HTMLInputElement): void => {
-  log('checkAirportCodes()')
+    log('checkAirportCodes()')
 
-  let airportCodes = el.value.split(',')
-  const errorAirportCodes: string[] = []
-  airportCodes = airportCodes.filter((airportCode) => {
-    if (airports[airportCode] != null) return true
-    if (airportCode !== '') errorAirportCodes.push(airportCode)
-    return false
-  })
+    let airportCodes = el.value.split(',')
+    const errorAirportCodes: string[] = []
+    airportCodes = airportCodes.filter(airportCode => {
+        if (airports[airportCode] != null) return true
+        if (airportCode !== '') errorAirportCodes.push(airportCode)
+        return false
+    })
 
-  if (errorAirportCodes.length > 0) {
-    el.value = airportCodes.join(',')
-    alert(`Removing ${lang.invalid_airport}${errorAirportCodes.length > 1 ? 's' : ''}: ${errorAirportCodes.join(',')}`)
-  }
+    if (errorAirportCodes.length > 0) {
+        el.value = airportCodes.join(',')
+        alert(
+            `Removing ${lang.invalid_airport}${errorAirportCodes.length > 1 ? 's' : ''}: ${errorAirportCodes.join(',')}`
+        )
+    }
 }
 
 const checkLogin = async (): Promise<void> => {
-  log('checkLogin()')
+    log('checkLogin()')
 
-  const resp = await httpRequest('https://api.cathaypacific.com/redibe/login/getProfile', {
-    headers: { 'Content-Type': 'application/json' },
-    data: JSON.stringify({}),
-    method: 'POST',
-    withCredentials: true
-  })
-  const data: Profile = await resp.json()
-  if (data.membershipNumber === null) divLoginPrompt.classList.remove('hidden')
+    const resp = await httpRequest('https://api.cathaypacific.com/redibe/login/getProfile', {
+        headers: { 'Content-Type': 'application/json' },
+        data: JSON.stringify({}),
+        method: 'POST',
+        withCredentials: true,
+    })
+    const data: Profile = await resp.json()
+    if (data.membershipNumber === null) divLoginPrompt.classList.remove('hidden')
 }
 
 // ============================================================
@@ -876,37 +1084,46 @@ const checkLogin = async (): Promise<void> => {
 
 // Default Search JSON
 
-const newQueryPayload = (queries: Query[] = [{
-  date: dayjs().add(1, 'd'),
-  from: 'HND',
-  to: 'ITM'
-}], passengers: Passengers = {
-  adults: 1,
-  children: 0
-}, cabinClass: CabinClass = 'Y'): QueryPayload => {
-  log('newQueryPayload()')
+const newQueryPayload = (
+    queries: Query[] = [
+        {
+            date: dayjs().add(1, 'd'),
+            from: 'HND',
+            to: 'ITM',
+        },
+    ],
+    passengers: Passengers = {
+        adults: 1,
+        children: 0,
+    },
+    cabinClass: CabinClass = 'Y'
+): QueryPayload => {
+    log('newQueryPayload()')
 
-  if (queries.length === 0) throw new Error('Empty queries array')
+    if (queries.length === 0) throw new Error('Empty queries array')
 
-  return {
-    ACTION: 'RED_AWARD_SEARCH',
-    ENTRYPOINT: entryPoint,
-    ENTRYLANGUAGE: browserLang,
-    ENTRYCOUNTRY: browserCountry,
-    RETURNURL: entryPoint,
-    ERRORURL: entryPoint,
-    CABINCLASS: cabinClass,
-    BRAND: 'CX',
-    ADULT: passengers.adults,
-    CHILD: passengers.children,
-    FLEXIBLEDATE: false,
-    ...Object.assign({}, ...queries.map((query, index) => ({
-      [`ORIGIN[${index + 1}]`]: query.from,
-      [`DESTINATION[${index + 1}]`]: query.to,
-      [`DEPARTUREDATE[${index + 1}]`]: query.date.format('YYYYMMDD')
-    }))),
-    LOGINURL: loginUrl
-  }
+    return {
+        ACTION: 'RED_AWARD_SEARCH',
+        ENTRYPOINT: entryPoint,
+        ENTRYLANGUAGE: browserLang,
+        ENTRYCOUNTRY: browserCountry,
+        RETURNURL: entryPoint,
+        ERRORURL: entryPoint,
+        CABINCLASS: cabinClass,
+        BRAND: 'CX',
+        ADULT: passengers.adults,
+        CHILD: passengers.children,
+        FLEXIBLEDATE: false,
+        ...Object.assign(
+            {},
+            ...queries.map((query, index) => ({
+                [`ORIGIN[${index + 1}]`]: query.from,
+                [`DESTINATION[${index + 1}]`]: query.to,
+                [`DEPARTUREDATE[${index + 1}]`]: query.date.format('YYYYMMDD'),
+            }))
+        ),
+        LOGINURL: loginUrl,
+    }
 }
 
 // ============================================================
@@ -914,56 +1131,56 @@ const newQueryPayload = (queries: Query[] = [{
 // ============================================================
 
 const newTabID = async (): Promise<string> => {
-  const formUrl = new URL(ibeFacadeUrl)
-  for (const [key, value] of Object.entries(newQueryPayload())) {
-    formUrl.searchParams.append(key, value)
-  }
-
-  log('Simulating IBEFacade form submission')
-  const resp = await httpRequest(formUrl, {
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    withCredentials: true
-  })
-  const text = await resp.text()
-
-  if (resp.status === 200) {
-    const container = document.createElement('div')
-    container.innerHTML = text
-    const form = container.getElementsByTagName('form')[0]
-
-    const formData = new URLSearchParams()
-    for (const [key, value] of new FormData(form).entries()) {
-      formData.append(key, value as string)
+    const formUrl = new URL(ibeFacadeUrl)
+    for (const [key, value] of Object.entries(newQueryPayload())) {
+        formUrl.searchParams.append(key, value)
     }
 
-    log('Requesting new Tab ID')
-    const resp = await httpRequest(availabilityUrl, {
-      headers: { Accept: 'application/json, text/plain, */*' },
-      data: formData,
-      method: 'POST',
-      withCredentials: true
+    log('Simulating IBEFacade form submission')
+    const resp = await httpRequest(formUrl, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        withCredentials: true,
     })
+    const text = await resp.text()
 
     if (resp.status === 200) {
-      const data: AvailabilityResponse = await resp.json()
-      try {
-        requestParams = JSON.parse(data.requestParams)
-        log('requestParams:', requestParams)
-      } catch {
-        resetSearch()
-        throw new Error('Response not valid JSON')
-      }
+        const container = document.createElement('div')
+        container.innerHTML = text
+        const form = container.getElementsByTagName('form')[0]
 
-      tabId = requestParams.TAB_ID ?? ''
-      formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
-      log('New Tab ID:', tabId)
-      return tabId
+        const formData = new URLSearchParams()
+        for (const [key, value] of new FormData(form).entries()) {
+            formData.append(key, value as string)
+        }
+
+        log('Requesting new Tab ID')
+        const resp = await httpRequest(availabilityUrl, {
+            headers: { Accept: 'application/json, text/plain, */*' },
+            data: formData,
+            method: 'POST',
+            withCredentials: true,
+        })
+
+        if (resp.status === 200) {
+            const data: AvailabilityResponse = await resp.json()
+            try {
+                requestParams = JSON.parse(data.requestParams)
+                log('requestParams:', requestParams)
+            } catch {
+                resetSearch()
+                throw new Error('Response not valid JSON')
+            }
+
+            tabId = requestParams.TAB_ID ?? ''
+            formSubmitUrl = `${availabilityUrl}?TAB_ID=${tabId}`
+            log('New Tab ID:', tabId)
+            return tabId
+        }
     }
-  }
 
-  log('Failed to retrieve new Tab ID')
-  resetSearch()
-  throw new Error(`<strong>Error</strong>: ${lang.tab_retrieve_fail} (<a href='${loginUrl}'>Login</a>)`)
+    log('Failed to retrieve new Tab ID')
+    resetSearch()
+    throw new Error(`<strong>Error</strong>: ${lang.tab_retrieve_fail} (<a href='${loginUrl}'>Login</a>)`)
 }
 
 // ============================================================
@@ -971,50 +1188,50 @@ const newTabID = async (): Promise<string> => {
 // ============================================================
 
 const regularSearch = async (cxString: QueryPayload, cont = {}): Promise<void> => {
-  btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_cont}`
-  btnSearch.innerHTML = `${loadingIconHtml} ${lang.searching_cont}`
-  btnSearch.disabled = true
-  btnBatch.disabled = true
+    btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_cont}`
+    btnSearch.innerHTML = `${loadingIconHtml} ${lang.searching_cont}`
+    btnSearch.disabled = true
+    btnBatch.disabled = true
 
-  await GM.setValue('cont', { ...defaultContVars, ts: +dayjs(), ...cont })
+    await GM.setValue('cont', { ...defaultContVars, ts: +dayjs(), ...cont })
 
-  const formUrl = new URL(ibeFacadeUrl)
-  for (const [key, value] of Object.entries(cxString)) {
-    formUrl.searchParams.append(key, value)
-  }
-
-  log('Simulating IBEFacade form submission')
-  try {
-    const resp = await httpRequest(formUrl, {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      withCredentials: true
-    })
-
-    if (resp.status === 200) {
-      const container = document.createElement('div')
-      container.innerHTML = await resp.text()
-      const form = container.getElementsByTagName('form')[0]
-
-      log('Submitting SubmissionDetails form')
-      shadowRoot.append(form)
-      form.submit()
-      return
+    const formUrl = new URL(ibeFacadeUrl)
+    for (const [key, value] of Object.entries(cxString)) {
+        formUrl.searchParams.append(key, value)
     }
-  } catch { }
 
-  const form = document.createElement('form')
-  form.setAttribute('action', ibeFacadeUrl)
-  for (const [key, value] of Object.entries(cxString)) {
-    const input = document.createElement('input')
-    input.setAttribute('type', 'hidden')
-    input.setAttribute('name', key)
-    input.setAttribute('value', value)
-    form.append(input)
-  }
+    log('Simulating IBEFacade form submission')
+    try {
+        const resp = await httpRequest(formUrl, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            withCredentials: true,
+        })
 
-  log('Fallback: Submitting IBEFacade form')
-  shadowRoot.append(form)
-  form.submit()
+        if (resp.status === 200) {
+            const container = document.createElement('div')
+            container.innerHTML = await resp.text()
+            const form = container.getElementsByTagName('form')[0]
+
+            log('Submitting SubmissionDetails form')
+            shadowRoot.append(form)
+            form.submit()
+            return
+        }
+    } catch {}
+
+    const form = document.createElement('form')
+    form.setAttribute('action', ibeFacadeUrl)
+    for (const [key, value] of Object.entries(cxString)) {
+        const input = document.createElement('input')
+        input.setAttribute('type', 'hidden')
+        input.setAttribute('name', key)
+        input.setAttribute('value', value)
+        form.append(input)
+    }
+
+    log('Fallback: Submitting IBEFacade form')
+    shadowRoot.append(form)
+    form.submit()
 }
 
 // ============================================================
@@ -1024,55 +1241,57 @@ const regularSearch = async (cxString: QueryPayload, cont = {}): Promise<void> =
 let bulkDate = ''
 
 const bulkSearch = async (singleDate = false): Promise<void> => {
-  log('bulkSearch start, remainingDays:', remainingDays)
+    log('bulkSearch start, remainingDays:', remainingDays)
 
-  let noContinue = false
-  if (remainingDays-- === 0) {
-    stopBatch()
-    noContinue = true
-  }
-
-  if (!cont.query) {
-    await regularSearch(
-      newQueryPayload(
-        [{ from: uef.from[0], to: uef.to[0], date: dayjs(uef.date) }],
-        { adults: uef.adults, children: uef.children }
-      ),
-      { batch: true, query: true }
-    )
-    return
-  }
-
-  bulkDate ||= uef.date
-
-  const routes: Route[] = []
-  const queryCount = uef.from.length * uef.to.length
-
-  if (!noContinue && remainingDays > Math.ceil(25 / queryCount)) {
-    remainingDays = Math.ceil(25 / queryCount) - 1
-  }
-
-  for (const from of uef.from) {
-    for (const to of uef.to) {
-      routes.push({ from, to })
+    let noContinue = false
+    if (remainingDays-- === 0) {
+        stopBatch()
+        noContinue = true
     }
-  }
 
-  let route = routes.shift()
-
-  const populateNextRoute = async (pageBom: PageBom): Promise<void> => {
-    await insertResults({ ...route, date: dayjs(bulkDate) }, pageBom)
-
-    if ((route = routes.shift()) != null) {
-      await searchAvailability({ ...route, date: dayjs(bulkDate) }, populateNextRoute)
-    } else {
-      bulkDate = dayjs(bulkDate).add(1, 'd').format('YYYYMMDD')
-      if (singleDate) stopBatch()
-      await bulkSearch()
+    if (!cont.query) {
+        await regularSearch(
+            newQueryPayload([{ from: uef.from[0], to: uef.to[0], date: dayjs(uef.date) }], {
+                adults: uef.adults,
+                children: uef.children,
+            }),
+            { batch: true, query: true }
+        )
+        return
     }
-  }
 
-  await searchAvailability({ ...route, date: dayjs(bulkDate) }, populateNextRoute)
+    bulkDate ||= uef.date
+
+    const routes: Route[] = []
+    const queryCount = uef.from.length * uef.to.length
+
+    if (!noContinue && remainingDays > Math.ceil(25 / queryCount)) {
+        remainingDays = Math.ceil(25 / queryCount) - 1
+    }
+
+    for (const from of uef.from) {
+        for (const to of uef.to) {
+            routes.push({ from, to })
+        }
+    }
+
+    let route = routes.shift()
+
+    const populateNextRoute = async (pageBom: PageBom): Promise<void> => {
+        await insertResults({ ...route, date: dayjs(bulkDate) }, pageBom)
+
+        if ((route = routes.shift()) != null) {
+            await searchAvailability({ ...route, date: dayjs(bulkDate) }, populateNextRoute)
+        } else {
+            bulkDate = dayjs(bulkDate)
+                .add(1, 'd')
+                .format('YYYYMMDD')
+            if (singleDate) stopBatch()
+            await bulkSearch()
+        }
+    }
+
+    await searchAvailability({ ...route, date: dayjs(bulkDate) }, populateNextRoute)
 }
 
 // ============================================================
@@ -1080,74 +1299,74 @@ const bulkSearch = async (singleDate = false): Promise<void> => {
 // ============================================================
 
 const searchAvailability = async (query: Query, cb: (pageBom: PageBom) => Promise<void>): Promise<void> => {
-  if (stopSearch) {
-    stopSearch = false
-    searching = false
-    return
-  }
+    if (stopSearch) {
+        stopSearch = false
+        searching = false
+        return
+    }
 
-  searching = true
+    searching = true
 
-  // Abort if invalid destination
-  if (!/^[A-Z]{3}$/.test(query.to)) {
-    // eslint-disable-next-line n/no-callback-literal
-    await cb({
-      modelObject: {
-        messages: [{ text: lang.invalid_code }],
-        isContainingErrors: true
-      }
+    // Abort if invalid destination
+    if (!/^[A-Z]{3}$/.test(query.to)) {
+        // eslint-disable-next-line n/no-callback-literal
+        await cb({
+            modelObject: {
+                messages: [{ text: lang.invalid_code }],
+                isContainingErrors: true,
+            },
+        })
+        return
+    }
+
+    const requests = requestParams
+    log('searchAvailability() requests:', requests)
+
+    requests.B_DATE_1 = query.date.format('YYYYMMDD0000')
+    // requests.B_DATE_2 = dayjs(date).add(1, 'd').format('YYYYMMDD0000')
+    requests.B_LOCATION_1 = query.from
+    requests.E_LOCATION_1 = query.to
+    // requests.B_LOCATION_2 = to
+    // requests.E_LOCATION_2 = from
+    delete requests.ENCT
+    delete requests.SERVICE_ID
+    delete requests.DIRECT_LOGIN
+    delete requests.ENC
+
+    const formData = new URLSearchParams()
+    for (const [key, value] of Object.entries(requests)) {
+        formData.append(key, value)
+    }
+
+    const resp = await httpRequest(formSubmitUrl, {
+        headers: { Accept: 'application/json, text/plain, */*' },
+        data: formData,
+        method: 'POST',
+        withCredentials: true,
     })
-    return
-  }
 
-  const requests = requestParams
-  log('searchAvailability() requests:', requests)
+    if (resp.status === 200) {
+        const data: AvailabilityResponse = await resp.json()
+        let pageBom: PageBom
+        try {
+            pageBom = JSON.parse(data.pageBom)
+        } catch {
+            resetSearch()
+            batchError('Response not valid JSON')
+        }
+        await cb(pageBom)
+    } else {
+        batchError(resp.status === 404 ? lang.key_exhausted : resp.status >= 300 ? lang.getting_key : lang.error)
 
-  requests.B_DATE_1 = query.date.format('YYYYMMDD0000')
-  // requests.B_DATE_2 = dayjs(date).add(1, 'd').format('YYYYMMDD0000')
-  requests.B_LOCATION_1 = query.from
-  requests.E_LOCATION_1 = query.to
-  // requests.B_LOCATION_2 = to
-  // requests.E_LOCATION_2 = from
-  delete requests.ENCT
-  delete requests.SERVICE_ID
-  delete requests.DIRECT_LOGIN
-  delete requests.ENC
-
-  const formData = new URLSearchParams()
-  for (const [key, value] of Object.entries(requests)) {
-    formData.append(key, value)
-  }
-
-  const resp = await httpRequest(formSubmitUrl, {
-    headers: { Accept: 'application/json, text/plain, */*' },
-    data: formData,
-    method: 'POST',
-    withCredentials: true
-  })
-
-  if (resp.status === 200) {
-    const data: AvailabilityResponse = await resp.json()
-    let pageBom: PageBom
-    try {
-      pageBom = JSON.parse(data.pageBom)
-    } catch {
-      resetSearch()
-      batchError('Response not valid JSON')
+        try {
+            tabId = await newTabID()
+            batchError()
+            await searchAvailability(query, cb)
+        } catch (error) {
+            if (!(error instanceof Error)) throw error
+            batchError(error.message)
+        }
     }
-    await cb(pageBom)
-  } else {
-    batchError(resp.status === 404 ? lang.key_exhausted : resp.status >= 300 ? lang.getting_key : lang.error)
-
-    try {
-      tabId = await newTabID()
-      batchError()
-      await searchAvailability(query, cb)
-    } catch (error) {
-      if (!(error instanceof Error)) throw error
-      batchError(error.message)
-    }
-  }
 }
 
 // ============================================================
@@ -1155,62 +1374,88 @@ const searchAvailability = async (query: Query, cb: (pageBom: PageBom) => Promis
 // ============================================================
 
 const insertResults = async (query: Query, pageBom: PageBom): Promise<void> => {
-  const queryString = queryToQueryString(query)
-  const flightResults: VNode[] = []
+    const queryString = queryToQueryString(query)
+    const flightResults: VNode[] = []
 
-  if (pageBom.modelObject?.isContainingErrors) {
-    flightResults.push(<span class='bulk_response_error'><strong>Error</strong>: {pageBom.modelObject?.messages[0]?.text}</span>)
-  } else if (pageBom.modelObject?.availabilities?.upsell?.bounds != null) {
-    assert(pageBom.modelObject.availabilities.upsell.bounds.length === 1, pageBom.modelObject.availabilities.upsell.bounds)
+    if (pageBom.modelObject?.isContainingErrors) {
+        flightResults.push(
+            <span class="bulk_response_error">
+                <strong>Error</strong>: {pageBom.modelObject?.messages[0]?.text}
+            </span>
+        )
+    } else if (pageBom.modelObject?.availabilities?.upsell?.bounds != null) {
+        assert(
+            pageBom.modelObject.availabilities.upsell.bounds.length === 1,
+            pageBom.modelObject.availabilities.upsell.bounds
+        )
 
-    for (const flight of pageBom.modelObject.availabilities.upsell.bounds[0].flights ?? []) {
-      assert(flight.segments.length > 0 && flight.segments.length <= 2, flight.segments)
+        for (const flight of pageBom.modelObject.availabilities.upsell.bounds[0].flights ?? []) {
+            assert(flight.segments.length > 0 && flight.segments.length <= 2, flight.segments)
 
-      const numF = Math.min(...flight.segments.map(segment => parseCabinStatus(segment.cabins?.F?.status)))
-      const numJ = Math.min(...flight.segments.map(segment => parseCabinStatus(segment.cabins?.B?.status)))
-      const numPY = Math.min(...flight.segments.map(segment => parseCabinStatus(segment.cabins?.N?.status)))
-      const numY = Math.min(...flight.segments.map(segment => parseCabinStatus(segment.cabins?.E?.status) + parseCabinStatus(segment.cabins?.R?.status)))
+            const numF = Math.min(...flight.segments.map(segment => parseCabinStatus(segment.cabins?.F?.status)))
+            const numJ = Math.min(...flight.segments.map(segment => parseCabinStatus(segment.cabins?.B?.status)))
+            const numPY = Math.min(...flight.segments.map(segment => parseCabinStatus(segment.cabins?.N?.status)))
+            const numY = Math.min(
+                ...flight.segments.map(
+                    segment => parseCabinStatus(segment.cabins?.E?.status) + parseCabinStatus(segment.cabins?.R?.status)
+                )
+            )
 
-      let flightKey: string
-      const leg1Airline = flight.segments[0].flightIdentifier.marketingAirline
-      const leg1FlightNum = flight.segments[0].flightIdentifier.flightNumber
+            let flightKey: string
+            const leg1Airline = flight.segments[0].flightIdentifier.marketingAirline
+            const leg1FlightNum = flight.segments[0].flightIdentifier.flightNumber
 
-      if (flight.segments.length === 1) {
-        flightKey = `${queryString}_${leg1Airline}${leg1FlightNum}`
-      } else {
-        const transitAirportCode = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g.exec(flight.flightIdString)[1].replace(':', ' / ')
-        const leg2Airline = flight.segments[1].flightIdentifier.marketingAirline
-        const leg2FlightNum = flight.segments[1].flightIdentifier.flightNumber
+            if (flight.segments.length === 1) {
+                flightKey = `${queryString}_${leg1Airline}${leg1FlightNum}`
+            } else {
+                const transitAirportCode = /^[A-Z]{3}:([A-Z:]{3,7}):[A-Z]{3}_/g
+                    .exec(flight.flightIdString)[1]
+                    .replace(':', ' / ')
+                const leg2Airline = flight.segments[1].flightIdentifier.marketingAirline
+                const leg2FlightNum = flight.segments[1].flightIdentifier.flightNumber
 
-        flightKey = `${queryString}_${leg1Airline}${leg1FlightNum}_${transitAirportCode}_${leg2Airline}${leg2FlightNum}`
-      }
+                flightKey = `${queryString}_${leg1Airline}${leg1FlightNum}_${transitAirportCode}_${leg2Airline}${leg2FlightNum}`
+            }
 
-      flightResults.push(FlightResult({ flight, flightKey, savedFlights, staticFilesPath }))
+            flightResults.push(FlightResult({ flight, flightKey, savedFlights, staticFilesPath }))
 
-      if (savedFlights.has(flightKey)) {
-        savedFlights.set(flightKey, { F: numF, J: numJ, PY: numPY, Y: numY })
-        updateSavedFlights()
-        await GM.setValue('saved_flights', Object.fromEntries(savedFlights))
-      }
+            if (savedFlights.has(flightKey)) {
+                savedFlights.set(flightKey, { F: numF, J: numJ, PY: numPY, Y: numY })
+                updateSavedFlights()
+                await GM.setValue('saved_flights', Object.fromEntries(savedFlights))
+            }
+        }
     }
-  }
 
-  if (divTableBody.childElementCount === 0 || !query.date.isSame((divTableBody.lastElementChild as HTMLTableRowElement).dataset.date, 'd')) {
-    divTableBody.insertAdjacentHTML('beforeend', render(FlightResultsRow({ query })))
-  }
+    if (
+        divTableBody.childElementCount === 0 ||
+        !query.date.isSame((divTableBody.lastElementChild as HTMLTableRowElement).dataset.date, 'd')
+    ) {
+        divTableBody.insertAdjacentHTML('beforeend', render(FlightResultsRow({ query })))
+    }
 
-  const flightHtml = render(
-    <div>
-      <span class='flight_title'>{query.from} - {query.to}
-        <a href='javascript:void 0' class={classNames('bulk_save', { bulk_saved: savedQueries.has(queryString) })} data-save data-query={queryString}><Heart className='heart_save' /></a>
-        <a href='javascript:void 0' class='bulk_go_book' data-book data-query={queryString}>Book &raquo;</a>
-      </span>
-      <div class='flight_list'>{...flightResults}</div>
-    </div>
-  )
+    const flightHtml = render(
+        <div>
+            <span class="flight_title">
+                {query.from} - {query.to}
+                <a
+                    href="javascript:void 0"
+                    class={classNames('bulk_save', { bulk_saved: savedQueries.has(queryString) })}
+                    data-save
+                    data-query={queryString}
+                >
+                    <Heart className="heart_save" />
+                </a>
+                <a href="javascript:void 0" class="bulk_go_book" data-book data-query={queryString}>
+                    Book &raquo;
+                </a>
+            </span>
+            <div class="flight_list">{...flightResults}</div>
+        </div>
+    )
 
-  divTableBody.lastElementChild.querySelector('.bulk_flights').insertAdjacentHTML('beforeend', flightHtml)
-  stickyFooter()
+    divTableBody.lastElementChild.querySelector('.bulk_flights').insertAdjacentHTML('beforeend', flightHtml)
+    stickyFooter()
 }
 
 // ============================================================
@@ -1218,13 +1463,16 @@ const insertResults = async (query: Query, pageBom: PageBom): Promise<void> => {
 // ============================================================
 
 const stickyFooter = (): void => {
-  const bulkBoxRect = divBulk.getBoundingClientRect()
-  const ueFormRect = divUeContainer.getBoundingClientRect()
-  if (ueFormRect.bottom + 65 < document.documentElement.clientHeight && document.documentElement.clientHeight < bulkBoxRect.bottom) {
-    divFooter.classList.add('bulk_sticky')
-  } else {
-    divFooter.classList.remove('bulk_sticky')
-  }
+    const bulkBoxRect = divBulk.getBoundingClientRect()
+    const ueFormRect = divUeContainer.getBoundingClientRect()
+    if (
+        ueFormRect.bottom + 65 < document.documentElement.clientHeight &&
+        document.documentElement.clientHeight < bulkBoxRect.bottom
+    ) {
+        divFooter.classList.add('bulk_sticky')
+    } else {
+        divFooter.classList.remove('bulk_sticky')
+    }
 }
 
 // ============================================================
@@ -1232,34 +1480,36 @@ const stickyFooter = (): void => {
 // ============================================================
 
 const initSearchBox = async (): Promise<void> => {
-  log('initSearchBox()')
+    log('initSearchBox()')
 
-  shadowContainer.innerHTML = render(SearchBox({ browserLang, browserCountry, loginUrl, savedFilters: filters, savedFlights, savedQueries, uef }))
-  assignElements()
-  addFormListeners()
-  document.addEventListener('scroll', (e) => {
-    stickyFooter()
-  })
+    shadowContainer.innerHTML = render(
+        SearchBox({ browserLang, browserCountry, loginUrl, savedFilters: filters, savedFlights, savedQueries, uef })
+    )
+    assignElements()
+    addFormListeners()
+    document.addEventListener('scroll', e => {
+        stickyFooter()
+    })
 
-  await loadAirports()
-  autocomplete(inputFrom, airports)
-  autocomplete(inputTo, airports)
+    await loadAirports()
+    autocomplete(inputFrom, airports)
+    autocomplete(inputTo, airports)
 
-  if (cont.query) {
-    await resetContVars()
-    // If over 5 minutes since cont query, don't auto search
-    if (+dayjs() - cont.ts > 60 * 5 * 1000) return
-    btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
-    document.body.classList.add('cont_query')
+    if (cont.query) {
+        await resetContVars()
+        // If over 5 minutes since cont query, don't auto search
+        if (+dayjs() - cont.ts > 60 * 5 * 1000) return
+        btnBatch.innerHTML = `${loadingIconHtml} ${lang.searching_w_cancel}`
+        document.body.classList.add('cont_query')
 
-    setTimeout(async () => {
-      if (cont.saved) {
-        await savedSearch()
-      } else {
-        await bulkClick(!cont.batch)
-      }
-    }, 1000)
-  }
+        setTimeout(async () => {
+            if (cont.saved) {
+                await savedSearch()
+            } else {
+                await bulkClick(!cont.batch)
+            }
+        }, 1000)
+    }
 }
 
 await initRoot()
